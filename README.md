@@ -10,18 +10,18 @@ We want it to stay interface compatible where possible, with all the aliases cur
 
 Golang has no shortage of external libraries for various parts of this, but the ones currently planned to be used are:
 
-*Cobra*
-https://ordina-jworks.github.io/development/2018/10/20/make-your-own-cli-with-golang-and-cobra.html
-https://www.bradcypert.com/testing-a-cobra-cli-in-go/
-https://www.linode.com/docs/development/go/using-cobra/
+### Cobra CLI Library
 
-https://github.com/logrusorgru/aurora
+* https://ordina-jworks.github.io/development/2018/10/20/make-your-own-cli-with-golang-and-cobra.html
+* https://www.bradcypert.com/testing-a-cobra-cli-in-go/
+* https://www.linode.com/docs/development/go/using-cobra/
 
-https://github.com/logrusorgru/aurora
+### Other libraries
 
-https://github.com/olekukonko/tablewriter
-
-https://github.com/spf13/viper
+* https://github.com/briandowns/spinner
+* https://github.com/logrusorgru/aurora
+* https://github.com/olekukonko/tablewriter
+* https://github.com/spf13/viper
 
 ## Progress
 
