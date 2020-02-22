@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"sort"
 
 	"github.com/logrusorgru/aurora"
 	"github.com/spf13/cobra"
@@ -33,8 +34,15 @@ Example: civo apikey ls -o custom -f "Name: Key"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		data := make([][]string, len(CurrentConfig.APIKeys))
 
+		keys := make([]string, 0, len(CurrentConfig.APIKeys))
+		for k := range CurrentConfig.APIKeys {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+
 		key := 0
-		for name, apiKey := range CurrentConfig.APIKeys {
+		for _, name := range keys {
+			apiKey := CurrentConfig.APIKeys[name]
 			defaultLabel := ""
 			if CurrentConfig.Meta.CurrentAPIKey == name {
 				defaultLabel = "<====="
@@ -50,7 +58,7 @@ Example: civo apikey ls -o custom -f "Name: Key"`,
 // apikeySaveCmd represents the command to save a new API key
 var apikeySaveCmd = &cobra.Command{
 	Use:     "save NAME KEY",
-	Aliases: []string{"add", "store", "create"},
+	Aliases: []string{"add", "store", "create", "save"},
 	Short:   "Save a new API keys",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -72,14 +80,20 @@ var apikeyRemoveCmd = &cobra.Command{
 	Short:   "Remove a saved API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		key, err := findPartialKey(args[0], CurrentConfig.APIKeys)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, err.Error())
+			os.Exit(1)
+		}
+
 		numKeys := len(CurrentConfig.APIKeys)
-		delete(CurrentConfig.APIKeys, args[0])
+		delete(CurrentConfig.APIKeys, key)
 		saveConfig()
 
 		if numKeys > len(CurrentConfig.APIKeys) {
 			fmt.Printf("Removed the API Key %s\n", aurora.Green(args[0]))
 		} else {
-			fmt.Printf("The API Key %s couldn't be found\n", aurora.Red(args[0]))
+			fmt.Fprintf(os.Stderr, "The API Key %s couldn't be found\n", aurora.Red(args[0]))
 			os.Exit(1)
 		}
 	},
@@ -92,18 +106,17 @@ var apikeyCurrentCmd = &cobra.Command{
 	Short:   "Show the current API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		// If specified
-		//   Find based on single partial match
-		//   Set
-		//   Output
-		// else
-		//   Output
-		value := CurrentConfig.APIKeys[args[0]]
+		name, err := findPartialKey(args[0], CurrentConfig.APIKeys)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, err.Error())
+			os.Exit(1)
+		}
+		value := CurrentConfig.APIKeys[name]
 		if value != "" {
 			if OutputFormat == "human" {
-				fmt.Printf("Saved the API Key %s as %s\n", aurora.Green(args[0]), aurora.Green(args[1]))
+				fmt.Printf("Set the default API Key to be %s\n", aurora.Green(name))
 			} else {
-				outputKeyValue(map[string]string{"Name": args[0], "Key": args[1]})
+				outputKeyValue(map[string]string{"Name": name, "Key": value})
 			}
 		}
 	},
