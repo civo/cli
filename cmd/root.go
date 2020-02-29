@@ -8,21 +8,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// {
-//   "apikeys":{
-//     "andy@civo.com":"DH48mUq3VIg0drpbkiO9RBsAJxuQKnSCTcZ2eGWYEPw7yFM6lv",
-//     "andy@andyjeffries.co.uk":"mfFNbE0yR8qIMrzSbLHzENYB7QrfhkA1XZdQ08BBITvQTXJpro",
-//     "demo@civo.com":"0G3EtRnkBxQdvzhsmACeLKlP4OUFNJVI51Zf67a9jMucY2qXiT"
-//   },
-//   "meta":{
-//     "admin":false,
-//     "current_apikey":"demo@civo.com",
-//     "default_region":"lon1",
-//     "latest_release_check":"2019-02-20T20:33:02Z",
-//     "url":"https://api.civo.com"
-//   }
-// }
-
 // Config describes the configuration for Civo's CLI
 type Config struct {
 	APIKeys map[string]string `json:"apikeys"`
