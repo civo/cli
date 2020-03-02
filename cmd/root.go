@@ -31,9 +31,6 @@ var rootCmd = &cobra.Command{
 	Short: "CLI to manage cloud resources at Civo.com",
 	Long: `civo is a CLI library for managing cloud resources such
 as instances and Kubernetes clusters at Civo.com.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
