@@ -25,6 +25,7 @@ func outputTable(headers []string, data [][]string) {
 	} else if OutputFormat == "table" || OutputFormat == "human" || OutputFormat == "" {
 		table := tablewriter.NewWriter(os.Stdout)
 		table.SetHeader(headers)
+		table.SetAutoWrapText(false)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 		table.SetAutoFormatHeaders(false)
 		table.AppendBulk(data)

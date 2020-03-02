@@ -29,7 +29,7 @@ Golang has no shortage of external libraries for various parts of this, but the 
 - ✅ ~~API Key management~~
 - ✅ ~~Regions~~
 - ✅ ~~Quotas~~
-- Sizes
+- ✅ ~~Sizes~~
 - Instances
 - Domain names
 - Domain records
