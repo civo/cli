@@ -102,7 +102,7 @@ var apikeyRemoveCmd = &cobra.Command{
 // apikeyCurrentCmd represents the command to show the current API key
 var apikeyCurrentCmd = &cobra.Command{
 	Use:     "current [NAME]",
-	Aliases: []string{"use", "default"},
+	Aliases: []string{"use", "default", "set"},
 	Short:   "Show the current API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
