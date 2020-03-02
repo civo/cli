@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/utility"
 	"github.com/logrusorgru/aurora"
 	"github.com/spf13/cobra"
 )
@@ -33,26 +34,34 @@ If you wish to use a custom format, the available fields are:
 
 Example: civo apikey ls -o custom -f "Name: Key"`,
 	Run: func(cmd *cobra.Command, args []string) {
-		data := make([][]string, len(config.Current.APIKeys))
-
 		keys := make([]string, 0, len(config.Current.APIKeys))
 		for k := range config.Current.APIKeys {
 			keys = append(keys, k)
 		}
 		sort.Strings(keys)
 
-		key := 0
+		ow := utility.NewOutputWriter()
+
 		for _, name := range keys {
+			ow.StartLine()
 			apiKey := config.Current.APIKeys[name]
 			defaultLabel := ""
 			if config.Current.Meta.CurrentAPIKey == name {
 				defaultLabel = "<====="
 			}
-			data[key] = []string{name, apiKey, defaultLabel}
-			key++
+			ow.AppendData("Name", name)
+			ow.AppendData("Key", apiKey)
+			ow.AppendData("Default", defaultLabel)
 		}
 
-		outputTable([]string{"Name", "Key", "Default"}, data)
+		switch OutputFormat {
+		case "json":
+			ow.WriteMultipleObjectsJSON()
+		case "custom":
+			ow.WriteCustomOutput(OutputFields)
+		default:
+			ow.WriteTable()
+		}
 	},
 }
 
@@ -66,10 +75,15 @@ var apikeySaveCmd = &cobra.Command{
 		config.Current.APIKeys[args[0]] = args[1]
 		config.SaveConfig()
 
-		if OutputFormat == "human" {
+		ow := utility.NewOutputWriterWithMap(map[string]string{"Name": args[0], "Key": args[1]})
+
+		switch OutputFormat {
+		case "json":
+			ow.WriteSingleObjectJSON()
+		case "custom":
+			ow.WriteCustomOutput(OutputFields)
+		default:
 			fmt.Printf("Saved the API Key %s as %s\n", aurora.Green(args[0]), aurora.Green(args[1]))
-		} else {
-			outputKeyValue(map[string]string{"Name": args[0], "Key": args[1]})
 		}
 	},
 }
@@ -81,7 +95,7 @@ var apikeyRemoveCmd = &cobra.Command{
 	Short:   "Remove a saved API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		key, err := findPartialKey(args[0], config.Current.APIKeys)
+		key, err := utility.FindPartialKey(args[0], config.Current.APIKeys)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, err.Error())
 			os.Exit(1)
@@ -107,17 +121,22 @@ var apikeyCurrentCmd = &cobra.Command{
 	Short:   "Show the current API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		name, err := findPartialKey(args[0], config.Current.APIKeys)
+		name, err := utility.FindPartialKey(args[0], config.Current.APIKeys)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, err.Error())
 			os.Exit(1)
 		}
 		value := config.Current.APIKeys[name]
 		if value != "" {
-			if OutputFormat == "human" {
+			ow := utility.NewOutputWriterWithMap(map[string]string{"Name": name, "Key": value})
+
+			switch OutputFormat {
+			case "json":
+				ow.WriteSingleObjectJSON()
+			case "custom":
+				ow.WriteCustomOutput(OutputFields)
+			default:
 				fmt.Printf("Set the default API Key to be %s\n", aurora.Green(name))
-			} else {
-				outputKeyValue(map[string]string{"Name": name, "Key": value})
 			}
 		}
 	},

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/utility"
 	"github.com/logrusorgru/aurora"
 	"github.com/spf13/cobra"
 )
@@ -41,22 +42,32 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 			return
 		}
 
-		if OutputFormat == "json" {
-			fmt.Println(client.LastJSONResponse)
-			return
-		}
+		ow := utility.NewOutputWriter()
 
-		data := make([][]string, len(regions))
-		for i, region := range regions {
+		for _, region := range regions {
+			ow.StartLine()
+			ow.AppendData("Code", region.Code)
+			ow.AppendData("Name", region.Name)
+
 			defaultLabel := ""
-			if region.Default {
-				defaultLabel = "<====="
+			if OutputFormat == "json" || OutputFormat == "custom" {
+				defaultLabel = utility.BoolToYesNo(region.Default)
+			} else {
+				if region.Default {
+					defaultLabel = "<====="
+				}
 			}
-
-			data[i] = []string{region.Code, region.Name, defaultLabel}
+			ow.AppendData("Default", defaultLabel)
 		}
 
-		outputTable([]string{"Code", "Name", "Default"}, data)
+		switch OutputFormat {
+		case "json":
+			ow.WriteMultipleObjectsJSON()
+		case "custom":
+			ow.WriteCustomOutput(OutputFields)
+		default:
+			ow.WriteTable()
+		}
 	},
 }
 

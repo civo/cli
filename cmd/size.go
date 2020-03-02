@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/utility"
 	"github.com/logrusorgru/aurora"
 	"github.com/spf13/cobra"
 )
@@ -46,24 +47,32 @@ Example: civo size ls -o custom -f "Code: Name (size)"`,
 			return
 		}
 
-		if OutputFormat == "json" {
-			fmt.Println(client.LastJSONResponse)
-			return
-		}
+		ow := utility.NewOutputWriter()
 
-		data := make([][]string, len(sizes))
-		for i, size := range sizes {
-			var selectableLabel string
-			if size.Selectable {
-				selectableLabel = "Yes"
+		for _, size := range sizes {
+			ow.StartLine()
+			ow.AppendData("Name", size.Name)
+			ow.AppendData("Description", size.Description)
+			ow.AppendData("CPU", strconv.Itoa(size.CPUCores))
+
+			if OutputFormat == "json" || OutputFormat == "custom" {
+				ow.AppendData("RAM_MB", strconv.Itoa(size.RAMMegabytes))
+				ow.AppendData("Disk_GB", strconv.Itoa(size.DiskGigabytes))
 			} else {
-				selectableLabel = "No"
+				ow.AppendData("RAM (MB)", strconv.Itoa(size.RAMMegabytes))
+				ow.AppendData("Disk (GB)", strconv.Itoa(size.DiskGigabytes))
 			}
-
-			data[i] = []string{size.Name, size.Description, strconv.Itoa(size.CPUCores), strconv.Itoa(size.RAMMegabytes), strconv.Itoa(size.DiskGigabytes), selectableLabel}
+			ow.AppendData("Selectable", utility.BoolToYesNo(size.Selectable))
 		}
 
-		outputTable([]string{"Name", "Description", "CPU", "RAM (MB)", "Disk (GB)", "Selectable"}, data)
+		switch OutputFormat {
+		case "json":
+			ow.WriteMultipleObjectsJSON()
+		case "custom":
+			ow.WriteCustomOutput(OutputFields)
+		default:
+			ow.WriteTable()
+		}
 	},
 }
 
