@@ -28,7 +28,7 @@ Golang has no shortage of external libraries for various parts of this, but the 
 - ✅ ~~Makefile for cross-platform builds~~
 - ✅ ~~API Key management~~
 - ✅ ~~Regions~~
-- Quotas
+- ✅ ~~Quotas~~
 - Sizes
 - Instances
 - Domain names

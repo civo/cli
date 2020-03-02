@@ -41,8 +41,8 @@ func outputKeyValue(data map[string]string) {
 			}
 			output = strings.Replace(output, "\\t", "\t", -1)
 			output = strings.Replace(output, "\\n", "\n", -1)
-			fmt.Println(output)
 		}
+		fmt.Println(output)
 	} else if OutputFormat == "table" || OutputFormat == "human" || OutputFormat == "" {
 		table := tablewriter.NewWriter(os.Stdout)
 		for key, value := range data {
