@@ -1,62 +1,13 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"reflect"
 	"strings"
 
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/olekukonko/tablewriter"
 )
-
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if cfgFile != "" {
-		loadConfig(cfgFile)
-	} else {
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		loadConfig(fmt.Sprintf("%s/%s", home, ".civo.json"))
-	}
-}
-
-func loadConfig(filename string) {
-	configFile, err := os.Open(filename)
-	defer configFile.Close()
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	jsonParser := json.NewDecoder(configFile)
-	jsonParser.Decode(&CurrentConfig)
-}
-
-func saveConfig() {
-	var filename string
-
-	if cfgFile != "" {
-		filename = cfgFile
-	} else {
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		filename = fmt.Sprintf("%s/%s", home, ".civo.json")
-	}
-
-	configJSON, _ := json.Marshal(CurrentConfig)
-	err := ioutil.WriteFile(filename, configJSON, 0600)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-}
 
 func outputTable(headers []string, data [][]string) {
 	if OutputFormat == "custom" {

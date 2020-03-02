@@ -5,6 +5,7 @@ import (
 	"os"
 	"sort"
 
+	"github.com/civo/cli/config"
 	"github.com/logrusorgru/aurora"
 	"github.com/spf13/cobra"
 )
@@ -32,19 +33,19 @@ If you wish to use a custom format, the available fields are:
 
 Example: civo apikey ls -o custom -f "Name: Key"`,
 	Run: func(cmd *cobra.Command, args []string) {
-		data := make([][]string, len(CurrentConfig.APIKeys))
+		data := make([][]string, len(config.Current.APIKeys))
 
-		keys := make([]string, 0, len(CurrentConfig.APIKeys))
-		for k := range CurrentConfig.APIKeys {
+		keys := make([]string, 0, len(config.Current.APIKeys))
+		for k := range config.Current.APIKeys {
 			keys = append(keys, k)
 		}
 		sort.Strings(keys)
 
 		key := 0
 		for _, name := range keys {
-			apiKey := CurrentConfig.APIKeys[name]
+			apiKey := config.Current.APIKeys[name]
 			defaultLabel := ""
-			if CurrentConfig.Meta.CurrentAPIKey == name {
+			if config.Current.Meta.CurrentAPIKey == name {
 				defaultLabel = "<====="
 			}
 			data[key] = []string{name, apiKey, defaultLabel}
@@ -62,8 +63,8 @@ var apikeySaveCmd = &cobra.Command{
 	Short:   "Save a new API keys",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		CurrentConfig.APIKeys[args[0]] = args[1]
-		saveConfig()
+		config.Current.APIKeys[args[0]] = args[1]
+		config.SaveConfig()
 
 		if OutputFormat == "human" {
 			fmt.Printf("Saved the API Key %s as %s\n", aurora.Green(args[0]), aurora.Green(args[1]))
@@ -80,17 +81,17 @@ var apikeyRemoveCmd = &cobra.Command{
 	Short:   "Remove a saved API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		key, err := findPartialKey(args[0], CurrentConfig.APIKeys)
+		key, err := findPartialKey(args[0], config.Current.APIKeys)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, err.Error())
 			os.Exit(1)
 		}
 
-		numKeys := len(CurrentConfig.APIKeys)
-		delete(CurrentConfig.APIKeys, key)
-		saveConfig()
+		numKeys := len(config.Current.APIKeys)
+		delete(config.Current.APIKeys, key)
+		config.SaveConfig()
 
-		if numKeys > len(CurrentConfig.APIKeys) {
+		if numKeys > len(config.Current.APIKeys) {
 			fmt.Printf("Removed the API Key %s\n", aurora.Green(args[0]))
 		} else {
 			fmt.Fprintf(os.Stderr, "The API Key %s couldn't be found\n", aurora.Red(args[0]))
@@ -106,12 +107,12 @@ var apikeyCurrentCmd = &cobra.Command{
 	Short:   "Show the current API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		name, err := findPartialKey(args[0], CurrentConfig.APIKeys)
+		name, err := findPartialKey(args[0], config.Current.APIKeys)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, err.Error())
 			os.Exit(1)
 		}
-		value := CurrentConfig.APIKeys[name]
+		value := config.Current.APIKeys[name]
 		if value != "" {
 			if OutputFormat == "human" {
 				fmt.Printf("Set the default API Key to be %s\n", aurora.Green(name))
