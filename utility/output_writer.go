@@ -27,6 +27,7 @@ import (
 //   ow.WriteTable()
 type OutputWriter struct {
 	Keys       []string
+	Labels     []string
 	Values     [][]string
 	TempValues []string
 }
@@ -62,8 +63,8 @@ func (ow *OutputWriter) finishExistingLine() {
 	}
 }
 
-// AppendData adds a line of data to the output writer
-func (ow *OutputWriter) AppendData(key, value string) {
+// AppendDataWithLabel adds a line of data to the output writer
+func (ow *OutputWriter) AppendDataWithLabel(key, value, label string) {
 	found := -1
 	for i, v := range ow.Keys {
 		if v == key {
@@ -73,10 +74,16 @@ func (ow *OutputWriter) AppendData(key, value string) {
 
 	if found == -1 {
 		ow.Keys = append(ow.Keys, key)
+		ow.Labels = append(ow.Labels, label)
 		ow.TempValues = append(ow.TempValues, value)
 	} else {
 		ow.TempValues[found] = value
 	}
+}
+
+// AppendData adds a line of data to the output writer
+func (ow *OutputWriter) AppendData(key, value string) {
+	ow.AppendDataWithLabel(key, value, key)
 }
 
 // WriteSingleObjectJSON writes the JSON for a single object to STDOUT
@@ -126,15 +133,16 @@ func (ow *OutputWriter) WriteKeyValues() {
 	ow.finishExistingLine()
 
 	longestLabelLength := 0
-	for _, key := range ow.Keys {
-		if len(key) > longestLabelLength {
-			longestLabelLength = len(key)
+	for _, label := range ow.Labels {
+		if len(label) > longestLabelLength {
+			longestLabelLength = len(label)
 		}
 	}
 
-	for i, key := range ow.Keys {
+	for i := range ow.Keys {
 		value := ow.Values[0][i]
-		fmt.Printf("%"+strconv.Itoa(longestLabelLength)+"s : %s\n", key, value)
+		label := ow.Labels[i]
+		fmt.Printf("%"+strconv.Itoa(longestLabelLength)+"s : %s\n", label, value)
 	}
 }
 
@@ -145,7 +153,7 @@ func (ow *OutputWriter) WriteTable() {
 
 	table := tablewriter.NewWriter(os.Stdout)
 	if len(ow.Keys) > 0 {
-		table.SetHeader(ow.Keys)
+		table.SetHeader(ow.Labels)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 		table.SetAutoWrapText(false)
 		table.SetAutoFormatHeaders(false)
@@ -159,6 +167,7 @@ func (ow *OutputWriter) WriteTable() {
 
 // WriteCustomOutput prints one or multiple objects using custom formatting
 func (ow *OutputWriter) WriteCustomOutput(fields string) {
+	ow.finishExistingLine()
 	for _, item := range ow.Values {
 		output := fields
 		for index, name := range ow.Keys {
@@ -177,70 +186,3 @@ func (ow *OutputWriter) WriteSubheader(label string) {
 	count := (72 - len(label) + 2) / 2
 	fmt.Println(strings.Repeat("-", count) + " " + label + " " + strings.Repeat("-", count))
 }
-
-// package cmd
-
-// import (
-// 	"fmt"
-// 	"os"
-// 	"reflect"
-// 	"strconv"
-// 	"strings"
-
-// 	"github.com/olekukonko/tablewriter"
-// )
-
-// func outputTable(headers []string, data [][]string) {
-// 	if OutputFormat == "custom" {
-// 		for _, items := range data {
-// 			output := OutputFields
-// 			for index, name := range headers {
-// 				if strings.Contains(output, name) {
-// 					output = strings.Replace(output, name, items[index], 1)
-// 				}
-// 			}
-// 			output = strings.Replace(output, "\\t", "\t", -1)
-// 			output = strings.Replace(output, "\\n", "\n", -1)
-// 			fmt.Println(output)
-// 		}
-// 	} else if OutputFormat == "table" || OutputFormat == "human" || OutputFormat == "" {
-// 		table := tablewriter.NewWriter(os.Stdout)
-// 		if len(headers) > 0 {
-// 			table.SetHeader(headers)
-// 			table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-// 			table.SetAutoWrapText(false)
-// 			table.SetAutoFormatHeaders(false)
-// 		} else {
-// 			table.SetBorder(false)
-// 		}
-// 		table.AppendBulk(data)
-// 		table.Render()
-// 	}
-// }
-
-// func outputKeyValue(keys []string, data map[string]string) {
-// 	if OutputFormat == "custom" {
-// 		output := OutputFields
-// 		for _, key := range keys {
-// 			value := data[key]
-// 			if strings.Contains(output, key) {
-// 				output = strings.Replace(output, key, value, 1)
-// 			}
-// 			output = strings.Replace(output, "\\t", "\t", -1)
-// 			output = strings.Replace(output, "\\n", "\n", -1)
-// 		}
-// 		fmt.Println(output)
-// 	} else if OutputFormat == "table" || OutputFormat == "human" || OutputFormat == "" {
-// 		longestLabelLength := 0
-// 		for key := range data {
-// 			if len(key) > longestLabelLength {
-// 				longestLabelLength = len(key)
-// 			}
-// 		}
-
-// 		for _, key := range keys {
-// 			value := data[key]
-// 			fmt.Printf("%"+strconv.Itoa(longestLabelLength)+"s : %s\n", key, value)
-// 		}
-// 	}
-// }

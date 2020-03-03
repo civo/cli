@@ -68,21 +68,22 @@ Example: civo instance ls -o custom -f "ID: Name (PublicIP)"`,
 		for _, instance := range instances {
 			ow.StartLine()
 
+			ow.AppendData("ID", instance.ID)
+			ow.AppendData("Hostname", instance.Hostname)
+			ow.AppendData("Size", instance.Size)
+			ow.AppendData("Region", instance.Region)
+			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public IP")
+			ow.AppendData("Status", instance.Status)
+
 			if OutputFormat == "json" || OutputFormat == "custom" {
-				ow.AppendData("ID", instance.ID)
 				ow.AppendData("OpenstackServerID", instance.OpenstackServerID)
-				ow.AppendData("Hostname", instance.Hostname)
-				ow.AppendData("Size", instance.Size)
-				ow.AppendData("Region", instance.Region)
 				ow.AppendData("NetworkID", instance.NetworkID)
 				ow.AppendData("PrivateIP", instance.PrivateIP)
 				ow.AppendData("PublicIP", instance.PublicIP)
-				ow.AppendData("PseudoIP", instance.PseudoIP)
 				ow.AppendData("TemplateID", instance.TemplateID)
 				ow.AppendData("SnapshotID", instance.SnapshotID)
 				ow.AppendData("InitialUser", instance.InitialUser)
 				ow.AppendData("SSHKey", instance.SSHKey)
-				ow.AppendData("Status", instance.Status)
 				ow.AppendData("Notes", instance.Notes)
 				ow.AppendData("FirewallID", instance.FirewallID)
 				ow.AppendData("Tags", strings.Join(instance.Tags, " "))
@@ -95,13 +96,6 @@ Example: civo instance ls -o custom -f "ID: Name (PublicIP)"`,
 				ow.AppendData("PrivateIP", instance.PrivateIP)
 				ow.AppendData("PublicIP", instance.PublicIP)
 				ow.AppendData("PseudoIP", instance.PseudoIP)
-			} else {
-				ow.AppendData("ID", instance.ID)
-				ow.AppendData("Hostname", instance.Hostname)
-				ow.AppendData("Size", instance.Size)
-				ow.AppendData("Region", instance.Region)
-				ow.AppendData("Public IP", instance.PublicIP)
-				ow.AppendData("Status", instance.Status)
 			}
 		}
 
@@ -166,31 +160,29 @@ Example: civo instance show ID/NAME -o custom -f "Key1: Key2"`,
 		ow := utility.NewOutputWriter()
 		ow.StartLine()
 
+		ow.AppendData("ID", instance.ID)
+		ow.AppendDataWithLabel("OpenstackServerID", instance.OpenstackServerID, "Openstack Server ID")
+		ow.AppendData("Hostname", instance.Hostname)
+		ow.AppendData("Status", instance.Status)
+		ow.AppendData("Size", instance.Size)
+		ow.AppendData("Region", instance.Region)
+		ow.AppendDataWithLabel("NetworkID", instance.NetworkID, "Network ID")
+		ow.AppendDataWithLabel("TemplateID", instance.TemplateID, "Template ID")
+		ow.AppendDataWithLabel("SnapshotID", instance.SnapshotID, "Snapshot ID")
+		ow.AppendDataWithLabel("InitialUser", instance.InitialUser, "Initial User")
+		ow.AppendDataWithLabel("SSHKey", instance.SSHKey, "SSH Key")
+		ow.AppendDataWithLabel("FirewallID", instance.FirewallID, "Firewall ID")
+		ow.AppendData("Tags", strings.Join(instance.Tags, " "))
+		ow.AppendDataWithLabel("CreatedAt", instance.CreatedAt.Format(time.RFC1123), "Created At")
+		ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "Private IP")
+
 		if OutputFormat == "json" || OutputFormat == "custom" {
-			ow.AppendData("ID", instance.ID)
-			ow.AppendData("OpenstackServerID", instance.OpenstackServerID)
-			ow.AppendData("Hostname", instance.Hostname)
-			ow.AppendData("Size", instance.Size)
-			ow.AppendData("Region", instance.Region)
-			ow.AppendData("NetworkID", instance.NetworkID)
-			ow.AppendData("PrivateIP", instance.PrivateIP)
-			ow.AppendData("PublicIP", instance.PublicIP)
-			ow.AppendData("PseudoIP", instance.PseudoIP)
-			ow.AppendData("TemplateID", instance.TemplateID)
-			ow.AppendData("SnapshotID", instance.SnapshotID)
-			ow.AppendData("InitialUser", instance.InitialUser)
-			ow.AppendData("SSHKey", instance.SSHKey)
-			ow.AppendData("Status", instance.Status)
+			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public IP")
+			ow.AppendDataWithLabel("PseudoIP", instance.PseudoIP, "Pseudo IP")
 			ow.AppendData("Notes", instance.Notes)
-			ow.AppendData("FirewallID", instance.FirewallID)
-			ow.AppendData("Tags", strings.Join(instance.Tags, " "))
-			ow.AppendData("CivostatsdToken", instance.CivostatsdToken)
-			ow.AppendData("CivostatsdStats", instance.CivostatsdStats)
 			ow.AppendData("Script", instance.Script)
-			ow.AppendData("CreatedAt", instance.CreatedAt.Format(time.RFC1123))
 
 			ow.AppendData("ReverseDNS", instance.ReverseDNS)
-			ow.AppendData("PrivateIP", instance.PrivateIP)
 			ow.AppendData("PublicIP", instance.PublicIP)
 			ow.AppendData("PseudoIP", instance.PseudoIP)
 			if OutputFormat == "json" {
@@ -199,29 +191,15 @@ Example: civo instance show ID/NAME -o custom -f "Key1: Key2"`,
 				ow.WriteCustomOutput(OutputFields)
 			}
 		} else {
-			ow.AppendData("ID", instance.ID)
-			ow.AppendData("Openstack Server ID", instance.OpenstackServerID)
-			ow.AppendData("Hostname", instance.Hostname)
-			if instance.Hostname != instance.ReverseDNS && instance.ReverseDNS != "" {
-				ow.AppendData("Reverse DNS", instance.ReverseDNS)
-			}
-			ow.AppendData("Size", instance.Size)
-			ow.AppendData("Region", instance.Region)
-			ow.AppendData("Network ID", instance.NetworkID)
 			if instance.PseudoIP != "" {
 				PublicIP := fmt.Sprintf("%s => %s", instance.PseudoIP, instance.PublicIP)
 				ow.AppendData("Public IP", PublicIP)
 			} else {
 				ow.AppendData("Public IP", instance.PublicIP)
 			}
-			ow.AppendData("Template ID", instance.TemplateID)
-			ow.AppendData("Snapshot ID", instance.SnapshotID)
-			ow.AppendData("Initial User", instance.InitialUser)
-			ow.AppendData("SSH Key", instance.SSHKey)
-			ow.AppendData("Status", instance.Status)
-			ow.AppendData("Firewall ID", instance.FirewallID)
-			ow.AppendData("Tags", strings.Join(instance.Tags, " "))
-			ow.AppendData("Created At", instance.CreatedAt.Format(time.RFC1123))
+			if instance.Hostname != instance.ReverseDNS && instance.ReverseDNS != "" {
+				ow.AppendData("Reverse DNS", instance.ReverseDNS)
+			}
 
 			ow.WriteKeyValues()
 
