@@ -39,7 +39,6 @@ If you wish to use a custom format, the available fields are:
 * TemplateID
 * SnapshotID
 * InitialUser
-* InitialPassword
 * SSHKey
 * Status
 * Notes
@@ -82,7 +81,6 @@ Example: civo instance ls -o custom -f "ID: Name (PublicIP)"`,
 				ow.AppendData("TemplateID", instance.TemplateID)
 				ow.AppendData("SnapshotID", instance.SnapshotID)
 				ow.AppendData("InitialUser", instance.InitialUser)
-				ow.AppendData("InitialPassword", instance.InitialPassword)
 				ow.AppendData("SSHKey", instance.SSHKey)
 				ow.AppendData("Status", instance.Status)
 				ow.AppendData("Notes", instance.Notes)
@@ -159,9 +157,9 @@ Example: civo instance show ID/NAME -o custom -f "Key1: Key2"`,
 			return
 		}
 
-		instance, err := client.GetInstance(args[0])
+		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			fmt.Printf("Unable to get your instance: %s\n", aurora.Red(err))
+			fmt.Printf("Unable to search instances: %s\n", aurora.Red(err))
 			return
 		}
 
@@ -181,7 +179,6 @@ Example: civo instance show ID/NAME -o custom -f "Key1: Key2"`,
 			ow.AppendData("TemplateID", instance.TemplateID)
 			ow.AppendData("SnapshotID", instance.SnapshotID)
 			ow.AppendData("InitialUser", instance.InitialUser)
-			ow.AppendData("InitialPassword", instance.InitialPassword)
 			ow.AppendData("SSHKey", instance.SSHKey)
 			ow.AppendData("Status", instance.Status)
 			ow.AppendData("Notes", instance.Notes)
@@ -243,20 +240,21 @@ Example: civo instance show ID/NAME -o custom -f "Key1: Key2"`,
 	},
 }
 
-// instance create [--name=HOSTNAME] [...] -- create a new instance with specified hostname and provided options
-// instance tags ID/HOSTNAME 'tag1 tag2 tag3...' -- retag instance by ID (input no tags to clear all tags)
-// instance update ID/HOSTNAME [--name] [--notes] -- update details of instance
-// instance remove ID/HOSTNAME -- removes an instance with ID/hostname entered (use with caution!) [delete, destroy, rm]
-// instance reboot ID/HOSTNAME -- reboots instance with ID/hostname entered [hard-reboot]
-// instance soft-reboot ID/HOSTNAME -- soft-reboots instance with ID entered
-// instance console ID/HOSTNAME -- outputs a URL for a web-based console for instance with ID provided
-// instance stop ID/HOSTNAME -- shuts down the instance with ID provided
-// instance start ID/HOSTNAME -- starts a stopped instance with ID provided
-// instance upgrade ID/HOSTNAME new-size -- Upgrade instance with ID to size provided (see civo sizes for size names)
-// instance move-ip ID/HOSTNAME IP_Address -- move a public IP_Address to target instance
-// instance firewall ID/HOSTNAME firewall_id -- set instance with ID/HOSTNAME to use firewall with firewall_id
-// instance public_ip ID/HOSTNAME -- Show public IP of ID/hostname [ip]
-// instance password ID/HOSTNAME -- Show the default user password for instance with ID/HOSTNAME
+// TODO: instance create [--name=HOSTNAME] [...] -- create a new instance with specified hostname and provided options
+// TODO: instance tags ID/HOSTNAME 'tag1 tag2 tag3...' -- retag instance by ID (input no tags to clear all tags)
+// TODO: instance update ID/HOSTNAME [--name] [--notes] -- update details of instance
+// TODO: instance remove ID/HOSTNAME -- removes an instance with ID/hostname entered (use with caution!) [delete, destroy, rm]
+
+// TODO: instance reboot ID/HOSTNAME -- reboots instance with ID/hostname entered [hard-reboot]
+// TODO: instance soft-reboot ID/HOSTNAME -- soft-reboots instance with ID entered
+// TODO: instance console ID/HOSTNAME -- outputs a URL for a web-based console for instance with ID provided
+// TODO: instance stop ID/HOSTNAME -- shuts down the instance with ID provided
+// TODO: instance start ID/HOSTNAME -- starts a stopped instance with ID provided
+// TODO: instance upgrade ID/HOSTNAME new-size -- Upgrade instance with ID to size provided (see civo sizes for size names)
+// TODO: instance move-ip ID/HOSTNAME IP_Address -- move a public IP_Address to target instance
+// TODO: instance firewall ID/HOSTNAME firewall_id -- set instance with ID/HOSTNAME to use firewall with firewall_id
+// TODO: instance public_ip ID/HOSTNAME -- Show public IP of ID/hostname [ip]
+// TODO: instance password ID/HOSTNAME -- Show the default user password for instance with ID/HOSTNAME
 
 func init() {
 	rootCmd.AddCommand(instanceCmd)

@@ -4,7 +4,7 @@ module github.com/civo/cli
 
 require (
 	github.com/briandowns/spinner v1.8.0 // indirect
-	github.com/civo/civogo v0.0.0-20200302094034-ee8dab3b93a3
+	github.com/civo/civogo v0.1.0
 	github.com/kami-zh/go-capturer v0.0.0-20171211120116-e492ea43421d // indirect
 	github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381
 	github.com/mitchellh/go-homedir v1.1.0

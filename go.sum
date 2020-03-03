@@ -13,6 +13,10 @@ github.com/briandowns/spinner v1.8.0/go.mod h1://Zf9tMcxfRUA36V23M6YGEAv+kECGfvp
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
 github.com/civo/civogo v0.0.0-20200302094034-ee8dab3b93a3 h1:1Dbdxh4nHzrQaEPmlUhA+LGmWQCCp8AotMUo1wERukc=
 github.com/civo/civogo v0.0.0-20200302094034-ee8dab3b93a3/go.mod h1:QwPxaDertZ7sxu3Fdibu/JdXBJV3RqYZrh76YEbGLKg=
+github.com/civo/civogo v0.0.0-20200303131252-8dafd66a0912 h1:BWqVM0faK6IRkNR1XW2Ha/OtdY+L64ntE0+WbKgw1lI=
+github.com/civo/civogo v0.0.0-20200303131252-8dafd66a0912/go.mod h1:QwPxaDertZ7sxu3Fdibu/JdXBJV3RqYZrh76YEbGLKg=
+github.com/civo/civogo v0.1.0 h1:ltxiVPehDJ3uuUW/bCezHI4P+A1CSHfZKQAy/5Es2tw=
+github.com/civo/civogo v0.1.0/go.mod h1:QwPxaDertZ7sxu3Fdibu/JdXBJV3RqYZrh76YEbGLKg=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/coreos/bbolt v1.3.2/go.mod h1:iRUV2dpdMOn7Bo10OQBFzIJO9kkE559Wcmn+qkEiiKk=
 github.com/coreos/etcd v3.3.10+incompatible/go.mod h1:uF7uidLiAD3TWHmW31ZFd/JWoc32PjwdhPthX9715RE=

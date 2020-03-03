@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"strings"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -95,7 +96,7 @@ var apikeyRemoveCmd = &cobra.Command{
 	Short:   "Remove a saved API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		key, err := utility.FindPartialKey(args[0], config.Current.APIKeys)
+		key, err := apiKeyFind(args[0])
 		if err != nil {
 			fmt.Fprintf(os.Stderr, err.Error())
 			os.Exit(1)
@@ -121,7 +122,7 @@ var apikeyCurrentCmd = &cobra.Command{
 	Short:   "Show the current API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		name, err := utility.FindPartialKey(args[0], config.Current.APIKeys)
+		name, err := apiKeyFind(args[0])
 		if err != nil {
 			fmt.Fprintf(os.Stderr, err.Error())
 			os.Exit(1)
@@ -140,6 +141,25 @@ var apikeyCurrentCmd = &cobra.Command{
 			}
 		}
 	},
+}
+
+func apiKeyFind(search string) (string, error) {
+	var result string
+	for k, v := range config.Current.APIKeys {
+		if strings.Contains(k, search) || strings.Contains(v, search) {
+			if result == "" {
+				result = k
+			} else {
+				return "", fmt.Errorf("unable to find %s because there were multiple matches", search)
+			}
+		}
+	}
+
+	if result == "" {
+		return "", fmt.Errorf("unable to find %s at all in the list", search)
+	}
+
+	return result, nil
 }
 
 func init() {
