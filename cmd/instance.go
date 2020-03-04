@@ -221,7 +221,39 @@ Example: civo instance show ID/NAME -o custom -f "Key1: Key2"`,
 // TODO: instance create [--name=HOSTNAME] [...] -- create a new instance with specified hostname and provided options
 // TODO: instance tags ID/HOSTNAME 'tag1 tag2 tag3...' -- retag instance by ID (input no tags to clear all tags)
 // TODO: instance update ID/HOSTNAME [--name] [--notes] -- update details of instance
-// TODO: instance remove ID/HOSTNAME -- removes an instance with ID/hostname entered (use with caution!) [delete, destroy, rm]
+
+// instanceRemoveCmd represents the command to show the details for an instance
+var instanceRemoveCmd = &cobra.Command{
+	Use:     "remove",
+	Aliases: []string{"delete", "destroy", "rm"},
+	Short:   "Remove/delete instance",
+	Long: `Remove the specified instance by part of the ID or name.
+
+Example: civo instance remove ID/NAME`,
+	Run: func(cmd *cobra.Command, args []string) {
+		client, err := config.CivoAPIClient()
+		if err != nil {
+			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			return
+		}
+
+		instance, err := client.FindInstance(args[0])
+		if err != nil {
+			fmt.Printf("Finding instance: %s\n", aurora.Red(err))
+			return
+		}
+
+		_, err = client.DeleteInstance(instance.ID)
+		if err != nil {
+			fmt.Printf("Removing instance: %s\n", aurora.Red(err))
+			return
+		}
+
+		if OutputFormat == "human" {
+			fmt.Printf("The instance %s (%s) has been removed\n", aurora.Green(instance.Hostname), instance.ID)
+		}
+	},
+}
 
 // TODO: instance reboot ID/HOSTNAME -- reboots instance with ID/hostname entered [hard-reboot]
 // TODO: instance soft-reboot ID/HOSTNAME -- soft-reboots instance with ID entered
@@ -238,4 +270,5 @@ func init() {
 	rootCmd.AddCommand(instanceCmd)
 	instanceCmd.AddCommand(instanceListCmd)
 	instanceCmd.AddCommand(instanceShowCmd)
+	instanceCmd.AddCommand(instanceRemoveCmd)
 }
