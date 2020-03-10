@@ -40,17 +40,17 @@ Example: civo instance stop ID/NAME`,
 			os.Exit(1)
 		}
 
-		if OutputFormat == "human" {
+		if outputFormat == "human" {
 			fmt.Printf("The instance %s (%s) is being stopped\n", aurora.Green(instance.Hostname), instance.ID)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
 			ow.AppendData("ID", instance.ID)
 			ow.AppendData("Hostname", instance.Hostname)
-			if OutputFormat == "json" {
+			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON()
 			} else {
-				ow.WriteCustomOutput(OutputFields)
+				ow.WriteCustomOutput(outputFields)
 			}
 		}
 	},

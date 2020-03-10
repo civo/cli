@@ -22,7 +22,7 @@ import (
 //   # Then one of:
 //   ow.WriteSingleObjectJSON()
 //   ow.WriteMultipleObjectsJSON()
-//   ow.WriteCustomOutput(OutputFields)
+//   ow.WriteCustomOutput(outputFields)
 //   ow.WriteKeyValues()
 //   ow.WriteTable()
 type OutputWriter struct {

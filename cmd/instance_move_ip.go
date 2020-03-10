@@ -58,7 +58,7 @@ Example: civo instance move-ip ID/NAME 1.2.3.4`,
 			os.Exit(1)
 		}
 
-		if OutputFormat == "human" {
+		if outputFormat == "human" {
 			fmt.Printf("Moving the IP %s to the instance %s (%s)\n", aurora.Green(args[1]), aurora.Green(instance.Hostname), instance.ID)
 		} else {
 			ow := utility.NewOutputWriter()
@@ -66,10 +66,10 @@ Example: civo instance move-ip ID/NAME 1.2.3.4`,
 			ow.AppendData("ID", instance.ID)
 			ow.AppendData("Hostname", instance.Hostname)
 			ow.AppendDataWithLabel("PublicIP", args[1], "Public IP")
-			if OutputFormat == "json" {
+			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON()
 			} else {
-				ow.WriteCustomOutput(OutputFields)
+				ow.WriteCustomOutput(outputFields)
 			}
 		}
 	},

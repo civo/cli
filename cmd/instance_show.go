@@ -77,7 +77,7 @@ Example: civo instance show ID/NAME -o custom -f "Key1: Key2"`,
 		ow.AppendDataWithLabel("CreatedAt", instance.CreatedAt.Format(time.RFC1123), "Created At")
 		ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "Private IP")
 
-		if OutputFormat == "json" || OutputFormat == "custom" {
+		if outputFormat == "json" || outputFormat == "custom" {
 			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public IP")
 			ow.AppendDataWithLabel("PseudoIP", instance.PseudoIP, "Pseudo IP")
 			ow.AppendData("Notes", instance.Notes)
@@ -86,10 +86,10 @@ Example: civo instance show ID/NAME -o custom -f "Key1: Key2"`,
 			ow.AppendData("ReverseDNS", instance.ReverseDNS)
 			ow.AppendData("PublicIP", instance.PublicIP)
 			ow.AppendData("PseudoIP", instance.PseudoIP)
-			if OutputFormat == "json" {
+			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON()
 			} else {
-				ow.WriteCustomOutput(OutputFields)
+				ow.WriteCustomOutput(outputFields)
 			}
 		} else {
 			if instance.PseudoIP != "" {

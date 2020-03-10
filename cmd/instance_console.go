@@ -41,7 +41,7 @@ Example: civo instance console ID/NAME`,
 			os.Exit(1)
 		}
 
-		if OutputFormat == "human" {
+		if outputFormat == "human" {
 			fmt.Printf("The instance %s (%s) has a console at %s\n", aurora.Green(instance.Hostname), instance.ID,
 				aurora.Green(url))
 		} else {
@@ -50,10 +50,10 @@ Example: civo instance console ID/NAME`,
 			ow.AppendData("ID", instance.ID)
 			ow.AppendDataWithLabel("URL", url, "Console URL")
 			ow.AppendData("Hostname", instance.Hostname)
-			if OutputFormat == "json" {
+			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON()
 			} else {
-				ow.WriteCustomOutput(OutputFields)
+				ow.WriteCustomOutput(outputFields)
 			}
 		}
 	},

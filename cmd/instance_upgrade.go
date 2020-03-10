@@ -65,7 +65,7 @@ Example: civo instance upgrade ID/NAME g2.xlarge`,
 			os.Exit(1)
 		}
 
-		if OutputFormat == "human" {
+		if outputFormat == "human" {
 			fmt.Printf("The instance %s (%s) is being upgraded to %s\n", aurora.Green(instance.Hostname), instance.ID, aurora.Green(args[1]))
 		} else {
 			ow := utility.NewOutputWriter()
@@ -74,10 +74,10 @@ Example: civo instance upgrade ID/NAME g2.xlarge`,
 			ow.AppendData("Hostname", instance.Hostname)
 			ow.AppendDataWithLabel("OldSize", instance.Size, "Old Size")
 			ow.AppendDataWithLabel("NewSize", args[1], "New Size")
-			if OutputFormat == "json" {
+			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON()
 			} else {
-				ow.WriteCustomOutput(OutputFields)
+				ow.WriteCustomOutput(outputFields)
 			}
 		}
 	},

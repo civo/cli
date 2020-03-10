@@ -52,7 +52,7 @@ Example: civo instance firewall ID/NAME 12345`,
 			os.Exit(1)
 		}
 
-		if OutputFormat == "human" {
+		if outputFormat == "human" {
 			fmt.Printf("Setting the firewall for the instance %s (%s) to %s (%s)\n", aurora.Green(instance.Hostname), instance.ID, aurora.Green(firewall.Name), firewall.ID)
 		} else {
 			ow := utility.NewOutputWriter()
@@ -60,10 +60,10 @@ Example: civo instance firewall ID/NAME 12345`,
 			ow.AppendData("ID", instance.ID)
 			ow.AppendData("Hostname", instance.Hostname)
 			ow.AppendDataWithLabel("FirewallID", firewall.ID, "Firewall ID")
-			if OutputFormat == "json" {
+			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON()
 			} else {
-				ow.WriteCustomOutput(OutputFields)
+				ow.WriteCustomOutput(outputFields)
 			}
 		}
 	},

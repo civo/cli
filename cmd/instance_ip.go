@@ -35,7 +35,7 @@ Example: civo instance public-ip ID/NAME`,
 			os.Exit(1)
 		}
 
-		if OutputFormat == "human" {
+		if outputFormat == "human" {
 			fmt.Printf("The instance %s (%s) has the public IP %s\n", aurora.Green(instance.Hostname), instance.ID, aurora.Green(instance.PublicIP))
 		} else {
 			ow := utility.NewOutputWriter()
@@ -43,10 +43,10 @@ Example: civo instance public-ip ID/NAME`,
 			ow.AppendData("ID", instance.ID)
 			ow.AppendData("Hostname", instance.Hostname)
 			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public ID")
-			if OutputFormat == "json" {
+			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON()
 			} else {
-				ow.WriteCustomOutput(OutputFields)
+				ow.WriteCustomOutput(outputFields)
 			}
 		}
 	},

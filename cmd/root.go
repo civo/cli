@@ -8,8 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var OutputFields string
-var OutputFormat string
+var outputFields string
+var outputFormat string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -36,8 +36,8 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVarP(&config.Filename, "config", "", "", "config file (default is $HOME/.civo.json)")
-	rootCmd.PersistentFlags().StringVarP(&OutputFields, "fields", "f", "", "output fields for custom format output (use -h to determine fields)")
-	rootCmd.PersistentFlags().StringVarP(&OutputFormat, "output", "o", "human", "output format (json/human/custom)")
+	rootCmd.PersistentFlags().StringVarP(&outputFields, "fields", "f", "", "output fields for custom format output (use -h to determine fields)")
+	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output", "o", "human", "output format (json/human/custom)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
