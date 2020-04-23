@@ -32,5 +32,5 @@ func init() {
 	instanceCmd.AddCommand(instanceTagCmd)
 	instanceUpdateCmd.Flags().StringVarP(&notes, "notes", "n", "", "notes stored against the instance")
 	instanceUpdateCmd.Flags().StringVarP(&reverseDNS, "reverse-dns", "r", "", "the reverse DNS entry for the instance")
-	instanceUpdateCmd.Flags().StringVarP(&hostname, "hostname", "h", "", "the instance's hostname")
+	instanceUpdateCmd.Flags().StringVarP(&hostname, "hostname", "e", "", "the instance's hostname")
 }

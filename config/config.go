@@ -24,7 +24,7 @@ type Config struct {
 }
 
 // Current contains the parsed ~/.civo.json file
-var Current []Config
+var Current Config
 
 // Filename is set to a full filename if the default config
 // file is overriden by a command-line switch
@@ -85,8 +85,8 @@ func SaveConfig() {
 
 // DefaultAPIKey returns the current default API key
 func DefaultAPIKey() string {
-	if Current[0].Meta.CurrentAPIKey != "" {
-		return Current[0].APIKeys[Current[0].Meta.CurrentAPIKey]
+	if Current.Meta.CurrentAPIKey != "" {
+		return Current.APIKeys[Current.Meta.CurrentAPIKey]
 	}
 	return ""
 }

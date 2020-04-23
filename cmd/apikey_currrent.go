@@ -22,14 +22,7 @@ var apikeyCurrentCmd = &cobra.Command{
 		}
 
 		if name != "" {
-			for k, v := range config.Current {
-
-				if v.Meta.CurrentAPIKey != "" {
-					config.Current[k].Meta.CurrentAPIKey = ""
-				}
-			}
-
-			config.Current[index].Meta.CurrentAPIKey = name
+			config.Current.Meta.CurrentAPIKey = index
 			config.SaveConfig()
 
 			fmt.Printf("Set the default API Key to be %s\n", aurora.Green(name))
