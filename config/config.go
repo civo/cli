@@ -45,6 +45,9 @@ func ReadConfig() {
 }
 
 func loadConfig(filename string) {
+
+	checkConfigFile(filename)
+
 	configFile, err := os.Open(filename)
 	defer configFile.Close()
 	if err != nil {
@@ -81,6 +84,26 @@ func SaveConfig() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+}
+
+func checkConfigFile(filename string) error {
+	_, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		_, err := os.Create(filename)
+		if err != nil {
+			return err
+		}
+
+		fileContend := []byte("{\"apikeys\":{},\"meta\":{\"current_apikey\":\"\",\"default_region\":\"lon1\",\"latest_release_check\":\"\",\"url\":\"https://api.civo.com\"}}")
+
+		err = ioutil.WriteFile(filename, fileContend, 0600)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+	}
+	return nil
 }
 
 // DefaultAPIKey returns the current default API key
