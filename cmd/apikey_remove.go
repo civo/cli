@@ -15,18 +15,18 @@ var apikeyRemoveCmd = &cobra.Command{
 	Short:   "Remove a saved API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		key, err := apiKeyFind(args[0])
+		index, name, err := apiKeyFind(args[0])
 		if err != nil {
 			fmt.Fprintf(os.Stderr, err.Error())
 			os.Exit(1)
 		}
 
-		numKeys := len(config.Current.APIKeys)
-		delete(config.Current.APIKeys, key)
+		numKeys := len(config.Current)
+		config.Current = append(config.Current[:index], config.Current[index+1:]...)
 		config.SaveConfig()
 
-		if numKeys > len(config.Current.APIKeys) {
-			fmt.Printf("Removed the API Key %s\n", aurora.Green(args[0]))
+		if numKeys > len(config.Current) {
+			fmt.Printf("Removed the API Key %s\n", aurora.Green(name))
 		} else {
 			fmt.Fprintf(os.Stderr, "The API Key %s couldn't be found\n", aurora.Red(args[0]))
 			os.Exit(1)

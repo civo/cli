@@ -15,7 +15,9 @@ var apikeySaveCmd = &cobra.Command{
 	Short:   "Save a new API keys",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		config.Current.APIKeys[args[0]] = args[1]
+
+		apiKeyConfig := &config.Config{APIKeys: map[string]string{args[0]: args[1]}}
+		config.Current = append(config.Current, *apiKeyConfig)
 		config.SaveConfig()
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"Name": args[0], "Key": args[1]})

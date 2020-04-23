@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"sort"
-
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -20,24 +18,20 @@ If you wish to use a custom format, the available fields are:
 
 Example: civo apikey ls -o custom -f "Name: Key"`,
 	Run: func(cmd *cobra.Command, args []string) {
-		keys := make([]string, 0, len(config.Current.APIKeys))
-		for k := range config.Current.APIKeys {
-			keys = append(keys, k)
-		}
-		sort.Strings(keys)
-
 		ow := utility.NewOutputWriter()
 
-		for _, name := range keys {
+		for _, name := range config.Current {
 			ow.StartLine()
-			apiKey := config.Current.APIKeys[name]
-			defaultLabel := ""
-			if config.Current.Meta.CurrentAPIKey == name {
-				defaultLabel = "<====="
+			for k, _ := range name.APIKeys {
+				apiKey := name.APIKeys[k]
+				defaultLabel := ""
+				if name.Meta.CurrentAPIKey == k {
+					defaultLabel = "<====="
+				}
+				ow.AppendData("Name", k)
+				ow.AppendData("Key", apiKey)
+				ow.AppendData("Default", defaultLabel)
 			}
-			ow.AppendData("Name", name)
-			ow.AppendData("Key", apiKey)
-			ow.AppendData("Default", defaultLabel)
 		}
 
 		switch outputFormat {

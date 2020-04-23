@@ -24,7 +24,7 @@ type Config struct {
 }
 
 // Current contains the parsed ~/.civo.json file
-var Current Config
+var Current []Config
 
 // Filename is set to a full filename if the default config
 // file is overriden by a command-line switch
@@ -70,8 +70,13 @@ func SaveConfig() {
 		filename = fmt.Sprintf("%s/%s", home, ".civo.json")
 	}
 
-	configJSON, _ := json.Marshal(Current)
-	err := ioutil.WriteFile(filename, configJSON, 0600)
+	dataBytes, err := json.Marshal(Current)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	err = ioutil.WriteFile(filename, dataBytes, 0600)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -80,8 +85,8 @@ func SaveConfig() {
 
 // DefaultAPIKey returns the current default API key
 func DefaultAPIKey() string {
-	if Current.Meta.CurrentAPIKey != "" {
-		return Current.APIKeys[Current.Meta.CurrentAPIKey]
+	if Current[0].Meta.CurrentAPIKey != "" {
+		return Current[0].APIKeys[Current[0].Meta.CurrentAPIKey]
 	}
 	return ""
 }
