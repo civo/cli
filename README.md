@@ -30,8 +30,8 @@ Golang has no shortage of external libraries for various parts of this, but the 
 - ✅ ~~Regions~~
 - ✅ ~~Quotas~~
 - ✅ ~~Sizes~~
-- Instances
-- Domain names
+- ✅ ~~Instances~~
+- ✅ Domain names
 - Domain records
 - Kubernetes Clusters
 - Kubernetes Applications
