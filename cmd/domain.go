@@ -1,14 +1,5 @@
 package cmd
 
-// domain list -- list all domain records for a domain [ls, all]
-// domain create DOMAIN -- create a new domain name called DOMAIN [new]
-// domain remove ID -- remove the domain with ID (or name) [delete, destroy, rm]
-
-// domain_record list DOMAIN_ID -- list all entries for DOMAIN_ID (or name) [ls, all]
-// domain_record show RECORD_ID -- show full information for record RECORD_ID (or full DNS name) [get, inspect]
-// domain_record create RECORD TYPE VALUE -- create a new domain record called RECORD TYPE(a/alias, cname/canonical, mx/mail, txt/text) VALUE [new]
-// domain_record remove ID -- remove the domain record with ID [delete, destroy, rm]
-
 import (
 	"github.com/spf13/cobra"
 )
@@ -19,9 +10,32 @@ var domainCmd = &cobra.Command{
 	Short:   "Details of Civo domains",
 }
 
+var domainRecordCmd = &cobra.Command{
+	Use:     "record",
+	Aliases: []string{"record"},
+	Short:   "Details of Civo domains records",
+}
+
 func init() {
 	rootCmd.AddCommand(domainCmd)
 	domainCmd.AddCommand(domainListCmd)
 	domainCmd.AddCommand(domainCreateCmd)
 	domainCmd.AddCommand(domainRemoveCmd)
+
+	// Domains record cmd
+	domainCmd.AddCommand(domainRecordCmd)
+	domainRecordCmd.AddCommand(domainRecordListCmd)
+	domainRecordCmd.AddCommand(domainRecordCreateCmd)
+	domainRecordCmd.AddCommand(domainRecordShowCmd)
+	domainRecordCmd.AddCommand(domainRecordRemoveCmd)
+
+	/*
+		Flags for domain record create cmd
+	*/
+	domainRecordCreateCmd.Flags().StringVarP(&recordName, "name", "n", "", "the name of the record")
+	domainRecordCreateCmd.Flags().StringVarP(&recordType, "type", "e", "", "type of the record (a, cname, txt, mx)")
+	domainRecordCreateCmd.Flags().StringVarP(&recordValue, "value", "v", "", "the value of the record")
+	domainRecordCreateCmd.Flags().IntVarP(&recordTTL, "ttl", "t", 600, "The TTL of the record")
+	domainRecordCreateCmd.Flags().IntVarP(&recordPriority, "priority", "p", 0, "the priority of record")
+
 }

@@ -9,11 +9,11 @@ import (
 	"os"
 )
 
-var domainRemoveCmd = &cobra.Command{
+var domainRecordRemoveCmd = &cobra.Command{
 	Use:     "remove",
-	Aliases: []string{"rm", "delete", "destroy"},
-	Short:   "Remove a domain",
-	Args:    cobra.MinimumNArgs(1),
+	Aliases: []string{"delete", "destroy", "rm"},
+	Args:    cobra.MinimumNArgs(2),
+	Short:   "Remove record",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -27,9 +27,15 @@ var domainRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		_, err = client.DeleteDNSDomain(domain)
+		record, err := client.GetDNSRecord(domain.ID, args[1])
+		if err != nil {
+			fmt.Printf("Unable to get domains record: %s\n", aurora.Red(err))
+			os.Exit(1)
+		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": domain.ID, "Name": domain.Name})
+		_, err = client.DeleteDNSRecord(record)
+
+		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": record.ID, "Name": record.Name})
 
 		switch outputFormat {
 		case "json":
@@ -37,7 +43,7 @@ var domainRemoveCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The domain called %s with ID %s was delete\n", aurora.Green(domain.Name), aurora.Green(domain.ID))
+			fmt.Printf("The domain record called %s with ID %s was delete\n", aurora.Green(record.Name), aurora.Green(record.ID))
 		}
 	},
 }
