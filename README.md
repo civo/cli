@@ -31,8 +31,9 @@ Golang has no shortage of external libraries for various parts of this, but the 
 - ✅ ~~Quotas~~
 - ✅ ~~Sizes~~
 - ✅ ~~Instances~~
-- ✅ Domain names
-- Domain records
+- ✅ ~~Domain names~~
+- ✅ ~~Domain records~~
+- ✅ ~~Firewalls~~
 - Kubernetes Clusters
 - Kubernetes Applications
 - Load balancers
@@ -40,7 +41,6 @@ Golang has no shortage of external libraries for various parts of this, but the 
 - Networks
 - Snapshots
 - Volumes
-- Firewalls
 - Templates
 - Blueprints
 - `curl | bash` installation mechanism
