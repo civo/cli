@@ -81,7 +81,12 @@ Example: civo instance create --hostname=foo.example.com`,
 		}
 
 		if sshkey != "" {
-			config.SSHKeyID = sshkey
+			sshKey, err := client.FindSSHKey(sshkey)
+			if err != nil {
+				fmt.Printf("Unable to find the ssh key: %s\n", aurora.Red(err))
+				os.Exit(1)
+			}
+			config.SSHKeyID = sshKey.ID
 		}
 
 		if tags != "" {

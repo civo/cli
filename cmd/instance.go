@@ -46,7 +46,7 @@ func init() {
 	instanceCreateCmd.Flags().StringVarP(&snapshot, "snapshot", "n", "", "the instance's snapshot")
 	instanceCreateCmd.Flags().StringVarP(&publicip, "publicip", "p", "", "the instance's public ip")
 	instanceCreateCmd.Flags().StringVarP(&initialuser, "initialuser", "u", "", "the instance's initial user")
-	instanceCreateCmd.Flags().StringVarP(&sshkey, "sshkey", "k", "", "the instance's ssh key")
+	instanceCreateCmd.Flags().StringVarP(&sshkey, "sshkey", "k", "", "the instance's ssh key you can use the Name or the ID")
 	instanceCreateCmd.Flags().StringVarP(&tags, "tags", "g", "", "the instance's tags")
 
 	/*

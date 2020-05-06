@@ -34,13 +34,17 @@ Golang has no shortage of external libraries for various parts of this, but the 
 - ✅ ~~Domain names~~
 - ✅ ~~Domain records~~
 - ✅ ~~Firewalls~~
-- Kubernetes Clusters
-- Kubernetes Applications
-- Load balancers
-- SSH keys
+- ✅ ~~Load balancers~~
+- ✅ ~~SSH keys~~
 - Networks
 - Snapshots
 - Volumes
+
+- Kubernetes Clusters
+- Kubernetes Applications
+
+
+
 - Templates
 - Blueprints
 - `curl | bash` installation mechanism
