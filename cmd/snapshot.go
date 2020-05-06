@@ -1,5 +1,22 @@
 package cmd
 
-// snapshot list -- list all snapshots [ls, all]
-// snapshot create NAME INSTANCE_ID [-c '0 * * * *'] -- create a snapshot called NAME from instance INSTANCE_ID [new]
-// snapshot remove ID -- remove the snapshot ID [delete, destroy, rm]
+import (
+	"github.com/spf13/cobra"
+)
+
+var snapshotCmd = &cobra.Command{
+	Use:   "snapshot",
+	Short: "Details of Civo Snapshot",
+}
+
+func init() {
+	rootCmd.AddCommand(snapshotCmd)
+	snapshotCmd.AddCommand(snapshotListCmd)
+	snapshotCmd.AddCommand(snapshotCreateCmd)
+	snapshotCmd.AddCommand(snapshotRemoveCmd)
+
+	/*
+		Flags for the create cmd
+	*/
+	snapshotCreateCmd.Flags().StringVarP(&cron, "cron", "c", "", "If a valid cron string is passed, the snapshot will be saved as an automated snapshot")
+}
