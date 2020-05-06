@@ -14,7 +14,7 @@ import (
 )
 
 var wait bool
-var hostname_create, size, template, snapshot, publicip, initialuser, sshkey, tags string
+var hostnameCreate, size, template, snapshot, publicip, initialuser, sshkey, tags, network string
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -56,8 +56,8 @@ Example: civo instance create --hostname=foo.example.com`,
 
 		config, err := client.NewInstanceConfig()
 
-		if hostname_create != "" {
-			config.Hostname = hostname_create
+		if hostnameCreate != "" {
+			config.Hostname = hostnameCreate
 		}
 
 		if size != "" {
@@ -87,6 +87,15 @@ Example: civo instance create --hostname=foo.example.com`,
 				os.Exit(1)
 			}
 			config.SSHKeyID = sshKey.ID
+		}
+
+		if network != "" {
+			net, err := client.FindNetwork(network)
+			if err != nil {
+				fmt.Printf("Unable to find the network: %s\n", aurora.Red(err))
+				os.Exit(1)
+			}
+			config.NetworkID = net.ID
 		}
 
 		if tags != "" {

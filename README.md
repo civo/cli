@@ -36,7 +36,7 @@ Golang has no shortage of external libraries for various parts of this, but the 
 - ✅ ~~Firewalls~~
 - ✅ ~~Load balancers~~
 - ✅ ~~SSH keys~~
-- Networks
+- ✅ ~~Networks~~
 - Snapshots
 - Volumes
 
