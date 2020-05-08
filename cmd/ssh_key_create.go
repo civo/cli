@@ -10,11 +10,13 @@ import (
 	"os"
 )
 
+var keyCreate string
+
 var sshKeyCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
 	Short:   "Create a new ssh key",
-	Args:    cobra.MinimumNArgs(2),
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -23,7 +25,7 @@ var sshKeyCreateCmd = &cobra.Command{
 		}
 
 		// reading the file
-		data, err := ioutil.ReadFile(args[1])
+		data, err := ioutil.ReadFile(keyCreate)
 		if err != nil {
 			fmt.Printf("Unable to read the ssh key file: %s\n", aurora.Red(err))
 			os.Exit(1)
