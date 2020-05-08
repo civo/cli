@@ -21,23 +21,27 @@ var snapshotRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		snapshot, err := client.FindSnapshot(args[0])
-		if err != nil {
-			fmt.Printf("Unable to find snapshot for your search: %s\n", aurora.Red(err))
-			os.Exit(1)
-		}
+		if utility.AskForConfirmDelete("snapshot") == nil {
+			snapshot, err := client.FindSnapshot(args[0])
+			if err != nil {
+				fmt.Printf("Unable to find snapshot for your search: %s\n", aurora.Red(err))
+				os.Exit(1)
+			}
 
-		_, err = client.DeleteSnapshot(snapshot.Name)
+			_, err = client.DeleteSnapshot(snapshot.Name)
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": snapshot.ID, "Name": snapshot.Name})
+			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": snapshot.ID, "Name": snapshot.Name})
 
-		switch outputFormat {
-		case "json":
-			ow.WriteSingleObjectJSON()
-		case "custom":
-			ow.WriteCustomOutput(outputFields)
-		default:
-			fmt.Printf("The snapshot called %s with ID %s was delete\n", aurora.Green(snapshot.Name), aurora.Green(snapshot.ID))
+			switch outputFormat {
+			case "json":
+				ow.WriteSingleObjectJSON()
+			case "custom":
+				ow.WriteCustomOutput(outputFields)
+			default:
+				fmt.Printf("The snapshot called %s with ID %s was delete\n", aurora.Green(snapshot.Name), aurora.Green(snapshot.ID))
+			}
+		} else {
+			fmt.Println("Operation aborted.")
 		}
 	},
 }

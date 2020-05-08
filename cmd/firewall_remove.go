@@ -21,23 +21,27 @@ var firewallRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		firewall, err := client.FindFirewall(args[0])
-		if err != nil {
-			fmt.Printf("Unable to find firewall for your search: %s\n", aurora.Red(err))
-			os.Exit(1)
-		}
+		if utility.AskForConfirmDelete("firewall") == nil {
+			firewall, err := client.FindFirewall(args[0])
+			if err != nil {
+				fmt.Printf("Unable to find firewall for your search: %s\n", aurora.Red(err))
+				os.Exit(1)
+			}
 
-		_, err = client.DeleteFirewall(firewall.ID)
+			_, err = client.DeleteFirewall(firewall.ID)
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": firewall.ID, "Name": firewall.Name})
+			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": firewall.ID, "Name": firewall.Name})
 
-		switch outputFormat {
-		case "json":
-			ow.WriteSingleObjectJSON()
-		case "custom":
-			ow.WriteCustomOutput(outputFields)
-		default:
-			fmt.Printf("The firewall called %s with ID %s was delete\n", aurora.Green(firewall.Name), aurora.Green(firewall.ID))
+			switch outputFormat {
+			case "json":
+				ow.WriteSingleObjectJSON()
+			case "custom":
+				ow.WriteCustomOutput(outputFields)
+			default:
+				fmt.Printf("The firewall %s with ID %s was delete\n", aurora.Green(firewall.Name), aurora.Green(firewall.ID))
+			}
+		} else {
+			fmt.Println("Operation aborted.")
 		}
 	},
 }

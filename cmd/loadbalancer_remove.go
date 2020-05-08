@@ -21,23 +21,27 @@ var loadBalancerRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		lb, err := client.FindLoadBalancer(args[0])
-		if err != nil {
-			fmt.Printf("Unable to find load balancer for your search: %s\n", aurora.Red(err))
-			os.Exit(1)
-		}
+		if utility.AskForConfirmDelete("load balancer") == nil {
+			lb, err := client.FindLoadBalancer(args[0])
+			if err != nil {
+				fmt.Printf("Unable to find load balancer for your search: %s\n", aurora.Red(err))
+				os.Exit(1)
+			}
 
-		_, err = client.DeleteLoadBalancer(lb.ID)
+			_, err = client.DeleteLoadBalancer(lb.ID)
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": lb.ID, "Hostname": lb.Hostname})
+			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": lb.ID, "Hostname": lb.Hostname})
 
-		switch outputFormat {
-		case "json":
-			ow.WriteSingleObjectJSON()
-		case "custom":
-			ow.WriteCustomOutput(outputFields)
-		default:
-			fmt.Printf("The load blancer %s with ID %s was delete\n", aurora.Green(lb.Hostname), aurora.Green(lb.ID))
+			switch outputFormat {
+			case "json":
+				ow.WriteSingleObjectJSON()
+			case "custom":
+				ow.WriteCustomOutput(outputFields)
+			default:
+				fmt.Printf("The load blancer %s with ID %s was delete\n", aurora.Green(lb.Hostname), aurora.Green(lb.ID))
+			}
+		} else {
+			fmt.Println("Operation aborted.")
 		}
 	},
 }

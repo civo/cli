@@ -21,23 +21,27 @@ var domainRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		domain, err := client.FindDNSDomain(args[0])
-		if err != nil {
-			fmt.Printf("Unable to find domain for your search: %s\n", aurora.Red(err))
-			os.Exit(1)
-		}
+		if utility.AskForConfirmDelete("domain") == nil {
+			domain, err := client.FindDNSDomain(args[0])
+			if err != nil {
+				fmt.Printf("Unable to find domain for your search: %s\n", aurora.Red(err))
+				os.Exit(1)
+			}
 
-		_, err = client.DeleteDNSDomain(domain)
+			_, err = client.DeleteDNSDomain(domain)
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": domain.ID, "Name": domain.Name})
+			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": domain.ID, "Name": domain.Name})
 
-		switch outputFormat {
-		case "json":
-			ow.WriteSingleObjectJSON()
-		case "custom":
-			ow.WriteCustomOutput(outputFields)
-		default:
-			fmt.Printf("The domain called %s with ID %s was delete\n", aurora.Green(domain.Name), aurora.Green(domain.ID))
+			switch outputFormat {
+			case "json":
+				ow.WriteSingleObjectJSON()
+			case "custom":
+				ow.WriteCustomOutput(outputFields)
+			default:
+				fmt.Printf("The domain called %s with ID %s was delete\n", aurora.Green(domain.Name), aurora.Green(domain.ID))
+			}
+		} else {
+			fmt.Println("Operation aborted.")
 		}
 	},
 }

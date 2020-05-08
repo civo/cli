@@ -16,29 +16,29 @@ var quotaShowCmd = &cobra.Command{
 	Short:   "Show quota",
 	Long: `Show your current quota and usage.
 If you wish to use a custom format, the available fields are:
-
-* InstanceCountLimit
-* InstanceCountUsage
-* CPUCoreLimit
-* CPUCoreUsage
-* RAMMegabytesLimit
-* RAMMegabytesUsage
-* DiskGigabytesLimit
-* DiskGigabytesUsage
-* DiskVolumeCountLimit
-* DiskVolumeCountUsage
-* DiskSnapshotCountLimit
-* DiskSnapshotCountUsage
-* PublicIPAddressLimit
-* PublicIPAddressUsage
-* SubnetCountLimit
-* SubnetCountUsage
-* NetworkCountLimit
-* NetworkCountUsage
-* SecurityGroupLimit
-* SecurityGroupUsage
-* SecurityGroupRuleLimit
-* SecurityGroupRuleUsage
+	
+	* InstanceCountLimit
+	* InstanceCountUsage
+	* CPUCoreLimit
+	* CPUCoreUsage
+	* RAMMegabytesLimit
+	* RAMMegabytesUsage
+	* DiskGigabytesLimit
+	* DiskGigabytesUsage
+	* DiskVolumeCountLimit
+	* DiskVolumeCountUsage
+	* DiskSnapshotCountLimit
+	* DiskSnapshotCountUsage
+	* PublicIPAddressLimit
+	* PublicIPAddressUsage
+	* SubnetCountLimit
+	* SubnetCountUsage
+	* NetworkCountLimit
+	* NetworkCountUsage
+	* SecurityGroupLimit
+	* SecurityGroupUsage
+	* SecurityGroupRuleLimit
+	* SecurityGroupRuleUsage
 
 Example: civo quota show -o custom -f "InstanceCountUsage/InstanceCountLimit"`,
 	Run: func(cmd *cobra.Command, args []string) {

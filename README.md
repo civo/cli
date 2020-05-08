@@ -37,10 +37,9 @@ Golang has no shortage of external libraries for various parts of this, but the 
 - ✅ ~~Load balancers~~
 - ✅ ~~SSH keys~~
 - ✅ ~~Networks~~
-- Snapshots
-- Volumes
+- ✅ ~~Snapshots~~
+- ✅ ~~Volumes~~
 - Templates
-
 - Kubernetes Clusters
 - Kubernetes Applications
 

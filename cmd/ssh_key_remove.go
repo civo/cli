@@ -21,23 +21,27 @@ var sshKeyRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		sshKey, err := client.FindSSHKey(args[0])
-		if err != nil {
-			fmt.Printf("Unable to find ssh key for your search: %s\n", aurora.Red(err))
-			os.Exit(1)
-		}
+		if utility.AskForConfirmDelete("ssh key") == nil {
+			sshKey, err := client.FindSSHKey(args[0])
+			if err != nil {
+				fmt.Printf("Unable to find ssh key for your search: %s\n", aurora.Red(err))
+				os.Exit(1)
+			}
 
-		_, err = client.DeleteSSHKey(sshKey.ID)
+			_, err = client.DeleteSSHKey(sshKey.ID)
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": sshKey.ID, "Name": sshKey.Name})
+			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": sshKey.ID, "Name": sshKey.Name})
 
-		switch outputFormat {
-		case "json":
-			ow.WriteSingleObjectJSON()
-		case "custom":
-			ow.WriteCustomOutput(outputFields)
-		default:
-			fmt.Printf("The ssh key called %s with ID %s was delete\n", aurora.Green(sshKey.Name), aurora.Green(sshKey.ID))
+			switch outputFormat {
+			case "json":
+				ow.WriteSingleObjectJSON()
+			case "custom":
+				ow.WriteCustomOutput(outputFields)
+			default:
+				fmt.Printf("The ssh key called %s with ID %s was delete\n", aurora.Green(sshKey.Name), aurora.Green(sshKey.ID))
+			}
+		} else {
+			fmt.Println("Operation aborted.")
 		}
 	},
 }
