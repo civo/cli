@@ -1,3 +1,4 @@
+id: "civo"
 builds:
   - env:
       - CGO_ENABLED=0
