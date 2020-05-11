@@ -2,24 +2,24 @@
 # Make sure to check the documentation at http://goreleaser.com
 project_name: civo
 builds:
-- env:
-  - CGO_ENABLED=0
-  goos:
-    - linux
-    - darwin
-    - windows
-  goarch:
-    - 386
-    - amd64
-  ignore:
-    - goos: darwin
-      goarch: 386
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - 386
+      - amd64
+    ignore:
+      - goos: darwin
+        goarch: 386
 archives:
-- replacements:
-  - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-    format_overrides:
-      - goos: windows
-        format: zip
+  - replacements:
+      - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+        format_overrides:
+          - goos: windows
+            format: zip
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -28,5 +28,5 @@ changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
+      - '^docs:'
+      - '^test:'
