@@ -1,7 +1,7 @@
 package utility
 
 import (
-	"github.com/logrusorgru/aurora"
+	"github.com/fatih/color"
 )
 
 func ColorStatus(status string) interface{} {
@@ -9,23 +9,23 @@ func ColorStatus(status string) interface{} {
 	var returnText interface{}
 
 	if status == "ACTIVE" {
-		returnText = aurora.BrightGreen(status)
+		returnText = color.GreenString(status)
 	}
 
 	if status == "SHUTOFF" {
-		returnText = aurora.BrightRed(status)
+		returnText = color.RedString(status)
 	}
 
 	if status == "REBOOTING" {
-		returnText = aurora.BrightYellow(status)
+		returnText = color.YellowString(status)
 	}
 
 	if status == "INSTANCE-CREATE" {
-		returnText = aurora.BrightBlue(status)
+		returnText = color.BlueString(status)
 	}
 
 	if status == "INSTALLING" {
-		returnText = aurora.BrightMagenta(status)
+		returnText = color.MagentaString(status)
 	}
 
 	return returnText

@@ -2,11 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"os"
-
 	"github.com/civo/cli/config"
-	"github.com/logrusorgru/aurora"
+	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var apikeyCurrentCmd = &cobra.Command{
@@ -24,8 +23,7 @@ var apikeyCurrentCmd = &cobra.Command{
 		if name != "" {
 			config.Current.Meta.CurrentAPIKey = index
 			config.SaveConfig()
-
-			fmt.Printf("Set the default API Key to be %s\n", aurora.Green(name))
+			fmt.Printf("Set the default API Key to be %s\n", utility.Green(name))
 		}
 	},
 }

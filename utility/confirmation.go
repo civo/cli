@@ -3,7 +3,6 @@ package utility
 import (
 	"bufio"
 	"fmt"
-	"github.com/logrusorgru/aurora"
 	"io"
 	"os"
 	"strings"
@@ -19,7 +18,7 @@ var retrieveUserInput = func(message string) (string, error) {
 // as to-be-read inputs can be injected conveniently.
 func readUserInput(in io.Reader, message string) (string, error) {
 	reader := bufio.NewReader(in)
-	fmt.Fprintf(os.Stderr, "%s", aurora.Red("Are you sure you want to "+message+" (y/N) ? "))
+	YellowConfirm("Are you sure you want to " + message + " (y/N) ? ")
 	answer, err := reader.ReadString('\n')
 	if err != nil {
 		return "", err
@@ -34,7 +33,7 @@ func readUserInput(in io.Reader, message string) (string, error) {
 func AskForConfirm(message string) error {
 	answer, err := retrieveUserInput(message)
 	if err != nil {
-		return fmt.Errorf("Unable to parse users input: %s", err)
+		Error("Unable to parse users input: %s", err)
 	}
 
 	if answer != "y" && answer != "ye" && answer != "yes" {

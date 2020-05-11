@@ -3,10 +3,11 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 )
 
@@ -26,25 +27,25 @@ If you wish to use a custom format, the available fields are:
 Example: civo instance upgrade ID/NAME g2.xlarge`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 2 {
-			fmt.Printf("You must specify %d parameters (you gave %d), the ID/name and the new size\n", aurora.Red(2), aurora.Red(len(args)))
+			fmt.Printf("You must specify %s parameters (you gave %s), the ID/name and the new size\n", utility.Red("2"), utility.Red(strconv.Itoa(len(args))))
 			os.Exit(1)
 		}
 
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			fmt.Printf("Finding instance: %s\n", aurora.Red(err))
+			utility.Error("Finding instance %s %s", err)
 			os.Exit(1)
 		}
 
 		sizes, err := client.ListInstanceSizes()
 		if err != nil {
-			fmt.Printf("Checking size: %s\n", aurora.Red(err))
+			utility.Error("Checking size %s %s", err)
 			os.Exit(1)
 		}
 
@@ -54,19 +55,19 @@ Example: civo instance upgrade ID/NAME g2.xlarge`,
 				resizing = true
 				_, err = client.UpgradeInstance(instance.ID, size.Name)
 				if err != nil {
-					fmt.Printf("Upgrading instance: %s\n", aurora.Red(err))
+					utility.Error("Upgrading instance %s %s", err)
 					os.Exit(1)
 				}
 			}
 		}
 
 		if !resizing {
-			fmt.Printf("Unable to find size: %s\n", aurora.Red(args[1]))
+			utility.Error("Unable to find size", args[1])
 			os.Exit(1)
 		}
 
 		if outputFormat == "human" {
-			fmt.Printf("The instance %s (%s) is being upgraded to %s\n", aurora.Green(instance.Hostname), instance.ID, aurora.Green(args[1]))
+			fmt.Printf("The instance %s (%s) is being upgraded to %s\n", utility.Green(instance.Hostname), instance.ID, utility.Green(args[1]))
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()

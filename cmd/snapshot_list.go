@@ -5,7 +5,7 @@ import (
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/gorhill/cronexpr"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 	"strconv"
 	"time"
@@ -35,13 +35,13 @@ Example: civo snapshot ls -o custom -f "ID: Name (Hostname)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s", err)
 			return
 		}
 
 		snapshots, err := client.ListSnapshots()
 		if err != nil {
-			fmt.Printf("Unable to list snapshots: %s\n", aurora.Red(err))
+			utility.Error("Unable to list snapshots %s", err)
 			return
 		}
 

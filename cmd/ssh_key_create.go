@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"os"
@@ -20,26 +20,26 @@ var sshKeyCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		// reading the file
 		data, err := ioutil.ReadFile(keyCreate)
 		if err != nil {
-			fmt.Printf("Unable to read the ssh key file: %s\n", aurora.Red(err))
+			utility.Error("Unable to read the ssh key file %s", err)
 			os.Exit(1)
 		}
 
 		_, err = client.NewSSHKey(args[0], string(data))
 		if err != nil {
-			fmt.Printf("Unable to create the ssh key: %s\n", aurora.Red(err))
+			utility.Error("Unable to create the ssh key %s", err)
 			os.Exit(1)
 		}
 
 		sshKey, err := client.FindSSHKey(args[0])
 		if err != nil {
-			fmt.Printf("Unable to find the ssh key: %s\n", aurora.Red(err))
+			utility.Error("Unable to find the ssh key %s", err)
 			os.Exit(1)
 		}
 
@@ -51,7 +51,7 @@ var sshKeyCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("Created a ssh key called %s with ID %s\n", aurora.Green(sshKey.Name), aurora.Green(sshKey.ID))
+			fmt.Printf("Created a ssh key called %s with ID %s\n", utility.Green(sshKey.Name), utility.Green(sshKey.ID))
 		}
 	},
 }

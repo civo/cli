@@ -2,6 +2,7 @@ package utility
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -35,7 +36,9 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte) ([]byte, error) 
 		return nil, writeErr
 	}
 
-	fmt.Printf("Merging with existing kubeconfig at %s\n", localKubeconfigPath)
+	color.Set(color.FgBlue)
+	fmt.Sprintf("Merging with existing kubeconfig at %s\n", localKubeconfigPath)
+	color.Unset()
 
 	// Append KUBECONFIGS in ENV Vars
 	appendKubeConfigENV := fmt.Sprintf("KUBECONFIG=%s:%s", localKubeconfigPath, file.Name())
@@ -60,8 +63,10 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte) ([]byte, error) 
 // Generates config files give the path to file: string and the data: []byte
 func writeConfig(path string, data []byte, suppressMessage bool) error {
 	if !suppressMessage {
+		color.Set(color.FgBlue)
 		fmt.Printf("Saving file to: %s\n", path)
 		fmt.Printf("\n# Test your cluster with:\nexport KUBECONFIG=%s\nkubectl get node -o wide\n", path)
+		color.Unset()
 	}
 
 	var _, err = os.Stat(path)
@@ -70,7 +75,7 @@ func writeConfig(path string, data []byte, suppressMessage bool) error {
 	if os.IsNotExist(err) {
 		var file, err = os.Create(path)
 		if err != nil {
-			fmt.Println(err.Error())
+			Error(err.Error())
 		}
 		defer file.Close()
 	}

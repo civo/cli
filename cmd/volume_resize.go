@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 	"os"
 	"strconv"
@@ -19,24 +19,24 @@ var volumeResizeCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		volume, err := client.FindVolume(args[0])
 		if err != nil {
-			fmt.Printf("Unable to find the volume: %s\n", aurora.Red(err))
+			utility.Error("Unable to find the volume %s", err)
 			os.Exit(1)
 		}
 
 		if newSizeGB < volume.SizeGigabytes {
-			fmt.Printf("Sorry, The volume size specified (%s) wasn't larger than the volume's current size (%s)\n", aurora.Red(strconv.Itoa(newSizeGB)), aurora.Green(strconv.Itoa(volume.SizeGigabytes)))
+			fmt.Printf("Sorry, The volume size specified (%s) wasn't larger than the volume's current size (%s)\n", utility.Red(strconv.Itoa(newSizeGB)), utility.Green(strconv.Itoa(volume.SizeGigabytes)))
 			os.Exit(1)
 		}
 
 		_, err = client.ResizeVolume(volume.ID, newSizeGB)
 		if err != nil {
-			fmt.Printf("Unable to resize the volume: %s\n", aurora.Red(err))
+			utility.Error("Unable to resize the volume %s", err)
 			os.Exit(1)
 		}
 
@@ -48,7 +48,7 @@ var volumeResizeCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The a volume called %s with ID %s was resized\n", aurora.Green(volume.Name), aurora.Green(volume.ID))
+			fmt.Printf("The a volume called %s with ID %s was resized\n", utility.Green(volume.Name), utility.Green(volume.ID))
 		}
 	},
 }

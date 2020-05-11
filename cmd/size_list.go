@@ -1,12 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 )
 
@@ -29,13 +28,13 @@ Example: civo size ls -o custom -f "Code: Name (size)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s", err)
 			return
 		}
 
 		sizes, err := client.ListInstanceSizes()
 		if err != nil {
-			fmt.Printf("Unable to list sizes: %s\n", aurora.Red(err))
+			utility.Error("Unable to list sizes %s", err)
 			return
 		}
 

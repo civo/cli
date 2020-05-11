@@ -7,7 +7,7 @@ import (
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 	"os"
 	"time"
@@ -23,13 +23,13 @@ var kubernetesScaleCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		kubernetesFindCluster, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			fmt.Printf("Unable to find a kubernetes cluster: %s\n", aurora.Red(err))
+			utility.Error("Unable to find a kubernetes cluster %s", err)
 			os.Exit(1)
 		}
 
@@ -39,7 +39,7 @@ var kubernetesScaleCmd = &cobra.Command{
 
 		kubernetesCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)
 		if err != nil {
-			fmt.Printf("Unable to rename a kubernetes cluster: %s\n", aurora.Red(err))
+			utility.Error("Unable to rename a kubernetes cluster %s", err)
 			os.Exit(1)
 		}
 
@@ -68,7 +68,7 @@ var kubernetesScaleCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The kubernetes cluster %s was rescale from (%v) to (%v) nodes with ID %s\n", aurora.Green(kubernetesCluster.Name), kubernetesFindCluster.NumTargetNode, kubernetesCluster.NumTargetNode, aurora.Green(kubernetesCluster.ID))
+			fmt.Printf("The kubernetes cluster %s was rescale from (%v) to (%v) nodes with ID %s\n", utility.Green(kubernetesCluster.Name), kubernetesFindCluster.NumTargetNode, kubernetesCluster.NumTargetNode, utility.Green(kubernetesCluster.ID))
 		}
 	},
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 	"os"
 	"strconv"
@@ -37,13 +37,13 @@ var domainRecordCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		domain, err := client.FindDNSDomain(args[0])
 		if err != nil {
-			fmt.Printf("Unable to find domain for your search: %s\n", aurora.Red(err))
+			utility.Error("Unable to find domain for your search %s", err)
 			os.Exit(1)
 		}
 
@@ -73,7 +73,7 @@ var domainRecordCreateCmd = &cobra.Command{
 
 		record, err := client.CreateDNSRecord(domain.ID, newRecordConfig)
 		if err != nil {
-			fmt.Printf("Unable to find domain for your search: %s\n", aurora.Red(err))
+			utility.Error("Unable to find domain for your search %s", err)
 			os.Exit(1)
 		}
 
@@ -85,7 +85,7 @@ var domainRecordCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("Created %s record %s for %s with a TTL of %s seconds and with a priority of %s with ID %s", aurora.Green(record.Type), aurora.Green(record.Name), aurora.Green(domain.Name), aurora.Green(strconv.Itoa(record.TTL)), aurora.Green(strconv.Itoa(record.Priority)), aurora.Green(record.ID))
+			fmt.Printf("Created %s record %s for %s with a TTL of %s seconds and with a priority of %s with ID %s", utility.Green(string(record.Type)), utility.Green(record.Name), utility.Green(domain.Name), utility.Green(strconv.Itoa(record.TTL)), utility.Green(strconv.Itoa(record.Priority)), utility.Green(record.ID))
 		}
 	},
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 	"os"
 	"strconv"
@@ -30,13 +30,13 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		volumes, err := client.ListVolumes()
 		if err != nil {
-			fmt.Printf("Unable to list volumes: %s\n", aurora.Red(err))
+			utility.Error("Unable to list volumes %s", err)
 			os.Exit(1)
 		}
 
@@ -50,7 +50,7 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)"`,
 			if volume.InstanceID != "" {
 				instance, err := client.FindInstance(volume.InstanceID)
 				if err != nil {
-					fmt.Printf("Unable to find the instance: %s\n", aurora.Red(err))
+					utility.Error("Unable to find the instance %s", err)
 					os.Exit(1)
 				}
 				ow.AppendDataWithLabel("InstanceID", instance.Hostname, "Instance")

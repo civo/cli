@@ -6,7 +6,7 @@ import (
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 )
 
@@ -26,18 +26,18 @@ Example: civo instance public-ip ID/NAME`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			fmt.Printf("Finding instance: %s\n", aurora.Red(err))
+			utility.Error("Finding instance %s %s", err)
 			os.Exit(1)
 		}
 
 		if outputFormat == "human" {
-			fmt.Printf("The instance %s (%s) has the password %s (and user %s)\n", aurora.Green(instance.Hostname), instance.ID, aurora.Green(instance.InitialPassword), aurora.Green(instance.InitialUser))
+			fmt.Printf("The instance %s (%s) has the password %s (and user %s)\n", utility.Green(instance.Hostname), instance.ID, utility.Green(instance.InitialPassword), utility.Green(instance.InitialUser))
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()

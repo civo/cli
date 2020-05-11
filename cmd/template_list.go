@@ -1,10 +1,9 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -27,13 +26,13 @@ Example: civo template ls -o custom -f "ID: Code (DefaultUsername)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		templates, err := client.ListTemplates()
 		if err != nil {
-			fmt.Printf("Unable to list templates: %s\n", aurora.Red(err))
+			utility.Error("Unable to list templates %s", err)
 			os.Exit(1)
 		}
 

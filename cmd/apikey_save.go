@@ -2,10 +2,8 @@ package cmd
 
 import (
 	"fmt"
-
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +24,7 @@ var apikeySaveCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("Saved the API Key %s as %s\n", aurora.Green(args[0]), aurora.Green(args[1]))
+			fmt.Printf("Saved the API Key %s as %s\n", utility.Green(args[0]), utility.Green(args[1]))
 		}
 	},
 }

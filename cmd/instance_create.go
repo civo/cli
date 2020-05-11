@@ -9,7 +9,7 @@ import (
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 )
 
@@ -50,7 +50,7 @@ Example: civo instance create --hostname=foo.example.com`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s %s", err)
 			os.Exit(1)
 		}
 
@@ -83,7 +83,7 @@ Example: civo instance create --hostname=foo.example.com`,
 		if sshkey != "" {
 			sshKey, err := client.FindSSHKey(sshkey)
 			if err != nil {
-				fmt.Printf("Unable to find the ssh key: %s\n", aurora.Red(err))
+				utility.Error("Unable to find the ssh key %s %s", err)
 				os.Exit(1)
 			}
 			config.SSHKeyID = sshKey.ID
@@ -92,7 +92,7 @@ Example: civo instance create --hostname=foo.example.com`,
 		if network != "" {
 			net, err := client.FindNetwork(network)
 			if err != nil {
-				fmt.Printf("Unable to find the network: %s\n", aurora.Red(err))
+				utility.Error("Unable to find the network %s %s", err)
 				os.Exit(1)
 			}
 			config.NetworkID = net.ID
@@ -104,7 +104,7 @@ Example: civo instance create --hostname=foo.example.com`,
 
 		resp, err := client.CreateInstance(config)
 		if err != nil {
-			fmt.Printf("error creating instance: %s\n", aurora.Red(err))
+			utility.Error("error creating instance %s %s", err)
 			os.Exit(1)
 		}
 
@@ -128,7 +128,7 @@ Example: civo instance create --hostname=foo.example.com`,
 		instance, _ := client.FindInstance(resp.ID)
 
 		if outputFormat == "human" {
-			fmt.Printf("The instance %s (%s) has been create\n", aurora.Green(instance.Hostname), instance.ID)
+			fmt.Printf("The instance %s (%s) has been create\n", utility.Green(instance.Hostname), instance.ID)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()

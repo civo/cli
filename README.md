@@ -19,7 +19,7 @@ Golang has no shortage of external libraries for various parts of this, but the 
 ### Other libraries
 
 * https://github.com/briandowns/spinner
-* https://github.com/logrusorgru/aurora
+* go get github.com/fatih/color
 * https://github.com/olekukonko/tablewriter
 * https://github.com/spf13/viper
 

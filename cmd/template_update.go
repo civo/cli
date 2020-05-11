@@ -5,7 +5,7 @@ import (
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"os"
@@ -24,13 +24,13 @@ var templateUpdateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		template, err := client.GetTemplateByCode(args[0])
 		if err != nil {
-			fmt.Printf("Unable to find the template: %s\n", aurora.Red(err))
+			utility.Error("Unable to find the template %s", err)
 			os.Exit(1)
 		}
 
@@ -67,7 +67,7 @@ var templateUpdateCmd = &cobra.Command{
 			// reading the file
 			data, err := ioutil.ReadFile(cloudConfig)
 			if err != nil {
-				fmt.Printf("Unable to read the cloud config file: %s\n", aurora.Red(err))
+				utility.Error("Unable to read the cloud config file %s", err)
 				os.Exit(1)
 			}
 
@@ -78,7 +78,7 @@ var templateUpdateCmd = &cobra.Command{
 
 		templateUpdate, err := client.UpdateTemplate(template.ID, configTemplateUpdate)
 		if err != nil {
-			fmt.Printf("Unable to update the template: %s\n", aurora.Red(err))
+			utility.Error("Unable to update the template %s", err)
 			os.Exit(1)
 		}
 
@@ -90,7 +90,7 @@ var templateUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("Updated template with name %s with ID %s\n", aurora.Green(templateUpdate.Name), aurora.Green(templateUpdate.ID))
+			fmt.Printf("Updated template with name %s with ID %s\n", utility.Green(templateUpdate.Name), utility.Green(templateUpdate.ID))
 		}
 	},
 }

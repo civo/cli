@@ -8,7 +8,7 @@ import (
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 )
 
@@ -46,13 +46,13 @@ Example: civo instance ls -o custom -f "ID: Name (PublicIP)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s %s", err)
 			os.Exit(1)
 		}
 
 		instances, err := client.ListAllInstances()
 		if err != nil {
-			fmt.Printf("Unable to list instances: %s\n", aurora.Red(err))
+			utility.Error("Unable to list instances %s %s", err)
 			os.Exit(1)
 		}
 

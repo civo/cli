@@ -6,7 +6,7 @@ import (
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	"github.com/logrusorgru/aurora"
+
 	"github.com/spf13/cobra"
 	"os"
 	_ "strconv"
@@ -28,7 +28,7 @@ var kubernetesCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			fmt.Printf("Unable to create a Civo API Client: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a Civo API Client %s %s", err)
 			os.Exit(1)
 		}
 
@@ -40,7 +40,7 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		if !isValidName {
-			fmt.Printf("The %s is nos valida name for the cluster\n", aurora.Red(args[0]))
+			fmt.Printf("The %s is nos valida name for the cluster\n", utility.Red(args[0]))
 			os.Exit(1)
 		}
 
@@ -53,7 +53,7 @@ var kubernetesCreateCmd = &cobra.Command{
 
 		kubernetesCluster, err := client.NewKubernetesClusters(configKubernetes)
 		if err != nil {
-			fmt.Printf("Unable to create a kubernetes cluster: %s\n", aurora.Red(err))
+			utility.Error("Unable to create a kubernetes cluster %s %s", err)
 			os.Exit(1)
 		}
 
@@ -82,7 +82,7 @@ var kubernetesCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("Created a new kubernetes cluster with Name %s with ID %s\n", aurora.Green(kubernetesCluster.Name), aurora.Green(kubernetesCluster.ID))
+			fmt.Printf("Created a new kubernetes cluster with Name %s with ID %s\n", utility.Green(kubernetesCluster.Name), utility.Green(kubernetesCluster.ID))
 		}
 	},
 }

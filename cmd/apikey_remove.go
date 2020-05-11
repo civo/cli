@@ -2,12 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/civo/cli/utility"
-	"os"
-
 	"github.com/civo/cli/config"
-	"github.com/logrusorgru/aurora"
+	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var apikeyRemoveCmd = &cobra.Command{
@@ -28,9 +26,9 @@ var apikeyRemoveCmd = &cobra.Command{
 			config.SaveConfig()
 
 			if numKeys > len(config.Current.APIKeys) {
-				fmt.Printf("Removed the API Key %s\n", aurora.Green(index))
+				fmt.Printf("Removed the API Key %s\n", utility.Green(index))
 			} else {
-				fmt.Fprintf(os.Stderr, "The API Key %s couldn't be found\n", aurora.Red(args[0]))
+				utility.Error("The API Key couldn't be found", args[0])
 				os.Exit(1)
 			}
 		} else {
