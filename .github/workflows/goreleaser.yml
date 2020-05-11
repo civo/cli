@@ -1,8 +1,5 @@
 name: goreleaser
 
-env_files:
-  github_token: ~/.goreleaser/github_token
-
 on:
   push:
     tags:
