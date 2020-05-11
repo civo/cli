@@ -6,7 +6,7 @@ env_files:
 on:
   push:
     tags:
-      - '*'
+      - 'v*.*.*'
 
 jobs:
   goreleaser:

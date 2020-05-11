@@ -30,18 +30,22 @@ Golang has no shortage of external libraries for various parts of this, but the 
 - ✅ ~~Regions~~
 - ✅ ~~Quotas~~
 - ✅ ~~Sizes~~
-- Instances
-- Domain names
-- Domain records
+- ✅ ~~Instances~~
+- ✅ ~~Domain names~~
+- ✅ ~~Domain records~~
+- ✅ ~~Firewalls~~
+- ✅ ~~Load balancers~~
+- ✅ ~~SSH keys~~
+- ✅ ~~Networks~~
+- ✅ ~~Snapshots~~
+- ✅ ~~Volumes~~
+- ✅ ~~Templates~~
 - Kubernetes Clusters
 - Kubernetes Applications
-- Load balancers
-- SSH keys
-- Networks
-- Snapshots
-- Volumes
-- Firewalls
-- Templates
+
+
+
+
 - Blueprints
 - `curl | bash` installation mechanism
 - Homebrew

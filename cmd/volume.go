@@ -1,9 +1,44 @@
 package cmd
 
-// volume list -- list all volumes [ls, all]
-// volume create NAME SIZE -- create a volume of SIZE (GB) called NAME [new]
-// volume resize ID NEW_SIZE -- resizes the volume with ID to NEW_SIZE GB
-// volume remove ID -- remove the volume with ID [delete, destroy, rm]
-// volume attach VOLUME_ID INSTANCE_ID -- connect the volume with VOLUME_ID to the instance with INSTANCE_ID [connect, link]
-// volume detach ID -- disconnect the volume with ID from any instance it's connected to [disconnect, unlink]
-// volume rename ID NEW_NAME -- rename the volume with ID to have the NEW_NAME
+import (
+	"github.com/spf13/cobra"
+)
+
+var volumeCmd = &cobra.Command{
+	Use:   "volume",
+	Short: "Details of Civo volume",
+}
+
+func init() {
+	rootCmd.AddCommand(volumeCmd)
+	volumeCmd.AddCommand(volumeListCmd)
+	volumeCmd.AddCommand(volumeCreateCmd)
+	volumeCmd.AddCommand(volumeResizeCmd)
+	volumeCmd.AddCommand(volumeRemoveCmd)
+	volumeCmd.AddCommand(volumeAttachCmd)
+	volumeCmd.AddCommand(volumeDetachCmd)
+
+	/*
+		Flags for the create cmd
+	*/
+	volumeCreateCmd.Flags().BoolVarP(&Bootable, "bootable", "b", false, "Mark the volume as bootable")
+	volumeCreateCmd.Flags().IntVarP(&createSizeGB, "size-gb", "s", 0, "The new size in GB (required)")
+	volumeCreateCmd.MarkFlagRequired("size-gb")
+
+	/*
+		Flags for the resize cmd
+	*/
+	volumeResizeCmd.Flags().IntVarP(&newSizeGB, "size-gb", "s", 0, "The new size in GB (required)")
+	volumeResizeCmd.MarkFlagRequired("size-gb")
+
+	/*
+		Flags for the attach cmd
+	*/
+	volumeAttachCmd.Flags().BoolVarP(&waitVolumeAttach, "wait", "w", false, "wait until the volume is attached")
+
+	/*
+		Flags for the attach cmd
+	*/
+	volumeDetachCmd.Flags().BoolVarP(&waitVolumeDetach, "wait", "w", false, "wait until the volume is detached")
+
+}

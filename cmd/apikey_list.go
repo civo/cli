@@ -1,11 +1,10 @@
 package cmd
 
 import (
-	"sort"
-
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
+	"sort"
 )
 
 var apikeyListCmd = &cobra.Command{
@@ -38,6 +37,7 @@ Example: civo apikey ls -o custom -f "Name: Key"`,
 			ow.AppendData("Name", name)
 			ow.AppendData("Key", apiKey)
 			ow.AppendData("Default", defaultLabel)
+
 		}
 
 		switch outputFormat {

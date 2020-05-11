@@ -28,30 +28,34 @@ Example: civo instance remove ID/NAME`,
 			os.Exit(1)
 		}
 
-		instance, err := client.FindInstance(args[0])
-		if err != nil {
-			fmt.Printf("Finding instance: %s\n", aurora.Red(err))
-			os.Exit(1)
-		}
-
-		_, err = client.DeleteInstance(instance.ID)
-		if err != nil {
-			fmt.Printf("Removing instance: %s\n", aurora.Red(err))
-			os.Exit(1)
-		}
-
-		if outputFormat == "human" {
-			fmt.Printf("The instance %s (%s) has been removed\n", aurora.Green(instance.Hostname), instance.ID)
-		} else {
-			ow := utility.NewOutputWriter()
-			ow.StartLine()
-			ow.AppendData("ID", instance.ID)
-			ow.AppendData("Hostname", instance.Hostname)
-			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON()
-			} else {
-				ow.WriteCustomOutput(outputFields)
+		if utility.AskForConfirmDelete("instance") == nil {
+			instance, err := client.FindInstance(args[0])
+			if err != nil {
+				fmt.Printf("Finding instance: %s\n", aurora.Red(err))
+				os.Exit(1)
 			}
+
+			_, err = client.DeleteInstance(instance.ID)
+			if err != nil {
+				fmt.Printf("Removing instance: %s\n", aurora.Red(err))
+				os.Exit(1)
+			}
+
+			if outputFormat == "human" {
+				fmt.Printf("The instance %s (%s) has been removed\n", aurora.Green(instance.Hostname), instance.ID)
+			} else {
+				ow := utility.NewOutputWriter()
+				ow.StartLine()
+				ow.AppendData("ID", instance.ID)
+				ow.AppendData("Hostname", instance.Hostname)
+				if outputFormat == "json" {
+					ow.WriteSingleObjectJSON()
+				} else {
+					ow.WriteCustomOutput(outputFields)
+				}
+			}
+		} else {
+			fmt.Println("Operation aborted.")
 		}
 	},
 }

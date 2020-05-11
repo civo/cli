@@ -65,7 +65,8 @@ Example: civo instance ls -o custom -f "ID: Name (PublicIP)"`,
 			ow.AppendData("Size", instance.Size)
 			ow.AppendData("Region", instance.Region)
 			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public IP")
-			ow.AppendData("Status", instance.Status)
+			ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "Private IP")
+			ow.AppendData("Status", fmt.Sprintf("%s", utility.ColorStatus(instance.Status)))
 
 			if outputFormat == "json" || outputFormat == "custom" {
 				ow.AppendDataWithLabel("OpenstackServerID", instance.OpenstackServerID, "Openstack Server ID")
