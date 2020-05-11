@@ -20,5 +20,13 @@ func ColorStatus(status string) interface{} {
 		returnText = aurora.BrightYellow(status)
 	}
 
+	if status == "INSTANCE-CREATE" {
+		returnText = aurora.BrightBlue(status)
+	}
+
+	if status == "INSTALLING" {
+		returnText = aurora.BrightMagenta(status)
+	}
+
 	return returnText
 }

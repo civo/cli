@@ -112,7 +112,7 @@ Example: civo instance create --hostname=foo.example.com`,
 
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Suffix = " Creating instance..."
+			s.Prefix = "Creating instance... "
 			s.Start()
 
 			for stillCreating {

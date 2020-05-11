@@ -47,7 +47,7 @@ Example: civo instance stop ID/NAME`,
 
 			stillStopping := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Suffix = " Stopping instance..."
+			s.Prefix = "Stopping instance... "
 			s.Start()
 
 			for stillStopping {

@@ -37,7 +37,7 @@ var volumeDetachCmd = &cobra.Command{
 
 			stillDetaching := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Suffix = " Detaching the volume..."
+			s.Prefix = "Detaching the volume... "
 			s.Start()
 
 			for stillDetaching {

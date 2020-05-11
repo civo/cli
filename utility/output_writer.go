@@ -186,3 +186,8 @@ func (ow *OutputWriter) WriteSubheader(label string) {
 	count := (72 - len(label) + 2) / 2
 	fmt.Println(strings.Repeat("-", count) + " " + label + " " + strings.Repeat("-", count))
 }
+
+// WriteSubheader writes a centred heading line in to output
+func (ow *OutputWriter) WriteHeader(label string) {
+	fmt.Println(fmt.Sprintf("%s:", label))
+}

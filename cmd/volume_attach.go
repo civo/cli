@@ -43,7 +43,7 @@ var volumeAttachCmd = &cobra.Command{
 
 			stillAttaching := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Suffix = " Attaching volume to the instance..."
+			s.Prefix = "Attaching volume to the instance... "
 			s.Start()
 
 			for stillAttaching {

@@ -39,7 +39,7 @@ Golang has no shortage of external libraries for various parts of this, but the 
 - ✅ ~~Networks~~
 - ✅ ~~Snapshots~~
 - ✅ ~~Volumes~~
-- Templates
+- ✅ ~~Templates~~
 - Kubernetes Clusters
 - Kubernetes Applications
 
