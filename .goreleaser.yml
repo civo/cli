@@ -1,4 +1,4 @@
-id: "civo"
+project_name: civo
 builds:
   - env:
       - CGO_ENABLED=0
