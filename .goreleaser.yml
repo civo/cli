@@ -21,7 +21,7 @@ builds:
       - goos: openbsd
         goarch: arm
     ldflags:
-      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
+      - -s -w -X cmd.version={{.Version}} -X cmd.commit={{.Commit}} -X cmd.date={{.Date}}
 checksum:
   name_template: '{{ .ProjectName }}_checksums.txt'
 changelog:
