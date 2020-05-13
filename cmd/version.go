@@ -25,8 +25,6 @@ var (
 				Repository:        "cli-go",
 				FixVersionStrFunc: latest.DeleteFrontV(),
 			}
-			res, _ := latest.Check(githubTag, strings.Replace(VersionCli, "v", "", 1))
-
 			switch {
 			case verbose:
 				fmt.Printf("Client version: %s\n", VersionCli)
@@ -34,13 +32,18 @@ var (
 				fmt.Printf("Git commit (client): %s\n", CommitCli)
 				fmt.Printf("OS/Arch (client): %s/%s\n", runtime.GOOS, runtime.GOARCH)
 
+				res, _ := latest.Check(githubTag, strings.Replace(VersionCli, "v", "", 1))
+
 				if res.Outdated {
 					utility.RedConfirm("A newer version (v%s) is available, please upgrade\n", res.Current)
 				}
 			case quiet:
 				fmt.Printf("%s\n", VersionCli)
 			default:
-				fmt.Printf("Civo CLI: %s\n", VersionCli)
+				fmt.Printf("Civo CLI %s\n", VersionCli)
+
+				res, _ := latest.Check(githubTag, strings.Replace(VersionCli, "v", "", 1))
+
 				if res.Outdated {
 					utility.RedConfirm("A newer version (v%s) is available, please upgrade\n", res.Current)
 				}
