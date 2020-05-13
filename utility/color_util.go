@@ -28,3 +28,7 @@ func Error(msg string, args ...interface{}) {
 func YellowConfirm(msg string, args ...interface{}) {
 	fmt.Fprintf(color.Output, "%s: %s", color.YellowString("Warning"), fmt.Sprintf(msg, args...))
 }
+
+func RedConfirm(msg string, args ...interface{}) {
+	fmt.Fprintf(color.Output, "%s: %s", color.RedString("IMPORTANT"), fmt.Sprintf(msg, args...))
+}

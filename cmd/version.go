@@ -35,14 +35,14 @@ var (
 				fmt.Printf("OS/Arch (client): %s/%s\n", runtime.GOOS, runtime.GOARCH)
 
 				if res.Outdated {
-					utility.YellowConfirm("A newer version (v%s) is available, please upgrade\n", res.Current)
+					utility.RedConfirm("A newer version (v%s) is available, please upgrade\n", res.Current)
 				}
 			case quiet:
 				fmt.Printf("%s\n", VersionCli)
 			default:
 				fmt.Printf("Civo CLI: %s\n", VersionCli)
 				if res.Outdated {
-					utility.YellowConfirm("A newer version (v%s) is available, please upgrade\n", res.Current)
+					utility.RedConfirm("A newer version (v%s) is available, please upgrade\n", res.Current)
 				}
 			}
 		},
