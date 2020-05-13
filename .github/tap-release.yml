@@ -1,0 +1,19 @@
+url: "https://github.com/civo/cli-go/releases/download/v$VERSION_NUMBER/civo_$VERSION_NUMBER_darwin_amd64.tar.gz
+tap: civo/homebrew-tools/formula/civo.rb
+template: >
+  class Civo < Formula
+    desc "CLI for managing Civo resources"
+    homepage "https://github.com/civo/cli-go"
+    version  "$STABLE_VERSION"
+    url      "$STABLE_ASSET_URL"
+    sha256   "$STABLE_ASSET_SHA256"
+
+    def install
+      bin.install "civo"
+    end
+
+    # Homebrew requires tests.
+    test do
+      assert_match "$VERSION_NUMBER", shell_output("#{bin}/civo version -q", 2)
+    end
+  end
