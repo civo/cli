@@ -27,7 +27,7 @@ var (
 			}
 			switch {
 			case verbose:
-				fmt.Printf("Client version: %s\n", VersionCli)
+				fmt.Printf("Client version: v%s\n", VersionCli)
 				fmt.Printf("Go version (client): %s\n", runtime.Version())
 				fmt.Printf("Git commit (client): %s\n", CommitCli)
 				fmt.Printf("OS/Arch (client): %s/%s\n", runtime.GOOS, runtime.GOARCH)
@@ -40,7 +40,7 @@ var (
 			case quiet:
 				fmt.Printf("%s\n", VersionCli)
 			default:
-				fmt.Printf("Civo CLI %s\n", VersionCli)
+				fmt.Printf("Civo CLI v%s\n", VersionCli)
 
 				res, _ := latest.Check(githubTag, strings.Replace(VersionCli, "v", "", 1))
 
