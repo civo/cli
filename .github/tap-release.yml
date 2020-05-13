@@ -1,7 +1,7 @@
 url: "https://github.com/civo/cli-go/releases/download/v$VERSION_NUMBER/civo_$VERSION_NUMBER_darwin_amd64.tar.gz
 tap: civo/homebrew-tools/formula/civo.rb
 template: >
-  class App < Formula
+  class Civo < Formula
     desc "CLI for managing Civo resources"
     homepage "https://github.com/civo/cli-go"
     version  "$STABLE_VERSION"
