@@ -31,25 +31,25 @@ Example: civo instance firewall ID/NAME 12345`,
 
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Finding instance %s %s", err)
+			utility.Error("Finding instance %s", err)
 			os.Exit(1)
 		}
 
 		firewall, err := client.FindFirewall(args[1])
 		if err != nil {
-			utility.Error("Finding firewall %s %s", err)
+			utility.Error("Finding firewall %s", err)
 			os.Exit(1)
 		}
 
 		_, err = client.SetInstanceFirewall(instance.ID, args[1])
 		if err != nil {
-			utility.Error("Setting firewall %s %s", err)
+			utility.Error("Setting firewall %s", err)
 			os.Exit(1)
 		}
 

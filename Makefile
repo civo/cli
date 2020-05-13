@@ -8,17 +8,20 @@ BINARY_MAC=$(BINARY_NAME)_mac
 BINARY_LINUX=$(BINARY_NAME)_linux
 BINARY_WINDOWS=$(BINARY_NAME)_windows
 
-all: test build
+all: build
 test:
 	$(GOTEST) -v ./...
 clean:
 	$(GOCLEAN)
 	rm -f dest/
+	git fetch --tags
 build:
 	mkdir -p dest
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_LINUX) -v
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_MAC) -v
-	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_WINDOWS) -v
+	$(eval VERSION_CLI=$(shell git tag | tail -1 | cut -d "v" -f 2))
+	$(eval COMMIT_CLI=$(shell git log --format="%H" -n 1))
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_LINUX) -ldflags "-s -X github.com/civo/cli/cmd.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/cmd.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/cmd.DateCli=$(shell date +%FT%T%Z)" -v
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_MAC) -ldflags "-s -X github.com/civo/cli/cmd.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/cmd.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/cmd.DateCli=$(shell date +%FT%T%Z)" -v
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_WINDOWS) -ldflags "-s -X github.com/civo/cli/cmd.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/cmd.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/cmd.DateCli=$(shell date +%FT%T%Z)" -v
 	rm -f civo
 	ln -s dest/$(BINARY_MAC) civo
 release: build

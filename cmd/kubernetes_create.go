@@ -28,7 +28,7 @@ var kubernetesCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
@@ -53,7 +53,7 @@ var kubernetesCreateCmd = &cobra.Command{
 
 		kubernetesCluster, err := client.NewKubernetesClusters(configKubernetes)
 		if err != nil {
-			utility.Error("Unable to create a kubernetes cluster %s %s", err)
+			utility.Error("Unable to create a kubernetes cluster %s", err)
 			os.Exit(1)
 		}
 

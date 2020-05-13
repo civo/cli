@@ -33,19 +33,19 @@ Example: civo instance upgrade ID/NAME g2.xlarge`,
 
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Finding instance %s %s", err)
+			utility.Error("Finding instance %s", err)
 			os.Exit(1)
 		}
 
 		sizes, err := client.ListInstanceSizes()
 		if err != nil {
-			utility.Error("Checking size %s %s", err)
+			utility.Error("Checking size %s", err)
 			os.Exit(1)
 		}
 
@@ -55,7 +55,7 @@ Example: civo instance upgrade ID/NAME g2.xlarge`,
 				resizing = true
 				_, err = client.UpgradeInstance(instance.ID, size.Name)
 				if err != nil {
-					utility.Error("Upgrading instance %s %s", err)
+					utility.Error("Upgrading instance %s", err)
 					os.Exit(1)
 				}
 			}

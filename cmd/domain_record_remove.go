@@ -17,14 +17,14 @@ var domainRecordRemoveCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s %s", err)
 			os.Exit(1)
 		}
 
 		if utility.AskForConfirmDelete("domain record") == nil {
 			domain, err := client.FindDNSDomain(args[0])
 			if err != nil {
-				utility.Error("Unable to find domain for your search %s %s", err)
+				utility.Error("Unable to find domain for your search %s", err)
 				os.Exit(1)
 			}
 

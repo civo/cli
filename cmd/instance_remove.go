@@ -24,14 +24,14 @@ Example: civo instance remove ID/NAME`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		if utility.AskForConfirmDelete("instance") == nil {
 			instance, err := client.FindInstance(args[0])
 			if err != nil {
-				utility.Error("Finding instance %s %s", err)
+				utility.Error("Finding instance %s", err)
 				os.Exit(1)
 			}
 

@@ -31,13 +31,13 @@ Example: civo instance move-ip ID/NAME 1.2.3.4`,
 
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Finding instance %s %s", err)
+			utility.Error("Finding instance %s", err)
 			os.Exit(1)
 		}
 

@@ -50,7 +50,7 @@ Example: civo instance create --hostname=foo.example.com`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
@@ -83,7 +83,7 @@ Example: civo instance create --hostname=foo.example.com`,
 		if sshkey != "" {
 			sshKey, err := client.FindSSHKey(sshkey)
 			if err != nil {
-				utility.Error("Unable to find the ssh key %s %s", err)
+				utility.Error("Unable to find the ssh key %s", err)
 				os.Exit(1)
 			}
 			config.SSHKeyID = sshKey.ID
@@ -92,7 +92,7 @@ Example: civo instance create --hostname=foo.example.com`,
 		if network != "" {
 			net, err := client.FindNetwork(network)
 			if err != nil {
-				utility.Error("Unable to find the network %s %s", err)
+				utility.Error("Unable to find the network %s", err)
 				os.Exit(1)
 			}
 			config.NetworkID = net.ID
@@ -104,7 +104,7 @@ Example: civo instance create --hostname=foo.example.com`,
 
 		resp, err := client.CreateInstance(config)
 		if err != nil {
-			utility.Error("error creating instance %s %s", err)
+			utility.Error("error creating instance %s", err)
 			os.Exit(1)
 		}
 

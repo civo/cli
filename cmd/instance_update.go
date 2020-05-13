@@ -28,13 +28,13 @@ Example: civo instance update ID/NAME --reverse-dns=foo.example.com`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Finding instance %s %s", err)
+			utility.Error("Finding instance %s", err)
 			os.Exit(1)
 		}
 
@@ -50,7 +50,7 @@ Example: civo instance update ID/NAME --reverse-dns=foo.example.com`,
 
 		_, err = client.UpdateInstance(instance)
 		if err != nil {
-			utility.Error("Updating instance %s %s", err)
+			utility.Error("Updating instance %s", err)
 			os.Exit(1)
 		}
 

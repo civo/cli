@@ -27,19 +27,19 @@ Example: civo instance stop ID/NAME`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Finding instance: %s\n %s %s %s", err)
+			utility.Error("Finding instance: %s\n %s %s", err)
 			os.Exit(1)
 		}
 
 		_, err = client.StopInstance(instance.ID)
 		if err != nil {
-			utility.Error("Stopping instance %s %s %s", err)
+			utility.Error("Stopping instance %s %s", err)
 			os.Exit(1)
 		}
 

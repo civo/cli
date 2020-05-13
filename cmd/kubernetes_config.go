@@ -29,13 +29,13 @@ Example: civo kubernetes config -o custom -f "KubeConfig"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		kube, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			utility.Error("Unable to get kubernetes cluster %s %s", err)
+			utility.Error("Unable to get kubernetes cluster %s", err)
 			os.Exit(1)
 		}
 

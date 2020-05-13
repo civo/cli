@@ -30,13 +30,13 @@ Example: civo firewall rule ls -o custom -f "ID: Label"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		firewall, err := client.FindFirewall(args[0])
 		if err != nil {
-			utility.Error("Unable to find firewall %s %s", err)
+			utility.Error("Unable to find firewall %s", err)
 			os.Exit(1)
 		}
 

@@ -46,13 +46,13 @@ Example: civo instance ls -o custom -f "ID: Name (PublicIP)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		instances, err := client.ListAllInstances()
 		if err != nil {
-			utility.Error("Unable to list instances %s %s", err)
+			utility.Error("Unable to list instances %s", err)
 			os.Exit(1)
 		}
 

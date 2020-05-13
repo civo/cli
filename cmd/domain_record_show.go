@@ -30,13 +30,13 @@ Example: civo domain record show RECORD_ID -o custom -f "ID: Name"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s %s", err)
+			utility.Error("Unable to create a Civo API Client %s", err)
 			os.Exit(1)
 		}
 
 		domain, err := client.FindDNSDomain(args[0])
 		if err != nil {
-			utility.Error("Unable to find domain for your search %s %s", err)
+			utility.Error("Unable to find domain for your search %s", err)
 			os.Exit(1)
 		}
 
