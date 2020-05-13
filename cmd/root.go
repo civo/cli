@@ -2,11 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	goVersion "go.hein.dev/go-version"
-	"os"
-
 	"github.com/civo/cli/config"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var outputFields string
@@ -19,30 +17,6 @@ var rootCmd = &cobra.Command{
 	Long: `civo is a CLI library for managing cloud resources such
 as instances and Kubernetes clusters at Civo.com.`,
 }
-
-var (
-	shortened  = false
-	version    = "dev"
-	commit     = "none"
-	date       = "unknown"
-	versionCmd = &cobra.Command{
-		Use:   "version",
-		Short: "Version will output the current build information",
-		Long:  ``,
-		Run: func(_ *cobra.Command, _ []string) {
-			var response string
-			versionOutput := goVersion.New(version, commit, date)
-
-			if shortened {
-				response = versionOutput.ToShortened()
-			} else {
-				response = versionOutput.ToJSON()
-			}
-			fmt.Printf("%+v", response)
-			return
-		},
-	}
-)
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -67,7 +41,4 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	versionCmd.Flags().BoolVarP(&shortened, "short", "s", false, "Use shortened output for version information.")
-	rootCmd.AddCommand(versionCmd)
-
 }
