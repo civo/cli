@@ -38,7 +38,7 @@ var (
 					utility.RedConfirm("A newer version (v%s) is available, please upgrade\n", res.Current)
 				}
 			case quiet:
-				fmt.Printf("%s\n", VersionCli)
+				fmt.Printf("v%s\n", VersionCli)
 			default:
 				fmt.Printf("Civo CLI v%s\n", VersionCli)
 
