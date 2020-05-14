@@ -26,7 +26,7 @@ func init() {
 	templateCreateCmd.Flags().StringVarP(&shortDescriptionCreate, "short-description", "s", "", "Add a short description")
 	templateCreateCmd.Flags().StringVarP(&descriptionCreate, "description", "d", "", "Add a description")
 	templateCreateCmd.Flags().StringVarP(&defaultUsernameCreate, "default-username", "u", "", "The default username of the template")
-	templateCreateCmd.Flags().StringVarP(&cloudConfigCreate, "cloudconfig", "i", "", "The cloud config")
+	templateCreateCmd.Flags().StringVarP(&cloudConfigCreate, "cloudconfig", "i", "", "The path of the cloud config")
 
 	/*
 		Flags for template update

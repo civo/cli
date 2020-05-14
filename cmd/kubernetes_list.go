@@ -30,21 +30,26 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		kubes, err := client.ListKubernetesClusters()
+		kubernetesCluster, err := client.ListKubernetesClusters()
 		if err != nil {
 			utility.Error("Unable to list kubernetes cluster %s", err)
 			os.Exit(1)
 		}
 
 		ow := utility.NewOutputWriter()
-		for _, kube := range kubes.Items {
+		for _, kubernetes := range kubernetesCluster.Items {
 			ow.StartLine()
 
-			ow.AppendData("ID", kube.ID)
-			ow.AppendData("Name", kube.Name)
-			ow.AppendData("Node", strconv.Itoa(kube.NumTargetNode))
-			ow.AppendData("Size", kube.TargetNodeSize)
-			ow.AppendData("Status", fmt.Sprintf("%s", utility.ColorStatus(kube.Status)))
+			ow.AppendData("ID", kubernetes.ID)
+			ow.AppendData("Name", kubernetes.Name)
+			ow.AppendData("Node", strconv.Itoa(kubernetes.NumTargetNode))
+			ow.AppendData("Size", kubernetes.TargetNodeSize)
+			ow.AppendData("Status", fmt.Sprintf("%s", utility.ColorStatus(kubernetes.Status)))
+
+			if outputFormat == "json" || outputFormat == "custom" {
+				ow.AppendData("Status", kubernetes.Status)
+			}
+
 		}
 
 		switch outputFormat {

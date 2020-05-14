@@ -68,6 +68,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("Status", fmt.Sprintf("%s", utility.ColorStatus(instance.Status)))
 
 			if outputFormat == "json" || outputFormat == "custom" {
+				ow.AppendData("Status", instance.Status)
 				ow.AppendDataWithLabel("OpenstackServerID", instance.OpenstackServerID, "Openstack Server ID")
 				ow.AppendData("NetworkID", instance.NetworkID)
 				ow.AppendData("PrivateIP", instance.PrivateIP)
