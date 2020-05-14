@@ -17,9 +17,10 @@ var KubernetesNewNodes int
 var waitKubernetesNodes bool
 
 var kubernetesScaleCmd = &cobra.Command{
-	Use:   "scale",
-	Short: "Scale a kubernetes cluster",
-	Args:  cobra.MinimumNArgs(1),
+	Use:     "scale",
+	Short:   "Scale a kubernetes cluster",
+	Example: "civo kubernetes scale CLUSTER_NAME --nodes 4 [flags]",
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

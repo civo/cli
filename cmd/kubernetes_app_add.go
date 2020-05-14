@@ -14,6 +14,7 @@ var KubernetesClusterApp string
 
 var kubernetesAppAddCmd = &cobra.Command{
 	Use:     "add",
+	Example: "civo kubernetes application add NAME --cluster CLUSTER_NAME",
 	Aliases: []string{"install"},
 	Short:   "Add the marketplace application to a Kubernetes cluster",
 	Run: func(cmd *cobra.Command, args []string) {

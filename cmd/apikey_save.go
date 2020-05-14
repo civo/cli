@@ -8,10 +8,11 @@ import (
 )
 
 var apikeySaveCmd = &cobra.Command{
-	Use:     "save NAME KEY",
+	Use:     "save",
 	Aliases: []string{"add", "store", "create", "save"},
 	Short:   "Save a new API keys",
 	Args:    cobra.MinimumNArgs(2),
+	Example: "civo apikey save NAME KEY",
 	Run: func(cmd *cobra.Command, args []string) {
 		config.Current.APIKeys[args[0]] = args[1]
 		config.SaveConfig()

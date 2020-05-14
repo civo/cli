@@ -24,7 +24,7 @@ If you wish to use a custom format, the available fields ar	:
 	* TTL
 	* Priority	
 
-Example: civo domain record ls DOMAIN or DOMAIN_ID -o custom -f "ID: Name"`,
+Example: civo domain record ls DOMAIN/DOMAIN_ID -o custom -f "ID: Name"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

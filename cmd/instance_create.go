@@ -20,6 +20,7 @@ var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new"},
 	Short:   "Create a new instance",
+	Example: "civo instance create --hostname=foo.example.com [flags]",
 	Long: `You can create an instance with a hostname parameter, as well as any options you provide.
 If you wish to use a custom format, the available fields are:
 
@@ -44,9 +45,7 @@ If you wish to use a custom format, the available fields are:
 	* CivostatsdStats
 	* RescuePassword
 	* Script
-	* CreatedAt
-
-Example: civo instance create --hostname=foo.example.com`,
+	* CreatedAt`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

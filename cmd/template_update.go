@@ -19,6 +19,7 @@ var (
 var templateUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"change", "modify"},
+	Example: "civo template update TEMPLATE_CODE [flags]",
 	Short:   "Update a template",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

@@ -12,6 +12,7 @@ import (
 var kubernetesRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
+	Example: "civo kubernetes remove CLUSTER_NAME",
 	Short:   "Remove a kubernetes cluster",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

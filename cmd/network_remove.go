@@ -12,6 +12,7 @@ import (
 var networkRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
+	Example: "civo network rm NAME",
 	Short:   "Remove a network",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

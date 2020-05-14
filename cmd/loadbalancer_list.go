@@ -13,6 +13,7 @@ import (
 var loadBalancerListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
+	Example: `civo loadbalancer ls -o custom -f "ID: Name"`,
 	Short:   "List Load Balancer",
 	Long: `List all current Load Balancer.
 If you wish to use a custom format, the available fields are:
@@ -28,9 +29,7 @@ If you wish to use a custom format, the available fields are:
 	* FailTimeout
 	* MaxConns
 	* IgnoreInvalidBackendTLS
-	* Backends
-
-Example: civo loadbalancer ls -o custom -f "ID: Name"`,
+	* Backends`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

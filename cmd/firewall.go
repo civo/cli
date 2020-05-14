@@ -6,7 +6,7 @@ import (
 
 var firewallCmd = &cobra.Command{
 	Use:     "firewall",
-	Aliases: []string{"firewalls"},
+	Aliases: []string{"firewalls", "fw"},
 	Short:   "Details of Civo firewalls",
 }
 

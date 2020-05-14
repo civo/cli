@@ -13,6 +13,7 @@ import (
 
 var instanceMoveIPCmd = &cobra.Command{
 	Use:     "move-ip",
+	Example: "civo instance move-ip ID/HOSTNAME 1.2.3.4",
 	Aliases: []string{"switch-ip", "moveip", "switchip"},
 	Short:   "Move a public IP",
 	Long: `Move a public IP address to a target instance by part of the ID or name.
@@ -20,9 +21,7 @@ If you wish to use a custom format, the available fields are:
 
 	* ID
 	* Hostname
-	* PublicIP
-
-Example: civo instance move-ip ID/NAME 1.2.3.4`,
+	* PublicIP`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 2 {
 			fmt.Printf("You must specify %s parameters (you gave %s), the ID/name and the public IP\n", utility.Red("2"), utility.Red(strconv.Itoa(len(args))))

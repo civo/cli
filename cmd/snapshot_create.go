@@ -15,6 +15,7 @@ var cron string
 var snapshotCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
+	Example: "civo snapshot create SNAPSHOT_NAME INSTANCE_HOSTNAME",
 	Short:   "Create a new snapshot",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {

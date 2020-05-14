@@ -12,6 +12,7 @@ import (
 var volumeRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
+	Example: "civo volume rm VOLUME_NAME",
 	Short:   "Remove a volume",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

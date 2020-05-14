@@ -14,6 +14,7 @@ import (
 
 var instanceShowCmd = &cobra.Command{
 	Use:     "show",
+	Example: `civo instance show ID/HOSTNAME`,
 	Aliases: []string{"get", "inspect"},
 	Short:   "Show instance",
 	Long: `Show your current instance.
@@ -42,9 +43,7 @@ If you wish to use a custom format, the available fields are:
 	* CivostatsdStats
 	* RescuePassword
 	* Script
-	* CreatedAt
-
-Example: civo instance show ID/NAME -o custom -f "Key1: Key2"`,
+	* CreatedAt`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

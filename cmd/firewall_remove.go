@@ -10,8 +10,9 @@ import (
 )
 
 var firewallRemoveCmd = &cobra.Command{
-	Use:     "remove",
+	Use:     "remove [NAME]",
 	Aliases: []string{"rm", "delete", "destroy"},
+	Example: "civo firewall remove NAME",
 	Short:   "Remove a firewall",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

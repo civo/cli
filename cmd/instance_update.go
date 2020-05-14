@@ -14,17 +14,16 @@ var notes, reverseDNS, hostname string
 
 var instanceUpdateCmd = &cobra.Command{
 	Use:     "update",
+	Example: "civo instance update ID/HOSTNAME --reverse-dns=foo.example.com",
 	Aliases: []string{"set"},
 	Short:   "Change the instance",
 	Long: `Change the notes, hostname or reverse DNS for an instance with partial ID/name provided.
 If you wish to use a custom format, the available fields are:
-
-* ID
-* Hostname
-* ReverseDNS
-* Notes
-
-Example: civo instance update ID/NAME --reverse-dns=foo.example.com`,
+	
+	* ID
+	* Hostname
+	* ReverseDNS
+	* Notes`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

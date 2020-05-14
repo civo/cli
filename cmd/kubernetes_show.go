@@ -13,6 +13,7 @@ import (
 var kubernetesShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"get", "inspect"},
+	Example: `civo kubernetes show ID/HOSTNAME -o custom -f "ID: Code (DefaultUsername)"`,
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Show kubernetes cluster",
 	Long: `Show your current kubernetes cluster.
@@ -27,9 +28,7 @@ If you wish to use a custom format, the available fields are:
 	* ShortDescription
 	* Description
 	* DefaultUsername
-	* CloudConfig
-
-Example: civo kubernetes show ID/NAME -o custom -f "ID: Code (DefaultUsername)"`,
+	* CloudConfig`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

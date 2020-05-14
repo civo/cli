@@ -15,6 +15,7 @@ var keyCreate string
 var sshKeyCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
+	Example: "civo ssh create NAME --key PATH_TO_SSH_KEY",
 	Short:   "Create a new ssh key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

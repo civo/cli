@@ -14,6 +14,7 @@ import (
 var snapshotListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
+	Example: `civo snapshot ls -o custom -f "ID: Name (Hostname)"`,
 	Short:   "List snapshot",
 	Long: `List all available snapshot.
 If you wish to use a custom format, the available fields are:
@@ -29,9 +30,7 @@ If you wish to use a custom format, the available fields are:
 	* State
 	* Cron
 	* RequestedAt
-	* CompletedAt
-
-Example: civo snapshot ls -o custom -f "ID: Name (Hostname)"`,
+	* CompletedAt`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

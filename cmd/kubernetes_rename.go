@@ -14,9 +14,10 @@ import (
 var KubernetesNewName string
 
 var kubernetesRenameCmd = &cobra.Command{
-	Use:   "rename",
-	Short: "Rename a kubernetes cluster",
-	Args:  cobra.MinimumNArgs(1),
+	Use:     "rename",
+	Short:   "Rename a kubernetes cluster",
+	Example: "civo kubernetes rename OLD_CLUSTER_NAME --name NEW_CLUSTER_NAME",
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

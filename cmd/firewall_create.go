@@ -13,6 +13,7 @@ var firewallCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
 	Short:   "Create a new firewall",
+	Example: "civo firewall create NAME",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()

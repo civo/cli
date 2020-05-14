@@ -14,6 +14,7 @@ var firewallRuleRemoveCmd = &cobra.Command{
 	Aliases: []string{"delete", "destroy", "rm"},
 	Args:    cobra.MinimumNArgs(2),
 	Short:   "Remove firewall rule",
+	Example: "civo firewall rule remove FIREWALL_NAME/FIREWALL_ID FIREWALL_RULE_ID",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

@@ -13,9 +13,10 @@ import (
 var newSizeGB int
 
 var volumeResizeCmd = &cobra.Command{
-	Use:   "resize",
-	Short: "Resize a volume",
-	Args:  cobra.MinimumNArgs(1),
+	Use:     "resize",
+	Short:   "Resize a volume",
+	Example: "civo volume resize VOLUME_NAME --size-gb 100",
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

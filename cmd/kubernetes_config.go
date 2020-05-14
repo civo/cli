@@ -18,14 +18,13 @@ var localPathConfig string
 var kubernetesConfigCmd = &cobra.Command{
 	Use:     "config",
 	Aliases: []string{"conf"},
+	Example: "civo kubernetes config CLUSTER_NAME --save --merge",
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Get kubernetes clusters config",
 	Long: `Show current kubernetes config.
 If you wish to use a custom format, the available fields are:
 
-	* KubeConfig
-
-Example: civo kubernetes config -o custom -f "KubeConfig"`,
+	* KubeConfig`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

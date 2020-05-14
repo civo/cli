@@ -16,6 +16,7 @@ var KubernetesNewVersion string
 var kubernetesUpgradeCmd = &cobra.Command{
 	Use:     "upgrade",
 	Aliases: []string{"change", "modify"},
+	Example: "civo kubernetes upgrade CLUSTER_NAME --version VERSION",
 	Short:   "Rename a kubernetes cluster",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

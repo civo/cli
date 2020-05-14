@@ -12,15 +12,14 @@ import (
 
 var instanceRebootCmd = &cobra.Command{
 	Use:     "reboot",
+	Example: "civo instance reboot ID/HOSTNAME",
 	Aliases: []string{"hard-reboot"},
 	Short:   "Hard reboot an instance",
 	Long: `Pull the power and restart the specified instance by part of the ID or name.
 If you wish to use a custom format, the available fields are:
 
 	* ID
-	* Hostname
-
-Example: civo instance reboot ID/NAME`,
+	* Hostname`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

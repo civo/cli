@@ -12,6 +12,7 @@ import (
 var sshKeyRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
+	Example: "civo ssh rm NAME",
 	Short:   "Remove a ssh key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

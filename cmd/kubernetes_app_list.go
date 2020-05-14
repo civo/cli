@@ -20,9 +20,7 @@ If you wish to use a custom format, the available fields are:
 	* Version
 	* Category
 	* Plans
-	* Dependencies
-
-Example: civo kubernetes applications ls -o custom -f "Name: Version"`,
+	* Dependencies`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

@@ -9,10 +9,11 @@ import (
 )
 
 var apikeyRemoveCmd = &cobra.Command{
-	Use:     "remove NAME",
+	Use:     "remove",
 	Aliases: []string{"delete", "rm"},
 	Short:   "Remove a saved API key",
 	Args:    cobra.MinimumNArgs(1),
+	Example: "civo apikey remove NAME",
 	Run: func(cmd *cobra.Command, args []string) {
 		index, _, err := apiKeyFind(args[0])
 		if err != nil {

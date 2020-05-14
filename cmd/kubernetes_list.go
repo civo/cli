@@ -13,6 +13,7 @@ import (
 var kubernetesListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
+	Example: `civo kubernetes ls -o custom -f "ID: Name"`,
 	Short:   "List all kubernetes clusters",
 	Long: `List all kubernetes clusters.
 If you wish to use a custom format, the available fields are:
@@ -21,9 +22,7 @@ If you wish to use a custom format, the available fields are:
 	* Name
 	* Node
 	* Size
-	* Status
-
-Example: civo kubernetes ls -o custom -f "ID: Name"`,
+	* Status`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

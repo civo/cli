@@ -12,15 +12,14 @@ import (
 var kubernetesListVersionCmd = &cobra.Command{
 	Use:     "versions",
 	Aliases: []string{"version"},
+	Example: `civo kubernetes versions -o custom -f "Version: Default"`,
 	Short:   "List all kubernetes clusters version",
 	Long: `List all kubernetes clusters versions.
 If you wish to use a custom format, the available fields are:
 
 	* Version
 	* Type
-	* Default
-
-Example: civo kubernetes versions -o custom -f "Version: Default"`,
+	* Default`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

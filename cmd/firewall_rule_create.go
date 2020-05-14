@@ -18,7 +18,7 @@ var firewallRuleCreateCmd = &cobra.Command{
 	Aliases: []string{"new", "add"},
 	Short:   "Create a new firewall rule",
 	Args:    cobra.MinimumNArgs(1),
-	Example: "civo firewall rule create FIREWALL_NAME or FIREWALL_ID [flags]",
+	Example: "civo firewall rule create FIREWALL_NAME/FIREWALL_ID [flags]",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

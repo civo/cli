@@ -14,6 +14,7 @@ var domainCreateCmd = &cobra.Command{
 	Aliases: []string{"new", "add"},
 	Short:   "Create a new domain",
 	Args:    cobra.MinimumNArgs(1),
+	Example: "civo domain create NAME",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

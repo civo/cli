@@ -12,6 +12,7 @@ import (
 var networkUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"change", "modify"},
+	Example: "civo network rm OLD_NAME NEW_NAME",
 	Short:   "Update a new network",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {

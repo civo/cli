@@ -12,6 +12,7 @@ import (
 
 var instancePasswordCmd = &cobra.Command{
 	Use:     "password",
+	Example: "civo instance public-ip ID/HOSTNAME",
 	Short:   "Show instance's password",
 	Aliases: []string{"pw"},
 	Long: `Show the specified instance's default user password by part of the instance's ID or name.
@@ -20,9 +21,7 @@ If you wish to use a custom format, the available fields are:
 	* ID
 	* Hostname
 	* Password
-	* User
-
-Example: civo instance public-ip ID/NAME`,
+	* User`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

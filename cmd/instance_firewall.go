@@ -13,16 +13,15 @@ import (
 
 var instanceSetFirewallCmd = &cobra.Command{
 	Use:     "firewall",
-	Aliases: []string{"set-firewall", "change-firewall"},
+	Aliases: []string{"set-firewall", "change-firewall", "fw"},
+	Example: "civo instance firewall HOSTNAME/INSTANCE_ID FIREWALL_NAME/FIREWALL_ID",
 	Short:   "Use different firewall",
 	Long: `Change an instance's firewall by part of the instance's ID or name and the full firewall ID.
 If you wish to use a custom format, the available fields are:
 
 	* ID
 	* Hostname
-	* FirewallID
-
-Example: civo instance firewall ID/NAME 12345`,
+	* FirewallID`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 2 {
 			fmt.Printf("You must specify %s parameters (you gave %s), the ID/name and the firewall ID\n", utility.Red("2"), utility.Red(strconv.Itoa(len(args))))

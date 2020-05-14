@@ -13,16 +13,15 @@ import (
 
 var instanceTagCmd = &cobra.Command{
 	Use:     "tag",
+	Example: "civo instance tags ID/HOSTNAME tag1 tag2 tag3",
 	Aliases: []string{"tags"},
 	Short:   "Change the instance's tags",
 	Long: `Change the tags for an instance with partial ID/name provided.
 If you wish to use a custom format, the available fields are:
 
-* ID
-* Hostname
-* Tags
-
-Example: civo instance tags ID/NAME tag1 tag2 tag3`,
+	* ID
+	* Hostname
+	* Tags`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

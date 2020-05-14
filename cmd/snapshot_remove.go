@@ -12,6 +12,7 @@ import (
 var snapshotRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
+	Example: "civo snapshot remove SNAPSHOT_NAME",
 	Short:   "Remove a snapshot",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

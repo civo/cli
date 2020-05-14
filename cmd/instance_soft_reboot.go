@@ -11,15 +11,14 @@ import (
 )
 
 var instanceSoftRebootCmd = &cobra.Command{
-	Use:   "soft-reboot",
-	Short: "Spft reboot an instance",
+	Use:     "soft-reboot",
+	Example: "civo instance soft-reboot ID/HOSTNAME",
+	Short:   "Spft reboot an instance",
 	Long: `Nicely ask the specified instance by part of the ID or name to restart.
 If you wish to use a custom format, the available fields are:
 
 	* ID
-	* Hostname
-
-Example: civo instance soft-reboot ID/NAME`,
+	* Hostname`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

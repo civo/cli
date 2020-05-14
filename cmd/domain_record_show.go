@@ -15,6 +15,7 @@ var domainRecordShowCmd = &cobra.Command{
 	Aliases: []string{"get", "inspect"},
 	Args:    cobra.MinimumNArgs(2),
 	Short:   "Show record",
+	Example: "civo domain record show DOMAIN/DOMAIN_ID RECORD_ID",
 	Long: `Show your current record.
 If you wish to use a custom format, the available fields ar	:
 

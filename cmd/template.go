@@ -16,7 +16,7 @@ func init() {
 	templateCmd.AddCommand(templateRemoveCmd)
 
 	/*
-		Flags for template update
+		Flags for template create
 	*/
 	templateCreateCmd.Flags().StringVarP(&codeCreate, "code", "c", "", "The code name of the template, this can't change after creation")
 	templateCreateCmd.MarkFlagRequired("code")

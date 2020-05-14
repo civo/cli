@@ -10,10 +10,11 @@ import (
 )
 
 var domainRecordRemoveCmd = &cobra.Command{
-	Use:     "remove",
+	Use:     "remove [DOMAIN|DOMAIN_ID] [RECORD_ID]",
 	Aliases: []string{"delete", "destroy", "rm"},
 	Args:    cobra.MinimumNArgs(2),
 	Short:   "Remove record",
+	Example: "civo domain record remove DOMAIN/DOMAIN_ID RECORD_ID",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

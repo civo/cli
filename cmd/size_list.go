@@ -12,19 +12,18 @@ import (
 var sizeListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
+	Example: `civo size ls -o custom -f "Code: Name (size)"`,
 	Short:   "List sizes",
 	Long: `List all available sizes for instances or Kubernetes nodes.
 If you wish to use a custom format, the available fields are:
 
-* Name
-* NiceName
-* CPUCores
-* RAMMegabytes
-* DiskGigabytes
-* Description
-* Selectable
-
-Example: civo size ls -o custom -f "Code: Name (size)"`,
+	* Name
+	* NiceName
+	* CPUCores
+	* RAMMegabytes
+	* DiskGigabytes
+	* Description
+	* Selectable`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

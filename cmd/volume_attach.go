@@ -16,6 +16,7 @@ var waitVolumeAttach bool
 var volumeAttachCmd = &cobra.Command{
 	Use:     "attach",
 	Aliases: []string{"connect", "link"},
+	Example: "civo volume attach VOLUME_NAME INSTANCE_HOSTNAME",
 	Short:   "Attach a volume",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {

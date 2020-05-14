@@ -10,15 +10,14 @@ import (
 var regionListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
+	Example: `civo region ls -o custom -f "Code: Name (Region)"`,
 	Short:   "List regions",
 	Long: `List all available regions, including which is the default.
 If you wish to use a custom format, the available fields are:
 
-* Code
-* Name
-* Default
-
-Example: civo region ls -o custom -f "Code: Name (Region)"`,
+	* Code
+	* Name
+	* Default`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

@@ -12,6 +12,7 @@ import (
 var templateShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"get", "inspect"},
+	Example: `civo template show CODE -o custom -f "ID: Code (DefaultUsername)"`,
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Show template",
 	Long: `Show your current template.
@@ -26,9 +27,7 @@ If you wish to use a custom format, the available fields are:
 	* ShortDescription
 	* Description
 	* DefaultUsername
-	* CloudConfig
-
-Example: civo template show CODE -o custom -f "ID: Code (DefaultUsername)"`,
+	* CloudConfig`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

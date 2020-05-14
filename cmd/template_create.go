@@ -20,6 +20,7 @@ var (
 var templateCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"add", "new"},
+	Example: "civo template create [flags]",
 	Short:   "Create a template",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()

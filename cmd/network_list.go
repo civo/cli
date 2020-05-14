@@ -11,6 +11,7 @@ import (
 var networkListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
+	Example: `civo network ls -o custom -f "ID: Name (CIDR)"`,
 	Short:   "List networks",
 	Long: `List all available networks.
 If you wish to use a custom format, the available fields are:
@@ -19,9 +20,7 @@ If you wish to use a custom format, the available fields are:
 	* Label
 	* Region
 	* CIDR
-	* Default
-
-Example: civo network ls -o custom -f "ID: Name (CIDR)"`,
+	* Default`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

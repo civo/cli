@@ -12,6 +12,7 @@ import (
 
 var instancePublicIPCmd = &cobra.Command{
 	Use:     "public-ip",
+	Example: "civo instance public-ip ID/HOSTNAME",
 	Short:   "Show instance's public IP",
 	Aliases: []string{"ip", "publicip"},
 	Long: `Show the specified instance's public IP by part of the instance's ID or name.
@@ -19,9 +20,7 @@ If you wish to use a custom format, the available fields are:
 
 	* ID
 	* Hostname
-	* PublicIP
-
-Example: civo instance public-ip ID/NAME`,
+	* PublicIP`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

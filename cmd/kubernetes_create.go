@@ -23,6 +23,7 @@ var (
 var kubernetesCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
+	Example: "civo kubernetes create CLUSTER_NAME [flags]",
 	Short:   "Create a new kubernetes cluster",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -40,7 +41,7 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		if !isValidName {
-			fmt.Printf("The %s is nos valida name for the cluster\n", utility.Red(args[0]))
+			fmt.Printf("The %s is nos valid name for the cluster\n", utility.Red(args[0]))
 			os.Exit(1)
 		}
 

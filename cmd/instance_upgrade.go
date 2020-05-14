@@ -13,18 +13,17 @@ import (
 
 var instanceUpgradeCmd = &cobra.Command{
 	Use:     "upgrade",
+	Example: "civo instance upgrade ID/HOSTNAME g2.xlarge",
 	Aliases: []string{"resize"},
 	Short:   "Upgrade an instance",
 	Long: `Upgrade instance with ID to size provided. Downgrades to smaller sizes are not possible.
 Run civo sizes for all the size names.
 If you wish to use a custom format, the available fields are:
 
-* ID
-* Hostname
-* OldSize
-* NewSize
-
-Example: civo instance upgrade ID/NAME g2.xlarge`,
+	* ID
+	* Hostname
+	* OldSize
+	* NewSize`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 2 {
 			fmt.Printf("You must specify %s parameters (you gave %s), the ID/name and the new size\n", utility.Red("2"), utility.Red(strconv.Itoa(len(args))))

@@ -12,6 +12,7 @@ import (
 var networkCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
+	Example: "civo network create NAME",
 	Short:   "Create a new network",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

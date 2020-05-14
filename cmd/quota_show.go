@@ -12,6 +12,7 @@ import (
 var quotaShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"get"},
+	Example: `civo quota show -o custom -f "InstanceCountUsage/InstanceCountLimit"`,
 	Short:   "Show quota",
 	Long: `Show your current quota and usage.
 If you wish to use a custom format, the available fields are:
@@ -37,9 +38,7 @@ If you wish to use a custom format, the available fields are:
 	* SecurityGroupLimit
 	* SecurityGroupUsage
 	* SecurityGroupRuleLimit
-	* SecurityGroupRuleUsage
-
-Example: civo quota show -o custom -f "InstanceCountUsage/InstanceCountLimit"`,
+	* SecurityGroupRuleUsage`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

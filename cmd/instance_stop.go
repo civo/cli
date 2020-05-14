@@ -15,15 +15,14 @@ import (
 var waitStop bool
 var instanceStopCmd = &cobra.Command{
 	Use:     "stop",
+	Example: "civo instance stop ID/HOSTNAME",
 	Short:   "Stop an instance",
 	Aliases: []string{"shutdown"},
 	Long: `Pull the power from the specified instance by part of the ID or name.
 If you wish to use a custom format, the available fields are:
 
 	* ID
-	* Hostname
-
-Example: civo instance stop ID/NAME`,
+	* Hostname`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

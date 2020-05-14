@@ -33,7 +33,7 @@ var domainRecordCreateCmd = &cobra.Command{
 	Aliases: []string{"new", "add"},
 	Short:   "Create a new domain record",
 	Args:    cobra.MinimumNArgs(1),
-	Example: "civo domain record create DOMAIN or DOMAIN_ID [flags]",
+	Example: "civo domain record create DOMAIN/DOMAIN_ID [flags]",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

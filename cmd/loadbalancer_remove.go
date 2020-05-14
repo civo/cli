@@ -12,6 +12,7 @@ import (
 var loadBalancerRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
+	Example: "civo loadbalancer rm HOSTNAME",
 	Short:   "Remove a Load Balancer",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

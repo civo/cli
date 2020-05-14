@@ -13,6 +13,7 @@ var firewallRuleListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
 	Args:    cobra.MinimumNArgs(1),
+	Example: "civo firewall rule ls FIREWALL_NAME",
 	Short:   "List firewall rule",
 	Long: `List all current firewall rule.
 If you wish to use a custom format, the available fields are:
@@ -26,7 +27,7 @@ If you wish to use a custom format, the available fields are:
 	* Protocol
 	* Cidr
 
-Example: civo firewall rule ls -o custom -f "ID: Label"`,
+Example: civo firewall rule ls FIREWALL_NAME -o custom -f "ID: Label"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

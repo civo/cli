@@ -14,6 +14,7 @@ import (
 var volumeListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
+	Example: `civo volume ls -o custom -f "ID: Name (SizeGigabytes)"`,
 	Short:   "List volumes",
 	Long: `List all available volumes.
 If you wish to use a custom format, the available fields are:
@@ -24,9 +25,7 @@ If you wish to use a custom format, the available fields are:
 	* SizeGigabytes
 	* MountPoint
 	* Bootable
-	* CreatedAt
-
-Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)"`,
+	* CreatedAt`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

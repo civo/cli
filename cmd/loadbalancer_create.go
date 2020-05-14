@@ -19,6 +19,7 @@ var backends []string
 var loadBalancerCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
+	Example: "civo loadbalancer create [flags]",
 	Short:   "Create a new Load Balancer",
 	//Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

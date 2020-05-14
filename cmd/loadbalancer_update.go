@@ -19,6 +19,7 @@ var backendsUpdate []string
 var loadBalancerUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"change", "modify"},
+	Example: "civo loadbalancer update [flags]",
 	Short:   "Update a Load Balancer",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

@@ -16,6 +16,7 @@ var waitVolumeDetach bool
 var volumeDetachCmd = &cobra.Command{
 	Use:     "detach",
 	Aliases: []string{"disconnect", "unlink"},
+	Example: "civo volume detach VOLUME_NAME",
 	Short:   "Detach a volume",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

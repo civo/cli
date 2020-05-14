@@ -14,6 +14,7 @@ import (
 
 var instanceListCmd = &cobra.Command{
 	Use:     "ls",
+	Example: `civo instance ls -o custom -f "ID: Name (PublicIP)"`,
 	Aliases: []string{"list", "all"},
 	Short:   "List instances",
 	Long: `List all current instances, including which is the default.
@@ -40,9 +41,7 @@ If you wish to use a custom format, the available fields are:
 	* CivostatsdStats
 	* RescuePassword
 	* Script
-	* CreatedAt
-
-Example: civo instance ls -o custom -f "ID: Name (PublicIP)"`,
+	* CreatedAt`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
