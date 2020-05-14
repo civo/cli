@@ -16,7 +16,6 @@ var networkListCmd = &cobra.Command{
 If you wish to use a custom format, the available fields are:
 
 	* ID
-	* Name
 	* Label
 	* Region
 	* CIDR
@@ -41,7 +40,6 @@ Example: civo network ls -o custom -f "ID: Name (CIDR)"`,
 		for _, network := range networks {
 			ow.StartLine()
 			ow.AppendData("ID", network.ID)
-			ow.AppendData("Name", network.Name)
 			ow.AppendData("Label", network.Label)
 			ow.AppendData("Region", network.Region)
 			ow.AppendData("CIDR", network.CIDR)

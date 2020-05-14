@@ -40,12 +40,8 @@ Golang has no shortage of external libraries for various parts of this, but the 
 - ✅ ~~Snapshots~~
 - ✅ ~~Volumes~~
 - ✅ ~~Templates~~
-- Kubernetes Clusters
-- Kubernetes Applications
+- ✅ ~~Kubernetes Clusters~~
+- ✅ ~~Kubernetes Applications~~
 
-
-
-
-- Blueprints
 - `curl | bash` installation mechanism
 - Homebrew

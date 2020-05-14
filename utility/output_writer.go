@@ -170,9 +170,15 @@ func (ow *OutputWriter) WriteCustomOutput(fields string) {
 	ow.finishExistingLine()
 	for _, item := range ow.Values {
 		output := fields
-		for index, name := range ow.Keys {
+		for _, name := range ow.Keys {
 			if strings.Contains(output, name) {
-				output = strings.Replace(output, name, item[index], 1)
+				output = strings.Replace(output, name, fmt.Sprintf("$%s$", name), 1)
+			}
+		}
+
+		for index, name := range ow.Keys {
+			if strings.Contains(output, fmt.Sprintf("$%s$", name)) {
+				output = strings.Replace(output, fmt.Sprintf("$%s$", name), item[index], 1)
 			}
 		}
 		output = strings.Replace(output, "\\t", "\t", -1)
