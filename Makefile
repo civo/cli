@@ -14,8 +14,8 @@ test:
 clean:
 	$(GOCLEAN)
 	rm -f dest/
-	git fetch --tags
 build:
+	git fetch --tags
 	mkdir -p dest
 	$(eval VERSION_CLI=$(shell git tag | tail -1 | cut -d "v" -f 2))
 	$(eval COMMIT_CLI=$(shell git log --format="%H" -n 1))
