@@ -1,0 +1,197 @@
+#!/bin/sh
+set -e
+
+# Copyright Civo Author(s) 2020
+#########################
+# Repo specific content #
+#########################
+
+export VERIFY_CHECKSUM=0
+export OWNER="civo"
+export REPO="cli-go"
+export SUCCESS_CMD="$REPO version"
+export BINLOCATION="/usr/local/bin"
+
+###############################
+# Get the las version         #
+###############################
+
+get_last_version() {
+  VERSION=""
+
+  echo "Finding latest version from GitHub"
+  VERSION=$(curl -sI https://github.com/$OWNER/$REPO/releases/latest | grep -i location | awk -F"/" '{ printf "%s", $NF }' | tr -d '\r')
+  VERSION_NUMBER=$(echo $VERSION | cut -d "v" -f 2)
+  echo $VERSION_NUMBER
+
+  if [ ! $VERSION ]; then
+    echo "Failed while attempting to install $REPO. Please manually install:"
+    echo ""
+    echo "1. Open your web browser and go to https://github.com/$OWNER/$REPO/releases"
+    echo "2. Download the latest release for your platform. Call it '$REPO'."
+    echo "3. chmod +x ./$REPO"
+    echo "4. mv ./$REPO $BINLOCATION"
+    if [ -n "$ALIAS_NAME" ]; then
+      echo "5. ln -sf $BINLOCATION/$REPO /usr/local/bin/$ALIAS_NAME"
+    fi
+    exit 1
+  fi
+}
+
+###############################
+# Check for curl              #
+###############################
+hasCurl() {
+  hasCurl=$(which curl)
+  if [ "$?" = "1" ]; then
+    echo "You need curl to use this script."
+    exit 1
+  fi
+}
+
+# --- set arch and suffix, fatal if architecture not supported ---
+setup_verify_arch() {
+  if [ -z "$ARCH" ]; then
+    ARCH=$(uname -m)
+
+  fi
+  case $ARCH in
+  amd64)
+    ARCH=-amd64
+    SUFFIX=
+    ;;
+  x86_64)
+    ARCH=-amd64
+    SUFFIX=
+    ;;
+  arm64)
+    ARCH=-arm
+    ;;
+  aarch64)
+    ARCH=-arm
+    ;;
+  arm*)
+    ARCH=-arm
+    SUFFIX=-${ARCH}hf
+    ;;
+  *)
+    fatal "Unsupported architecture $ARCH"
+    ;;
+  esac
+}
+
+setup_verify_os() {
+  if [ -z "$SUFFIX" ]; then
+    SUFFIX=$(uname)
+  fi
+  case $SUFFIX in
+  "Darwin")
+    SUFFIX="-darwin"
+    ;;
+  "MINGW"*)
+    SUFFIX="windows"
+    ;;
+  "Linux")
+    SUFFIX="-linux"
+    ;;
+  *)
+    fatal "Unsupported architecture $ARCH"
+    ;;
+  esac
+}
+
+download() {
+  URL=https://github.com/$OWNER/$REPO/releases/download/$VERSION/$OWNER-$VERSION_NUMBER$SUFFIX$ARCH.tar.gz
+  TARGETFILE="/tmp/$OWNER-$VERSION_NUMBER$SUFFIX$ARCH.tar.gz"
+  echo "Downloading package $URL to $TARGETFILE"
+
+  curl -sSL $URL --output $TARGETFILE
+
+  if [ "$VERIFY_CHECKSUM" = "1" ]; then
+    check_hash
+  fi
+
+  tar -xf /tmp/$OWNER-$VERSION_NUMBER$SUFFIX$ARCH.tar.gz -C /tmp
+  chmod +x /tmp/$OWNER
+
+  echo "Download complete."
+
+  if [ ! -w "$BINLOCATION" ]; then
+
+    echo
+    echo "============================================================"
+    echo "  The script was run as a user who is unable to write"
+    echo "  to $BINLOCATION. To complete the installation the"
+    echo "  following commands may need to be run manually."
+    echo "============================================================"
+    echo
+    echo "  sudo cp $REPO$suffix $BINLOCATION/$REPO"
+
+    if [ -n "$ALIAS_NAME" ]; then
+      echo "  sudo ln -sf $BINLOCATION/$REPO $BINLOCATION/$ALIAS_NAME"
+    fi
+
+    echo
+
+  else
+
+    echo
+    echo "Running with sufficient permissions to attempt to move $OWNER to $BINLOCATION"
+
+    if [ ! -w "$BINLOCATION/$REPO" ] && [ -f "$BINLOCATION/$REPO" ]; then
+
+      echo
+      echo "================================================================"
+      echo "  $BINLOCATION/$REPO already exists and is not writeable"
+      echo "  by the current user.  Please adjust the binary ownership"
+      echo "  or run sh/bash with sudo."
+      echo "================================================================"
+      echo
+      exit 1
+
+    fi
+
+    mv /tmp/$OWNER $BINLOCATION/$OWNER
+
+    if [ "$?" = "0" ]; then
+      echo "New version of $OWNER installed to $BINLOCATION"
+    fi
+
+    if [ -e TARGETFILE ]; then
+      rm TARGETFILE
+      rm /tmp/$OWNER
+    fi
+
+    ${SUCCESS_CMD}
+  fi
+
+}
+
+check_hash() {
+  sha_cmd="sha256sum"
+
+  if [ ! -x "$(command -v $sha_cmd)" ]; then
+    sha_cmd="shasum -a 256"
+  fi
+
+  if [ -x "$(command -v $sha_cmd)" ]; then
+
+    targetFileDir=${TARGETFILE%/*}
+
+    (cd $targetFileDir && curl -sSL https://github.com/$OWNER/$REPO/releases/download/$VERSION/$OWNER-$VERSION_NUMBER-checksums.sha256 | $sha_cmd -c >/dev/null)
+
+    if [ "$?" != "0" ]; then
+      rm TARGETFILE
+      echo "Binary checksum didn't match. Exiting"
+      exit 1
+    fi
+  fi
+}
+
+{
+  hasCurl
+  setup_verify_arch
+  setup_verify_os
+  get_last_version
+  download
+}
