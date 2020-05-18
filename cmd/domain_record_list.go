@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
 	"os"
 	"strconv"
@@ -12,6 +11,7 @@ import (
 var domainRecordListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
+	Example: "civo domain record ls DOMAIN/DOMAIN_ID",
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "List all domains records",
 	Long: `List all current domain records.
@@ -22,9 +22,7 @@ If you wish to use a custom format, the available fields ar	:
 	* Value
 	* Type
 	* TTL
-	* Priority	
-
-Example: civo domain record ls DOMAIN/DOMAIN_ID -o custom -f "ID: Name"`,
+	* Priority`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
