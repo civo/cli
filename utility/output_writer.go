@@ -193,7 +193,7 @@ func (ow *OutputWriter) WriteSubheader(label string) {
 	fmt.Println(strings.Repeat("-", count) + " " + label + " " + strings.Repeat("-", count))
 }
 
-// WriteSubheader writes a centred heading line in to output
+// WriteHeader WriteSubheader writes a centred heading line in to output
 func (ow *OutputWriter) WriteHeader(label string) {
 	fmt.Println(fmt.Sprintf("%s:", label))
 }

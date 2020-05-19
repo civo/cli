@@ -48,12 +48,17 @@ var volumeAttachCmd = &cobra.Command{
 			s.Start()
 
 			for stillAttaching {
-				volumeCheck, _ := client.FindVolume(volume.ID)
+				volumeCheck, err := client.FindVolume(volume.ID)
+				if err != nil {
+					utility.Error("Unable to find the volume %s", err)
+					os.Exit(1)
+				}
 				if volumeCheck.MountPoint != "" {
 					stillAttaching = false
 					s.Stop()
+				} else {
+					time.Sleep(2 * time.Second)
 				}
-				time.Sleep(5 * time.Second)
 			}
 		}
 

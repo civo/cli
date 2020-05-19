@@ -15,7 +15,7 @@ var domainRecordListCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "List all domains records",
 	Long: `List all current domain records.
-If you wish to use a custom format, the available fields ar	:
+If you wish to use a custom format, the available fields are:
 
 	* ID
 	* Name
@@ -64,4 +64,30 @@ If you wish to use a custom format, the available fields ar	:
 			ow.WriteTable()
 		}
 	},
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		if len(args) != 0 {
+			return nil, cobra.ShellCompDirectiveDefault
+		}
+		return getDomainList(toComplete), cobra.ShellCompDirectiveDefault
+	},
+}
+
+func getDomainList(value string) []string {
+	client, err := config.CivoAPIClient()
+	if err != nil {
+		utility.Error("Unable to create a Civo API Client %s", err)
+		os.Exit(1)
+	}
+
+	domain, err := client.FindDNSDomain(value)
+	if err != nil {
+		utility.Error("Unable to list domains %s", err)
+		os.Exit(1)
+	}
+
+	var domainList []string
+	domainList = append(domainList, domain.Name)
+
+	return domainList
+
 }

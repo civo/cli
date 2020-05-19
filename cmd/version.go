@@ -11,11 +11,18 @@ import (
 )
 
 var (
-	quiet      bool
-	verbose    bool
+	quiet   bool
+	verbose bool
+
+	// VersionCli is set from outside using ldflags
 	VersionCli = "0.0.0"
-	CommitCli  = "none"
-	DateCli    = "unknown"
+
+	// CommitCli is set from outside using ldflags
+	CommitCli = "none"
+
+	// DateCli is set from outside using ldflags
+	DateCli = "unknown"
+
 	versionCmd = &cobra.Command{
 		Use:   "version",
 		Short: "Version will output the current build information",

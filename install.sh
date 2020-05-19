@@ -21,10 +21,10 @@ get_last_version() {
 
   echo "Finding latest version from GitHub"
   VERSION=$(curl -sI https://github.com/$OWNER/$REPO/releases/latest | grep -i location | awk -F"/" '{ printf "%s", $NF }' | tr -d '\r')
-  VERSION_NUMBER=$(echo $VERSION | cut -d "v" -f 2)
-  echo $VERSION_NUMBER
+  VERSION_NUMBER=$(echo "$VERSION" | cut -d "v" -f 2)
+  echo "$VERSION_NUMBER"
 
-  if [ ! $VERSION ]; then
+  if [ ! "$VERSION" ]; then
     echo "Failed while attempting to install $REPO. Please manually install:"
     echo ""
     echo "1. Open your web browser and go to https://github.com/$OWNER/$REPO/releases"
@@ -42,7 +42,7 @@ get_last_version() {
 # Check for curl              #
 ###############################
 hasCurl() {
-  hasCurl=$(which curl)
+  which curl
   if [ "$?" = "1" ]; then
     echo "You need curl to use this script."
     exit 1
@@ -105,7 +105,7 @@ download() {
   TARGETFILE="/tmp/$OWNER-$VERSION_NUMBER$SUFFIX$ARCH.tar.gz"
   echo "Downloading package $URL to $TARGETFILE"
 
-  curl -sSL $URL --output $TARGETFILE
+  curl -sSL "$URL" --output "$TARGETFILE"
 
   if [ "$VERIFY_CHECKSUM" = "1" ]; then
     check_hash
@@ -125,7 +125,7 @@ download() {
     echo "  following commands may need to be run manually."
     echo "============================================================"
     echo
-    echo "  sudo cp $REPO$suffix $BINLOCATION/$REPO"
+    echo "  sudo cp $REPO$SUFFIX $BINLOCATION/$REPO"
 
     if [ -n "$ALIAS_NAME" ]; then
       echo "  sudo ln -sf $BINLOCATION/$REPO $BINLOCATION/$ALIAS_NAME"
@@ -168,17 +168,17 @@ download() {
 }
 
 check_hash() {
-  sha_cmd="sha256sum"
+  SHACMD="sha256sum"
 
-  if [ ! -x "$(command -v $sha_cmd)" ]; then
-    sha_cmd="shasum -a 256"
+  if [ ! -x "$(command -v $SHACMD)" ]; then
+    SHACMD="shasum -a 256"
   fi
 
-  if [ -x "$(command -v $sha_cmd)" ]; then
+  if [ -x "$(command -v "$SHACMD")" ]; then
 
-    targetFileDir=${TARGETFILE%/*}
+    TARGETFILEDIR=${TARGETFILE%/*}
 
-    (cd $targetFileDir && curl -sSL https://github.com/$OWNER/$REPO/releases/download/$VERSION/$OWNER-$VERSION_NUMBER-checksums.sha256 | $sha_cmd -c >/dev/null)
+    (cd "$TARGETFILEDIR" && curl -sSL https://github.com/$OWNER/$REPO/releases/download/$VERSION/$OWNER-$VERSION_NUMBER-checksums.sha256 | $SHACMD -c >/dev/null)
 
     if [ "$?" != "0" ]; then
       rm TARGETFILE

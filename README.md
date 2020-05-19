@@ -113,7 +113,7 @@ autoload -Uz compinit
 compinit
 ```
 
-To set the civo completion code for zsh to autoload on startup yo can run this command.
+To set the civo completion code for zsh to autoload on start up yo can run this command.
 ```bash
 civo completion zsh > "${fpath[1]}/_civo"
 ```

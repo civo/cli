@@ -3,8 +3,9 @@ package cmd
 import "github.com/spf13/cobra"
 
 var templateCmd = &cobra.Command{
-	Use:   "template",
-	Short: "Details of Civo templates",
+	Use:     "template",
+	Aliases: []string{"templates"},
+	Short:   "Details of Civo templates",
 }
 
 func init() {

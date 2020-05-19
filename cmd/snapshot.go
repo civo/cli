@@ -5,8 +5,9 @@ import (
 )
 
 var snapshotCmd = &cobra.Command{
-	Use:   "snapshot",
-	Short: "Details of Civo Snapshot",
+	Use:     "snapshot",
+	Aliases: []string{"snapshots"},
+	Short:   "Details of Civo Snapshot",
 }
 
 func init() {

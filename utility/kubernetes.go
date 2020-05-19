@@ -8,17 +8,21 @@ import (
 	"os/exec"
 )
 
-func ObtainKubeConfig(localKubeconfig string, civoConfig string, merge bool) error {
+// ObtainKubeConfig is the function to get the kubeconfig from the cluster
+// and save to the file or merge with the existing one
+func ObtainKubeConfig(KubeconfigFilename string, civoConfig string, merge bool) error {
 
-	kubeconfig := []byte(civoConfig)
+	kubeConfig := []byte(civoConfig)
 
 	if merge {
-		// Create a merged kubeconfig
-		kubeconfig, _ = mergeConfigs(localKubeconfig, []byte(kubeconfig))
+		var err error
+		kubeConfig, err = mergeConfigs(KubeconfigFilename, kubeConfig)
+		if err != nil {
+			return err
+		}
 	}
 
-	// Create a new kubeconfig
-	if writeErr := writeConfig(localKubeconfig, []byte(kubeconfig), false); writeErr != nil {
+	if writeErr := writeConfig(KubeconfigFilename, kubeConfig, false); writeErr != nil {
 		return writeErr
 	}
 	return nil
@@ -32,12 +36,12 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte) ([]byte, error) 
 	}
 	defer file.Close()
 
-	if writeErr := writeConfig(file.Name(), []byte(k3sconfig), true); writeErr != nil {
+	if writeErr := writeConfig(file.Name(), k3sconfig, true); writeErr != nil {
 		return nil, writeErr
 	}
 
 	color.Set(color.FgBlue)
-	fmt.Sprintf("Merging with existing kubeconfig at %s\n", localKubeconfigPath)
+	fmt.Printf("Merging with existing kubeconfig at %s\n", localKubeconfigPath)
 	color.Unset()
 
 	// Append KUBECONFIGS in ENV Vars
@@ -65,7 +69,7 @@ func writeConfig(path string, data []byte, suppressMessage bool) error {
 	if !suppressMessage {
 		color.Set(color.FgBlue)
 		fmt.Printf("Saving file to: %s\n", path)
-		fmt.Printf("\n# Test your cluster with:\nexport KUBECONFIG=%s\nkubectl get node -o wide\n", path)
+		fmt.Printf("\nTest your cluster with:\nexport KUBECONFIG=%s\nkubectl get node -o wide\n", path)
 		color.Unset()
 	}
 
@@ -80,7 +84,7 @@ func writeConfig(path string, data []byte, suppressMessage bool) error {
 		defer file.Close()
 	}
 
-	writeErr := ioutil.WriteFile(path, []byte(data), 0600)
+	writeErr := ioutil.WriteFile(path, data, 0600)
 	if writeErr != nil {
 		return writeErr
 	}

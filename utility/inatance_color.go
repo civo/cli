@@ -4,6 +4,7 @@ import (
 	"github.com/fatih/color"
 )
 
+// ColorStatus is to print the status of the Instance or k8s Cluster
 func ColorStatus(status string) interface{} {
 
 	var returnText interface{}

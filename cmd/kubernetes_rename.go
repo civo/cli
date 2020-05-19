@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-var KubernetesNewName string
+var kubernetesNewName string
 
 var kubernetesRenameCmd = &cobra.Command{
 	Use:     "rename",
@@ -32,7 +32,7 @@ var kubernetesRenameCmd = &cobra.Command{
 		}
 
 		configKubernetes := &civogo.KubernetesClusterConfig{
-			Name: KubernetesNewName,
+			Name: kubernetesNewName,
 		}
 
 		kubernetesCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)

@@ -6,7 +6,7 @@ import (
 
 var loadBalancerCmd = &cobra.Command{
 	Use:     "loadbalancer",
-	Aliases: []string{"loadbalancer", "lb"},
+	Aliases: []string{"loadbalancers", "lb"},
 	Short:   "Details of Civo Load Balancer",
 }
 

@@ -12,7 +12,7 @@ var domainCmd = &cobra.Command{
 
 var domainRecordCmd = &cobra.Command{
 	Use:     "record",
-	Aliases: []string{"record"},
+	Aliases: []string{"records"},
 	Short:   "Details of Civo domains records",
 }
 

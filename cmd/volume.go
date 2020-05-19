@@ -5,8 +5,9 @@ import (
 )
 
 var volumeCmd = &cobra.Command{
-	Use:   "volume",
-	Short: "Details of Civo volume",
+	Use:     "volume",
+	Aliases: []string{"volumes"},
+	Short:   "Details of Civo volume",
 }
 
 func init() {
@@ -21,7 +22,7 @@ func init() {
 	/*
 		Flags for the create cmd
 	*/
-	volumeCreateCmd.Flags().BoolVarP(&Bootable, "bootable", "b", false, "Mark the volume as bootable")
+	volumeCreateCmd.Flags().BoolVarP(&bootableVolume, "bootable", "b", false, "Mark the volume as bootable")
 	volumeCreateCmd.Flags().IntVarP(&createSizeGB, "size-gb", "s", 0, "The new size in GB (required)")
 	volumeCreateCmd.MarkFlagRequired("size-gb")
 

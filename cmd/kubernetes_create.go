@@ -6,26 +6,26 @@ import (
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
 	"os"
-	_ "strconv"
+	"strconv"
 	"time"
 )
 
-var NumTargetNodes int
+var numTargetNodes int
 var waitKubernetes bool
 var (
-	KubernetesVersion string
-	TargetNodesSize   string
+	kubernetesVersion string
+	targetNodesSize   string
 )
+
+var clusterName string
 
 var kubernetesCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
 	Example: "civo kubernetes create CLUSTER_NAME [flags]",
 	Short:   "Create a new kubernetes cluster",
-	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -33,23 +33,17 @@ var kubernetesCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		isValidName := false
-
-		_, err = client.FindKubernetesCluster(args[0])
-		if err != nil {
-			isValidName = true
-		}
-
-		if !isValidName {
-			fmt.Printf("The %s is nos valid name for the cluster\n", utility.Red(args[0]))
-			os.Exit(1)
+		if len(args) > 0 {
+			clusterName = args[0]
+		} else {
+			clusterName = utility.RandomName()
 		}
 
 		configKubernetes := &civogo.KubernetesClusterConfig{
-			Name:              args[0],
-			NumTargetNodes:    NumTargetNodes,
-			TargetNodesSize:   TargetNodesSize,
-			KubernetesVersion: KubernetesVersion,
+			Name:              clusterName,
+			NumTargetNodes:    numTargetNodes,
+			TargetNodesSize:   targetNodesSize,
+			KubernetesVersion: kubernetesVersion,
 		}
 
 		kubernetesCluster, err := client.NewKubernetesClusters(configKubernetes)
@@ -62,16 +56,21 @@ var kubernetesCreateCmd = &cobra.Command{
 
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Prefix = "Creating kubernetes cluster... "
+			s.Prefix = fmt.Sprintf("Creating a %s node k3s cluster of %s instances called %s... ", strconv.Itoa(kubernetesCluster.NumTargetNode), kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
 			s.Start()
 
 			for stillCreating {
-				kubernetesCheck, _ := client.FindKubernetesCluster(kubernetesCluster.ID)
+				kubernetesCheck, err := client.FindKubernetesCluster(kubernetesCluster.ID)
+				if err != nil {
+					utility.Error("Unable to find the kubernetes cluster %s", err)
+					os.Exit(1)
+				}
 				if kubernetesCheck.Status == "ACTIVE" {
 					stillCreating = false
 					s.Stop()
+				} else {
+					time.Sleep(2 * time.Second)
 				}
-				time.Sleep(5 * time.Second)
 			}
 		}
 
@@ -83,7 +82,7 @@ var kubernetesCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("Created a new kubernetes cluster with Name %s with ID %s\n", utility.Green(kubernetesCluster.Name), utility.Green(kubernetesCluster.ID))
+			fmt.Printf("The cluster %s (%s) has been created and took %s\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID, "2m3s")
 		}
 	},
 }

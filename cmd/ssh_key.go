@@ -6,7 +6,7 @@ import (
 
 var sshKeyCmd = &cobra.Command{
 	Use:     "sshkey",
-	Aliases: []string{"ssh", "ssh-key"},
+	Aliases: []string{"ssh", "ssh-key", "sshkeys"},
 	Short:   "Details of Civo Ssh Keys",
 }
 

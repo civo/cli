@@ -34,12 +34,16 @@ If you wish to use a custom format, the available fields are:
 
 		kube, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			utility.Error("Unable to get kubernetes cluster %s", err)
+			utility.Error("Unable to find the kubernetes cluster %s", err)
 			os.Exit(1)
 		}
 
 		if saveConfig {
-			_ = utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig)
+			err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig)
+			if err != nil {
+				utility.Error("Unable to save the cluster config %s", err)
+				os.Exit(1)
+			}
 		}
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"KubeConfig": kube.KubeConfig})

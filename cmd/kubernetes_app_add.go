@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-var KubernetesClusterApp string
+var kubernetesClusterApp string
 
 var kubernetesAppAddCmd = &cobra.Command{
 	Use:     "add",
@@ -24,7 +24,7 @@ var kubernetesAppAddCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		kubernetesFindCluster, err := client.FindKubernetesCluster(KubernetesClusterApp)
+		kubernetesFindCluster, err := client.FindKubernetesCluster(kubernetesClusterApp)
 		if err != nil {
 			utility.Error("Unable to find a kubernetes cluster %s", err)
 			os.Exit(1)

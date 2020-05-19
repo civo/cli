@@ -9,7 +9,7 @@ import (
 
 var apikeySaveCmd = &cobra.Command{
 	Use:     "save",
-	Aliases: []string{"add", "store", "create", "save"},
+	Aliases: []string{"add", "store", "create", "new"},
 	Short:   "Save a new API keys",
 	Args:    cobra.MinimumNArgs(2),
 	Example: "civo apikey save NAME KEY",

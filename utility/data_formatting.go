@@ -12,7 +12,7 @@ func BoolToYesNo(d bool) string {
 	return ret
 }
 
-// getStringMap convert string in the format a:1,b:2,c:3
+// GetStringMap getStringMap convert string in the format a:1,b:2,c:3
 // in map[string]string, this is util for the flags StringArrayVarP
 func GetStringMap(s string) map[string]string {
 	entries := strings.Split(s, ",")

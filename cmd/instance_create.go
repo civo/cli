@@ -54,6 +54,10 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		config, err := client.NewInstanceConfig()
+		if err != nil {
+			utility.Error("Unable to create a new config for the instance %s", err)
+			os.Exit(1)
+		}
 
 		if hostnameCreate != "" {
 			config.Hostname = hostnameCreate
@@ -111,49 +115,60 @@ If you wish to use a custom format, the available fields are:
 
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Prefix = "Creating instance... "
+			s.Prefix = fmt.Sprintf("Creating instance (%s)... ", resp.Hostname)
 			s.Start()
 
 			for stillCreating {
-				instanceCheck, _ := client.FindInstance(resp.ID)
+				instanceCheck, err := client.FindInstance(resp.ID)
+				if err != nil {
+					utility.Error("Unable to find the network %s", err)
+					os.Exit(1)
+				}
 				if instanceCheck.Status == "ACTIVE" {
 					stillCreating = false
 					s.Stop()
+				} else {
+					time.Sleep(2 * time.Second)
 				}
-				time.Sleep(5 * time.Second)
 			}
 		}
 
-		instance, _ := client.FindInstance(resp.ID)
+		// we look for the created instance to obtain the data that we need
+		// like PublicIP
+		instance, err := client.FindInstance(resp.ID)
+		if err != nil {
+			utility.Error("Unable to find the instance %s", err)
+			os.Exit(1)
+		}
 
 		if outputFormat == "human" {
-			fmt.Printf("The instance %s (%s) has been create\n", utility.Green(instance.Hostname), instance.ID)
+			fmt.Printf("The instance %s (%s) has been created\n", utility.Green(instance.Hostname), instance.PublicIP)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
-			ow.AppendData("ID", instance.ID)
-			ow.AppendData("Hostname", instance.Hostname)
-			ow.AppendData("Size", instance.Size)
-			ow.AppendData("Region", instance.Region)
-			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public IP")
-			ow.AppendData("Status", instance.Status)
-			ow.AppendDataWithLabel("OpenstackServerID", instance.OpenstackServerID, "Openstack Server ID")
-			ow.AppendData("NetworkID", instance.NetworkID)
-			ow.AppendData("TemplateID", instance.TemplateID)
-			ow.AppendData("SnapshotID", instance.SnapshotID)
-			ow.AppendData("InitialUser", instance.InitialUser)
-			ow.AppendData("SSHKey", instance.SSHKey)
-			ow.AppendData("Notes", instance.Notes)
-			ow.AppendData("FirewallID", instance.FirewallID)
-			ow.AppendData("Tags", strings.Join(instance.Tags, " "))
-			ow.AppendData("CivostatsdToken", instance.CivostatsdToken)
-			ow.AppendData("CivostatsdStats", instance.CivostatsdStats)
-			ow.AppendData("Script", instance.Script)
-			ow.AppendData("CreatedAt", instance.CreatedAt.Format(time.RFC1123))
-			ow.AppendData("ReverseDNS", instance.ReverseDNS)
-			ow.AppendData("PrivateIP", instance.PrivateIP)
-			ow.AppendData("PublicIP", instance.PublicIP)
-			ow.AppendData("PseudoIP", instance.PseudoIP)
+			ow.AppendData("ID", resp.ID)
+			ow.AppendData("Hostname", resp.Hostname)
+			ow.AppendData("Size", resp.Size)
+			ow.AppendData("Region", resp.Region)
+			ow.AppendDataWithLabel("PublicIP", resp.PublicIP, "Public IP")
+			ow.AppendData("Status", resp.Status)
+			ow.AppendDataWithLabel("OpenstackServerID", resp.OpenstackServerID, "Openstack Server ID")
+			ow.AppendData("NetworkID", resp.NetworkID)
+			ow.AppendData("TemplateID", resp.TemplateID)
+			ow.AppendData("SnapshotID", resp.SnapshotID)
+			ow.AppendData("InitialUser", resp.InitialUser)
+			ow.AppendData("SSHKey", resp.SSHKey)
+			ow.AppendData("Notes", resp.Notes)
+			ow.AppendData("FirewallID", resp.FirewallID)
+			ow.AppendData("Tags", strings.Join(resp.Tags, " "))
+			ow.AppendData("CivostatsdToken", resp.CivostatsdToken)
+			ow.AppendData("CivostatsdStats", resp.CivostatsdStats)
+			ow.AppendData("Script", resp.Script)
+			ow.AppendData("CreatedAt", resp.CreatedAt.Format(time.RFC1123))
+			ow.AppendData("ReverseDNS", resp.ReverseDNS)
+			ow.AppendData("PrivateIP", resp.PrivateIP)
+			ow.AppendData("PublicIP", resp.PublicIP)
+			ow.AppendData("PseudoIP", resp.PseudoIP)
 
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON()

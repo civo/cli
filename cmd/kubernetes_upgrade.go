@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-var KubernetesNewVersion string
+var kubernetesNewVersion string
 
 var kubernetesUpgradeCmd = &cobra.Command{
 	Use:     "upgrade",
@@ -33,7 +33,7 @@ var kubernetesUpgradeCmd = &cobra.Command{
 		}
 
 		configKubernetes := &civogo.KubernetesClusterConfig{
-			KubernetesVersion: KubernetesNewVersion,
+			KubernetesVersion: kubernetesNewVersion,
 		}
 
 		kubernetesCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)

@@ -37,7 +37,7 @@ func AskForConfirm(message string) error {
 	}
 
 	if answer != "y" && answer != "ye" && answer != "yes" {
-		return fmt.Errorf("Invalid user input")
+		return fmt.Errorf("invalid user input")
 	}
 
 	return nil

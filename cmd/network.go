@@ -6,7 +6,7 @@ import (
 
 var networkCmd = &cobra.Command{
 	Use:     "network",
-	Aliases: []string{"net", "nw"},
+	Aliases: []string{"networks", "net"},
 	Short:   "Details of Civo Network",
 }
 

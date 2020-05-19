@@ -92,8 +92,8 @@ If you wish to use a custom format, the available fields are:
 			}
 		} else {
 			if instance.PseudoIP != "" {
-				PublicIP := fmt.Sprintf("%s => %s", instance.PseudoIP, instance.PublicIP)
-				ow.AppendData("Public IP", PublicIP)
+				publicIP := fmt.Sprintf("%s => %s", instance.PseudoIP, instance.PublicIP)
+				ow.AppendData("Public IP", publicIP)
 			} else {
 				ow.AppendData("Public IP", instance.PublicIP)
 			}

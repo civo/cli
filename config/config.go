@@ -27,7 +27,7 @@ type Config struct {
 var Current Config
 
 // Filename is set to a full filename if the default config
-// file is overriden by a command-line switch
+// file is overridden by a command-line switch
 var Filename string
 
 // ReadConfig reads in config file and ENV variables if set.
@@ -46,15 +46,22 @@ func ReadConfig() {
 
 func loadConfig(filename string) {
 
-	checkConfigFile(filename)
-
-	configFile, err := os.Open(filename)
-	defer configFile.Close()
+	var err error
+	err = checkConfigFile(filename)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+
+	configFile, err := os.Open(filename)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
 	jsonParser := json.NewDecoder(configFile)
-	jsonParser.Decode(&Current)
+	err = jsonParser.Decode(&Current)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }
 
 // SaveConfig saves the current configuration back out to a JSON file in

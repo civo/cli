@@ -11,19 +11,20 @@ import (
 var apikeyCurrentCmd = &cobra.Command{
 	Use:     "current [NAME]",
 	Aliases: []string{"use", "default", "set"},
-	Short:   "Show the current API key",
+	Short:   "Set the API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		index, name, err := apiKeyFind(args[0])
+		index, err := apiKeyFind(args[0])
 		if err != nil {
-			fmt.Fprintf(os.Stderr, err.Error())
+			utility.Error("Unable find the api key %s", err.Error())
 			os.Exit(1)
 		}
 
-		if name != "" {
+		if index != "" {
 			config.Current.Meta.CurrentAPIKey = index
 			config.SaveConfig()
-			fmt.Printf("Set the default API Key to be %s\n", utility.Green(name))
+			fmt.Printf("Set the default API Key to be %s\n", utility.Green(index))
 		}
+
 	},
 }

@@ -17,21 +17,19 @@ for work, then you can setup multiple API keys and switch
 between them when required.`,
 }
 
-func apiKeyFind(search string) (string, string, error) {
+func apiKeyFind(search string) (string, error) {
 	var result string
-	var name string
 	for key, value := range config.Current.APIKeys {
 		if strings.Contains(key, search) || strings.Contains(value, search) {
 			result = key
-			name = value
 		}
 	}
 
-	if name == "" {
-		return "", "", fmt.Errorf("unable to find %s at all in the list", search)
+	if result == "" {
+		return "", fmt.Errorf("Unable to find %s at all in the list\n", search)
 	}
 
-	return result, name, nil
+	return result, nil
 }
 
 func init() {

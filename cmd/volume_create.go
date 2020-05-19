@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-var Bootable bool
+var bootableVolume bool
 var createSizeGB int
 
 var volumeCreateCmd = &cobra.Command{
@@ -29,7 +29,7 @@ var volumeCreateCmd = &cobra.Command{
 		volumeConfig := &civogo.VolumeConfig{
 			Name:          args[0],
 			SizeGigabytes: createSizeGB,
-			Bootable:      Bootable,
+			Bootable:      bootableVolume,
 		}
 
 		volume, err := client.NewVolume(volumeConfig)

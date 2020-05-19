@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-var KubernetesNewNodes int
+var kubernetesNewNodes int
 var waitKubernetesNodes bool
 
 var kubernetesScaleCmd = &cobra.Command{
@@ -35,7 +35,7 @@ var kubernetesScaleCmd = &cobra.Command{
 		}
 
 		configKubernetes := &civogo.KubernetesClusterConfig{
-			NumTargetNodes: KubernetesNewNodes,
+			NumTargetNodes: kubernetesNewNodes,
 		}
 
 		kubernetesCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)
@@ -52,12 +52,17 @@ var kubernetesScaleCmd = &cobra.Command{
 			s.Start()
 
 			for stillScaling {
-				kubernetesCheck, _ := client.FindKubernetesCluster(kubernetesCluster.ID)
+				kubernetesCheck, err := client.FindKubernetesCluster(kubernetesCluster.ID)
+				if err != nil {
+					utility.Error("Unable to find a kubernetes cluster %s", err)
+					os.Exit(1)
+				}
 				if kubernetesCheck.Status == "ACTIVE" {
 					stillScaling = false
 					s.Stop()
+				} else {
+					time.Sleep(2 * time.Second)
 				}
-				time.Sleep(5 * time.Second)
 			}
 		}
 

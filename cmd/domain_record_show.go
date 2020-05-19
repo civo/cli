@@ -17,7 +17,7 @@ var domainRecordShowCmd = &cobra.Command{
 	Short:   "Show record",
 	Example: "civo domain record show DOMAIN/DOMAIN_ID RECORD_ID",
 	Long: `Show your current record.
-If you wish to use a custom format, the available fields ar	:
+If you wish to use a custom format, the available fields are:
 
 	* ID
 	* DomainID
