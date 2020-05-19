@@ -9,7 +9,7 @@ set -e
 export VERIFY_CHECKSUM=0
 export OWNER="civo"
 export REPO="cli-go"
-export SUCCESS_CMD="$REPO version"
+export SUCCESS_CMD="$OWNER version"
 export BINLOCATION="/usr/local/bin"
 
 ###############################

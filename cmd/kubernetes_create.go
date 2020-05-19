@@ -14,12 +14,7 @@ import (
 
 var numTargetNodes int
 var waitKubernetes bool
-var (
-	kubernetesVersion string
-	targetNodesSize   string
-)
-
-var clusterName string
+var kubernetesVersion, targetNodesSize, clusterName string
 
 var kubernetesCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -52,7 +47,10 @@ var kubernetesCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		var executionTime string
+
 		if waitKubernetes == true {
+			startTime := utility.StartTime()
 
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
@@ -72,6 +70,8 @@ var kubernetesCreateCmd = &cobra.Command{
 					time.Sleep(2 * time.Second)
 				}
 			}
+
+			executionTime = utility.TrackTime(startTime)
 		}
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": kubernetesCluster.ID, "Name": kubernetesCluster.Name})
@@ -82,7 +82,12 @@ var kubernetesCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The cluster %s (%s) has been created and took %s\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID, "2m3s")
+			if executionTime != "" {
+				fmt.Printf("The cluster %s (%s) has been created in %s\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID, executionTime)
+			} else {
+				fmt.Printf("The cluster %s (%s) has been created\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID)
+			}
+
 		}
 	},
 }

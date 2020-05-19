@@ -111,7 +111,10 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
+		var executionTime string
+
 		if wait == true {
+			startTime := utility.StartTime()
 
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
@@ -131,6 +134,8 @@ If you wish to use a custom format, the available fields are:
 					time.Sleep(2 * time.Second)
 				}
 			}
+
+			executionTime = utility.TrackTime(startTime)
 		}
 
 		// we look for the created instance to obtain the data that we need
@@ -142,7 +147,11 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if outputFormat == "human" {
-			fmt.Printf("The instance %s (%s) has been created\n", utility.Green(instance.Hostname), instance.PublicIP)
+			if executionTime != "" {
+				fmt.Printf("The instance %s (%s) has been created in %s\n", utility.Green(instance.Hostname), instance.PublicIP, executionTime)
+			} else {
+				fmt.Printf("The instance %s (%s) has been created\n", utility.Green(instance.Hostname), instance.PublicIP)
+			}
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
