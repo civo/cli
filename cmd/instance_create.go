@@ -2,11 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/briandowns/spinner"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/briandowns/spinner"
+
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -105,29 +107,29 @@ If you wish to use a custom format, the available fields are:
 			config.TagsList = tags
 		}
 
+		var executionTime string
+  	startTime := utility.StartTime()
+
+		var instance *civogo.Instance
 		resp, err := client.CreateInstance(config)
 		if err != nil {
 			utility.Error("error creating instance %s", err)
 			os.Exit(1)
 		}
 
-		var executionTime string
-
 		if wait == true {
-			startTime := utility.StartTime()
-
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
 			s.Prefix = fmt.Sprintf("Creating instance (%s)... ", resp.Hostname)
 			s.Start()
 
 			for stillCreating {
-				instanceCheck, err := client.FindInstance(resp.ID)
+				instance, err = client.FindInstance(resp.ID)
 				if err != nil {
 					utility.Error("Unable to find the network %s", err)
 					os.Exit(1)
 				}
-				if instanceCheck.Status == "ACTIVE" {
+				if instance.Status == "ACTIVE" {
 					stillCreating = false
 					s.Stop()
 				} else {
@@ -136,14 +138,14 @@ If you wish to use a custom format, the available fields are:
 			}
 
 			executionTime = utility.TrackTime(startTime)
-		}
-
-		// we look for the created instance to obtain the data that we need
-		// like PublicIP
-		instance, err := client.FindInstance(resp.ID)
-		if err != nil {
-			utility.Error("Unable to find the instance %s", err)
-			os.Exit(1)
+		} else {
+			// we look for the created instance to obtain the data that we need
+			// like PublicIP
+			instance, err = client.FindInstance(resp.ID)
+			if err != nil {
+				utility.Error("Unable to find the instance %s", err)
+				os.Exit(1)
+			}
 		}
 
 		if outputFormat == "human" {
