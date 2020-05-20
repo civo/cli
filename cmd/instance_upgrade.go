@@ -32,19 +32,19 @@ If you wish to use a custom format, the available fields are:
 
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Finding instance %s", err)
+			utility.Error("Finding instance failed with %s", err)
 			os.Exit(1)
 		}
 
 		sizes, err := client.ListInstanceSizes()
 		if err != nil {
-			utility.Error("Checking size %s", err)
+			utility.Error("Checking size is valid failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -54,14 +54,14 @@ If you wish to use a custom format, the available fields are:
 				resizing = true
 				_, err = client.UpgradeInstance(instance.ID, size.Name)
 				if err != nil {
-					utility.Error("Upgrading instance %s", err)
+					utility.Error("Upgrading instance failed with %s", err)
 					os.Exit(1)
 				}
 			}
 		}
 
 		if !resizing {
-			utility.Error("Unable to find size", args[1])
+			utility.Error("Unable to find size %s", args[1])
 			os.Exit(1)
 		}
 

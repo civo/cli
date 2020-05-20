@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/civo/cli/config"
-	"github.com/civo/cli/utility"
-
-	"github.com/spf13/cobra"
 	"os"
 	"strconv"
+
+	"github.com/civo/cli/config"
+	"github.com/civo/cli/utility"
+	"github.com/spf13/cobra"
 )
 
 var kubernetesShowCmd = &cobra.Command{
@@ -15,8 +15,8 @@ var kubernetesShowCmd = &cobra.Command{
 	Aliases: []string{"get", "inspect"},
 	Example: `civo kubernetes show ID/HOSTNAME -o custom -f "ID: Code (DefaultUsername)"`,
 	Args:    cobra.MinimumNArgs(1),
-	Short:   "Show kubernetes cluster",
-	Long: `Show your current kubernetes cluster.
+	Short:   "Show Kubernetes cluster",
+	Long: `Show a specified Kubernetes cluster.
 If you wish to use a custom format, the available fields are:
 
 	* ID
@@ -32,13 +32,13 @@ If you wish to use a custom format, the available fields are:
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		kubernetesCluster, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			utility.Error("Unable to search template %s", err)
+			utility.Error("Finding the Kubernetes cluster failed with %s", err)
 			os.Exit(1)
 		}
 

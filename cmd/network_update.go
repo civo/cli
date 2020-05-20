@@ -2,35 +2,35 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var networkUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"change", "modify"},
 	Example: "civo network rm OLD_NAME NEW_NAME",
-	Short:   "Update a new network",
+	Short:   "Rename a network",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		oldNetwork, err := client.FindNetwork(args[0])
 		if err != nil {
-			utility.Error("Unable to find the network %s", err)
+			utility.Error("Finding the network failed with %s", err)
 			os.Exit(1)
 		}
 
 		network, err := client.RenameNetwork(args[1], oldNetwork.ID)
 		if err != nil {
-			utility.Error("Unable to update the network %s", err)
+			utility.Error("Renaming the network failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -42,7 +42,7 @@ var networkUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("Update a network called %s with ID %s to %s\n", utility.Green(oldNetwork.Label), utility.Green(network.ID), utility.Green(network.Label))
+			fmt.Printf("Renamed the network called %s with ID %s to %s\n", utility.Green(oldNetwork.Label), utility.Green(network.ID), utility.Green(network.Label))
 		}
 	},
 }

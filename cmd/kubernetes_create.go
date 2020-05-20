@@ -2,14 +2,15 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strconv"
+	"time"
+
 	"github.com/briandowns/spinner"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
-	"os"
-	"strconv"
-	"time"
 )
 
 var numTargetNodes int
@@ -20,11 +21,11 @@ var kubernetesCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
 	Example: "civo kubernetes create CLUSTER_NAME [flags]",
-	Short:   "Create a new kubernetes cluster",
+	Short:   "Create a new Kubernetes cluster",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -43,7 +44,7 @@ var kubernetesCreateCmd = &cobra.Command{
 
 		kubernetesCluster, err := client.NewKubernetesClusters(configKubernetes)
 		if err != nil {
-			utility.Error("Unable to create a kubernetes cluster %s", err)
+			utility.Error("Creating a Kubernetes cluster failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -60,7 +61,7 @@ var kubernetesCreateCmd = &cobra.Command{
 			for stillCreating {
 				kubernetesCheck, err := client.FindKubernetesCluster(kubernetesCluster.ID)
 				if err != nil {
-					utility.Error("Unable to find the kubernetes cluster %s", err)
+					utility.Error("Finding the Kubernetes cluster failed with %s", err)
 					os.Exit(1)
 				}
 				if kubernetesCheck.Status == "ACTIVE" {

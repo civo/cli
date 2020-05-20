@@ -2,11 +2,13 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 var firewallRemoveCmd = &cobra.Command{
@@ -18,7 +20,7 @@ var firewallRemoveCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -39,7 +41,7 @@ var firewallRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(outputFields)
 			default:
-				fmt.Printf("The firewall %s with ID %s was delete\n", utility.Green(firewall.Name), utility.Green(firewall.ID))
+				fmt.Printf("The firewall %s with ID %s was deleted\n", utility.Green(firewall.Name), utility.Green(firewall.ID))
 			}
 		} else {
 			fmt.Println("Operation aborted.")

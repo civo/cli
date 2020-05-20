@@ -16,7 +16,7 @@ var instanceMoveIPCmd = &cobra.Command{
 	Example: "civo instance move-ip ID/HOSTNAME 1.2.3.4",
 	Aliases: []string{"switch-ip", "moveip", "switchip"},
 	Short:   "Move a public IP",
-	Long: `Move a public IP address to a target instance by part of the ID or name.
+	Long: `Move a public IP address to a target instance by part of its ID or name.
 If you wish to use a custom format, the available fields are:
 
 	* ID
@@ -30,13 +30,13 @@ If you wish to use a custom format, the available fields are:
 
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Finding instance %s", err)
+			utility.Error("Finding instance failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -47,19 +47,19 @@ If you wish to use a custom format, the available fields are:
 				moving = true
 				_, err = client.MovePublicIPToInstance(instance.ID, args[1])
 				if err != nil {
-					utility.Error("Moving IP", err)
+					utility.Error("Moving IP failed with %s", err)
 					os.Exit(1)
 				}
 			}
 		}
 
 		if !moving {
-			utility.Error("Unable to find public IP", args[1])
+			utility.Error("Unable to find that public IP connected to one of your instances", args[1])
 			os.Exit(1)
 		}
 
 		if outputFormat == "human" {
-			fmt.Printf("Moving the IP %s to the instance %s (%s)\n", utility.Green(args[1]), utility.Green(instance.Hostname), instance.ID)
+			fmt.Printf("Moved the IP %s to the instance %s (%s)\n", utility.Green(args[1]), utility.Green(instance.Hostname), instance.ID)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()

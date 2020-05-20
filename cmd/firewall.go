@@ -32,11 +32,11 @@ func init() {
 	/*
 		Flags for firewall rule create cmd
 	*/
-	firewallRuleCreateCmd.Flags().StringVarP(&protocol, "protocol", "p", "", "the protocol choice from (TCP, UDP, ICMP)")
+	firewallRuleCreateCmd.Flags().StringVarP(&protocol, "protocol", "p", "", "the protocol choice (from: TCP, UDP, ICMP)")
 	firewallRuleCreateCmd.Flags().StringVarP(&startPort, "startport", "s", "", "the start port of the rule")
 	firewallRuleCreateCmd.Flags().StringVarP(&endPort, "endport", "e", "", "the end port of the rule")
-	firewallRuleCreateCmd.Flags().StringArrayVarP(&cidr, "cidr", "c", []string{}, "the cidr of the rule you can use like (-c 10.10.10.1/32, 10.10.10.2/32)")
-	firewallRuleCreateCmd.Flags().StringVarP(&direction, "direction", "d", "", "the direction of the rule, you can use inbound or outbound ")
-	firewallRuleCreateCmd.Flags().StringVarP(&label, "label", "l", "", "a string that will be the displayed name/reference for this rule")
+	firewallRuleCreateCmd.Flags().StringArrayVarP(&cidr, "cidr", "c", []string{}, "the CIDR of the rule you can use (e.g. -c 10.10.10.1/32, 10.10.10.2/32)")
+	firewallRuleCreateCmd.Flags().StringVarP(&direction, "direction", "d", "", "the direction of the rule (from: inbound, outbound)")
+	firewallRuleCreateCmd.Flags().StringVarP(&label, "label", "l", "", "a string that will be the displayed as the name/reference for this rule")
 
 }

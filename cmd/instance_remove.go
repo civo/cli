@@ -6,7 +6,6 @@ import (
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
 )
 
@@ -23,20 +22,20 @@ If you wish to use a custom format, the available fields are:
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		if utility.AskForConfirmDelete("instance") == nil {
 			instance, err := client.FindInstance(args[0])
 			if err != nil {
-				utility.Error("Finding instance %s", err)
+				utility.Error("Finding instance failed with %s", err)
 				os.Exit(1)
 			}
 
 			_, err = client.DeleteInstance(instance.ID)
 			if err != nil {
-				utility.Error("Removing instance %s", err)
+				utility.Error("Removing instancefailed with  %s", err)
 				os.Exit(1)
 			}
 

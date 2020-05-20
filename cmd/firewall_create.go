@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var firewallCreateCmd = &cobra.Command{
@@ -18,7 +18,7 @@ var firewallCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 

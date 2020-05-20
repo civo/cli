@@ -1,34 +1,36 @@
 package cmd
 
 import (
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var sshKeyListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
-	Example: `Example: civo ssh ls -o custom -f "ID: Name"`,
-	Short:   "List all ssh keys",
-	Long: `List all current ssh keys.
+	Example: `civo ssh ls`,
+	Short:   "List all SSH keys",
+	Long: `List all current SSH keys.
 If you wish to use a custom format, the available fields are:
 
 	* ID
 	* Name
-	* Fingerprint`,
+	* Fingerprint
+
+Example: civo ssh ls -o custom -f "ID: Name"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		sshKeys, err := client.ListSSHKeys()
 		if err != nil {
-			utility.Error("Unable to list ssh keys %s", err)
+			utility.Error("Listing SSH keys failed with %s", err)
 			os.Exit(1)
 		}
 

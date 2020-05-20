@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var bootableVolume bool
@@ -22,7 +22,7 @@ var volumeCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -34,7 +34,7 @@ var volumeCreateCmd = &cobra.Command{
 
 		volume, err := client.NewVolume(volumeConfig)
 		if err != nil {
-			utility.Error("Unable to create the volume %s", err)
+			utility.Error("Creating the volume failed with %s", err)
 			os.Exit(1)
 		}
 

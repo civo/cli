@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/briandowns/spinner"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
-	"time"
 )
 
 var waitVolumeDetach bool
@@ -17,18 +17,18 @@ var volumeDetachCmd = &cobra.Command{
 	Use:     "detach",
 	Aliases: []string{"disconnect", "unlink"},
 	Example: "civo volume detach VOLUME_NAME",
-	Short:   "Detach a volume",
+	Short:   "Detach a volume from an instance",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		volume, err := client.FindVolume(args[0])
 		if err != nil {
-			utility.Error("Unable to find the volume for your search %s", err)
+			utility.Error("Finding the volume for your search failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -44,7 +44,7 @@ var volumeDetachCmd = &cobra.Command{
 			for stillDetaching {
 				volumeCheck, err := client.FindVolume(volume.ID)
 				if err != nil {
-					utility.Error("Unable to find the volume %s", err)
+					utility.Error("Finding the volume failed with %s", err)
 					os.Exit(1)
 				}
 				if volumeCheck.MountPoint == "" {

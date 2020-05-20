@@ -7,7 +7,7 @@ import (
 var snapshotCmd = &cobra.Command{
 	Use:     "snapshot",
 	Aliases: []string{"snapshots"},
-	Short:   "Details of Civo Snapshot",
+	Short:   "Details of Civo snapshots",
 }
 
 func init() {
@@ -16,8 +16,5 @@ func init() {
 	snapshotCmd.AddCommand(snapshotCreateCmd)
 	snapshotCmd.AddCommand(snapshotRemoveCmd)
 
-	/*
-		Flags for the create cmd
-	*/
 	snapshotCreateCmd.Flags().StringVarP(&cron, "cron", "c", "", "If a valid cron string is passed, the snapshot will be saved as an automated snapshot")
 }

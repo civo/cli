@@ -1,21 +1,21 @@
 package cmd
 
 import (
-	"github.com/civo/cli/config"
-	"github.com/civo/cli/utility"
-
-	"github.com/spf13/cobra"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/civo/cli/config"
+	"github.com/civo/cli/utility"
+	"github.com/spf13/cobra"
 )
 
 var loadBalancerListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
 	Example: `civo loadbalancer ls -o custom -f "ID: Name"`,
-	Short:   "List Load Balancer",
-	Long: `List all current Load Balancer.
+	Short:   "List load balancers",
+	Long: `List all load balancers.
 If you wish to use a custom format, the available fields are:
 
 	* ID
@@ -33,13 +33,13 @@ If you wish to use a custom format, the available fields are:
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		lbs, err := client.ListLoadBalancers()
 		if err != nil {
-			utility.Error("Unable to list Load Balancer %s", err)
+			utility.Error("Listing load balancers failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -67,7 +67,7 @@ If you wish to use a custom format, the available fields are:
 			for _, backend := range lb.Backends {
 				instance, err := client.FindInstance(backend.InstanceID)
 				if err != nil {
-					utility.Error("Unable to find the instance %s", err)
+					utility.Error("Finding the load balancer failed with %s", err)
 					os.Exit(1)
 				}
 				backendList = append(backendList, instance.Hostname)

@@ -2,23 +2,23 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var domainRecordRemoveCmd = &cobra.Command{
 	Use:     "remove [DOMAIN|DOMAIN_ID] [RECORD_ID]",
 	Aliases: []string{"delete", "destroy", "rm"},
 	Args:    cobra.MinimumNArgs(2),
-	Short:   "Remove record",
+	Short:   "Remove domain record",
 	Example: "civo domain record remove DOMAIN/DOMAIN_ID RECORD_ID",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 

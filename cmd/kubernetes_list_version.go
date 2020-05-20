@@ -4,17 +4,18 @@ import (
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
-	"github.com/spf13/cobra"
 	"os"
 	"strconv"
+
+	"github.com/spf13/cobra"
 )
 
 var kubernetesListVersionCmd = &cobra.Command{
 	Use:     "versions",
 	Aliases: []string{"version"},
-	Example: `civo kubernetes versions -o custom -f "Version: Default"`,
-	Short:   "List all kubernetes clusters version",
-	Long: `List all kubernetes clusters versions.
+	Example: `civo kubernetes versions`,
+	Short:   "List all Kubernetes clusters version",
+	Long: `List all Kubernetes clusters versions.
 If you wish to use a custom format, the available fields are:
 
 	* Version
@@ -23,13 +24,13 @@ If you wish to use a custom format, the available fields are:
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		kubeVersions, err := client.ListAvailableKubernetesVersions()
 		if err != nil {
-			utility.Error("Unable to list kubernetes cluster %s", err)
+			utility.Error("Unable to list Kubernetes cluster %s", err)
 			os.Exit(1)
 		}
 

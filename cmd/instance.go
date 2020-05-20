@@ -29,16 +29,10 @@ func init() {
 	instanceCmd.AddCommand(instancePasswordCmd)
 	instanceCmd.AddCommand(instanceTagCmd)
 
-	/*
-		Flags for instance update cmd
-	*/
 	instanceUpdateCmd.Flags().StringVarP(&notes, "notes", "n", "", "notes stored against the instance")
 	instanceUpdateCmd.Flags().StringVarP(&reverseDNS, "reverse-dns", "r", "", "the reverse DNS entry for the instance")
 	instanceUpdateCmd.Flags().StringVarP(&hostname, "hostname", "s", "", "the instance's hostname")
 
-	/*
-		Flags for instance create cmd
-	*/
 	instanceCreateCmd.Flags().BoolVarP(&wait, "wait", "w", false, "wait until the instance's is ready")
 	instanceCreateCmd.Flags().StringVarP(&hostnameCreate, "hostname", "s", "", "the instance's hostname")
 	instanceCreateCmd.Flags().StringVarP(&size, "size", "i", "", "the instance's size")
@@ -50,9 +44,5 @@ func init() {
 	instanceCreateCmd.Flags().StringVarP(&network, "network", "r", "", "the instance's network you can use the Name or the ID")
 	instanceCreateCmd.Flags().StringVarP(&tags, "tags", "g", "", "the instance's tags")
 
-	/*
-		Flags for stop cmd
-	*/
 	instanceStopCmd.Flags().BoolVarP(&waitStop, "wait", "w", false, "wait until the instance's is stoped")
-
 }

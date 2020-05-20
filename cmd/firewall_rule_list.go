@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"github.com/civo/cli/config"
-	"github.com/civo/cli/utility"
-
-	"github.com/spf13/cobra"
 	"os"
 	"strings"
+
+	"github.com/civo/cli/config"
+	"github.com/civo/cli/utility"
+	"github.com/spf13/cobra"
 )
 
 var firewallRuleListCmd = &cobra.Command{
@@ -15,7 +15,7 @@ var firewallRuleListCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(1),
 	Example: "civo firewall rule ls FIREWALL_NAME",
 	Short:   "List firewall rule",
-	Long: `List all current firewall rule.
+	Long: `List all current firewall rules.
 If you wish to use a custom format, the available fields are:
 
 	* ID
@@ -31,7 +31,7 @@ Example: civo firewall rule ls FIREWALL_NAME -o custom -f "ID: Label"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -43,7 +43,7 @@ Example: civo firewall rule ls FIREWALL_NAME -o custom -f "ID: Label"`,
 
 		firewallRules, err := client.ListFirewallRules(firewall.ID)
 		if err != nil {
-			utility.Error("Unable to list firewalls rules %s", err)
+			utility.Error("Unable to list firewall's rules %s", err)
 			os.Exit(1)
 		}
 

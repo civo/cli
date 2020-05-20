@@ -7,7 +7,7 @@ import (
 var sshKeyCmd = &cobra.Command{
 	Use:     "sshkey",
 	Aliases: []string{"ssh", "ssh-key", "sshkeys"},
-	Short:   "Details of Civo Ssh Keys",
+	Short:   "Details of Civo SSH keys",
 }
 
 func init() {
@@ -16,9 +16,6 @@ func init() {
 	sshKeyCmd.AddCommand(sshKeyCreateCmd)
 	sshKeyCmd.AddCommand(sshKeyRemoveCmd)
 
-	/*
-		Flags for ssh key create
-	*/
 	sshKeyCreateCmd.Flags().StringVarP(&keyCreate, "key", "k", "", "The path of the key")
 	sshKeyCreateCmd.MarkFlagRequired("key")
 }

@@ -2,18 +2,18 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
+
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"io/ioutil"
-	"os"
 )
 
 var (
 	shortDescription                                string
-	Name, description, defaultUsername, cloudConfig string
+	name, description, defaultUsername, cloudConfig string
 )
 
 var templateUpdateCmd = &cobra.Command{
@@ -25,13 +25,13 @@ var templateUpdateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		template, err := client.GetTemplateByCode(args[0])
 		if err != nil {
-			utility.Error("Unable to find the template %s", err)
+			utility.Error("Finding the template failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -40,8 +40,8 @@ var templateUpdateCmd = &cobra.Command{
 			VolumeID: template.VolumeID,
 		}
 
-		if Name != "" {
-			configTemplateUpdate.Name = Name
+		if name != "" {
+			configTemplateUpdate.Name = name
 		} else {
 			configTemplateUpdate.Name = template.Name
 		}
@@ -65,10 +65,9 @@ var templateUpdateCmd = &cobra.Command{
 		}
 
 		if cloudConfig != "" {
-			// reading the file
 			data, err := ioutil.ReadFile(cloudConfig)
 			if err != nil {
-				utility.Error("Unable to read the cloud config file %s", err)
+				utility.Error("Reading the cloud config file failed with %s", err)
 				os.Exit(1)
 			}
 
@@ -79,7 +78,7 @@ var templateUpdateCmd = &cobra.Command{
 
 		templateUpdate, err := client.UpdateTemplate(template.ID, configTemplateUpdate)
 		if err != nil {
-			utility.Error("Unable to update the template %s", err)
+			utility.Error("Updating the template failed with %s", err)
 			os.Exit(1)
 		}
 

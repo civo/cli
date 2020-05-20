@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/briandowns/spinner"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
-	"time"
 )
 
 var waitVolumeAttach bool
@@ -17,24 +17,24 @@ var volumeAttachCmd = &cobra.Command{
 	Use:     "attach",
 	Aliases: []string{"connect", "link"},
 	Example: "civo volume attach VOLUME_NAME INSTANCE_HOSTNAME",
-	Short:   "Attach a volume",
+	Short:   "Attach a volume to an instance",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		volume, err := client.FindVolume(args[0])
 		if err != nil {
-			utility.Error("Unable to find the volume for your search %s", err)
+			utility.Error("Finding the volume for your search failed with %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[1])
 		if err != nil {
-			utility.Error("Unable to find the instance for your search %s", err)
+			utility.Error("Finding the instance for your search failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -50,7 +50,7 @@ var volumeAttachCmd = &cobra.Command{
 			for stillAttaching {
 				volumeCheck, err := client.FindVolume(volume.ID)
 				if err != nil {
-					utility.Error("Unable to find the volume %s", err)
+					utility.Error("Finding the volume failed with %s", err)
 					os.Exit(1)
 				}
 				if volumeCheck.MountPoint != "" {

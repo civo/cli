@@ -2,12 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/civo/cli/utility"
-	"github.com/spf13/cobra"
-	"github.com/tcnksm/go-latest"
 	"os"
 	"runtime"
 	"strings"
+
+	"github.com/civo/cli/utility"
+	"github.com/spf13/cobra"
+	"github.com/tcnksm/go-latest"
 )
 
 var (
@@ -43,7 +44,7 @@ var (
 
 				res, err := latest.Check(githubTag, strings.Replace(VersionCli, "v", "", 1))
 				if err != nil {
-					utility.Error("Unable to check the last version %s", err)
+					utility.Error("Checking for a newer version failed with %s", err)
 					os.Exit(1)
 				}
 
@@ -57,7 +58,7 @@ var (
 
 				res, err := latest.Check(githubTag, strings.Replace(VersionCli, "v", "", 1))
 				if err != nil {
-					utility.Error("Unable to check the last version %s", err)
+					utility.Error("Checking for a newer version failed with %s", err)
 					os.Exit(1)
 				}
 
@@ -71,6 +72,6 @@ var (
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
-	versionCmd.Flags().BoolVarP(&quiet, "quiet", "q", false, "Use quiet output for simple output.")
-	versionCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "Use verbose output to see full information.")
+	versionCmd.Flags().BoolVarP(&quiet, "quiet", "q", false, "Use quiet output for simple output")
+	versionCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "Use verbose output to see full information")
 }

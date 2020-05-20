@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var volumeRemoveCmd = &cobra.Command{
@@ -18,14 +18,14 @@ var volumeRemoveCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		if utility.AskForConfirmDelete("volume") == nil {
 			volume, err := client.FindVolume(args[0])
 			if err != nil {
-				utility.Error("Unable to find the volume for your search %s", err)
+				utility.Error("Finding the volume for your search failed with %s", err)
 				os.Exit(1)
 			}
 
@@ -39,7 +39,7 @@ var volumeRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(outputFields)
 			default:
-				fmt.Printf("The volume called %s with ID %s was delete\n", utility.Green(volume.Name), utility.Green(volume.ID))
+				fmt.Printf("The volume called %s with ID %s was deleted\n", utility.Green(volume.Name), utility.Green(volume.ID))
 			}
 		} else {
 			fmt.Println("Operation aborted.")

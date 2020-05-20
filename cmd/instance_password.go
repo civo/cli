@@ -6,16 +6,15 @@ import (
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
 )
 
 var instancePasswordCmd = &cobra.Command{
 	Use:     "password",
 	Example: "civo instance public-ip ID/HOSTNAME",
-	Short:   "Show instance's password",
+	Short:   "Show instance's default password",
 	Aliases: []string{"pw"},
-	Long: `Show the specified instance's default user password by part of the instance's ID or name.
+	Long: `Show the specified instance's default SSH password by part of the instance's ID or name.
 If you wish to use a custom format, the available fields are:
 
 	* ID
@@ -25,13 +24,13 @@ If you wish to use a custom format, the available fields are:
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Finding instance %s", err)
+			utility.Error("Finding instance failed with %s", err)
 			os.Exit(1)
 		}
 

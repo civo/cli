@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strconv"
+
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
-	"strconv"
 )
 
 var lbHostname, lbProtocol, tlsCertificate, tlsKey, policy, healthCheckPath string
@@ -20,12 +20,12 @@ var loadBalancerCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
 	Example: "civo loadbalancer create [flags]",
-	Short:   "Create a new Load Balancer",
+	Short:   "Create a new load balancer",
 	//Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -68,7 +68,7 @@ var loadBalancerCreateCmd = &cobra.Command{
 				data := utility.GetStringMap(backend)
 				instance, err := client.FindInstance(data["instance"])
 				if err != nil {
-					utility.Error("Unable to find the instance %s", err)
+					utility.Error("Finding the backend instance failed with %s", err)
 					os.Exit(1)
 				}
 
@@ -89,7 +89,7 @@ var loadBalancerCreateCmd = &cobra.Command{
 
 		loadBalancer, err := client.CreateLoadBalancer(configLoadBalancer)
 		if err != nil {
-			utility.Error("Unable to create a load balancer %s", err)
+			utility.Error("Creating the load balancer failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -101,7 +101,7 @@ var loadBalancerCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("Created a new Load Balancer with hostname %s with ID %s\n", utility.Green(loadBalancer.Hostname), utility.Green(loadBalancer.ID))
+			fmt.Printf("Created a new load balancer with hostname %s with ID %s\n", utility.Green(loadBalancer.Hostname), utility.Green(loadBalancer.ID))
 		}
 	},
 }

@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strconv"
+
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
-	"strconv"
 )
 
 const (
@@ -37,13 +37,13 @@ var domainRecordCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		domain, err := client.FindDNSDomain(args[0])
 		if err != nil {
-			utility.Error("Unable to find domain for your search %s", err)
+			utility.Error("Unable to find the domain for your search %s", err)
 			os.Exit(1)
 		}
 
@@ -54,7 +54,6 @@ var domainRecordCreateCmd = &cobra.Command{
 			Priority: recordPriority,
 		}
 
-		//a/alias, cname/canonical, mx/mail, txt/text
 		if recordType == "a" || recordType == "alias" {
 			newRecordConfig.Type = DNSRecordTypeA
 		}

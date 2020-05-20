@@ -4,19 +4,20 @@ import (
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
-	"github.com/spf13/cobra"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/spf13/cobra"
 )
 
 var domainRecordShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"get", "inspect"},
 	Args:    cobra.MinimumNArgs(2),
-	Short:   "Show record",
+	Short:   "Show domain record",
 	Example: "civo domain record show DOMAIN/DOMAIN_ID RECORD_ID",
-	Long: `Show your current record.
+	Long: `Show the specified record.
 If you wish to use a custom format, the available fields are:
 
 	* ID
@@ -25,13 +26,13 @@ If you wish to use a custom format, the available fields are:
 	* Value
 	* Type
 	* TTL
-	* Priority	
+	* Priority
 
 Example: civo domain record show RECORD_ID -o custom -f "ID: Name"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -43,7 +44,7 @@ Example: civo domain record show RECORD_ID -o custom -f "ID: Name"`,
 
 		record, err := client.GetDNSRecord(domain.ID, args[1])
 		if err != nil {
-			utility.Error("Unable to get domains record %s", err)
+			utility.Error("Unable to find the domain record %s", err)
 			os.Exit(1)
 		}
 

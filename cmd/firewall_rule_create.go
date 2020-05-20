@@ -2,12 +2,15 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
 var protocol, startPort, endPort, direction, label string
@@ -22,7 +25,7 @@ var firewallRuleCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -61,7 +64,11 @@ var firewallRuleCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("New rule %s created", utility.Green(rule.Label))
+			if newRuleConfig.EndPort == newRuleConfig.StartPort {
+				fmt.Printf("Created a firewall rule called %s allowing access to port %s from %s with ID %s\n", utility.Green(rule.Label), utility.Green(newRuleConfig.StartPort), utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+			} else {
+				fmt.Printf("Created a firewall rule called %s allowing access to ports %s-%s from %s with ID %s\n", utility.Green(rule.Label), utility.Green(newRuleConfig.StartPort), utility.Green(newRuleConfig.EndPort), utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+			}
 		}
 	},
 }

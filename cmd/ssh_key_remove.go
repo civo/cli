@@ -2,30 +2,30 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var sshKeyRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
 	Example: "civo ssh rm NAME",
-	Short:   "Remove a ssh key",
+	Short:   "Remove an SSH key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		if utility.AskForConfirmDelete("ssh key") == nil {
 			sshKey, err := client.FindSSHKey(args[0])
 			if err != nil {
-				utility.Error("Unable to find ssh key for your search %s", err)
+				utility.Error("Finding the SSH key for your search failed with %s", err)
 				os.Exit(1)
 			}
 
@@ -39,7 +39,7 @@ var sshKeyRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(outputFields)
 			default:
-				fmt.Printf("The ssh key called %s with ID %s was delete\n", utility.Green(sshKey.Name), utility.Green(sshKey.ID))
+				fmt.Printf("The SSH key called %s with ID %s was deleted\n", utility.Green(sshKey.Name), utility.Green(sshKey.ID))
 			}
 		} else {
 			fmt.Println("Operation aborted.")

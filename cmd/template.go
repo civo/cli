@@ -16,9 +16,6 @@ func init() {
 	templateCmd.AddCommand(templateCreateCmd)
 	templateCmd.AddCommand(templateRemoveCmd)
 
-	/*
-		Flags for template create
-	*/
 	templateCreateCmd.Flags().StringVarP(&codeCreate, "code", "c", "", "The code name of the template, this can't change after creation")
 	templateCreateCmd.MarkFlagRequired("code")
 	templateCreateCmd.Flags().StringVarP(&imageIDCreate, "image-id", "m", "", "The image id for the template")
@@ -29,10 +26,7 @@ func init() {
 	templateCreateCmd.Flags().StringVarP(&defaultUsernameCreate, "default-username", "u", "", "The default username of the template")
 	templateCreateCmd.Flags().StringVarP(&cloudConfigCreate, "cloudconfig", "i", "", "The path of the cloud config")
 
-	/*
-		Flags for template update
-	*/
-	templateUpdateCmd.Flags().StringVarP(&Name, "name", "n", "", "The name of the template")
+	templateUpdateCmd.Flags().StringVarP(&name, "name", "n", "", "The name of the template")
 	templateUpdateCmd.Flags().StringVarP(&shortDescription, "short-description", "s", "", "Add a short description")
 	templateUpdateCmd.Flags().StringVarP(&description, "description", "d", "", "Add a description")
 	templateUpdateCmd.Flags().StringVarP(&defaultUsername, "default-username", "u", "", "The default username of the template")

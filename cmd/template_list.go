@@ -1,17 +1,17 @@
 package cmd
 
 import (
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var templateListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
-	Example: `civo template ls -o custom -f "ID: Code (DefaultUsername)"`,
+	Example: `civo template ls`,
 	Short:   "List templates",
 	Long: `List all available templates.
 If you wish to use a custom format, the available fields are:
@@ -21,17 +21,19 @@ If you wish to use a custom format, the available fields are:
 	* Name
 	* ShortDescription
 	* Description
-	* DefaultUsername`,
+	* DefaultUsername
+
+Example: civo template ls -o custom -f "ID: Code (DefaultUsername)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		templates, err := client.ListTemplates()
 		if err != nil {
-			utility.Error("Unable to list templates %s", err)
+			utility.Error("Listing templates failed with %s", err)
 			os.Exit(1)
 		}
 

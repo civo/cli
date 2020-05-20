@@ -1,15 +1,12 @@
 package cmd
 
 import (
-	_ "errors"
 	"fmt"
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	_ "github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
-	_ "strconv"
 )
 
 var saveConfig, mergeConfig bool
@@ -20,28 +17,28 @@ var kubernetesConfigCmd = &cobra.Command{
 	Aliases: []string{"conf"},
 	Example: "civo kubernetes config CLUSTER_NAME --save --merge",
 	Args:    cobra.MinimumNArgs(1),
-	Short:   "Get kubernetes clusters config",
-	Long: `Show current kubernetes config.
+	Short:   "Get a Kubernetes cluster's config",
+	Long: `Show the Kubernetes config for a specified cluster.
 If you wish to use a custom format, the available fields are:
 
 	* KubeConfig`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		kube, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			utility.Error("Unable to find the kubernetes cluster %s", err)
+			utility.Error("Finding the Kubernetes cluster failed with %s", err)
 			os.Exit(1)
 		}
 
 		if saveConfig {
 			err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig)
 			if err != nil {
-				utility.Error("Unable to save the cluster config %s", err)
+				utility.Error("Saving the cluster config failed with %s", err)
 				os.Exit(1)
 			}
 		}

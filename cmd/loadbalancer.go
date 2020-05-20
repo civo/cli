@@ -17,9 +17,6 @@ func init() {
 	loadBalancerCmd.AddCommand(loadBalancerCreateCmd)
 	loadBalancerCmd.AddCommand(loadBalancerUpdateCmd)
 
-	/*
-		Flags for create a load balancer
-	*/
 	loadBalancerCreateCmd.Flags().StringVarP(&lbHostname, "hostname", "e", "", "If not supplied, will be in format loadbalancer-uuid.civo.com")
 	loadBalancerCreateCmd.Flags().StringVarP(&lbProtocol, "protocol", "p", "", "Either http or https. If you specify https then you must also provide the next two fields")
 	loadBalancerCreateCmd.Flags().StringVarP(&tlsCertificate, "tls_certificate", "c", "", "TLS certificate in Base64-encoded PEM. Required if --protocol is https")
@@ -33,9 +30,6 @@ func init() {
 	loadBalancerCreateCmd.Flags().BoolVarP(&ignoreInvalidBackendTLS, "ignore_invalid_backend_tls", "i", true, "Should self-signed/invalid certificates be ignored from backend servers? Defaults to true")
 	loadBalancerCreateCmd.Flags().StringArrayVarP(&backends, "backends", "b", []string{}, "Specify a backend instance to associate with the load balancer. Takes instance_id, protocol and port in the format --backend=instance:instance-id|instance-name,protocol:http,port:80")
 
-	/*
-		Flags for update a load balancer
-	*/
 	loadBalancerUpdateCmd.Flags().StringVarP(&lbHostnameUpdate, "hostname", "e", "", "If not supplied, will be in format loadbalancer-uuid.civo.com")
 	loadBalancerUpdateCmd.Flags().StringVarP(&lbProtocolUpdate, "protocol", "p", "", "Either http or https. If you specify https then you must also provide the next two fields")
 	loadBalancerUpdateCmd.Flags().StringVarP(&tlsCertificateUpdate, "tls_certificate", "c", "", "TLS certificate in Base64-encoded PEM. Required if --protocol is https")

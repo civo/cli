@@ -2,19 +2,19 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/civo/cli/config"
-	"github.com/civo/cli/utility"
-
-	"github.com/spf13/cobra"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/civo/cli/config"
+	"github.com/civo/cli/utility"
+	"github.com/spf13/cobra"
 )
 
 var volumeListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
-	Example: `civo volume ls -o custom -f "ID: Name (SizeGigabytes)"`,
+	Example: `civo volume ls`,
 	Short:   "List volumes",
 	Long: `List all available volumes.
 If you wish to use a custom format, the available fields are:
@@ -25,17 +25,19 @@ If you wish to use a custom format, the available fields are:
 	* SizeGigabytes
 	* MountPoint
 	* Bootable
-	* CreatedAt`,
+	* CreatedAt
+
+Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		volumes, err := client.ListVolumes()
 		if err != nil {
-			utility.Error("Unable to list volumes %s", err)
+			utility.Error("Listing volumes failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -49,7 +51,7 @@ If you wish to use a custom format, the available fields are:
 			if volume.InstanceID != "" {
 				instance, err := client.FindInstance(volume.InstanceID)
 				if err != nil {
-					utility.Error("Unable to find the instance %s", err)
+					utility.Error("Finding the instance failed with %s", err)
 					os.Exit(1)
 				}
 				ow.AppendDataWithLabel("InstanceID", instance.Hostname, "Instance")

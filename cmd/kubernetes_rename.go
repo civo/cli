@@ -2,13 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	_ "github.com/briandowns/spinner"
+	"os"
+
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var kubernetesNewName string
@@ -21,13 +20,13 @@ var kubernetesRenameCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		kubernetesFindCluster, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			utility.Error("Unable to find a kubernetes cluster %s", err)
+			utility.Error("Finding Kubernetes cluster failed with %s", err)
 			os.Exit(1)
 		}
 

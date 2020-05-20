@@ -2,17 +2,17 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var templateShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"get", "inspect"},
-	Example: `civo template show CODE -o custom -f "ID: Code (DefaultUsername)"`,
+	Example: `civo template show CODE`,
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Show template",
 	Long: `Show your current template.
@@ -27,17 +27,19 @@ If you wish to use a custom format, the available fields are:
 	* ShortDescription
 	* Description
 	* DefaultUsername
-	* CloudConfig`,
+	* CloudConfig
+
+Example: civo template show CODE -o custom -f "ID: Code (DefaultUsername)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		template, err := client.GetTemplateByCode(args[0])
 		if err != nil {
-			utility.Error("Unable to search template %s", err)
+			utility.Error("Searching for the template failed with %s", err)
 			os.Exit(1)
 		}
 

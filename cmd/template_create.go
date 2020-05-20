@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
+
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"io/ioutil"
-	"os"
 )
 
 var (
@@ -25,7 +25,7 @@ var templateCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -67,7 +67,7 @@ var templateCreateCmd = &cobra.Command{
 			// reading the file
 			data, err := ioutil.ReadFile(cloudConfigCreate)
 			if err != nil {
-				utility.Error("Unable to read the cloud config file %s", err)
+				utility.Error("Reading the cloud config file failed with %s", err)
 				os.Exit(1)
 			}
 
@@ -76,13 +76,13 @@ var templateCreateCmd = &cobra.Command{
 
 		_, err = client.NewTemplate(configTemplate)
 		if err != nil {
-			utility.Error("Unable to create the template %s", err)
+			utility.Error("Creating the template failed with %s", err)
 			os.Exit(1)
 		}
 
 		template, err := client.GetTemplateByCode(codeCreate)
 		if err != nil {
-			utility.Error("Unable to find the template %s", err)
+			utility.Error("Finding the template failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -94,7 +94,7 @@ var templateCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("Created template with name %s with ID %s\n", utility.Green(template.Name), utility.Green(template.ID))
+			fmt.Printf("Created the template with name %s with ID %s\n", utility.Green(template.Name), utility.Green(template.ID))
 		}
 	},
 }

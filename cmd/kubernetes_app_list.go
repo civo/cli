@@ -1,19 +1,19 @@
 package cmd
 
 import (
-	"github.com/civo/cli/config"
-	"github.com/civo/cli/utility"
-
-	"github.com/spf13/cobra"
 	"os"
 	"strings"
+
+	"github.com/civo/cli/config"
+	"github.com/civo/cli/utility"
+	"github.com/spf13/cobra"
 )
 
 var kubernetesAppListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
-	Short:   "List all kubernetes clusters applications",
-	Long: `List all kubernetes clusters applications.
+	Short:   "List all Kubernetes clusters applications",
+	Long: `List all available Kubernetes clusters applications.
 If you wish to use a custom format, the available fields are:
 
 	* Name
@@ -24,13 +24,13 @@ If you wish to use a custom format, the available fields are:
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		kubeApps, err := client.ListKubernetesMarketplaceApplications()
 		if err != nil {
-			utility.Error("Unable to list kubernetes cluster application %s", err)
+			utility.Error("Listing Kubernetes cluster application failed with %s", err)
 			os.Exit(1)
 		}
 

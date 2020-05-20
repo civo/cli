@@ -2,15 +2,14 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"time"
+
 	"github.com/briandowns/spinner"
-	_ "github.com/briandowns/spinner"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
-	"os"
-	"time"
 )
 
 var kubernetesNewNodes int
@@ -18,19 +17,19 @@ var waitKubernetesNodes bool
 
 var kubernetesScaleCmd = &cobra.Command{
 	Use:     "scale",
-	Short:   "Scale a kubernetes cluster",
+	Short:   "Scale a Kubernetes cluster",
 	Example: "civo kubernetes scale CLUSTER_NAME --nodes 4 [flags]",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
 		kubernetesFindCluster, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			utility.Error("Unable to find a kubernetes cluster %s", err)
+			utility.Error("Finding a Kubernetes cluster failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -40,7 +39,7 @@ var kubernetesScaleCmd = &cobra.Command{
 
 		kubernetesCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)
 		if err != nil {
-			utility.Error("Unable to rename a kubernetes cluster %s", err)
+			utility.Error("Renaming the Kubernetes cluster failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -48,13 +47,13 @@ var kubernetesScaleCmd = &cobra.Command{
 
 			stillScaling := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Prefix = "Scaling the kubernetes cluster... "
+			s.Prefix = "Scaling the Kubernetes cluster... "
 			s.Start()
 
 			for stillScaling {
 				kubernetesCheck, err := client.FindKubernetesCluster(kubernetesCluster.ID)
 				if err != nil {
-					utility.Error("Unable to find a kubernetes cluster %s", err)
+					utility.Error("Finding the kubernetes cluster failed with %s", err)
 					os.Exit(1)
 				}
 				if kubernetesCheck.Status == "ACTIVE" {
@@ -74,7 +73,7 @@ var kubernetesScaleCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The kubernetes cluster %s was rescale from (%v) to (%v) nodes with ID %s\n", utility.Green(kubernetesCluster.Name), kubernetesFindCluster.NumTargetNode, kubernetesCluster.NumTargetNode, utility.Green(kubernetesCluster.ID))
+			fmt.Printf("The Kubernetes cluster %s (with ID %s) was rescaled from %v to %v nodes\n", utility.Green(kubernetesCluster.Name), utility.Green(kubernetesCluster.ID), kubernetesFindCluster.NumTargetNode, kubernetesCluster.NumTargetNode)
 		}
 	},
 }

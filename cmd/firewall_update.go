@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var firewallUpdateCmd = &cobra.Command{
@@ -17,7 +18,7 @@ var firewallUpdateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
-			utility.Error("Unable to create a Civo API Client %s", err)
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
@@ -41,7 +42,7 @@ var firewallUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The firewall called %s with ID %s was rename to %s\n", utility.Green(firewall.Name), utility.Green(firewall.ID), utility.Green(args[1]))
+			fmt.Printf("The firewall called %s with ID %s was renamed to %s\n", utility.Green(firewall.Name), utility.Green(firewall.ID), utility.Green(args[1]))
 		}
 	},
 }
