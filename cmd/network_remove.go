@@ -22,7 +22,7 @@ var networkRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.AskForConfirmDelete("network") == nil {
+		if utility.UserConfirmedDeletion("network", defaultRemove) == true {
 			network, err := client.FindNetwork(args[0])
 			if err != nil {
 				utility.Error("Finding the network for your search failed with %s", err)

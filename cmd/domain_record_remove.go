@@ -22,7 +22,7 @@ var domainRecordRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.AskForConfirmDelete("domain record") == nil {
+		if utility.UserConfirmedDeletion("domain record", defaultRemove) == true {
 			domain, err := client.FindDNSDomain(args[0])
 			if err != nil {
 				utility.Error("Unable to find domain for your search %s", err)

@@ -26,7 +26,7 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if utility.AskForConfirmDelete("instance") == nil {
+		if utility.UserConfirmedDeletion("instance", defaultRemove) == true {
 			instance, err := client.FindInstance(args[0])
 			if err != nil {
 				utility.Error("Finding instance failed with %s", err)

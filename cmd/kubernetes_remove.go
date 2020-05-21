@@ -22,7 +22,7 @@ var kubernetesRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.AskForConfirmDelete("kubernetes cluster") == nil {
+		if utility.UserConfirmedDeletion("kubernetes cluster", defaultRemove) == true {
 			kubernetesCluster, err := client.FindKubernetesCluster(args[0])
 			if err != nil {
 				utility.Error("Unable to find the Kubernetes cluster for your search because of %s", err)

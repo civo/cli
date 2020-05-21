@@ -22,7 +22,7 @@ var sshKeyRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.AskForConfirmDelete("ssh key") == nil {
+		if utility.UserConfirmedDeletion("ssh key", defaultRemove) == true {
 			sshKey, err := client.FindSSHKey(args[0])
 			if err != nil {
 				utility.Error("Finding the SSH key for your search failed with %s", err)

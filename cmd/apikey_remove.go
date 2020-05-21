@@ -21,7 +21,7 @@ var apikeyRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.AskForConfirmDelete("api key") == nil {
+		if utility.UserConfirmedDeletion("api key", defaultRemove) == true {
 			numKeys := len(config.Current.APIKeys)
 			delete(config.Current.APIKeys, index)
 			config.SaveConfig()

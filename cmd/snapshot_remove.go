@@ -22,7 +22,7 @@ var snapshotRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.AskForConfirmDelete("snapshot") == nil {
+		if utility.UserConfirmedDeletion("snapshot", defaultRemove) == true {
 			snapshot, err := client.FindSnapshot(args[0])
 			if err != nil {
 				utility.Error("Finding snapshot for your search failed with %s", err)

@@ -22,7 +22,7 @@ var volumeRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.AskForConfirmDelete("volume") == nil {
+		if utility.UserConfirmedDeletion("volume", defaultRemove) == true {
 			volume, err := client.FindVolume(args[0])
 			if err != nil {
 				utility.Error("Finding the volume for your search failed with %s", err)

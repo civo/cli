@@ -22,7 +22,7 @@ var loadBalancerRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.AskForConfirmDelete("load balancer") == nil {
+		if utility.UserConfirmedDeletion("load balancer", defaultRemove) == true {
 			lb, err := client.FindLoadBalancer(args[0])
 			if err != nil {
 				utility.Error("Finding the load balancer for your search failed with %s", err)

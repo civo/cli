@@ -24,7 +24,7 @@ var firewallRuleRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.AskForConfirmDelete("firewall") == nil {
+		if utility.UserConfirmedDeletion("firewall", defaultRemove) == true {
 			firewall, err := client.FindFirewall(args[0])
 			if err != nil {
 				utility.Error("Unable to find the firewall for your search %s", err)
