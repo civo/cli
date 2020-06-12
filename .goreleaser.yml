@@ -38,13 +38,13 @@ archives:
       - goos: windows
         format: zip
 brews:
-  name: civo
-  github:
-    owner: civo
-    name: homebrew-tools
-  commit_author:
-    name: civobot
-    email: hello@civo.com
-  folder: formula
-  homepage: "https://github.com/civo/cli-go"
-  description: "CLI for managing Civo resources."
+  - name: civo
+    github:
+      owner: civo
+      name: homebrew-tools
+    commit_author:
+      name: civobot
+      email: hello@civo.com
+    folder: formula
+    homepage: "https://github.com/civo/cli-go"
+    description: "CLI for managing Civo resources."
