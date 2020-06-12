@@ -23,17 +23,28 @@ builds:
     ldflags:
       - -s -w -X github.com/civo/cli/cmd.VersionCli={{.Version}} -X github.com/civo/cli/cmd.CommitCli={{.Commit}} -X github.com/civo/cli/cmd.DateCli={{.Date}}
 checksum:
-  name_template: '{{ .ProjectName }}-{{ .Version }}-checksums.sha256'
+  name_template: "{{ .ProjectName }}-{{ .Version }}-checksums.sha256"
 changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+      - "^docs:"
+      - "^test:"
       - Merge pull request
       - Merge branch
 archives:
-  - name_template: '{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}'
+  - name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
     format_overrides:
       - goos: windows
         format: zip
+brews:
+  name: civo
+  github:
+    owner: civo
+    name: homebrew-tools
+  commit_author:
+    name: civobot
+    email: hello@civo.com
+  folder: formula
+  homepage: "https://github.com/civo/cli-go"
+  description: "CLI for managing Civo resources."
