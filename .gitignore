@@ -2,3 +2,8 @@ civo
 dest/civo_*
 cli
 dist/
+.idea
+.local.yml
+temporal*
+.DS*
+get.sh

@@ -42,9 +42,9 @@ brews:
     github:
       owner: civo
       name: homebrew-tools
-    # commit_author:
-      # name: civobot
-      # email: hello@civo.com
+    commit_author:
+      name: civobot
+      email: hello@civo.com
     folder: formula
     homepage: "https://github.com/civo/cli-go"
     description: "CLI for managing Civo resources."
