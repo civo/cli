@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine
+FROM alpine:latest
 COPY civo /usr/local/bin/civo
 
 RUN adduser -S civo
