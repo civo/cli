@@ -46,5 +46,15 @@ brews:
       name: civobot
       email: hello@civo.com
     folder: formula
-    homepage: "https://github.com/civo/cli-go"
+    homepage: "https://github.com/civo/cli"
     description: "CLI for managing Civo resources."
+dockers:
+  -
+    goos: linux
+    goarch: amd64
+    binaries:
+    - civo
+    image_templates:
+    - "civo/cli:latest"
+    - "civo/cli:{{ .Tag }}"
+    dockerfile: docker/Dockerfile

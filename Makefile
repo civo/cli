@@ -15,9 +15,9 @@ clean:
 	$(GOCLEAN)
 	rm -f dest/
 build:
-	git fetch --tags
+	git fetch --tags -f
 	mkdir -p dest
-	$(eval VERSION_CLI=$(shell git describe --tags | cut -d "v" -f 2))
+	$(eval VERSION_CLI=$(shell git describe --tags | cut -d "v" -f 2 | cut -d "-" -f 1))
 	$(eval COMMIT_CLI=$(shell git log --format="%H" -n 1))
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_LINUX) -ldflags "-s -X github.com/civo/cli/cmd.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/cmd.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/cmd.DateCli=$(shell date +%FT%T%Z)" -v
 	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_MAC) -ldflags "-s -X github.com/civo/cli/cmd.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/cmd.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/cmd.DateCli=$(shell date +%FT%T%Z)" -v

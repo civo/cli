@@ -31,7 +31,7 @@ var (
 
 			githubTag := &latest.GithubTag{
 				Owner:             "civo",
-				Repository:        "cli-go",
+				Repository:        "cli",
 				FixVersionStrFunc: latest.DeleteFrontV(),
 			}
 			switch {

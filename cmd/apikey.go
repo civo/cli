@@ -26,7 +26,7 @@ func apiKeyFind(search string) (string, error) {
 	}
 
 	if result == "" {
-		return "", fmt.Errorf("Unable to find %s at all in the list\n", search)
+		return "", fmt.Errorf("unable to find %s at all in the list", search)
 	}
 
 	return result, nil
