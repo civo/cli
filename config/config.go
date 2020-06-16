@@ -101,7 +101,7 @@ func checkConfigFile(filename string) error {
 			return err
 		}
 
-		fileContend := []byte("{\"apikeys\":{},\"meta\":{\"current_apikey\":\"\",\"default_region\":\"lon1\",\"latest_release_check\":\"\",\"url\":\"https://api.civo.com\"}}")
+		fileContend := []byte(fmt.Sprintf("{\"apikeys\":{},\"meta\":{\"current_apikey\":\"\",\"default_region\":\"lon1\",\"latest_release_check\":\"%s\",\"url\":\"https://api.civo.com\"}}", time.Now().Format(time.RFC3339)))
 
 		err = ioutil.WriteFile(filename, fileContend, 0600)
 		if err != nil {
