@@ -28,7 +28,7 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 - [License](#license)
 
 ## Set-up
-Civo CLI is built with Go and distributed as binary files, downloadable for multiple operating systems and downloadable from https://github.com/civo/cli/releases.
+Civo CLI is built with Go and distributed as binary files, available for multiple operating systems and downloadable from https://github.com/civo/cli/releases.
 
 If you have a Mac, you can install it using [Homebrew](https://brew.sh):
 
