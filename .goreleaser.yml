@@ -64,5 +64,5 @@ snapcrafts:
     description: |
       Civo CLI is a tool to handler all resource inside the Civo cloud, from the console.
     grade: stable
-    confinement: classic
+    confinement: strict
     publish: true
