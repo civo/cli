@@ -1,19 +1,16 @@
 #!/bin/sh
 set -e
 
-# Copyright Civo Author(s) 2020
-#########################
-# Repo specific content #
-#########################
+# Copyright Civo Ltd 2020, all rights reserved
 
 export VERIFY_CHECKSUM=0
 export OWNER="civo"
-export REPO="cli-go"
+export REPO="cli"
 export SUCCESS_CMD="$OWNER version"
 export BINLOCATION="/usr/local/bin"
 
 ###############################
-# Get the las version         #
+# Get the last version        #
 ###############################
 
 get_last_version() {
