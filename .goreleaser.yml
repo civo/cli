@@ -57,20 +57,20 @@ dockers:
       - "civo/cli:latest"
       - "civo/cli:{{ .Tag }}"
     dockerfile: docker/Dockerfile
-snapcrafts:
-  - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    summary: Tool to handler all Civo cloud resource
-    description: |
-      Civo CLI is a tool to handler all resource inside the Civo cloud, from the console.
-    grade: stable
-    confinement: strict
-    publish: true
-    apps:
-      civo:
-        plugs: ["network", "network-bind", "home", "personal-files"]
-    plugs:
-      personal-files:
-        read:
-          - $HOME/.civo.json
-        write:
-          - $HOME/.civo.json
+# snapcrafts:
+#   - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+#     summary: Tool to handler all Civo cloud resource
+#     description: |
+#       Civo CLI is a tool to handler all resource inside the Civo cloud, from the console.
+#     grade: stable
+#     confinement: strict
+#     publish: true
+#     apps:
+#       civo:
+#         plugs: ["network", "network-bind", "home", "personal-files"]
+#     plugs:
+#       personal-files:
+#         read:
+#           - $HOME/.civo.json
+#         write:
+#           - $HOME/.civo.json
