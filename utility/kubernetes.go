@@ -2,33 +2,33 @@ package utility
 
 import (
 	"fmt"
-	"github.com/fatih/color"
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 // ObtainKubeConfig is the function to get the kubeconfig from the cluster
 // and save to the file or merge with the existing one
-func ObtainKubeConfig(KubeconfigFilename string, civoConfig string, merge bool) error {
+func ObtainKubeConfig(KubeconfigFilename string, civoConfig string, merge bool, clusterName string) error {
 
 	kubeConfig := []byte(civoConfig)
 
 	if merge {
 		var err error
-		kubeConfig, err = mergeConfigs(KubeconfigFilename, kubeConfig)
+		kubeConfig, err = mergeConfigs(KubeconfigFilename, kubeConfig, clusterName)
 		if err != nil {
 			return err
 		}
 	}
 
-	if writeErr := writeConfig(KubeconfigFilename, kubeConfig, false); writeErr != nil {
+	if writeErr := writeConfig(KubeconfigFilename, kubeConfig, false, merge, clusterName); writeErr != nil {
 		return writeErr
 	}
 	return nil
 }
 
-func mergeConfigs(localKubeconfigPath string, k3sconfig []byte) ([]byte, error) {
+func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, clusterName string) ([]byte, error) {
 	// Create a temporary kubeconfig to store the config of the newly create k3s cluster
 	file, err := ioutil.TempFile(os.TempDir(), "civo-temp-*")
 	if err != nil {
@@ -36,13 +36,11 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte) ([]byte, error) 
 	}
 	defer file.Close()
 
-	if writeErr := writeConfig(file.Name(), k3sconfig, true); writeErr != nil {
+	if writeErr := writeConfig(file.Name(), k3sconfig, true, true, clusterName); writeErr != nil {
 		return nil, writeErr
 	}
 
-	color.Set(color.FgBlue)
-	fmt.Printf("Merging with existing kubeconfig at %s\n", localKubeconfigPath)
-	color.Unset()
+	fmt.Printf("Merged with main kubernetes config: %s\n", Green(localKubeconfigPath))
 
 	// Append KUBECONFIGS in ENV Vars
 	appendKubeConfigENV := fmt.Sprintf("KUBECONFIG=%s:%s", localKubeconfigPath, file.Name())
@@ -65,12 +63,22 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte) ([]byte, error) 
 }
 
 // Generates config files give the path to file: string and the data: []byte
-func writeConfig(path string, data []byte, suppressMessage bool) error {
+func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bool, clusterName string) error {
 	if !suppressMessage {
-		color.Set(color.FgBlue)
-		fmt.Printf("Saving file to: %s\n", path)
-		fmt.Printf("\nTest your cluster with:\nexport KUBECONFIG=%s\nkubectl get node -o wide\n", path)
-		color.Unset()
+		fmt.Printf("Saved configuration to: %s\n", Green(path))
+		fmt.Print("\nAccess your cluster with:\n")
+		if mergeConfigs {
+			fmt.Printf("kubectl config use-context %s\n", clusterName)
+			fmt.Println("kubectl get node")
+		} else {
+			if strings.Contains(path, ".kube") {
+				fmt.Print("kubectl get node\n")
+			} else {
+				fmt.Printf("export KUBECONFIG=%s kubectl get node\n", path)
+			}
+
+		}
+
 	}
 
 	var _, err = os.Stat(path)

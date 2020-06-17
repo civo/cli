@@ -48,7 +48,7 @@ func AskForConfirm(message string) error {
 // parses and verifies user input.
 func UserConfirmedDeletion(resourceType string, ignoringConfirmed bool) bool {
 	if ignoringConfirmed == false {
-		message := fmt.Sprintf("delete this %s?", resourceType)
+		message := fmt.Sprintf("delete this %s", resourceType)
 		err := AskForConfirm(message)
 		if err != nil {
 			return false
@@ -63,7 +63,7 @@ func UserConfirmedDeletion(resourceType string, ignoringConfirmed bool) bool {
 // parses and verifies user input.
 func UserConfirmedOverwrite(resourceType string, ignoringConfirmed bool) bool {
 	if ignoringConfirmed == false {
-		message := fmt.Sprintf("overwrite the %s?", resourceType)
+		message := fmt.Sprintf("overwrite the %s", resourceType)
 		err := AskForConfirm(message)
 		if err != nil {
 			return false

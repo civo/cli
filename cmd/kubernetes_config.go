@@ -38,8 +38,8 @@ If you wish to use a custom format, the available fields are:
 
 		if saveConfig {
 			if !mergeConfig && strings.Contains(localPathConfig, ".kube") {
-				if utility.UserConfirmedOverwrite("kubernetes confi", defaultYes) == true {
-					err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig)
+				if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) == true {
+					err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig, kube.Name)
 					if err != nil {
 						utility.Error("Saving the cluster config failed with %s", err)
 						os.Exit(1)
@@ -49,7 +49,7 @@ If you wish to use a custom format, the available fields are:
 					os.Exit(1)
 				}
 			} else {
-				err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig)
+				err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig, kube.Name)
 				if err != nil {
 					utility.Error("Saving the cluster config failed with %s", err)
 					os.Exit(1)
@@ -66,9 +66,7 @@ If you wish to use a custom format, the available fields are:
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			if saveConfig {
-				fmt.Println("The cluster access details were saved")
-			} else {
+			if !saveConfig {
 				fmt.Println(kube.KubeConfig)
 			}
 
