@@ -65,7 +65,6 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, clusterName stri
 // Generates config files give the path to file: string and the data: []byte
 func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bool, clusterName string) error {
 	if !suppressMessage {
-		fmt.Printf("Saved configuration to: %s\n", Green(path))
 		fmt.Print("\nAccess your cluster with:\n")
 		if mergeConfigs {
 			fmt.Printf("kubectl config use-context %s\n", clusterName)
@@ -74,11 +73,9 @@ func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bo
 			if strings.Contains(path, ".kube") {
 				fmt.Print("kubectl get node\n")
 			} else {
-				fmt.Printf("export KUBECONFIG=%s kubectl get node\n", path)
+				fmt.Printf("KUBECONFIG=%s kubectl get node\n", path)
 			}
-
 		}
-
 	}
 
 	var _, err = os.Stat(path)
