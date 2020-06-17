@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -36,11 +37,25 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if saveConfig {
-			err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig)
-			if err != nil {
-				utility.Error("Saving the cluster config failed with %s", err)
-				os.Exit(1)
+			if !mergeConfig && strings.Contains(localPathConfig, ".kube") {
+				if utility.UserConfirmedOverwrite("kubernetes confi", defaultYes) == true {
+					err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig)
+					if err != nil {
+						utility.Error("Saving the cluster config failed with %s", err)
+						os.Exit(1)
+					}
+				} else {
+					fmt.Println("Operation aborted.")
+					os.Exit(1)
+				}
+			} else {
+				err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig)
+				if err != nil {
+					utility.Error("Saving the cluster config failed with %s", err)
+					os.Exit(1)
+				}
 			}
+
 		}
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"KubeConfig": kube.KubeConfig})
@@ -51,7 +66,12 @@ If you wish to use a custom format, the available fields are:
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Println("The configuration was save")
+			if saveConfig {
+				fmt.Println("The cluster access details were saved")
+			} else {
+				fmt.Println(kube.KubeConfig)
+			}
+
 		}
 	},
 }

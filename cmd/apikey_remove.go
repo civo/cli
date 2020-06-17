@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var apikeyRemoveCmd = &cobra.Command{
@@ -21,7 +22,7 @@ var apikeyRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("api key", defaultRemove) == true {
+		if utility.UserConfirmedDeletion("api key", defaultYes) == true {
 			numKeys := len(config.Current.APIKeys)
 			delete(config.Current.APIKeys, index)
 			config.SaveConfig()

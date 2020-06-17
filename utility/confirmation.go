@@ -57,3 +57,18 @@ func UserConfirmedDeletion(resourceType string, ignoringConfirmed bool) bool {
 
 	return true
 }
+
+// UserConfirmedOverwrite builds a message to ask the user to confirm overwrite config
+// and then sends it through to AskForConfirm to
+// parses and verifies user input.
+func UserConfirmedOverwrite(resourceType string, ignoringConfirmed bool) bool {
+	if ignoringConfirmed == false {
+		message := fmt.Sprintf("overwrite the %s?", resourceType)
+		err := AskForConfirm(message)
+		if err != nil {
+			return false
+		}
+	}
+
+	return true
+}

@@ -22,7 +22,7 @@ var templateRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("template", defaultRemove) == true {
+		if utility.UserConfirmedDeletion("template", defaultYes) == true {
 			template, err := client.GetTemplateByCode(args[0])
 			if err != nil {
 				utility.Error("Finding the template for your search failed with %s", err)
