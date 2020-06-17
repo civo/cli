@@ -66,6 +66,6 @@ snapcrafts:
     grade: stable
     confinement: strict
     publish: true
-  apps:
-    civo:    
-      plugs: ["network", "network-bind"]
+    apps:
+      civo:    
+        plugs: ["network", "network-bind"]
