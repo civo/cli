@@ -98,43 +98,46 @@ An instance is a virtual server running on the Civo cloud platform. They can be 
 #### Creating an instance
 You can create an instance by running `civo instance create` with a hostname parameter, as well as any options you provide:
 
-* `hostname` is a fully qualified domain name that should be set as the instance's hostname. The client will generate a random name if not provided.
-* `size` -  The size of instance to create, from the current list of sizes (e.g. g2.small) available at [`civo sizes`](#sizes). Defaults to `g2.small`.
-* `template` -  The OS template UUID to use, from the available list at [`civo templates`](#templates) Defaults to Ubuntu 18.04 if no `template` value or `snapshot` provided.
-* `snapshot` - The snapshot UUID to use, from snapshots you have saved on your account. Only required if `template` ID not provided.
-* `region` - The region code identifier to have your instance built in. Optional; will be assigned randomly if not provided.
-* `public_ip` - this should be either `none`, `create` or `from`. If `from` is specified then the `move_ip_from`parameter should also be specified (and contain the ID of the instance that will be releasing its IP). As aliases, `true` will be treated the same as `create` and `false` will be treated the same as `none`. If `create` or `true` is specified it will automatically allocate an initial public IP address, rather than having to add the first one later. Optional; default is `create`.
-* `initial_user` - The name of the initial user created on the server. If not provided, will default to the template's `default_username` and fallback to `civo`.
-* `ssh_key_id` - The ID of an already  [uploaded SSH public key](#ssh-keys)  to use for login to the default user. Optional; if one isn't provided a random password will be set and returned in the  `initial_password`  field.
-* `tags` - A space-separated list of tags in `'quotation marks'` to be used freely as required. Optional.
-* `wait` - a simple flag (e.g. `--wait`) that will cause the CLI to spin and wait for the instance to be `ACTIVE`.
+```
+Options:
+  -s, --hostname string      the instance's hostname
+  -u, --initialuser string   the instance's initial user
+  -r, --network string       the instance's network you can use the Name or the ID
+  -p, --publicip string      the instance's public ip
+  -e, --region string        the region code identifier to have your instance built in
+  -i, --size string          the instance's size
+  -n, --snapshot string      the instance's snapshot
+  -k, --sshkey string        the instance's ssh key you can use the Name or the ID
+  -g, --tags string          the instance's tags
+  -t, --template string      the instance's template
+  -w, --wait                 wait until the instance's is ready
+```
 
 Example usage:
 ```
-$ civo instance create --name=api-demo.test --size g2.small --template=811a8dfb-8202-49ad-b1ef-1e6320b20497 --initial_user=demo-user
+$ civo instance create --hostname=api-demo.test --size g2.small --template=811a8dfb-8202-49ad-b1ef-1e6320b20497 --initialuser=demo-user
  Created instance api-demo.test
 
 $ civo instance show api-demo.test
-                ID : 715f95d1-3cee-4a3c-8759-f9b49eec34c4
-          Hostname : api-demo.test
-              Tags :
-              Size : Small - 2GB RAM, 1 CPU Core, 25GB SSD Disk
-            Status : ACTIVE
-        Private IP : 10.250.199.4
-         Public IP : 172.31.2.164 => 91.211.152.100
-           Network : Default (10.250.199.0/24)
-          Firewall :  (rules: )
-            Region : lon1
-      Initial User : api-demouser
-      OpenStack ID : 7c89f7de-2b29-4178-a2e5-55bdaa5c4c21
-       Template ID : 811a8dfb-8202-49ad-b1ef-1e6320b20497
-       Snapshot ID :
+                 ID : c31e3262-b3f4-467a-b4d2-7980e02d181f
+           Hostname : api-demo.test
+Openstack Server ID : 986529e8-4063-4576-8952-1cbcd5743e44
+             Status : ACTIVE
+               Size : g2.small
+             Region : lon1
+         Network ID : cc3aceb1-66a8-4060-ae35-36e862ba4f82
+        Template ID : fffbe2e5-0dd8-476b-b480-cb7c9fccbe39
+        Snapshot ID : 
+       Initial User : demo-user
+            SSH Key : bcdd0589-7543-459a-8452-b5fe2252c170
+        Firewall ID : default
+               Tags : 
+         Created At : Thu, 18 Jun 2020 03:35:24 +0100
+         Private IP : 10.173.156.59
+          Public IP : 172.31.6.7 => 185.136.234.101
 
 ----------------------------- NOTES -----------------------------
-
-
 ```
-
 You will be able to see the instance's details by running `civo instance show api-demo.test` as above.
 
 #### Viewing the Default User Password For an Instance

@@ -16,7 +16,7 @@ import (
 )
 
 var wait bool
-var hostnameCreate, size, template, snapshot, publicip, initialuser, sshkey, tags, network string
+var hostnameCreate, size, template, snapshot, publicip, initialuser, sshkey, tags, network, region string
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -65,6 +65,10 @@ If you wish to use a custom format, the available fields are:
 			config.Hostname = hostnameCreate
 		}
 
+		if region != "" {
+			config.Region = region
+		}
+
 		if size != "" {
 			config.Size = size
 		}
@@ -108,7 +112,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		var executionTime string
-  	startTime := utility.StartTime()
+		startTime := utility.StartTime()
 
 		var instance *civogo.Instance
 		resp, err := client.CreateInstance(config)
