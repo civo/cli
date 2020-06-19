@@ -49,7 +49,14 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendData("Nodes", strconv.Itoa(kubernetesCluster.NumTargetNode))
 		ow.AppendData("Size", kubernetesCluster.TargetNodeSize)
 		ow.AppendData("Status", kubernetesCluster.Status)
-		ow.AppendDataWithLabel("KubernetesVersion", kubernetesCluster.KubernetesVersion, "Version")
+
+		if kubernetesCluster.UpgradeAvailableTo != "" {
+			ow.AppendDataWithLabel("KubernetesVersion", utility.Red(kubernetesCluster.KubernetesVersion+" *"), "Version")
+		} else {
+			ow.AppendDataWithLabel("KubernetesVersion", kubernetesCluster.KubernetesVersion, "Version")
+		}
+
+		ow.AppendDataWithLabel("UpgradeAvailableTo", kubernetesCluster.UpgradeAvailableTo, "Upgrade")
 		ow.AppendDataWithLabel("APIEndPoint", kubernetesCluster.APIEndPoint, "API Endpoint")
 		ow.AppendDataWithLabel("DNSEntry", kubernetesCluster.DNSEntry, "DNS A record")
 
@@ -62,6 +69,12 @@ If you wish to use a custom format, the available fields are:
 			}
 		} else {
 			ow.WriteKeyValues()
+
+			if kubernetesCluster.UpgradeAvailableTo != "" {
+				fmt.Println()
+				fmt.Printf(utility.Red("* An upgrade to v%s is available. To upgrade use: civo k3s upgrade %s --version %s"), kubernetesCluster.UpgradeAvailableTo, kubernetesCluster.Name, kubernetesCluster.UpgradeAvailableTo)
+				fmt.Println()
+			}
 
 			if len(kubernetesCluster.Instances) > 0 {
 				fmt.Println()

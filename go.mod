@@ -4,7 +4,7 @@ module github.com/civo/cli
 
 require (
 	github.com/briandowns/spinner v1.9.0
-	github.com/civo/civogo v0.2.8
+	github.com/civo/civogo v0.2.9
 	github.com/fatih/color v1.9.0
 	github.com/google/go-github v17.0.0+incompatible // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
