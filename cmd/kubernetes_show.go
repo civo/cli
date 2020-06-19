@@ -22,13 +22,12 @@ If you wish to use a custom format, the available fields are:
 	* ID
 	* Code
 	* Name
-	* AccountID
-	* ImageID
-	* VolumeID
-	* ShortDescription
-	* Description
-	* DefaultUsername
-	* CloudConfig`,
+	* Nodes
+	* Size
+	* Status
+	* KubernetesVersion
+	* APIEndPoint
+	* DNSEntry`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -50,7 +49,7 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendData("Nodes", strconv.Itoa(kubernetesCluster.NumTargetNode))
 		ow.AppendData("Size", kubernetesCluster.TargetNodeSize)
 		ow.AppendData("Status", kubernetesCluster.Status)
-		ow.AppendData("Version", kubernetesCluster.Version)
+		ow.AppendDataWithLabel("KubernetesVersion", kubernetesCluster.KubernetesVersion, "Version")
 		ow.AppendDataWithLabel("APIEndPoint", kubernetesCluster.APIEndPoint, "API Endpoint")
 		ow.AppendDataWithLabel("DNSEntry", kubernetesCluster.DNSEntry, "DNS A record")
 
