@@ -5,6 +5,7 @@
 <a name="v0.6.1"></a>
 ## [v0.6.1] - 2020-06-19
 ### Added
+- Added the CHANGELOG.md
 - Added new feature
 
 ### Fix
