@@ -57,13 +57,13 @@ To run, you generally will want to map the API key for persistence.
 
 ```
 touch $HOME/.civo.json
-docker run -it --rm -v $HOME/.civo.json:/home/user/.civo.json civo/cli:latest
+docker run -it --rm -v $HOME/.civo.json:/.civo.json civo/cli:latest
 ```
 
 To make usage easier, an alias is recommended.  Here's an example how to set one to the same command as would be used if installed directly on the system, and using the Docker image:
 
 ```
-alias civo="docker run -it --rm -v $HOME/.civo.json:/home/user/.civo.json civo/cli:latest"
+alias civo="docker run -it --rm -v $HOME/.civo.json:/.civo.json civo/cli:latest"
 # Maybe put the above line in ~/.bash_profile or ~/.zshrc
 civo sshkey list
 civo instance list

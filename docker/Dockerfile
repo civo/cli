@@ -1,8 +1,5 @@
 FROM alpine:latest
 COPY civo /usr/local/bin/civo
 
-RUN adduser -S user
-USER user
-
-ENTRYPOINT ["civo"]
+ENTRYPOINT ["civo", "--config", "/.civo.json"]
 CMD [ "version" ]
