@@ -49,7 +49,7 @@ var kubernetesUpgradeCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The kubernetes cluster %s was upgraded to %s\n", utility.Green(kubernetesCluster.Name), utility.Green(kubernetesCluster.KubernetesVersion))
+			fmt.Printf("The kubernetes cluster %s was upgraded to %s\n", utility.Green(kubernetesCluster.Name), utility.Green(kubernetesNewVersion))
 		}
 	},
 }
