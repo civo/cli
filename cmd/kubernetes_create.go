@@ -36,10 +36,13 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		configKubernetes := &civogo.KubernetesClusterConfig{
-			Name:              clusterName,
-			NumTargetNodes:    numTargetNodes,
-			TargetNodesSize:   targetNodesSize,
-			KubernetesVersion: kubernetesVersion,
+			Name:            clusterName,
+			NumTargetNodes:  numTargetNodes,
+			TargetNodesSize: targetNodesSize,
+		}
+
+		if kubernetesVersion != "latest" {
+			configKubernetes.KubernetesVersion = kubernetesVersion
 		}
 
 		kubernetesCluster, err := client.NewKubernetesClusters(configKubernetes)
