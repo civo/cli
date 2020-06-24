@@ -38,7 +38,7 @@ jobs:
       #     snapcraft login --with <(echo "$SNAPCRAFT_LOGIN")
 
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@master
+        uses: goreleaser/goreleaser-action@v2
         with:
           args: release --rm-dist
         env:
