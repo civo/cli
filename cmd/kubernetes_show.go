@@ -61,6 +61,15 @@ If you wish to use a custom format, the available fields are:
 
 		if outputFormat == "json" || outputFormat == "custom" {
 			//ow.AppendData("CloudConfig", template.CloudConfig)
+
+			if kubernetesCluster.UpgradeAvailableTo != "" {
+				ow.AppendDataWithLabel("KubernetesVersion", kubernetesCluster.KubernetesVersion, "Version")
+			} else {
+				ow.AppendDataWithLabel("KubernetesVersion", kubernetesCluster.KubernetesVersion, "Version")
+			}
+
+			ow.AppendDataWithLabel("UpgradeAvailableTo", kubernetesCluster.UpgradeAvailableTo, "Upgrade Available")
+
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON()
 			} else {
