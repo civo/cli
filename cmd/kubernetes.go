@@ -50,6 +50,7 @@ func init() {
 	kubernetesRenameCmd.Flags().StringVarP(&kubernetesNewName, "name", "n", "", "the new name for the cluster.")
 
 	kubernetesUpgradeCmd.Flags().StringVarP(&kubernetesNewVersion, "version", "v", "", "change the version of the cluster.")
+	kubernetesUpgradeCmd.MarkFlagRequired("version")
 
 	kubernetesScaleCmd.Flags().IntVarP(&kubernetesNewNodes, "nodes", "n", 3, "change the total nodes of the cluster.")
 	kubernetesScaleCmd.Flags().BoolVarP(&waitKubernetesNodes, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE")

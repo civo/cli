@@ -34,7 +34,7 @@ func init() {
 	loadBalancerUpdateCmd.Flags().StringVarP(&lbProtocolUpdate, "protocol", "p", "", "Either http or https. If you specify https then you must also provide the next two fields")
 	loadBalancerUpdateCmd.Flags().StringVarP(&tlsCertificateUpdate, "tls_certificate", "c", "", "TLS certificate in Base64-encoded PEM. Required if --protocol is https")
 	loadBalancerUpdateCmd.Flags().StringVarP(&tlsKeyUpdate, "tls_key", "k", "", "TLS certificate in Base64-encoded PEM. Required if --protocol is https")
-	loadBalancerUpdateCmd.Flags().StringVarP(&policyUpdate, "policy", "y", "", "<least_conn | random | round_robin | ip_hash> - Balancing policy to choose backends")
+	loadBalancerUpdateCmd.Flags().StringVarP(&policyUpdate, "policy", "", "", "<least_conn | random | round_robin | ip_hash> - Balancing policy to choose backends")
 	loadBalancerUpdateCmd.Flags().IntVarP(&lbPortUpdate, "port", "r", 80, "Listening port. Defaults to 80 to match default http protocol")
 	loadBalancerUpdateCmd.Flags().IntVarP(&maxRequestSizeUpdate, "max_request_size", "m", 20, "Maximum request content size, in MB. Defaults to 20")
 	loadBalancerUpdateCmd.Flags().StringVarP(&healthCheckPathUpdate, "health_check_path", "l", "", "URL to check for a valid (2xx/3xx) HTTP status on the backends. Defaults to /")
