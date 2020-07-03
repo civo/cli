@@ -45,7 +45,7 @@ brews:
     commit_author:
       name: civobot
       email: hello@civo.com
-    folder: formula
+    folder: Formula
     homepage: "https://github.com/civo/cli"
     description: "CLI for managing Civo resources."
 dockers:
