@@ -19,7 +19,7 @@ clean:
 build: buildmac buildlinux buildwindows
 	@rm -f civo
 	# Assuming either Mac or Linux at this point...too many options for running Make on Windows
-ifeq ($(OS),"Darwin")
+ifeq ($(OS),Darwin)
 	ln -s dest/$(BINARY_MAC) civo
 else
 	ln -s dest/$(BINARY_LINUX) civo
