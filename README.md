@@ -486,6 +486,7 @@ $ civo kubernetes show apps-demo
             Status : ACTIVE
            Version : 0.8.1
       API Endpoint : https://[Cluster-IP]:6443
+         Master IP : [Cluster-IP]
       DNS A record : 1199efbe-e2a5-4d25-a32f-0b7aa50082b2.k8s.civo.com
 
 Nodes:

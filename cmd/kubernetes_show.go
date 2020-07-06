@@ -27,6 +27,7 @@ If you wish to use a custom format, the available fields are:
 	* Status
 	* KubernetesVersion
 	* APIEndPoint
+	* MasterIP
 	* DNSEntry`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
@@ -57,6 +58,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		ow.AppendDataWithLabel("APIEndPoint", kubernetesCluster.APIEndPoint, "API Endpoint")
+		ow.AppendDataWithLabel("MasterIP", kubernetesCluster.MasterIP, "Master IP")
 		ow.AppendDataWithLabel("DNSEntry", kubernetesCluster.DNSEntry, "DNS A record")
 
 		if outputFormat == "json" || outputFormat == "custom" {
