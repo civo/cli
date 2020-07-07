@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -24,6 +25,9 @@ If you wish to use a custom format, the available fields are:
 	* OpenstackServerID
 	* ReverseDNS
 	* Size
+	* CPUCores
+	* RAMMegabytes
+	* DiskGigabytes
 	* Region
 	* NetworkID
 	* PrivateIP
@@ -64,6 +68,9 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("OpenstackServerID", instance.OpenstackServerID, "Openstack Server ID")
 		ow.AppendData("Status", instance.Status)
 		ow.AppendData("Size", instance.Size)
+		ow.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
+		ow.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
+		ow.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
 		ow.AppendData("Region", instance.Region)
 		ow.AppendDataWithLabel("NetworkID", instance.NetworkID, "Network ID")
 		ow.AppendDataWithLabel("TemplateID", instance.TemplateID, "Template ID")

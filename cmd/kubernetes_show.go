@@ -24,6 +24,9 @@ If you wish to use a custom format, the available fields are:
 	* Name
 	* Nodes
 	* Size
+	* CPUCores
+	* RAMMegabytes
+	* DiskGigabytes
 	* Status
 	* KubernetesVersion
 	* APIEndPoint
@@ -98,6 +101,9 @@ If you wish to use a custom format, the available fields are:
 					owNode.AppendData("IP", instance.PublicIP)
 					owNode.AppendData("Status", instance.Status)
 					owNode.AppendData("Size", instance.Size)
+					owNode.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
+					owNode.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
+					owNode.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
 				}
 				owNode.WriteTable()
 			}

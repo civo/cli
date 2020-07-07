@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -23,6 +24,9 @@ If you wish to use a custom format, the available fields are:
 	* Hostname
 	* ReverseDNS
 	* Size
+	* CPUCores
+	* RAMMegabytes
+	* DiskGigabytes
 	* Region
 	* NetworkID
 	* PrivateIP
@@ -61,6 +65,9 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("ID", instance.ID)
 			ow.AppendData("Hostname", instance.Hostname)
 			ow.AppendData("Size", instance.Size)
+			ow.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
+			ow.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
+			ow.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
 			ow.AppendData("Region", instance.Region)
 			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public IP")
 			ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "Private IP")
