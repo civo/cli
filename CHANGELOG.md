@@ -1,4 +1,11 @@
 
+0.6.12
+=============
+2020-07-08
+
+* Added the option to install multiple application at the same time in the Kubernetes Cluster (611120b1)
+* Update the change log (d6cc1d42)
+
 0.6.11
 =============
 2020-07-07
