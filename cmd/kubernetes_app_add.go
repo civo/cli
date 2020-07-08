@@ -14,7 +14,7 @@ var kubernetesClusterApp string
 
 var kubernetesAppAddCmd = &cobra.Command{
 	Use:     "add",
-	Example: "civo kubernetes application add NAME --cluster CLUSTER_NAME",
+	Example: "civo kubernetes application add NAME:PLAN --cluster CLUSTER_NAME",
 	Aliases: []string{"install"},
 	Short:   "Add the marketplace application to a Kubernetes cluster",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -30,8 +30,15 @@ var kubernetesAppAddCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		appList, err := client.ListKubernetesMarketplaceApplications()
+		if err != nil {
+			utility.Error("Listing all Kubernetes cluster Applications failed with %s", err)
+			os.Exit(1)
+		}
+
+		result := utility.RequestedSplit(appList, args[0])
 		configKubernetes := &civogo.KubernetesClusterConfig{
-			Applications: args[0],
+			Applications: result,
 		}
 
 		kubeCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)
