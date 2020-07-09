@@ -36,6 +36,11 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
+		if !kube.Ready {
+			utility.Error("The cluster isn't ready yet, so the KUBECONFIG isn't available.")
+			os.Exit(1)
+		}
+
 		if saveConfig {
 			if !mergeConfig && strings.Contains(localPathConfig, ".kube") {
 				if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) == true {
