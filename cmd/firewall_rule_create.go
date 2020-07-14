@@ -40,8 +40,17 @@ var firewallRuleCreateCmd = &cobra.Command{
 			Protocol:   protocol,
 			StartPort:  startPort,
 			Cidr:       cidr,
-			Direction:  direction,
 			Label:      label,
+		}
+
+		// Check the rule address, if the input is different
+		// from (inbound or outbound) then we will generate an error
+		if direction == "inbound" || direction == "outbound" {
+			newRuleConfig.Direction = direction
+
+		} else {
+			utility.Error("Sorry but the direccion of the rule must be (inbound, outbound) not %s", direction)
+			os.Exit(1)
 		}
 
 		if endPort == "" {
