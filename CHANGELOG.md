@@ -1,4 +1,12 @@
 
+0.6.13
+=============
+2020-07-14
+
+* Added verification to the firewall rule creation (a7fc88f9)
+* Added new verification step to the kubernetes config (f77cf09e)
+* Update the change log (5dc1bcac)
+
 0.6.12
 =============
 2020-07-08
