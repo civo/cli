@@ -628,7 +628,7 @@ You will then be able to **configure rules** that allow connections to and from 
 ```text
 Options:
 -c, --cidr string Array   the CIDR of the rule you can use (e.g. -c 10.10.10.1/32, 10.10.10.2/32)
--d, --direction string   the direction of the rule (from: inbound, outbound)
+-d, --direction string   the direction of the rule (from: ingress, egress)
 -e, --endport string     the end port of the rule
 -h, --help               help for create
 -l, --label string       a string that will be the displayed as the name/reference for this rule
@@ -638,7 +638,7 @@ Options:
 
 Example usage:
 ```sh
-$ civo firewall rule create civocli_demo --startport=22 --direction=inbound --label='SSH access for CLI demo'
+$ civo firewall rule create civocli_demo --startport=22 --direction=ingress --label='SSH access for CLI demo'
  New rule SSH access for CLI demo created
 
 $ civo firewall rule list civocli_demo

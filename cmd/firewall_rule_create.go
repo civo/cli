@@ -45,11 +45,11 @@ var firewallRuleCreateCmd = &cobra.Command{
 
 		// Check the rule address, if the input is different
 		// from (inbound or outbound) then we will generate an error
-		if direction == "inbound" || direction == "outbound" {
+		if direction == "ingress" || direction == "egress" {
 			newRuleConfig.Direction = direction
 
 		} else {
-			utility.Error("Sorry but the direccion of the rule must be (inbound, outbound) not %s", direction)
+			utility.Error("Sorry but the direccion of the rule must be (ingress, egress) not %s", direction)
 			os.Exit(1)
 		}
 
