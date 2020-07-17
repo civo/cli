@@ -28,7 +28,7 @@ func ObtainKubeConfig(KubeconfigFilename string, civoConfig string, merge bool, 
 		return writeErr
 	}
 
-	if switchContext {
+	if merge && switchContext {
 		_, err := switchKubernetesContext(clusterName)
 		if err != nil {
 			YellowConfirm("%s\n", err)
