@@ -30,6 +30,11 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
+		if switchConfig && !mergeConfig {
+			utility.Error("You can use --switch flag without --merge flag")
+			os.Exit(1)
+		}
+
 		kube, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
 			utility.Error("Finding the Kubernetes cluster failed with %s", err)
