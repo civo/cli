@@ -3,6 +3,7 @@
 =============
 2020-07-17
 
+* Removed option egress as direction when creating a firewall rule (7baf88f4)
 * Changed the words used to define the direction in the firewall rule (3df9c5b6)
 * Added .editorconfig (cfb6ca22)
 
