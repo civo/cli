@@ -12,25 +12,34 @@ import (
 
 // ObtainKubeConfig is the function to get the kubeconfig from the cluster
 // and save to the file or merge with the existing one
-func ObtainKubeConfig(KubeconfigFilename string, civoConfig string, merge bool, clusterName string) error {
+func ObtainKubeConfig(KubeconfigFilename string, civoConfig string, merge bool, switchContext bool, clusterName string) error {
 
 	kubeConfig := []byte(civoConfig)
 
 	if merge {
 		var err error
-		kubeConfig, err = mergeConfigs(KubeconfigFilename, kubeConfig, clusterName)
+		kubeConfig, err = mergeConfigs(KubeconfigFilename, kubeConfig, switchContext, clusterName)
 		if err != nil {
 			return err
 		}
 	}
 
-	if writeErr := writeConfig(KubeconfigFilename, kubeConfig, false, merge, clusterName); writeErr != nil {
+	if writeErr := writeConfig(KubeconfigFilename, kubeConfig, false, merge, switchContext, clusterName); writeErr != nil {
 		return writeErr
 	}
+
+	if switchContext {
+		_, err := switchKubernetesContext(clusterName)
+		if err != nil {
+			YellowConfirm("%s\n", err)
+			os.Exit(1)
+		}
+	}
+
 	return nil
 }
 
-func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, clusterName string) ([]byte, error) {
+func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, switchContext bool, clusterName string) ([]byte, error) {
 	// Create a temporary kubeconfig to store the config of the newly create k3s cluster
 	file, err := ioutil.TempFile(os.TempDir(), "civo-temp-*")
 	if err != nil {
@@ -38,7 +47,7 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, clusterName stri
 	}
 	defer file.Close()
 
-	if writeErr := writeConfig(file.Name(), k3sconfig, true, true, clusterName); writeErr != nil {
+	if writeErr := writeConfig(file.Name(), k3sconfig, true, true, switchContext, clusterName); writeErr != nil {
 		return nil, writeErr
 	}
 
@@ -65,11 +74,13 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, clusterName stri
 }
 
 // Generates config files give the path to file: string and the data: []byte
-func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bool, clusterName string) error {
+func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bool, switchConfig bool, clusterName string) error {
 	if !suppressMessage {
 		fmt.Print("\nAccess your cluster with:\n")
 		if mergeConfigs {
-			fmt.Printf("kubectl config use-context %s\n", clusterName)
+			if !switchConfig {
+				fmt.Printf("kubectl config use-context %s\n", clusterName)
+			}
 			fmt.Println("kubectl get node")
 		} else {
 			if strings.Contains(path, ".kube") {
@@ -173,4 +184,14 @@ func find(slice []string, val string) (int, bool) {
 		}
 	}
 	return -1, false
+}
+
+// switchKubernetesContext function to change automatic to the context
+func switchKubernetesContext(context string) (bool, error) {
+	cmd := exec.Command("kubectl", "config", "use-context", context)
+	_, err := cmd.Output()
+	if err != nil {
+		return false, fmt.Errorf("could not change to the context: (%s) %s", context, err)
+	}
+	return true, nil
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var saveConfig, mergeConfig bool
+var saveConfig, mergeConfig, switchConfig bool
 var localPathConfig string
 
 var kubernetesConfigCmd = &cobra.Command{
@@ -44,7 +44,7 @@ If you wish to use a custom format, the available fields are:
 		if saveConfig {
 			if !mergeConfig && strings.Contains(localPathConfig, ".kube") {
 				if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) == true {
-					err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig, kube.Name)
+					err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig, switchConfig, kube.Name)
 					if err != nil {
 						utility.Error("Saving the cluster config failed with %s", err)
 						os.Exit(1)
@@ -54,7 +54,7 @@ If you wish to use a custom format, the available fields are:
 					os.Exit(1)
 				}
 			} else {
-				err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig, kube.Name)
+				err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig, switchConfig, kube.Name)
 				if err != nil {
 					utility.Error("Saving the cluster config failed with %s", err)
 					os.Exit(1)
