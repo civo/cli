@@ -31,7 +31,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if switchConfig && !mergeConfig {
-			utility.Error("You can use --switch flag without --merge flag")
+			utility.Error("You can't use --switch flag without --merge flag")
 			os.Exit(1)
 		}
 
