@@ -7,7 +7,7 @@
 * Fixed typo in the kubernetes config error message (bf097440)
 * Added verification to kubernetes config cmd (7e4bb504)
 * Fix error in kubernetes utils (f1f46612)
-* Now if you use --switch with --merge, automatically the cli will change the context in kubernetes (8b9fad39)
+* Now if you use --switch with --merge in kubernetes config cmd, the cli will change the context in kubernetes (8b9fad39)
 
 0.6.14
 =============
