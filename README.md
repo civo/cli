@@ -361,6 +361,8 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
 * `nodes` -  The number of nodes to create (the master also acts as a node).
 * `version` - the `k3s` version to use on the cluster. Defaults to the latest.
 * `wait` - a simple flag (e.g. `--wait`) that will cause the CLI to spin and wait for the cluster to be `ACTIVE`.
+* `save` - a simple flag (e.g. `--save`) save the config.
+* `switch` - a simple flag (e.g. `--switch`) switch context to newly-created cluster.
 
 ```sh
 $ civo kubernetes create my-first-cluster
@@ -387,7 +389,7 @@ civo kubernetes config my-first-cluster -s
 Saved config to ~/.kube/config
 ```
 
-If you already have a `~/.kube/config` file, any cluster configuration that is saved will be merged to the file using `--merge`, allowing you to switch contexts at will, or if you prefer to save the configuration in another place, just use the parameter `--local-path` or `-p` and the path
+If you already have a `~/.kube/config` file, any cluster configuration that is saved will be merged to the file using `--merge`, allowing you to switch contexts at will, or if you prefer to save the configuration in another place, just use the parameter `--local-path` or `-p` and the path, if you use `--switch` the cli automatically change the kubernetes context to the new cluster
 
 ```sh
 civo kubernetes config my-first-cluster -s --merge
