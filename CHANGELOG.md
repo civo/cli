@@ -1,4 +1,14 @@
 
+0.6.15
+=============
+2020-07-17
+
+* Added the --save and --switch option to kubernetes create (950a432d)
+* Fixed typo in the kubernetes config error message (bf097440)
+* Added verification to kubernetes config cmd (7e4bb504)
+* Fix error in kubernetes utils (f1f46612)
+* Now if you use --switch with --merge, automatically the cli will change the context in kubernetes (8b9fad39)
+
 0.6.14
 =============
 2020-07-17
