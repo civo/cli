@@ -14,7 +14,7 @@ import (
 )
 
 var numTargetNodes int
-var waitKubernetes bool
+var waitKubernetes, saveConfigKubernetes, switchConfigKubernetes bool
 var kubernetesVersion, targetNodesSize, clusterName string
 
 var kubernetesCreateCmd = &cobra.Command{
@@ -27,6 +27,18 @@ var kubernetesCreateCmd = &cobra.Command{
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+
+		if !waitKubernetes {
+			if saveConfigKubernetes || switchConfigKubernetes {
+				utility.Error("you can't use --save or --switch without --wait")
+				os.Exit(1)
+			}
+		} else {
+			if switchConfigKubernetes && !saveConfigKubernetes {
+				utility.Error("you can't use --switch without --save")
+				os.Exit(1)
+			}
 		}
 
 		if len(args) > 0 {
@@ -53,7 +65,7 @@ var kubernetesCreateCmd = &cobra.Command{
 
 		var executionTime string
 
-		if waitKubernetes == true {
+		if waitKubernetes {
 			startTime := utility.StartTime()
 
 			stillCreating := true
@@ -76,6 +88,20 @@ var kubernetesCreateCmd = &cobra.Command{
 			}
 
 			executionTime = utility.TrackTime(startTime)
+		}
+
+		if saveConfigKubernetes {
+			kube, err := client.FindKubernetesCluster(kubernetesCluster.ID)
+			if err != nil {
+				utility.Error("Finding the Kubernetes cluster failed with %s", err)
+				os.Exit(1)
+			}
+
+			err = utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, true, switchConfigKubernetes, kube.Name)
+			if err != nil {
+				utility.Error("Saving the cluster config failed with %s", err)
+				os.Exit(1)
+			}
 		}
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": kubernetesCluster.ID, "Name": kubernetesCluster.Name})
