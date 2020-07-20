@@ -1,4 +1,10 @@
 
+0.6.17
+=============
+2020-07-20
+
+* Fixed error in the configuration of the kubeconfig (87326d25)
+
 0.6.16
 =============
 2020-07-20
