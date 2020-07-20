@@ -2,9 +2,10 @@ package utility
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/fatih/color"
 	"github.com/shiena/ansicolor"
-	"os"
 )
 
 func init() {
@@ -14,6 +15,24 @@ func init() {
 // Green is the function to convert str to green in console
 func Green(value string) string {
 	newColor := color.New(color.FgGreen).SprintFunc()
+	return newColor(value)
+}
+
+// Yellow is the function to convert str to yellow in console
+func Yellow(value string) string {
+	newColor := color.New(color.FgYellow).SprintFunc()
+	return newColor(value)
+}
+
+// Blue is the function to convert str to blue in console
+func Blue(value string) string {
+	newColor := color.New(color.FgBlue).SprintFunc()
+	return newColor(value)
+}
+
+// Magenta is the function to convert str to magenta in console
+func Magenta(value string) string {
+	newColor := color.New(color.FgMagenta).SprintFunc()
 	return newColor(value)
 }
 
@@ -37,4 +56,32 @@ func YellowConfirm(msg string, args ...interface{}) {
 // RedConfirm is the function to handler the new version of the Cli
 func RedConfirm(msg string, args ...interface{}) {
 	fmt.Fprintf(color.Output, "%s: %s", color.RedString("IMPORTANT"), fmt.Sprintf(msg, args...))
+}
+
+// ColorStatus is to print the status of the Instance or k8s Cluster
+func ColorStatus(status string) string {
+
+	var returnText string
+
+	if status == "ACTIVE" {
+		returnText = Green(status)
+	}
+
+	if status == "SHUTOFF" {
+		returnText = Red(status)
+	}
+
+	if status == "REBOOTING" {
+		returnText = Yellow(status)
+	}
+
+	if status == "INSTANCE-CREATE" {
+		returnText = Blue(status)
+	}
+
+	if status == "INSTALLING" {
+		returnText = Magenta(status)
+	}
+
+	return returnText
 }
