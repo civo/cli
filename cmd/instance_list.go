@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -71,7 +70,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("Region", instance.Region)
 			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public IP")
 			ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "Private IP")
-			ow.AppendData("Status", fmt.Sprintf("%s", utility.ColorStatus(instance.Status)))
+			ow.AppendData("Status", utility.ColorStatus(instance.Status))
 
 			if outputFormat == "json" || outputFormat == "custom" {
 				ow.AppendData("Status", instance.Status)

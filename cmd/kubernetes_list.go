@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -46,7 +44,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("Name", cluster.Name)
 			ow.AppendData("Node", strconv.Itoa(cluster.NumTargetNode))
 			ow.AppendData("Size", cluster.TargetNodeSize)
-			ow.AppendData("Status", fmt.Sprintf("%s", utility.ColorStatus(cluster.Status)))
+			ow.AppendData("Status", utility.ColorStatus(cluster.Status))
 
 			if outputFormat == "json" || outputFormat == "custom" {
 				ow.AppendData("Status", cluster.Status)
