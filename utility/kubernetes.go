@@ -53,21 +53,36 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, switchContext bo
 
 	fmt.Printf("Merged with main kubernetes config: %s\n", Green(localKubeconfigPath))
 
-	// Append KUBECONFIGS in ENV Vars
-	appendKubeConfigENV := fmt.Sprintf("KUBECONFIG=%s:%s", localKubeconfigPath, file.Name())
-
 	// Merge the two kubeconfigs and read the output into 'data'
-	cmd := exec.Command("kubectl", "config", "view", "--merge", "--flatten")
-	cmd.Env = append(os.Environ(), appendKubeConfigENV)
+	osResult := CheckOS()
+	var cmd *exec.Cmd
+
+	if osResult == "windows" {
+		os.Setenv("KUBECONFIG", fmt.Sprintf("%s;%s", localKubeconfigPath, file.Name()))
+		cmd = exec.Command("powershell", "kubectl", "config", "view", "--merge", "--flatten")
+	} else {
+		// Append KUBECONFIGS in ENV Vars
+		appendKubeConfigENV := fmt.Sprintf("KUBECONFIG=%s;%s", localKubeconfigPath, file.Name())
+		cmd = exec.Command("kubectl", "config", "view", "--merge", "--flatten")
+		cmd.Env = append(os.Environ(), appendKubeConfigENV)
+	}
+
 	data, err := cmd.Output()
 	if err != nil {
 		return nil, fmt.Errorf("could not merge kubeconfigs: %s", err)
 	}
 
 	// Remove the temporarily generated file
-	err = os.Remove(file.Name())
-	if err != nil {
-		return nil, fmt.Errorf("could not remove temporary kubeconfig file: %s", file.Name())
+	if osResult == "windows" {
+		_, err = exec.Command("powershell", "remove-item", file.Name()).Output()
+		if err != nil {
+			return nil, fmt.Errorf("could not remove temporary kubeconfig file: %s, %s", file.Name(), err)
+		}
+	} else {
+		err = os.Remove(file.Name())
+		if err != nil {
+			return nil, fmt.Errorf("could not remove temporary kubeconfig file: %s", file.Name())
+		}
 	}
 
 	return data, nil
@@ -188,7 +203,14 @@ func find(slice []string, val string) (int, bool) {
 
 // switchKubernetesContext function to change automatic to the context
 func switchKubernetesContext(context string) (bool, error) {
-	cmd := exec.Command("kubectl", "config", "use-context", context)
+	var cmd *exec.Cmd
+
+	if CheckOS() == "windows" {
+		cmd = exec.Command("powershell", "kubectl", "config", "use-context", context)
+	} else {
+		cmd = exec.Command("kubectl", "config", "use-context", context)
+	}
+
 	_, err := cmd.Output()
 	if err != nil {
 		return false, fmt.Errorf("could not change to the context: (%s) %s", context, err)
