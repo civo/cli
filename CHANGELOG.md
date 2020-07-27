@@ -1,4 +1,11 @@
 
+0.6.18
+=============
+2020-07-27
+
+* Added verification at the moment of delete a snapshot (911cb634)
+* Change the lib to add color to the CLI (d35889a5)
+
 0.6.17
 =============
 2020-07-20
