@@ -22,13 +22,28 @@ var snapshotRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("snapshot", defaultYes) == true {
-			snapshot, err := client.FindSnapshot(args[0])
-			if err != nil {
-				utility.Error("Finding snapshot for your search failed with %s", err)
+		snapshot, err := client.FindSnapshot(args[0])
+		if err != nil {
+			utility.Error("Finding snapshot for your search failed with %s", err)
+			os.Exit(1)
+		}
+
+		// List all instance to search the snapshot
+		allInstance, err := client.ListAllInstances()
+		if err != nil {
+			utility.Error("Error listing all instance with %s", err)
+			os.Exit(1)
+		}
+
+		for _, v := range allInstance {
+			if v.SnapshotID == snapshot.ID {
+				errMessage := fmt.Sprintf("Sorry I couldn't delete this snapshot (%s) while it is in use by the instance (%s) \n", utility.Green(snapshot.Name), utility.Green(v.Hostname))
+				utility.Error(errMessage)
 				os.Exit(1)
 			}
+		}
 
+		if utility.UserConfirmedDeletion("snapshot", defaultYes) == true {
 			_, err = client.DeleteSnapshot(snapshot.Name)
 
 			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": snapshot.ID, "Name": snapshot.Name})
