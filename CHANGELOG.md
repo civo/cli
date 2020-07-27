@@ -3,6 +3,8 @@
 =============
 2020-07-27
 
+* Fixed color in the error message (a30bb996)
+* Update Change log (5257cc27)
 * Added verification at the moment of delete a snapshot (911cb634)
 * Change the lib to add color to the CLI (d35889a5)
 
