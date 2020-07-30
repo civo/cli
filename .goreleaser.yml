@@ -6,9 +6,6 @@ builds:
       - linux
       - darwin
       - windows
-      - solaris
-      - openbsd
-      - freebsd
     goarch:
       - 386
       - amd64
@@ -16,10 +13,6 @@ builds:
     ignore:
       - goos: darwin
         goarch: 386
-      - goos: solaris
-        goarch: 386
-      - goos: openbsd
-        goarch: arm
     ldflags:
       - -s -w -X github.com/civo/cli/cmd.VersionCli={{.Version}} -X github.com/civo/cli/cmd.CommitCli={{.Commit}} -X github.com/civo/cli/cmd.DateCli={{.Date}}
 checksum:
