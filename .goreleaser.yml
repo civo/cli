@@ -39,7 +39,7 @@ archives:
         format: zip
 brews:
   - name: civo
-    github:
+    tap:
       owner: civo
       name: homebrew-tools
     commit_author:

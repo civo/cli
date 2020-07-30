@@ -20,6 +20,7 @@ require (
 	github.com/hooklift/assert v0.0.0-20170704181755-9d1defd6d214 // indirect
 	github.com/kierdavis/ansi v0.0.0-20180105022324-90d93b0fcae2
 	github.com/klauspost/pgzip v1.2.4 // indirect
+	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/spf13/cobra v1.0.0
