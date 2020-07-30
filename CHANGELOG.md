@@ -1,4 +1,10 @@
 
+0.6.19
+=============
+2020-07-30
+
+* Added the auto update option to the cli (eb9ff675)
+
 0.6.18
 =============
 2020-07-27
@@ -24,7 +30,7 @@
 
 0.6.15
 =============
-2020-07-17
+2020-07-18
 
 * Added the --save and --switch option to kubernetes create (950a432d)
 * Fixed typo in the kubernetes config error message (bf097440)
@@ -261,7 +267,7 @@
 
 0.2.3
 =============
-2020-06-17
+2020-06-18
 
 * Fixed some errors (911f046e)
 * Remove snap from release process (15d43a7c)
