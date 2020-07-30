@@ -32,7 +32,7 @@ $(BINARY_MAC): buildprep
 buildlinux: $(BINARY_LINUX)
 $(BINARY_LINUX): buildprep
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_LINUX) -ldflags "-s -X github.com/civo/cli/cmd.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/cmd.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/cmd.DateCli=$(shell date +%FT%T%Z)" -v
-	
+
 buildwindows: $(BINARY_WINDOWS)
 $(BINARY_WINDOWS): buildprep
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_WINDOWS) -ldflags "-s -X github.com/civo/cli/cmd.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/cmd.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/cmd.DateCli=$(shell date +%FT%T%Z)" -v
@@ -40,6 +40,7 @@ $(BINARY_WINDOWS): buildprep
 buildprep:
 	git fetch --tags -f
 	mkdir -p dest
+	# $(eval VERSION_CLI=$(shell git describe --tags | cut -d "v" -f 2 | cut -d "-" -f 1))
 	$(eval VERSION_CLI=$(shell git describe --tags | cut -d "v" -f 2 | cut -d "-" -f 1))
 	$(eval COMMIT_CLI=$(shell git log --format="%H" -n 1))
 
