@@ -74,9 +74,9 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if template != "" {
-			findTemplate, err := client.GetTemplateByCode(template)
+			findTemplate, err := client.FindTemplate(template)
 			if err != nil {
-				utility.Error("Unable to find the template %s", err)
+				utility.Error("%s", err)
 				os.Exit(1)
 			}
 			config.TemplateID = findTemplate.ID
@@ -155,14 +155,13 @@ If you wish to use a custom format, the available fields are:
 				utility.Error("Unable to find the instance %s", err)
 				os.Exit(1)
 			}
-			publicIP = ""
 		}
 
 		if outputFormat == "human" {
 			if executionTime != "" {
 				fmt.Printf("The instance %s %s has been created in %s\n", utility.Green(instance.Hostname), publicIP, executionTime)
 			} else {
-				fmt.Printf("The instance %s %s has been created\n", utility.Green(instance.Hostname), publicIP)
+				fmt.Printf("The instance %s has been created\n", utility.Green(instance.Hostname))
 			}
 		} else {
 			ow := utility.NewOutputWriter()
