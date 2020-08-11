@@ -1,4 +1,10 @@
 
+0.6.21
+=============
+2020-08-11
+
+* Update the civogo to 0.2.14, fixed error in the intance create cmd (78e107de)
+
 0.6.20
 =============
 2020-08-11

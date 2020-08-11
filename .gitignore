@@ -7,5 +7,3 @@ dist/
 temporal*
 .DS*
 get.sh
-chglog
-changelog.yml
