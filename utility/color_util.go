@@ -58,24 +58,19 @@ func ColorStatus(status string) string {
 
 	var returnText string
 
-	if status == "ACTIVE" {
+	switch {
+	case status == "ACTIVE":
 		returnText = Green(status)
-	}
-
-	if status == "SHUTOFF" {
+	case status == "SHUTOFF":
 		returnText = Red(status)
-	}
-
-	if status == "REBOOTING" {
+	case status == "REBOOTING":
 		returnText = Yellow(status)
-	}
-
-	if status == "INSTANCE-CREATE" {
+	case status == "INSTANCE-CREATE":
 		returnText = Blue(status)
-	}
-
-	if status == "INSTALLING" {
+	case status == "INSTALLING":
 		returnText = Magenta(status)
+	default:
+		returnText = Red("Unknown")
 	}
 
 	return returnText

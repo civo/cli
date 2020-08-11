@@ -74,7 +74,12 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if template != "" {
-			config.TemplateID = template
+			findTemplate, err := client.GetTemplateByCode(template)
+			if err != nil {
+				utility.Error("Unable to find the template %s", err)
+				os.Exit(1)
+			}
+			config.TemplateID = findTemplate.ID
 		}
 
 		if snapshot != "" {
@@ -111,7 +116,7 @@ If you wish to use a custom format, the available fields are:
 			config.TagsList = tags
 		}
 
-		var executionTime string
+		var executionTime, publicIP string
 		startTime := utility.StartTime()
 
 		var instance *civogo.Instance
@@ -140,7 +145,7 @@ If you wish to use a custom format, the available fields are:
 					time.Sleep(2 * time.Second)
 				}
 			}
-
+			publicIP = fmt.Sprintf("(%s)", instance.PublicIP)
 			executionTime = utility.TrackTime(startTime)
 		} else {
 			// we look for the created instance to obtain the data that we need
@@ -150,13 +155,14 @@ If you wish to use a custom format, the available fields are:
 				utility.Error("Unable to find the instance %s", err)
 				os.Exit(1)
 			}
+			publicIP = ""
 		}
 
 		if outputFormat == "human" {
 			if executionTime != "" {
-				fmt.Printf("The instance %s (%s) has been created in %s\n", utility.Green(instance.Hostname), instance.PublicIP, executionTime)
+				fmt.Printf("The instance %s %s has been created in %s\n", utility.Green(instance.Hostname), publicIP, executionTime)
 			} else {
-				fmt.Printf("The instance %s (%s) has been created\n", utility.Green(instance.Hostname), instance.PublicIP)
+				fmt.Printf("The instance %s %s has been created\n", utility.Green(instance.Hostname), publicIP)
 			}
 		} else {
 			ow := utility.NewOutputWriter()
