@@ -1,4 +1,10 @@
 
+0.6.20
+=============
+2020-08-11
+
+* Fixed error in the instance module and in the color utility (8738797c)
+
 0.6.19
 =============
 2020-07-30
