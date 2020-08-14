@@ -1,3 +1,18 @@
+- semver: 0.6.22
+  date: 2020-08-14T13:19:53.610105-04:00
+  packager: ""
+  changes:
+  - commit: 53ef3806c02eed6739ec5e24a36b45a808300210
+    note: |-
+      Fixed bug in output writing component
+
+      Close #14
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.21
   date: 2020-08-11T10:40:46.149236-04:00
   packager: ""
