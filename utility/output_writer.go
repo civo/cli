@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -171,7 +172,12 @@ func (ow *OutputWriter) WriteCustomOutput(fields string) {
 	for _, item := range ow.Values {
 		output := fields
 		for _, name := range ow.Keys {
-			if strings.Contains(output, name) {
+			check, err := regexp.MatchString(fmt.Sprintf("\\b%s\\b", name), output)
+			if err != nil {
+				Error("Error checking: %s", err)
+				os.Exit(1)
+			}
+			if check {
 				output = strings.Replace(output, name, fmt.Sprintf("$%s$", name), 1)
 			}
 		}
