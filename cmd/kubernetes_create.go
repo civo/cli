@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -15,7 +16,7 @@ import (
 
 var numTargetNodes int
 var waitKubernetes, saveConfigKubernetes, switchConfigKubernetes bool
-var kubernetesVersion, targetNodesSize, clusterName string
+var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications string
 
 var kubernetesCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -55,6 +56,27 @@ var kubernetesCreateCmd = &cobra.Command{
 
 		if kubernetesVersion != "latest" {
 			configKubernetes.KubernetesVersion = kubernetesVersion
+		}
+
+		if applications != "" {
+			installApplications = applications
+		}
+
+		if removeapplications != "" {
+			var rmApp []string
+			for _, v := range strings.Split(removeapplications, ",") {
+				rmApp = append(rmApp, fmt.Sprintf("-%s", v))
+			}
+			if installApplications != "" {
+				installApplications = fmt.Sprintf("%s,%s", installApplications, strings.Join(rmApp, ","))
+			} else {
+				installApplications = fmt.Sprintf("%s", strings.Join(rmApp, ","))
+			}
+
+		}
+
+		if installApplications != "" {
+			configKubernetes.Applications = installApplications
 		}
 
 		kubernetesCluster, err := client.NewKubernetesClusters(configKubernetes)
