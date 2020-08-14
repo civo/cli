@@ -1,3 +1,15 @@
+- semver: 0.6.23
+  date: 2020-08-14T17:03:30.731056-04:00
+  packager: ""
+  changes:
+  - commit: fb51ae8c54f0666a62fc3a9a666a67b8b5a467e5
+    note: Added new features when creating a kubernetes cluster
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.22
   date: 2020-08-14T13:19:53.610105-04:00
   packager: ""

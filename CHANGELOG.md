@@ -1,4 +1,10 @@
 
+0.6.23
+=============
+2020-08-14
+
+* Added new features when creating a kubernetes cluster (fb51ae8c)
+
 0.6.22
 =============
 2020-08-14
