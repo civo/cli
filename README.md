@@ -401,7 +401,6 @@ kubectl config use-context my-first-cluster
 kubectl get node
 ```
 
-
 #### Renaming the cluster
 
 Although the name isn't used anywhere except for in the list of clusters (e.g. it's not in any way written in to the cluster), if you wish to rename a cluster you can do so with:
@@ -413,8 +412,6 @@ Kubernetes cluster my-first-cluster is now named Production
 
 #### Starting a cluster without default applications
 
-*NOT IMPLEMENTED:* Not implemented as of v0.6.7
-
 By default, `traefik` is bundled in with `k3s` to act as the ingress controller. If you want to set up a cluster without `traefik`, you can use the `remove-applications` option in the creation command to start a cluster without it:
 
 ```sh
@@ -422,59 +419,63 @@ civo kubernetes create --remove-applications=traefik --nodes=2 --wait
 ```
 
 #### Removing the cluster
+
 If you're completely finished with a cluster you can delete it with:
 
 ```sh
 civo kubernetes remove my-first-cluster
-Removing Kubernetes cluster my-first-cluster
 ```
 
 ## Kubernetes Applications
+
 #### Introduction
+
 You can install applications from the [Applications Marketplace](https://github.com/civo/kubernetes-marketplace/) through the command-line interface. The installation depends on whether you are creating a new cluster or adding applications to an existing cluster.
 
 #### Listing Available Applications
+
 To get an up-to-date list of available applications on the Marketplace, run `civo kubernetes apps list`. At the time of writing, the list looked like this:
 
 ```text
-+----------------------+-------------+--------------+-----------------+--------------+
-| Name                 | Version     | Category     | Plans           | Dependencies |
-+----------------------+-------------+--------------+-----------------+--------------+
-| cert-manager         | v0.11.0     | architecture |                 | Helm         |
-| Helm                 | 2.16.5      | management   |                 |              |
-| Jenkins              | 2.190.1     | ci_cd        | 5GB, 10GB, 20GB | Longhorn     |
-| KubeDB               | v0.12.0     | database     |                 | Longhorn     |
-| Kubeless             | 1.0.5       | architecture |                 |              |
-| kubernetes-dashboard | v2.0.0      | management   |                 |              |
-| Linkerd              | 2.5.0       | architecture |                 |              |
-| Longhorn             | 0.7.0       | storage      |                 |              |
-| Maesh                | Latest      | architecture |                 | Helm         |
-| MariaDB              | 10.4.7      | database     | 5GB, 10GB, 20GB | Longhorn     |
-| metrics-server       | (default)   | architecture |                 |              |
-| MinIO                | 2019-08-29  | storage      | 5GB, 10GB, 20GB | Longhorn     |
-| MongoDB              | 4.2.0       | database     | 5GB, 10GB, 20GB | Longhorn     |
-| OpenFaaS             | 0.18.0      | architecture |                 | Helm         |
-| Portainer            | beta        | management   |                 |              |
-| PostgreSQL           |        11.5 | database     | 5GB, 10GB, 20GB | Longhorn     |
-| prometheus-operator  | 0.35.0      | monitoring   |                 |              |
-| Rancher              | v2.3.0      | management   |                 |              |
-| Redis                |         3.2 | database     |                 |              |
-| Selenium             | 3.141.59-r1 | ci_cd        |                 |              |
-| Traefik              | (default)   | architecture |                 |              |
-+----------------------+-------------+--------------+-----------------+--------------+
++---------------------------+-------------+--------------+-----------------+-----------------------------+
+| Name                      | Version     | Category     | Plans           | Dependencies                |
++---------------------------+-------------+--------------+-----------------+-----------------------------+
+| cert-manager              | v0.11.0     | architecture |                 | Helm                        |
+| docker-registry           | ALPHA       | architecture |                 | Helm, cert-manager, Traefik |
+| haproxy                   | 1.4.6       | architecture |                 |                             |
+| Helm                      | 2.16.5      | management   |                 |                             |
+| Jenkins                   | 2.190.1     | ci_cd        | 5GB, 10GB, 20GB | Longhorn                    |
+| KubeDB                    | v0.12.0-r1  | database     |                 | Longhorn                    |
+| Kubeless                  | 1.0.5       | architecture |                 |                             |
+| kubernetes-dashboard      | v2.0.0      | management   |                 |                             |
+| Linkerd                   | 2.5.0       | architecture |                 |                             |
+| Longhorn                  | 0.7.0       | storage      |                 |                             |
+| Maesh                     | Latest      | architecture |                 | Helm                        |
+| MariaDB                   | 10.4.7      | database     | 5GB, 10GB, 20GB | Longhorn                    |
+| metrics-server            | (default)   | architecture |                 |                             |
+| MinIO                     | 2019-08-29  | storage      | 5GB, 10GB, 20GB | Longhorn                    |
+| MongoDB                   | 4.2.0       | database     | 5GB, 10GB, 20GB | Longhorn                    |
+| OpenFaaS                  | 0.18.0      | architecture |                 | Helm                        |
+| Portainer                 | beta        | management   |                 |                             |
+| PostgreSQL                |        11.5 | database     | 5GB, 10GB, 20GB | Longhorn                    |
+| prometheus-operator       | 0.35.0      | monitoring   |                 |                             |
+| Rancher                   | v2.3.0      | management   |                 |                             |
+| Redis                     |         3.2 | database     |                 |                             |
+| sealed-secrets            | v0.12.4     | architecture |                 |                             |
+| Selenium                  | 3.141.59-r1 | ci_cd        |                 |                             |
+| system-upgrade-controller | v0.6.2      | architecture |                 |                             |
+| Tekton                    | v0.14.0     | ci_cd        |                 |                             |
+| Traefik                   | (default)   | architecture |                 |                             |
++---------------------------+-------------+--------------+-----------------+-----------------------------+
 ```
 
 
 #### Installing Applications Onto a New Cluster
+
 To specify applications to install onto a new cluster, list them at cluster creation by specifying their `name` from the list above:
 
 ```sh
-$ civo kubernetes create apps-demo-cluster --nodes=2
-Created Kubernetes cluster apps-demo-cluster.
-$ civo kubernetes apps add Redis --cluster apps-demo-cluster
-The application was installed in the Kubernetes cluster apps-demo-cluster
-$ civo kubernetes apps add Linkerd --cluster apps-demo-cluster 
-The application was installed in the Kubernetes cluster apps-demo-cluster
+$ civo kubernetes create apps-demo-cluster --nodes=2  --applications=Redis,Linkerd
 ```
 
 Now, if you take a look at the cluster's details, you will see the newly-installed applications listed:
