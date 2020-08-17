@@ -1,3 +1,16 @@
+- semver: 0.6.24
+  date: 2020-08-16T21:20:13.989869-04:00
+  packager: ""
+  changes:
+  - commit: 9e0767c784b0843cc3a8c722a438b24bba27435a
+    note: |-
+      Update on Kubernetes apps documentation
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
 - semver: 0.6.23
   date: 2020-08-14T17:03:30.731056-04:00
   packager: ""
