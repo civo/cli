@@ -101,7 +101,7 @@ var kubernetesCreateCmd = &cobra.Command{
 					utility.Error("Finding the Kubernetes cluster failed with %s", err)
 					os.Exit(1)
 				}
-				if kubernetesCheck.Status == "ACTIVE" {
+				if kubernetesCheck.Ready {
 					stillCreating = false
 					s.Stop()
 				} else {
