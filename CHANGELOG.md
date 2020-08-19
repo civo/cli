@@ -1,4 +1,17 @@
 
+0.6.26
+=============
+2020-08-19
+
+* Update civogo lib to v0.2.15 (09b3bbe2)
+* Added verification before delete any object (a9c4334f)
+
+0.6.25
+=============
+2020-08-19
+
+* Checking correct flag for Kubernetes readiness (e0f543c4)
+
 0.6.24
 =============
 2020-08-17

@@ -1,10 +1,44 @@
+- semver: 0.6.26
+  date: 2020-08-19T09:29:56.419404-04:00
+  packager: ""
+  changes:
+  - commit: 09b3bbe2071779289c6afdb5d5865f5eb07d8cc3
+    note: Update civogo lib to v0.2.15
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: a9c4334f1290f33806b0ef9c325303b0565bbb4c
+    note: |-
+      Added verification before delete any object
+
+      Close #16
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+- semver: 0.6.25
+  date: 2020-08-18T21:20:13.989869-04:00
+  packager: ""
+  changes:
+  - commit: e0f543c4cde0d9cf8edeb2cd8b87d680bd83e868
+    note: Checking correct flag for Kubernetes readiness
+    author:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+    committer:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
 - semver: 0.6.24
   date: 2020-08-16T21:20:13.989869-04:00
   packager: ""
   changes:
   - commit: 9e0767c784b0843cc3a8c722a438b24bba27435a
-    note: |-
-      Update on Kubernetes apps documentation
+    note: Update on Kubernetes apps documentation
     author:
       name: Alejandro J. Nuñez Madrazo
       email: alejandrojnm@gmail.com
