@@ -29,11 +29,11 @@ var firewallRuleRemoveCmd = &cobra.Command{
 		firewall, err := client.FindFirewall(args[0])
 		if err != nil {
 			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry this firewall (%s) does not exist in your account", args[0])
+				utility.Error("sorry there is no %s firewall in your account", utility.Red(args[0]))
 				os.Exit(1)
 			}
 			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one firewall with that name in your account", args[0])
+				utility.Error("sorry we found more than one firewall with that name in your account")
 				os.Exit(1)
 			}
 		}
@@ -41,16 +41,16 @@ var firewallRuleRemoveCmd = &cobra.Command{
 		rule, err := client.FindFirewallRule(firewall.ID, args[1])
 		if err != nil {
 			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry this firewall rule (%s) does not exist in your account", args[1])
+				utility.Error("sorry there is no %s firewall rule in your account", utility.Red(args[1]))
 				os.Exit(1)
 			}
 			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one firewall rule in your account", args[1])
+				utility.Error("sorry we found more than one firewall rule in your account")
 				os.Exit(1)
 			}
 		}
 
-		if utility.UserConfirmedDeletion("firewall", defaultYes) == true {
+		if utility.UserConfirmedDeletion("firewall", defaultYes, rule.Label) == true {
 
 			_, err = client.DeleteFirewallRule(firewall.ID, rule.ID)
 

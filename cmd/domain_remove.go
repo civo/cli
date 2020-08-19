@@ -29,16 +29,16 @@ var domainRemoveCmd = &cobra.Command{
 		domain, err := client.FindDNSDomain(args[0])
 		if err != nil {
 			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry this domain (%s) does not exist in your account", args[0])
+				utility.Error("sorry there is no %s domain in your account", utility.Red(args[0]))
 				os.Exit(1)
 			}
 			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one domain with that name in your account", args[0])
+				utility.Error("sorry we found more than one domain with that name in your account")
 				os.Exit(1)
 			}
 		}
 
-		if utility.UserConfirmedDeletion("domain", defaultYes) == true {
+		if utility.UserConfirmedDeletion("domain", defaultYes, domain.Name) == true {
 
 			_, err = client.DeleteDNSDomain(domain)
 

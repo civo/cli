@@ -27,16 +27,16 @@ var templateRemoveCmd = &cobra.Command{
 		template, err := client.GetTemplateByCode(args[0])
 		if err != nil {
 			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry this template (%s) does not exist in your account", args[0])
+				utility.Error("sorry there is no %s template in your account", utility.Red(args[0]))
 				os.Exit(1)
 			}
 			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one template with that value in your account", args[0])
+				utility.Error("sorry we found more than one template with that value in your account")
 				os.Exit(1)
 			}
 		}
 
-		if utility.UserConfirmedDeletion("template", defaultYes) == true {
+		if utility.UserConfirmedDeletion("template", defaultYes, template.Name) == true {
 
 			_, err = client.DeleteTemplate(template.ID)
 

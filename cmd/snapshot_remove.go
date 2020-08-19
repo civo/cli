@@ -27,16 +27,16 @@ var snapshotRemoveCmd = &cobra.Command{
 		snapshot, err := client.FindSnapshot(args[0])
 		if err != nil {
 			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry this snapshot (%s) does not exist in your account", args[0])
+				utility.Error("sorry there is no %s snapshot in your account", utility.Red(args[0]))
 				os.Exit(1)
 			}
 			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one snapshot with that value in your account", args[0])
+				utility.Error("sorry we found more than one snapshot with that value in your account")
 				os.Exit(1)
 			}
 		}
 
-		if utility.UserConfirmedDeletion("snapshot", defaultYes) == true {
+		if utility.UserConfirmedDeletion("snapshot", defaultYes, snapshot.Name) == true {
 			_, err = client.DeleteSnapshot(snapshot.Name)
 			if err != nil {
 				if errors.Is(err, civogo.DatabaseSnapshotCannotDeleteInUseError) {

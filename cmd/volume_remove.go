@@ -27,16 +27,16 @@ var volumeRemoveCmd = &cobra.Command{
 		volume, err := client.FindVolume(args[0])
 		if err != nil {
 			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry this volume (%s) does not exist in your account", args[0])
+				utility.Error("sorry there is no %s volume in your account", utility.Red(args[0]))
 				os.Exit(1)
 			}
 			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one volume with that value in your account", args[0])
+				utility.Error("sorry we found more than one volume with that value in your account")
 				os.Exit(1)
 			}
 		}
 
-		if utility.UserConfirmedDeletion("volume", defaultYes) == true {
+		if utility.UserConfirmedDeletion("volume", defaultYes, volume.Name) == true {
 
 			_, err = client.DeleteVolume(volume.ID)
 

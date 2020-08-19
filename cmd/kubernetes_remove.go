@@ -27,16 +27,16 @@ var kubernetesRemoveCmd = &cobra.Command{
 		kubernetesCluster, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
 			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry this kubernetes cluster (%s) does not exist in your account", args[0])
+				utility.Error("sorry there is no %s Kubernetes cluster in your account", utility.Red(args[0]))
 				os.Exit(1)
 			}
 			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one kubernetes cluster with that name in your account", args[0])
+				utility.Error("sorry we found more than one Kubernetes cluster with that name in your account")
 				os.Exit(1)
 			}
 		}
 
-		if utility.UserConfirmedDeletion("kubernetes cluster", defaultYes) == true {
+		if utility.UserConfirmedDeletion("Kubernetes cluster", defaultYes, kubernetesCluster.Name) == true {
 
 			_, err = client.DeleteKubernetesCluster(kubernetesCluster.ID)
 

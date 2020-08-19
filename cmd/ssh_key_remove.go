@@ -27,16 +27,16 @@ var sshKeyRemoveCmd = &cobra.Command{
 		sshKey, err := client.FindSSHKey(args[0])
 		if err != nil {
 			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry this SSH key (%s) does not exist in your account", args[0])
+				utility.Error("sorry there is no %s SSH key in your account", utility.Red(args[0]))
 				os.Exit(1)
 			}
 			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one SSH key with that value in your account", args[0])
+				utility.Error("sorry we found more than one SSH key with that value in your account")
 				os.Exit(1)
 			}
 		}
 
-		if utility.UserConfirmedDeletion("ssh key", defaultYes) == true {
+		if utility.UserConfirmedDeletion("ssh key", defaultYes, sshKey.Name) == true {
 
 			_, err = client.DeleteSSHKey(sshKey.ID)
 

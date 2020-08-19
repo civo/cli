@@ -31,16 +31,16 @@ If you wish to use a custom format, the available fields are:
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
 			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry this instance (%s) does not exist in your account", args[0])
+				utility.Error("sorry there is no %s instance in your account", utility.Red(args[0]))
 				os.Exit(1)
 			}
 			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one instance with that name in your account", args[0])
+				utility.Error("sorry we found more than one instance with that name in your account")
 				os.Exit(1)
 			}
 		}
 
-		if utility.UserConfirmedDeletion("instance", defaultYes) == true {
+		if utility.UserConfirmedDeletion("instance", defaultYes, instance.Hostname) == true {
 
 			_, err = client.DeleteInstance(instance.ID)
 			if err != nil {

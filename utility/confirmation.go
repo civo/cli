@@ -46,9 +46,9 @@ func AskForConfirm(message string) error {
 // UserConfirmedDeletion builds a message to ask the user to confirm delete
 // a resource and then sends it through to AskForConfirm to
 // parses and verifies user input.
-func UserConfirmedDeletion(resourceType string, ignoringConfirmed bool) bool {
+func UserConfirmedDeletion(resourceType string, ignoringConfirmed bool, objectToDelete string) bool {
 	if ignoringConfirmed == false {
-		message := fmt.Sprintf("delete this %s", resourceType)
+		message := fmt.Sprintf("delete the %s %s", Green(objectToDelete), resourceType)
 		err := AskForConfirm(message)
 		if err != nil {
 			return false

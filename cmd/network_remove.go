@@ -27,21 +27,21 @@ var networkRemoveCmd = &cobra.Command{
 		network, err := client.FindNetwork(args[0])
 		if err != nil {
 			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry this network (%s) does not exist in your account", args[0])
+				utility.Error("sorry there is no %s network in your account", utility.Red(args[0]))
 				os.Exit(1)
 			}
 			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one network with that name in your account", args[0])
+				utility.Error("sorry we found more than one network with that name in your account")
 				os.Exit(1)
 			}
 		}
 
-		if utility.UserConfirmedDeletion("network", defaultYes) == true {
+		if utility.UserConfirmedDeletion("network", defaultYes, network.Name) == true {
 
 			_, err = client.DeleteNetwork(network.ID)
 			if err != nil {
 				if errors.Is(err, civogo.DatabaseNetworkDeleteWithInstanceError) {
-					errMessage := fmt.Sprintf("sorry couldn't delete this network (%s) while it is in use\n", utility.Green(network.Label))
+					errMessage := fmt.Sprintf("sorry couldn't delete this network %s while it is in use\n", utility.Green(network.Label))
 					utility.Error(errMessage)
 					os.Exit(1)
 				}
