@@ -36,7 +36,7 @@ var networkRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if utility.UserConfirmedDeletion("network", defaultYes, network.Name) == true {
+		if utility.UserConfirmedDeletion("network", defaultYes, network.Label) == true {
 
 			_, err = client.DeleteNetwork(network.ID)
 			if err != nil {
