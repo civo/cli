@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -24,27 +26,25 @@ var snapshotRemoveCmd = &cobra.Command{
 
 		snapshot, err := client.FindSnapshot(args[0])
 		if err != nil {
-			utility.Error("Finding snapshot for your search failed with %s", err)
-			os.Exit(1)
-		}
-
-		// List all instance to search the snapshot
-		allInstance, err := client.ListAllInstances()
-		if err != nil {
-			utility.Error("Error listing all instance with %s", err)
-			os.Exit(1)
-		}
-
-		for _, v := range allInstance {
-			if v.SnapshotID == snapshot.ID {
-				errMessage := fmt.Sprintf("Sorry I couldn't delete this snapshot (%s) while it is in use by the instance (%s) \n", utility.Green(snapshot.Name), utility.Green(v.Hostname))
-				utility.Error(errMessage)
+			if errors.Is(err, civogo.ZeroMatchesError) {
+				utility.Error("sorry this snapshot (%s) does not exist in your account", args[0])
+				os.Exit(1)
+			}
+			if errors.Is(err, civogo.MultipleMatchesError) {
+				utility.Error("sorry we found more than one snapshot with that value in your account", args[0])
 				os.Exit(1)
 			}
 		}
 
 		if utility.UserConfirmedDeletion("snapshot", defaultYes) == true {
 			_, err = client.DeleteSnapshot(snapshot.Name)
+			if err != nil {
+				if errors.Is(err, civogo.DatabaseSnapshotCannotDeleteInUseError) {
+					errMessage := fmt.Sprintf("sorry I couldn't delete this snapshot (%s) while it is in use\n", utility.Green(snapshot.Name))
+					utility.Error(errMessage)
+					os.Exit(1)
+				}
+			}
 
 			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": snapshot.ID, "Name": snapshot.Name})
 

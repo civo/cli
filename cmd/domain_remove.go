@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -24,12 +26,19 @@ var domainRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("domain", defaultYes) == true {
-			domain, err := client.FindDNSDomain(args[0])
-			if err != nil {
-				utility.Error("Unable to find the domain for your search %s", err)
+		domain, err := client.FindDNSDomain(args[0])
+		if err != nil {
+			if errors.Is(err, civogo.ZeroMatchesError) {
+				utility.Error("sorry this domain (%s) does not exist in your account", args[0])
 				os.Exit(1)
 			}
+			if errors.Is(err, civogo.MultipleMatchesError) {
+				utility.Error("sorry we found more than one domain with that name in your account", args[0])
+				os.Exit(1)
+			}
+		}
+
+		if utility.UserConfirmedDeletion("domain", defaultYes) == true {
 
 			_, err = client.DeleteDNSDomain(domain)
 

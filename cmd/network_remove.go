@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -22,14 +24,28 @@ var networkRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("network", defaultYes) == true {
-			network, err := client.FindNetwork(args[0])
-			if err != nil {
-				utility.Error("Finding the network for your search failed with %s", err)
+		network, err := client.FindNetwork(args[0])
+		if err != nil {
+			if errors.Is(err, civogo.ZeroMatchesError) {
+				utility.Error("sorry this network (%s) does not exist in your account", args[0])
 				os.Exit(1)
 			}
+			if errors.Is(err, civogo.MultipleMatchesError) {
+				utility.Error("sorry we found more than one network with that name in your account", args[0])
+				os.Exit(1)
+			}
+		}
+
+		if utility.UserConfirmedDeletion("network", defaultYes) == true {
 
 			_, err = client.DeleteNetwork(network.ID)
+			if err != nil {
+				if errors.Is(err, civogo.DatabaseNetworkDeleteWithInstanceError) {
+					errMessage := fmt.Sprintf("sorry couldn't delete this network (%s) while it is in use\n", utility.Green(network.Label))
+					utility.Error(errMessage)
+					os.Exit(1)
+				}
+			}
 
 			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": network.ID, "Name": network.Name, "Label": network.Label})
 

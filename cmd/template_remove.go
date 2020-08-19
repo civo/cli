@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -22,12 +24,19 @@ var templateRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("template", defaultYes) == true {
-			template, err := client.GetTemplateByCode(args[0])
-			if err != nil {
-				utility.Error("Finding the template for your search failed with %s", err)
+		template, err := client.GetTemplateByCode(args[0])
+		if err != nil {
+			if errors.Is(err, civogo.ZeroMatchesError) {
+				utility.Error("sorry this template (%s) does not exist in your account", args[0])
 				os.Exit(1)
 			}
+			if errors.Is(err, civogo.MultipleMatchesError) {
+				utility.Error("sorry we found more than one template with that value in your account", args[0])
+				os.Exit(1)
+			}
+		}
+
+		if utility.UserConfirmedDeletion("template", defaultYes) == true {
 
 			_, err = client.DeleteTemplate(template.ID)
 

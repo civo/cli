@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -22,12 +24,19 @@ var sshKeyRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("ssh key", defaultYes) == true {
-			sshKey, err := client.FindSSHKey(args[0])
-			if err != nil {
-				utility.Error("Finding the SSH key for your search failed with %s", err)
+		sshKey, err := client.FindSSHKey(args[0])
+		if err != nil {
+			if errors.Is(err, civogo.ZeroMatchesError) {
+				utility.Error("sorry this SSH key (%s) does not exist in your account", args[0])
 				os.Exit(1)
 			}
+			if errors.Is(err, civogo.MultipleMatchesError) {
+				utility.Error("sorry we found more than one SSH key with that value in your account", args[0])
+				os.Exit(1)
+			}
+		}
+
+		if utility.UserConfirmedDeletion("ssh key", defaultYes) == true {
 
 			_, err = client.DeleteSSHKey(sshKey.ID)
 

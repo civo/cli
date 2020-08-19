@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -22,18 +24,27 @@ var domainRecordRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("domain record", defaultYes) == true {
-			domain, err := client.FindDNSDomain(args[0])
-			if err != nil {
-				utility.Error("Unable to find domain for your search %s", err)
+		domain, err := client.FindDNSDomain(args[0])
+		if err != nil {
+			if errors.Is(err, civogo.ZeroMatchesError) {
+				utility.Error("sorry this domain (%s) does not exist in your account", args[0])
 				os.Exit(1)
 			}
+			if errors.Is(err, civogo.MultipleMatchesError) {
+				utility.Error("sorry we found more than one domain with that name in your account", args[0])
+				os.Exit(1)
+			}
+		}
 
-			record, err := client.GetDNSRecord(domain.ID, args[1])
-			if err != nil {
-				utility.Error("Unable to get domains record %s", err)
+		record, err := client.GetDNSRecord(domain.ID, args[1])
+		if err != nil {
+			if errors.Is(err, civogo.ErrDNSRecordNotFound) {
+				utility.Error("sorry this domain record (%s) does not exist in your account", args[1])
 				os.Exit(1)
 			}
+		}
+
+		if utility.UserConfirmedDeletion("domain record", defaultYes) == true {
 
 			_, err = client.DeleteDNSRecord(record)
 

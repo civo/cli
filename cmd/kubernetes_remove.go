@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -22,12 +24,19 @@ var kubernetesRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("kubernetes cluster", defaultYes) == true {
-			kubernetesCluster, err := client.FindKubernetesCluster(args[0])
-			if err != nil {
-				utility.Error("Unable to find the Kubernetes cluster for your search because of %s", err)
+		kubernetesCluster, err := client.FindKubernetesCluster(args[0])
+		if err != nil {
+			if errors.Is(err, civogo.ZeroMatchesError) {
+				utility.Error("sorry this kubernetes cluster (%s) does not exist in your account", args[0])
 				os.Exit(1)
 			}
+			if errors.Is(err, civogo.MultipleMatchesError) {
+				utility.Error("sorry we found more than one kubernetes cluster with that name in your account", args[0])
+				os.Exit(1)
+			}
+		}
+
+		if utility.UserConfirmedDeletion("kubernetes cluster", defaultYes) == true {
 
 			_, err = client.DeleteKubernetesCluster(kubernetesCluster.ID)
 

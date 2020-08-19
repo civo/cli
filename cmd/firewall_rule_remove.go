@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -24,18 +26,31 @@ var firewallRuleRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("firewall", defaultYes) == true {
-			firewall, err := client.FindFirewall(args[0])
-			if err != nil {
-				utility.Error("Unable to find the firewall for your search %s", err)
+		firewall, err := client.FindFirewall(args[0])
+		if err != nil {
+			if errors.Is(err, civogo.ZeroMatchesError) {
+				utility.Error("sorry this firewall (%s) does not exist in your account", args[0])
 				os.Exit(1)
 			}
+			if errors.Is(err, civogo.MultipleMatchesError) {
+				utility.Error("sorry we found more than one firewall with that name in your account", args[0])
+				os.Exit(1)
+			}
+		}
 
-			rule, err := client.FindFirewallRule(firewall.ID, args[1])
-			if err != nil {
-				utility.Error("Unable to find the firewall rule %s", err)
+		rule, err := client.FindFirewallRule(firewall.ID, args[1])
+		if err != nil {
+			if errors.Is(err, civogo.ZeroMatchesError) {
+				utility.Error("sorry this firewall rule (%s) does not exist in your account", args[1])
 				os.Exit(1)
 			}
+			if errors.Is(err, civogo.MultipleMatchesError) {
+				utility.Error("sorry we found more than one firewall rule in your account", args[1])
+				os.Exit(1)
+			}
+		}
+
+		if utility.UserConfirmedDeletion("firewall", defaultYes) == true {
 
 			_, err = client.DeleteFirewallRule(firewall.ID, rule.ID)
 

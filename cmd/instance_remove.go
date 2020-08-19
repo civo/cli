@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -26,12 +28,19 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("instance", defaultYes) == true {
-			instance, err := client.FindInstance(args[0])
-			if err != nil {
-				utility.Error("Finding instance failed with %s", err)
+		instance, err := client.FindInstance(args[0])
+		if err != nil {
+			if errors.Is(err, civogo.ZeroMatchesError) {
+				utility.Error("sorry this instance (%s) does not exist in your account", args[0])
 				os.Exit(1)
 			}
+			if errors.Is(err, civogo.MultipleMatchesError) {
+				utility.Error("sorry we found more than one instance with that name in your account", args[0])
+				os.Exit(1)
+			}
+		}
+
+		if utility.UserConfirmedDeletion("instance", defaultYes) == true {
 
 			_, err = client.DeleteInstance(instance.ID)
 			if err != nil {
@@ -55,5 +64,6 @@ If you wish to use a custom format, the available fields are:
 		} else {
 			fmt.Println("Operation aborted.")
 		}
+
 	},
 }
