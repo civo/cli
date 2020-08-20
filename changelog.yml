@@ -1,3 +1,23 @@
+- semver: 0.6.27
+  date: 2020-08-20T08:28:00.946899-04:00
+  packager: ""
+  changes:
+  - commit: add3b7f43d48e459c999d883fd83d8c378f62184
+    note: Name changed to label in the message of remove
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: c7c57d9d14d7d4a03dd4291ddeb117bc55db64a0
+    note: Updated the message in the remove command
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.26
   date: 2020-08-19T09:29:56.419404-04:00
   packager: ""

@@ -1,4 +1,11 @@
 
+0.6.27
+=============
+2020-08-20
+
+* Name changed to label in the message of remove (add3b7f4)
+* Updated the message in the remove command (c7c57d9d)
+
 0.6.26
 =============
 2020-08-19
