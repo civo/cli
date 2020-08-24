@@ -16,6 +16,7 @@ var instanceShowCmd = &cobra.Command{
 	Use:     "show",
 	Example: `civo instance show ID/HOSTNAME`,
 	Aliases: []string{"get", "inspect"},
+	Args:    cobra.MinimumNArgs(1),
 	Short:   "Show instance",
 	Long: `View the details for an instance.
 If you wish to use a custom format, the available fields are:

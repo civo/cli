@@ -15,6 +15,7 @@ var notes, reverseDNS, hostname string
 var instanceUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Example: "civo instance update ID/HOSTNAME --reverse-dns=foo.example.com",
+	Args:    cobra.MinimumNArgs(1),
 	Aliases: []string{"set"},
 	Short:   "Change the instance",
 	Long: `Change the notes, hostname or reverse DNS for an instance with partial ID/name provided.

@@ -14,6 +14,7 @@ import (
 var instanceMoveIPCmd = &cobra.Command{
 	Use:     "move-ip",
 	Example: "civo instance move-ip ID/HOSTNAME 1.2.3.4",
+	Args:    cobra.MinimumNArgs(2),
 	Aliases: []string{"switch-ip", "moveip", "switchip"},
 	Short:   "Move a public IP",
 	Long: `Move a public IP address to a target instance by part of its ID or name.

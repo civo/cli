@@ -12,6 +12,7 @@ import (
 var instanceRebootCmd = &cobra.Command{
 	Use:     "reboot",
 	Example: "civo instance reboot ID/HOSTNAME",
+	Args:    cobra.MinimumNArgs(1),
 	Aliases: []string{"hard-reboot"},
 	Short:   "Hard reboot an instance",
 	Long: `Pull the power and restart the specified instance by part of its ID or name.

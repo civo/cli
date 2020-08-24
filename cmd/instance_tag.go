@@ -14,6 +14,7 @@ import (
 var instanceTagCmd = &cobra.Command{
 	Use:     "tag",
 	Example: "civo instance tag ID/HOSTNAME tag1 tag2 tag3",
+	Args:    cobra.MinimumNArgs(1),
 	Aliases: []string{"tags"},
 	Short:   "Change the instance's tags",
 	Long: `Change the tags for an instance with partial ID/name provided.

@@ -13,6 +13,7 @@ import (
 var instanceSoftRebootCmd = &cobra.Command{
 	Use:     "soft-reboot",
 	Example: "civo instance soft-reboot ID/HOSTNAME",
+	Args:    cobra.MinimumNArgs(1),
 	Short:   "Spft reboot an instance",
 	Long: `Nicely ask the specified instance by part of the ID or name to restart.
 If you wish to use a custom format, the available fields are:

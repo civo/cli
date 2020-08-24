@@ -12,6 +12,7 @@ import (
 var instanceConsoleCmd = &cobra.Command{
 	Use:     "console",
 	Aliases: []string{"terminal", "shell"},
+	Args:    cobra.MinimumNArgs(1),
 	Example: "civo instance console HOSTNAME/INSTANCE_ID",
 	Short:   "Get console URL for instance",
 	Long: `Get the web console's URL for a given instance by part of the ID or name.

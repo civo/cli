@@ -14,6 +14,7 @@ import (
 var instanceUpgradeCmd = &cobra.Command{
 	Use:     "upgrade",
 	Example: "civo instance upgrade ID/HOSTNAME g2.xlarge",
+	Args:    cobra.MinimumNArgs(2),
 	Aliases: []string{"resize"},
 	Short:   "Upgrade an instance",
 	Long: `Upgrade instance with ID to size provided. Downgrades to smaller sizes are not possible.

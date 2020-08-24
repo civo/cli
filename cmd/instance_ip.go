@@ -13,6 +13,7 @@ import (
 var instancePublicIPCmd = &cobra.Command{
 	Use:     "public-ip",
 	Example: "civo instance public-ip ID/HOSTNAME",
+	Args:    cobra.MinimumNArgs(1),
 	Short:   "Show instance's public IP",
 	Aliases: []string{"ip", "publicip"},
 	Long: `Show the specified instance's public IP by part of the instance's ID or name.

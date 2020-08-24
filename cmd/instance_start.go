@@ -13,6 +13,7 @@ import (
 var instanceStartCmd = &cobra.Command{
 	Use:     "start",
 	Example: "civo instance start ID/HOSTNAME",
+	Args:    cobra.MinimumNArgs(1),
 	Aliases: []string{"boot", "run"},
 	Short:   "Start an instance",
 	Long: `Power on the specified instance by part of the ID or name.

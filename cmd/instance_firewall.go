@@ -13,6 +13,7 @@ import (
 var instanceSetFirewallCmd = &cobra.Command{
 	Use:     "firewall",
 	Aliases: []string{"set-firewall", "change-firewall", "fw"},
+	Args:    cobra.MinimumNArgs(2),
 	Example: "civo instance firewall HOSTNAME/INSTANCE_ID FIREWALL_NAME/FIREWALL_ID",
 	Short:   "Set firewall for instance",
 	Long: `Change an instance's firewall by part of the instance's ID or name and the full firewall ID.

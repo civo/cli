@@ -12,6 +12,7 @@ import (
 var instancePasswordCmd = &cobra.Command{
 	Use:     "password",
 	Example: "civo instance public-ip ID/HOSTNAME",
+	Args:    cobra.MinimumNArgs(1),
 	Short:   "Show instance's default password",
 	Aliases: []string{"pw"},
 	Long: `Show the specified instance's default SSH password by part of the instance's ID or name.

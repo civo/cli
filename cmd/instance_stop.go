@@ -15,6 +15,7 @@ var waitStop bool
 var instanceStopCmd = &cobra.Command{
 	Use:     "stop",
 	Example: "civo instance stop ID/HOSTNAME",
+	Args:    cobra.MinimumNArgs(1),
 	Short:   "Stop an instance",
 	Aliases: []string{"shutdown"},
 	Long: `Pull the power from the specified instance by part of the ID or name.

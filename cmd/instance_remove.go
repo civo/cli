@@ -14,6 +14,7 @@ import (
 var instanceRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Example: "civo instance remove ID/HOSTNAME",
+	Args:    cobra.MinimumNArgs(1),
 	Aliases: []string{"delete", "destroy", "rm"},
 	Short:   "Remove/delete instance",
 	Long: `Remove the specified instance by part of the ID or name.
