@@ -3,6 +3,7 @@
 =============
 2020-08-24
 
+* Update the civogo lib to v0.2.16 (8257fb46)
 * Fixed the config generator (5a2efa5e)
 * Remove windows 386 build from goreleaser (ab8d0bba)
 * Added verification to all commands (80a158ea)

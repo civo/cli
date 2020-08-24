@@ -1,7 +1,18 @@
 - semver: 0.6.28
-  date: 2020-08-24T15:21:39.999753-04:00
+  date: 2020-08-24T15:35:39.399734-04:00
   packager: ""
   changes:
+  - commit: 8257fb4620c6df2368ad48b5fa441ad51510f081
+    note: |-
+      Update the civogo lib to v0.2.16
+
+      Close #17
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
   - commit: 5a2efa5e9c78a89dd86b1d38cf9248b7572bf2d7
     note: Fixed the config generator
     author:
