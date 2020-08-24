@@ -1,3 +1,49 @@
+- semver: 0.6.28
+  date: 2020-08-24T15:21:39.999753-04:00
+  packager: ""
+  changes:
+  - commit: 5a2efa5e9c78a89dd86b1d38cf9248b7572bf2d7
+    note: Fixed the config generator
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: ab8d0bbadfac3fed68765bf90b302ba9be1afc74
+    note: Remove windows 386 build from goreleaser
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 80a158eaf4795a845d39c2fe1057a06cc17a9719
+    note: |-
+      Added verification to all commands
+      Close #21
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 2c616de4cf72c5882fb8fe1b6094d2eb13916c98
+    note: Add a little polish for DEVELOPER.md
+    author:
+      name: Andy Jeffries
+      email: andy@civo.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
+  - commit: 3fefaffba96f52fec9a36c9be703ce917a140b18
+    note: Added the develper file
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.27
   date: 2020-08-20T08:28:00.946899-04:00
   packager: ""

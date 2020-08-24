@@ -1,4 +1,14 @@
 
+0.6.28
+=============
+2020-08-24
+
+* Fixed the config generator (5a2efa5e)
+* Remove windows 386 build from goreleaser (ab8d0bba)
+* Added verification to all commands (80a158ea)
+* Add a little polish for DEVELOPER.md (2c616de4)
+* Added the develper file (3fefaffb)
+
 0.6.27
 =============
 2020-08-20
