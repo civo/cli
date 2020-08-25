@@ -38,4 +38,5 @@ func init() {
 	apikeyCmd.AddCommand(apikeySaveCmd)
 	apikeyCmd.AddCommand(apikeyRemoveCmd)
 	apikeyCmd.AddCommand(apikeyCurrentCmd)
+	apikeyCmd.AddCommand(apikeyShowCmd)
 }

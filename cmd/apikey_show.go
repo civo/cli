@@ -2,23 +2,24 @@ package cmd
 
 import (
 	"sort"
+	"strings"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
-var apikeyListCmd = &cobra.Command{
-	Use:     "ls",
-	Aliases: []string{"list", "all"},
-	Short:   "List stored API keys",
-	Long: `List all API keys, making clear which is the current default.
+var apikeyShowCmd = &cobra.Command{
+	Use:     "show",
+	Aliases: []string{"show"},
+	Example: "civo apikey show NAME",
+	Short:   "Show default API keys",
+	Long: `Show default API keys.
 If you wish to use a custom format, the available fields are:
 
 * Name
 * Key
-
-Example: civo apikey ls -o custom -f "Name: Key"`,
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		keys := make([]string, 0, len(config.Current.APIKeys))
 		for k := range config.Current.APIKeys {
@@ -29,16 +30,21 @@ Example: civo apikey ls -o custom -f "Name: Key"`,
 		ow := utility.NewOutputWriter()
 
 		for _, name := range keys {
-			ow.StartLine()
-			// apiKey := config.Current.APIKeys[name]
-			defaultLabel := ""
-			if config.Current.Meta.CurrentAPIKey == name {
-				defaultLabel = "<====="
+			apiKey := config.Current.APIKeys[name]
+			if len(args) > 0 {
+				if strings.Contains(name, args[0]) {
+					ow.StartLine()
+					ow.AppendData("Name", name)
+					ow.AppendData("Key", apiKey)
+				}
+			} else {
+				if config.Current.Meta.CurrentAPIKey == name {
+					ow.StartLine()
+					ow.AppendData("Name", name)
+					ow.AppendData("Key", apiKey)
+					// ow.AppendData("Default", defaultLabel)
+				}
 			}
-			ow.AppendData("Name", name)
-			// ow.AppendData("Key", apiKey)
-			ow.AppendData("Default", defaultLabel)
-
 		}
 
 		switch outputFormat {

@@ -103,6 +103,26 @@ $ civo apikey current Demo_Test_Key
 
 You can list all stored API keys in your configuration by invoking `civo apikey list` or remove one by name by using `civo apikey remove apikey_name`.
 
+To see the secret key you can use `civo apikey show` which will show only the default key, to see others just use `civo apikey show NAME`
+
+```sh
+civo apikey show    
++----------+------------+
+| Name     | Key        |
++----------+------------+
+| username | secret_key |
++--------------+--------+
+```
+
+```sh
+civo apikey show my_username
++-------------+------------+
+| Name        | Key        |
++-------------+------------+
+| my_username | secret_key |
++-------------+------------+
+```
+
 ## Instances
 
 #### Introduction
