@@ -1,3 +1,30 @@
+- semver: 0.6.29
+  date: 2020-08-26T09:22:19.083163-04:00
+  packager: ""
+  changes:
+  - commit: 381ab929d2b22208eb492baddd5a710b3c8f5cec
+    note: |-
+      Quota command improved
+      - When you are at 80% or more of the quota, the numbers change color
+      Close #23
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: cb8c73d5c3fe8889ace12e3c564a3cbd2042034c
+    note: |-
+      Added new show command to apikey
+      - update the README.md
+      - now, when the apikey are listed, the secret will be hidden
+      Close #24
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.28
   date: 2020-08-24T15:35:39.399734-04:00
   packager: ""

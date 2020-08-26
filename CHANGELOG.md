@@ -1,4 +1,11 @@
 
+0.6.29
+=============
+2020-08-26
+
+* Quota command improved (381ab929)
+* Added new show command to apikey (cb8c73d5)
+
 0.6.28
 =============
 2020-08-24
