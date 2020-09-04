@@ -3,6 +3,8 @@
 =============
 2020-09-04
 
+* Updated the Dockerfile to add curl (e2d0d5f8)
+* Update the Change log (9ed54ddd)
 * Added kubectl inside the docker image (65c2c23c)
 
 0.6.29

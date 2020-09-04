@@ -1,7 +1,23 @@
 - semver: 0.6.30
-  date: 2020-09-04T10:47:36.106694-04:00
+  date: 2020-09-04T10:53:12.872402-04:00
   packager: ""
   changes:
+  - commit: e2d0d5f898b913f8540c49e86d631b593b234ad7
+    note: Updated the Dockerfile to add curl
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 9ed54ddd95dcbce36b6fc98e9df4c4926592a113
+    note: Update the Change log
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
   - commit: 65c2c23c8c812bb8c8e343d86c6e0cca01db340f
     note: |-
       Added kubectl inside the docker image
