@@ -1,3 +1,17 @@
+- semver: 0.6.30
+  date: 2020-09-04T10:47:36.106694-04:00
+  packager: ""
+  changes:
+  - commit: 65c2c23c8c812bb8c8e343d86c6e0cca01db340f
+    note: |-
+      Added kubectl inside the docker image
+      Close #25
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.29
   date: 2020-08-26T09:22:19.083163-04:00
   packager: ""
