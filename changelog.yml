@@ -1,7 +1,23 @@
 - semver: 0.6.30
-  date: 2020-09-04T10:53:12.872402-04:00
+  date: 2020-09-04T10:58:08.121393-04:00
   packager: ""
   changes:
+  - commit: 73e5e0d819f3c834afbbbb3e0431e1018c2756e0
+    note: Fixed error in the Dockerfile
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 6054efff2a4886818c1b6d5a250771eee428a32c
+    note: Update the Change log
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
   - commit: e2d0d5f898b913f8540c49e86d631b593b234ad7
     note: Updated the Dockerfile to add curl
     author:
