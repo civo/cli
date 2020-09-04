@@ -3,6 +3,8 @@
 =============
 2020-09-04
 
+* Fixed typo error in the Dockerfile (9d479dae)
+* Updated Change log (30376d69)
 * Fixed error in the Dockerfile (73e5e0d8)
 * Update the Change log (6054efff)
 * Updated the Dockerfile to add curl (e2d0d5f8)

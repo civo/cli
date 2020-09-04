@@ -1,7 +1,23 @@
 - semver: 0.6.30
-  date: 2020-09-04T10:58:08.121393-04:00
+  date: 2020-09-04T11:46:43.975327-04:00
   packager: ""
   changes:
+  - commit: 9d479dae6508eed25e24ec999340f9bda447f723
+    note: Fixed typo error in the Dockerfile
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 30376d69436ad0955c6fe5274b31f43ea6fa3748
+    note: Updated Change log
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
   - commit: 73e5e0d819f3c834afbbbb3e0431e1018c2756e0
     note: Fixed error in the Dockerfile
     author:
