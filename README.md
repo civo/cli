@@ -64,11 +64,30 @@ To run, you generally will want to map the API key for persistence.
 touch $HOME/.civo.json
 docker run -it --rm -v $HOME/.civo.json:/.civo.json civo/cli:latest
 ```
+now you can also use the kubernetes options, we have included kubectl inside our image, to use it you just need to mount the configuration in the container.
+
+```sh
+touch $HOME/.civo.json
+mkdir $HOME/.kube/
+touch $HOME/.kube/config
+docker run -it --rm -v $HOME/.civo.json:/.civo.json -v $HOME/.kube/config:$HOME/.kube/config civo/cli:latest
+```
 
 To make usage easier, an alias is recommended.  Here's an example how to set one to the same command as would be used if installed directly on the system, and using the Docker image:
 
 ```sh
 alias civo="docker run -it --rm -v $HOME/.civo.json:/.civo.json civo/cli:latest"
+# Maybe put the above line in ~/.bash_profile or ~/.zshrc
+civo sshkey list
+civo instance list
+civo instance create --size g2.xsmall
+civo k8s list
+```
+
+Here's an example how to set with kubernetes.
+
+```sh
+alias civo="docker run -it --rm -v $HOME/.civo.json:/.civo.json -v $HOME/.kube/config:$HOME/.kube/config civo/cli:latest"
 # Maybe put the above line in ~/.bash_profile or ~/.zshrc
 civo sshkey list
 civo instance list
