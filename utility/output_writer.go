@@ -7,11 +7,24 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 
 	"github.com/olekukonko/tablewriter"
 )
+
+type byLen []string
+
+func (a byLen) Len() int {
+	return len(a)
+}
+func (a byLen) Less(i, j int) bool {
+	return len(a[i]) > len(a[j])
+}
+func (a byLen) Swap(i, j int) {
+	a[i], a[j] = a[j], a[i]
+}
 
 // OutputWriter is for printing structured data in various
 // tabular formats
@@ -169,22 +182,21 @@ func (ow *OutputWriter) WriteTable() {
 // WriteCustomOutput prints one or multiple objects using custom formatting
 func (ow *OutputWriter) WriteCustomOutput(fields string) {
 	ow.finishExistingLine()
+	defaultKeys := make([]string, len(ow.Keys))
+	copy(defaultKeys, ow.Keys)
+
+	sort.Sort(byLen(ow.Keys))
+
 	for _, item := range ow.Values {
 		output := fields
 		for _, name := range ow.Keys {
-			check, err := regexp.MatchString(fmt.Sprintf("\\b%s\\b", name), output)
-			if err != nil {
-				Error("Error checking: %s", err)
-				os.Exit(1)
-			}
-			if check {
-				output = strings.Replace(output, name, fmt.Sprintf("$%s$", name), 1)
-			}
+			re := regexp.MustCompile(fmt.Sprintf(`\b%s\b`, name))
+			output = re.ReplaceAllString(output, fmt.Sprintf("#%s#", name))
 		}
 
-		for index, name := range ow.Keys {
-			if strings.Contains(output, fmt.Sprintf("$%s$", name)) {
-				output = strings.Replace(output, fmt.Sprintf("$%s$", name), item[index], 1)
+		for index, name := range defaultKeys {
+			if strings.Contains(output, fmt.Sprintf("#%s#", name)) {
+				output = strings.Replace(output, fmt.Sprintf("#%s#", name), item[index], 1)
 			}
 		}
 		output = strings.Replace(output, "\\t", "\t", -1)
