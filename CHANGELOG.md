@@ -1,4 +1,12 @@
 
+0.6.31
+=============
+2020-09-07
+
+* Fixed error in the custom output (cc05acff)
+* Updated the README (c8815d73)
+* Update the Change log (3900c15e)
+
 0.6.30
 =============
 2020-09-04

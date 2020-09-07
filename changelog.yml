@@ -1,3 +1,33 @@
+- semver: 0.6.31
+  date: 2020-09-07T17:53:00.398973-04:00
+  packager: ""
+  changes:
+  - commit: cc05acff75916993ed3807284f3324fae5ee4392
+    note: |-
+      Fixed error in the custom output
+      Close #14
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: c8815d73a4ed235543a0fc96f7facda36d3ae7b6
+    note: Updated the README
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 3900c15e2b88a43055964ba1f69379872d3bbdae
+    note: Update the Change log
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.30
   date: 2020-09-04T11:46:43.975327-04:00
   packager: ""
