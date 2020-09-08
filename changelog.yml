@@ -1,3 +1,15 @@
+- semver: 0.6.32
+  date: 2020-09-08T14:44:46.188871-04:00
+  packager: ""
+  changes:
+  - commit: 98939932c6c253dd23a41b4dd2cbdac74b51a452
+    note: improved the custom output
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.31
   date: 2020-09-07T17:53:00.398973-04:00
   packager: ""
