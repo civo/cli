@@ -179,24 +179,48 @@ func (ow *OutputWriter) WriteTable() {
 	table.Render()
 }
 
+// Replace the nth occurrence of old in s by new.
+func replaceNth(s, old, new string, n int) string {
+	i := 0
+	for m := 1; m <= n; m++ {
+		x := strings.Index(s[i:], old)
+		if x < 0 {
+			break
+		}
+		i += x
+		if m == n {
+			return s[:i] + new + s[i+len(old):]
+		}
+		i += len(old)
+	}
+	return s
+}
+
 // WriteCustomOutput prints one or multiple objects using custom formatting
 func (ow *OutputWriter) WriteCustomOutput(fields string) {
 	ow.finishExistingLine()
 	defaultKeys := make([]string, len(ow.Keys))
 	copy(defaultKeys, ow.Keys)
-
 	sort.Sort(byLen(ow.Keys))
 
-	for _, item := range ow.Values {
+	//build my custom map
+	customMap := make(map[string]string)
+	for index, key := range defaultKeys {
+		customMap[key] = ow.Values[0][index]
+	}
+
+	for range ow.Values {
 		output := fields
-		for _, name := range ow.Keys {
-			re := regexp.MustCompile(fmt.Sprintf(`\b%s\b`, name))
-			output = re.ReplaceAllString(output, fmt.Sprintf("#%s#", name))
+		for key, name := range ow.Keys {
+			var re = regexp.MustCompile(fmt.Sprintf(`%s`, name))
+			if len(re.FindStringIndex(output)) > 0 {
+				output = replaceNth(output, name, fmt.Sprintf("$%v$", key), 1)
+			}
 		}
 
-		for index, name := range defaultKeys {
-			if strings.Contains(output, fmt.Sprintf("#%s#", name)) {
-				output = strings.Replace(output, fmt.Sprintf("#%s#", name), item[index], 1)
+		for index, name := range ow.Keys {
+			if strings.Contains(output, fmt.Sprintf("$%v$", index)) {
+				output = strings.Replace(output, fmt.Sprintf("$%v$", index), customMap[name], 1)
 			}
 		}
 		output = strings.Replace(output, "\\t", "\t", -1)
