@@ -1,3 +1,15 @@
+- semver: 0.6.33
+  date: 2020-09-09T09:36:03.911851-04:00
+  packager: ""
+  changes:
+  - commit: 422d393387e27a3541d018e322e8c7aec4a1bdb7
+    note: Added STOPPING status
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.32
   date: 2020-09-08T14:44:46.188871-04:00
   packager: ""
