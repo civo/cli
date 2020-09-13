@@ -1,4 +1,11 @@
 
+0.6.34
+=============
+2020-09-13
+
+* Allowed SRV record type in the DNS command (594884e1)
+* Updated civogo lib to v0.2.17 (10e6d50d)
+
 0.6.33
 =============
 2020-09-09
