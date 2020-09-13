@@ -11,20 +11,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	// DNSRecordTypeA represents an A record
-	DNSRecordTypeA = "a"
-
-	// DNSRecordTypeCName represents an CNAME record
-	DNSRecordTypeCName = "cname"
-
-	// DNSRecordTypeMX represents an MX record
-	DNSRecordTypeMX = "mx"
-
-	// DNSRecordTypeTXT represents an TXT record
-	DNSRecordTypeTXT = "txt"
-)
-
 var recordName, recordType, recordValue string
 var recordTTL, recordPriority int
 
@@ -54,20 +40,24 @@ var domainRecordCreateCmd = &cobra.Command{
 			Priority: recordPriority,
 		}
 
-		if recordType == "a" || recordType == "alias" {
-			newRecordConfig.Type = DNSRecordTypeA
+		if recordType == "A" || recordType == "alias" {
+			newRecordConfig.Type = civogo.DNSRecordTypeA
 		}
 
-		if recordType == "cname" || recordType == "canonical" {
-			newRecordConfig.Type = DNSRecordTypeCName
+		if recordType == "CNAME" || recordType == "canonical" {
+			newRecordConfig.Type = civogo.DNSRecordTypeCName
 		}
 
-		if recordType == "mx" || recordType == "mail" {
-			newRecordConfig.Type = DNSRecordTypeMX
+		if recordType == "MX" || recordType == "mail" {
+			newRecordConfig.Type = civogo.DNSRecordTypeMX
 		}
 
-		if recordType == "txt" || recordType == "text" {
-			newRecordConfig.Type = DNSRecordTypeTXT
+		if recordType == "TXT" || recordType == "text" {
+			newRecordConfig.Type = civogo.DNSRecordTypeTXT
+		}
+
+		if recordType == "SRV" || recordType == "service" {
+			newRecordConfig.Type = civogo.DNSRecordTypeSRV
 		}
 
 		record, err := client.CreateDNSRecord(domain.ID, newRecordConfig)

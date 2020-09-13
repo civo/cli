@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -57,19 +58,23 @@ Example: civo domain record show RECORD_ID -o custom -f "ID: Name"`,
 		ow.AppendData("Value", record.Value)
 
 		if record.Type == "a" {
-			ow.AppendData("Type", "a")
+			ow.AppendData("Type", string(civogo.DNSRecordTypeA))
 		}
 
 		if record.Type == "cname" {
-			ow.AppendData("Type", "cname")
+			ow.AppendData("Type", string(civogo.DNSRecordTypeCName))
 		}
 
 		if record.Type == "mx" {
-			ow.AppendData("Type", "mx")
+			ow.AppendData("Type", string(civogo.DNSRecordTypeMX))
 		}
 
 		if record.Type == "txt" {
-			ow.AppendData("Type", "txt")
+			ow.AppendData("Type", string(civogo.DNSRecordTypeTXT))
+		}
+
+		if record.Type == "srv" {
+			ow.AppendData("Type", string(civogo.DNSRecordTypeSRV))
 		}
 
 		ow.AppendData("TTL", strconv.Itoa(record.TTL))
