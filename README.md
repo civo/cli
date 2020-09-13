@@ -617,14 +617,14 @@ Options:
 -n, --name string    the name of the record
 -p, --priority int   the priority of record only for MX record
 -t, --ttl int        The TTL of the record (default 600)
--e, --type string    type of the record (a, cname, txt, mx)
+-e, --type string    type of the record (A, CNAME, TXT, SRV, MX)
 -v, --value string   the value of the record
 ```
 
 Usage is as follows:
 
 ```sh
-$ civo domain record create civoclidemo.xyz -n www -t 600 -e a -v 192.168.1.1
+$ civo domain record create civoclidemo.xyz -n www -t 600 -e A -v 192.168.1.1
 
 Created a record www1 for civoclidemo.xyz with a TTL of 600 seconds and with a priority of 0 with ID 4e181dde-bde8-4744-8984-067f957a7d59
 ```
