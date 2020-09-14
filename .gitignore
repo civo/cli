@@ -7,3 +7,4 @@ dist/
 temporal*
 .DS*
 get.sh
+.vscode
