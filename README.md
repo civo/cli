@@ -428,7 +428,7 @@ civo kubernetes config my-first-cluster -s
 Saved config to ~/.kube/config
 ```
 
-If you already have a `~/.kube/config` file, any cluster configuration that is saved will be merged to the file using `--merge`, allowing you to switch contexts at will, or if you prefer to save the configuration in another place, just use the parameter `--local-path` or `-p` and the path, if you use `--switch` the cli automatically change the kubernetes context to the new cluster
+If you already have a `~/.kube/config` file, any cluster configuration that is saved will be *overwritten* unless you also pass the `--merge` option. If you have multiple cluster configurations,  merging allows you to switch contexts at will. If you prefer to save the configuration in another place, just use the parameter `--local-path` or `-p` and the path. If you use `--switch` the cli will automatically change the kubernetes context to the new cluster.
 
 ```sh
 civo kubernetes config my-first-cluster -s --merge
