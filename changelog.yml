@@ -1,3 +1,42 @@
+- semver: 0.6.35
+  date: 2020-09-23T10:58:08.966956-04:00
+  packager: ""
+  changes:
+  - commit: 9879243af3d13bc3994f688c11f007d8da7b4c10
+    note: Updated the civogo lib to v0.2.18
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 102dd5d622071012f6844e627dc51ca9fb596ca1
+    note: |-
+      Update README.md
+
+      Clarify merging and saving of cluster contexts
+    author:
+      name: Kai Hoffman
+      email: 44998809+kaihoffman@users.noreply.github.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
+  - commit: b4cce868cd3e689d66fc2f5aee8d595e9ab8aa44
+    note: Update the gitignore
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 999d0895795bbfa90bb13f982c9e6d9b2e8450e4
+    note: Update the README.md
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.34
   date: 2020-09-12T23:05:08.879769-04:00
   packager: ""

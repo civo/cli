@@ -1,4 +1,13 @@
 
+0.6.35
+=============
+2020-09-23
+
+* Updated the civogo lib to v0.2.18 (9879243a)
+* Update README.md (102dd5d6)
+* Update the gitignore (b4cce868)
+* Update the README.md (999d0895)
+
 0.6.34
 =============
 2020-09-13
