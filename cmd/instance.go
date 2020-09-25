@@ -38,7 +38,7 @@ func init() {
 	instanceCreateCmd.Flags().StringVarP(&size, "size", "i", "", "the instance's size")
 	instanceCreateCmd.Flags().StringVarP(&template, "template", "t", "", "the instance's template")
 	instanceCreateCmd.Flags().StringVarP(&snapshot, "snapshot", "n", "", "the instance's snapshot")
-	instanceCreateCmd.Flags().StringVarP(&publicip, "publicip", "p", "", "the instance's public ip")
+	instanceCreateCmd.Flags().StringVarP(&publicip, "publicip", "p", "create", "This should be either none, create or `move_ip_from:intances_id` by default is create")
 	instanceCreateCmd.Flags().StringVarP(&initialuser, "initialuser", "u", "", "the instance's initial user")
 	instanceCreateCmd.Flags().StringVarP(&sshkey, "sshkey", "k", "", "the instance's ssh key you can use the Name or the ID")
 	instanceCreateCmd.Flags().StringVarP(&network, "network", "r", "", "the instance's network you can use the Name or the ID")
