@@ -1,3 +1,17 @@
+- semver: 0.6.36
+  date: 2020-09-25T14:29:56.812183-04:00
+  packager: ""
+  changes:
+  - commit: b99f42589f6a775c070b20d281e3febdc3bab57c
+    note: |-
+      Updated the civogo lib to v0.2.19
+      Fixed error in the cmd instance create
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.35
   date: 2020-09-23T10:58:08.966956-04:00
   packager: ""
