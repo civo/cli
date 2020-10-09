@@ -1,3 +1,15 @@
+- semver: 0.6.37
+  date: 2020-10-09T08:53:56.455079-04:00
+  packager: ""
+  changes:
+  - commit: 52beb72e47967962953d235714fdc700348f0831
+    note: Add arm64 to build list
+    author:
+      name: Andy Jeffries
+      email: andy@civo.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
 - semver: 0.6.36
   date: 2020-09-25T14:29:56.812183-04:00
   packager: ""
