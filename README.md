@@ -132,12 +132,12 @@ You can list all stored API keys in your configuration by invoking `civo apikey 
 To see the secret key you can use `civo apikey show` which will show only the default key, to see others just use `civo apikey show NAME`
 
 ```sh
-civo apikey show    
-+----------+------------+
-| Name     | Key        |
-+----------+------------+
-| username | secret_key |
-+--------------+--------+
+civo apikey list    
++--------------+---------+
+| Name         | Default |
++--------------+---------+
+| my_username  | <=====  |
++--------------+---------+
 ```
 
 ```sh
