@@ -1,4 +1,13 @@
 
+0.6.38
+=============
+2020-10-16
+
+* Merge pull request #30 from Johannestegner/master (b59581ea)
+* Updated the apikey output (f2d000b9)
+* Update README.md (318d5988)
+* Updated the Change log (a4abc2b0)
+
 0.6.37
 =============
 2020-10-09

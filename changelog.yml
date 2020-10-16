@@ -1,3 +1,46 @@
+- semver: 0.6.38
+  date: 2020-10-16T10:01:43.613273-04:00
+  packager: ""
+  changes:
+  - commit: b59581ea97a669b44c12adab65ce924aa1394565
+    note: |-
+      Merge pull request #30 from Johannestegner/master
+
+      Kubeconfig save/merge fix.
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
+  - commit: f2d000b92f9f8110acb057dee5a36fb72543b571
+    note: Updated the apikey output
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 318d5988aa26ac4b1e8a813382db4abf4ce2a6bd
+    note: |-
+      Update README.md
+
+      Add Fedora-specific alias instructions;
+      Minor grammar fixes
+    author:
+      name: Kai Hoffman
+      email: 44998809+kaihoffman@users.noreply.github.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
+  - commit: a4abc2b0628bfe07c7851217472add10144b9a6a
+    note: Updated the Change log
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.37
   date: 2020-10-09T08:53:56.455079-04:00
   packager: ""
