@@ -72,17 +72,16 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, switchContext bo
 		return nil, fmt.Errorf("could not merge kubeconfigs: %s", err)
 	}
 
+	// To be able to remove the file, it aught to be closed.
+	err = file.Close()
+	if err != nil {
+		return nil, fmt.Errorf("could not close temporary kubeconfig file: %s, %s", file.Name(), err)
+	}
+
 	// Remove the temporarily generated file
-	if osResult == "windows" {
-		_, err = exec.Command("powershell", "remove-item", file.Name()).Output()
-		if err != nil {
-			return nil, fmt.Errorf("could not remove temporary kubeconfig file: %s, %s", file.Name(), err)
-		}
-	} else {
-		err = os.Remove(file.Name())
-		if err != nil {
-			return nil, fmt.Errorf("could not remove temporary kubeconfig file: %s", file.Name())
-		}
+	err = os.Remove(file.Name())
+	if err != nil {
+		return nil, fmt.Errorf("could not remove temporary kubeconfig file: %s, %s", file.Name(), err)
 	}
 
 	return data, nil
