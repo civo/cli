@@ -1,4 +1,11 @@
 
+0.6.39
+=============
+2020-11-02
+
+* Added powershel and fish to the completion cmd (3ce2c969)
+* Updated the civogo lib to v0.2.21 (8820f312)
+
 0.6.38
 =============
 2020-10-16

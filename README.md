@@ -1101,7 +1101,11 @@ $ civo volume list
 
 ## Enabling shell autocompletion
 
-The civo completion script for Bash can be generated with the command civo completion bash. Sourcing the completion script in your shell enables civo autocompletion.
+The civo binary is delivered with the support for bash, zsh, powershell and fish, and you can use in this way
+
+`civo completion [bash|zsh|powershell|fish]`
+
+Sourcing the completion script in your shell enables civo autocompletion.
 
 However, the completion script depends on bash-completion, which means that you have to install this software first (you can test if you have bash-completion already installed by running `type _init_completion`).
 
@@ -1179,4 +1183,4 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/civo/c
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The code is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).

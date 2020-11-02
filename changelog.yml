@@ -1,3 +1,25 @@
+- semver: 0.6.39
+  date: 2020-11-01T22:20:21.302231-05:00
+  packager: ""
+  changes:
+  - commit: 3ce2c9694aa4dd2940dba8d8161d26fc6db9b2c8
+    note: Added powershel and fish to the completion cmd
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 8820f312bfa1b657fec9e6474e4657bbf7ec3bad
+    note: |-
+      Updated the civogo lib to v0.2.21
+      Close #31 #29 #28
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.38
   date: 2020-10-16T10:01:43.613273-04:00
   packager: ""
