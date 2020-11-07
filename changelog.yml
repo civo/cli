@@ -1,3 +1,17 @@
+- semver: 0.6.40
+  date: 2020-11-07T11:27:46.074775-05:00
+  packager: ""
+  changes:
+  - commit: f89b57e509edd31624531ed09b2b388f3e9e35d1
+    note: |-
+      Fixed the permission in the civo conf file
+      Close #32
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.39
   date: 2020-11-01T22:20:21.302231-05:00
   packager: ""

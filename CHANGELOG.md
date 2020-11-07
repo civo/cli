@@ -1,4 +1,10 @@
 
+0.6.40
+=============
+2020-11-07
+
+* Fixed the permission in the civo conf file (f89b57e5)
+
 0.6.39
 =============
 2020-11-02
