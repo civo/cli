@@ -91,6 +91,11 @@ func SaveConfig() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+	if err := os.Chmod(filename, 0600); err != nil {
+		fmt.Println(err)
+	}
+
 }
 
 func checkConfigFile(filename string) error {
@@ -117,6 +122,11 @@ func checkConfigFile(filename string) error {
 			}
 		}
 	}
+
+	if err := os.Chmod(filename, 0600); err != nil {
+		fmt.Println(err)
+	}
+
 	return nil
 }
 
