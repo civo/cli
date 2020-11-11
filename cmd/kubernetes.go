@@ -31,6 +31,7 @@ func init() {
 	kubernetesCmd.AddCommand(kubernetesUpgradeCmd)
 	kubernetesCmd.AddCommand(kubernetesScaleCmd)
 	kubernetesCmd.AddCommand(kubernetesRemoveCmd)
+	kubernetesCmd.AddCommand(kubernetesRecycleCmd)
 
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -60,8 +61,11 @@ func init() {
 	kubernetesScaleCmd.Flags().IntVarP(&kubernetesNewNodes, "nodes", "n", 3, "change the total nodes of the cluster.")
 	kubernetesScaleCmd.Flags().BoolVarP(&waitKubernetesNodes, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE")
 
-	kubernetesCmd.AddCommand(kubernetesApplicationsCmd)
+	kubernetesRecycleCmd.Flags().StringVarP(&kubernetesNode, "node", "n", "", "the node that needs to be recycled.")
+	kubernetesRecycleCmd.MarkFlagRequired("node")
 
+	// Kubernetes Applications
+	kubernetesCmd.AddCommand(kubernetesApplicationsCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppListCmd)
 	// TODO: show command
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppAddCmd)

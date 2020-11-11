@@ -93,7 +93,7 @@ func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bo
 		fmt.Print("\nAccess your cluster with:\n")
 		if mergeConfigs {
 			if !switchConfig {
-				fmt.Printf("kubectl config use-context %s\n", clusterName)
+				fmt.Printf("kubectl config use-context %s\n", strings.ToLower(clusterName))
 			}
 			fmt.Println("kubectl get node")
 		} else {
