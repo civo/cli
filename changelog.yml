@@ -1,3 +1,15 @@
+- semver: 0.6.41
+  date: 2020-11-11T09:16:34.039619-05:00
+  packager: ""
+  changes:
+  - commit: d2457212d6521dffe545a5833cfcfd12c1c6e994
+    note: Added the recycle cmd to kubernetes
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.40
   date: 2020-11-07T11:27:46.074775-05:00
   packager: ""
