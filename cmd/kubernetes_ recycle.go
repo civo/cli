@@ -49,7 +49,7 @@ var kubernetesRecycleCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The node (%s) was recycle\n", utility.Green(kubernetesNode))
+			fmt.Printf("The node (%s) was recycled\n", utility.Green(kubernetesNode))
 		}
 	},
 }

@@ -13,8 +13,8 @@ var apikeyShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"show"},
 	Example: "civo apikey show NAME",
-	Short:   "Show default API keys",
-	Long: `Show default API keys.
+	Short:   "Show the default (current) API key",
+	Long: `Show default API key.
 If you wish to use a custom format, the available fields are:
 
 * Name
