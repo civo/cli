@@ -1,3 +1,26 @@
+- semver: 0.6.42
+  date: 2020-11-17T20:54:27.272273-05:00
+  packager: ""
+  changes:
+  - commit: d5695bff29ed400c54fe3363b045a4aac6771e45
+    note: Updated the civogo lib to v0.2.22
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: a7b6ef7eeec2b38a38a11263cc20a2e9b61d98f1
+    note: |-
+      Merge pull request #33 from kaihoffman/master
+
+      Grammar fixes in user output
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
 - semver: 0.6.41
   date: 2020-11-11T09:16:34.039619-05:00
   packager: ""

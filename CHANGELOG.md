@@ -1,4 +1,11 @@
 
+0.6.42
+=============
+2020-11-18
+
+* Updated the civogo lib to v0.2.22 (d5695bff)
+* Merge pull request #33 from kaihoffman/master (a7b6ef7e)
+
 0.6.41
 =============
 2020-11-11
