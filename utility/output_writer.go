@@ -203,13 +203,15 @@ func (ow *OutputWriter) WriteCustomOutput(fields string) {
 	copy(defaultKeys, ow.Keys)
 	sort.Sort(byLen(ow.Keys))
 
-	//build my custom map
-	customMap := make(map[string]string)
-	for index, key := range defaultKeys {
-		customMap[key] = ow.Values[0][index]
+	// Transcribe Data
+	customMap := make(map[string][]string)
+	for i, key := range defaultKeys {
+		for _, row := range ow.Values {
+			customMap[key] = append(customMap[key], row[i])
+		}
 	}
 
-	for range ow.Values {
+	for i, _ := range ow.Values {
 		output := fields
 		for key, name := range ow.Keys {
 			var re = regexp.MustCompile(fmt.Sprintf(`%s`, name))
@@ -220,7 +222,7 @@ func (ow *OutputWriter) WriteCustomOutput(fields string) {
 
 		for index, name := range ow.Keys {
 			if strings.Contains(output, fmt.Sprintf("$%v$", index)) {
-				output = strings.Replace(output, fmt.Sprintf("$%v$", index), customMap[name], 1)
+				output = strings.Replace(output, fmt.Sprintf("$%v$", index), customMap[name][i], 1)
 			}
 		}
 		output = strings.Replace(output, "\\t", "\t", -1)
