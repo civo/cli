@@ -1,4 +1,10 @@
 
+0.6.43
+=============
+2020-11-29
+
+* Merge pull request #34 from martynbristow/master (af8c5e7d)
+
 0.6.42
 =============
 2020-11-18
