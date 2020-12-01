@@ -122,10 +122,10 @@ download() {
     echo "  following commands may need to be run manually."
     echo "============================================================"
     echo
-    echo "  sudo cp $REPO$SUFFIX $BINLOCATION/$REPO"
+    echo "  sudo mv /tmp/civo $BINLOCATION/$OWNER"
 
     if [ -n "$ALIAS_NAME" ]; then
-      echo "  sudo ln -sf $BINLOCATION/$REPO $BINLOCATION/$ALIAS_NAME"
+      echo "  sudo ln -sf $BINLOCATION/$OWNER $BINLOCATION/$ALIAS_NAME"
     fi
 
     echo
@@ -135,11 +135,11 @@ download() {
     echo
     echo "Running with sufficient permissions to attempt to move $OWNER to $BINLOCATION"
 
-    if [ ! -w "$BINLOCATION/$REPO" ] && [ -f "$BINLOCATION/$REPO" ]; then
+    if [ ! -w "$BINLOCATION/$OWNER" ] && [ -f "$BINLOCATION/$OWNER" ]; then
 
       echo
       echo "================================================================"
-      echo "  $BINLOCATION/$REPO already exists and is not writeable"
+      echo "  $BINLOCATION/$OWNER already exists and is not writeable"
       echo "  by the current user.  Please adjust the binary ownership"
       echo "  or run sh/bash with sudo."
       echo "================================================================"
