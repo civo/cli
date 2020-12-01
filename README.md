@@ -46,6 +46,11 @@ or if you prefer you can run this in the console:
 $ curl -sL https://civo.com/get | sh
 ```
 
+### Installing on windows
+First you need [scoop](https://scoop.sh/) installed then:
+- add the extras bucket with `scoop bucket add extras`
+- install civo with `scoop install civo`.
+
 You will also, of course, need a Civo account, for which you can [register here](https://www.civo.com/signup).
 
 To run the tool, simply run `civo` with your chosen options. You can find context-sensitive help for commands and their options by invoking the `help` or `-h` command:
