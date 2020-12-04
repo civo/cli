@@ -47,7 +47,7 @@ If you wish to use a custom format, the available fields are:
 
 		quota, err := client.GetQuota()
 		if err != nil {
-			utility.Error("Unable to get your quota %s", err)
+			utility.Error("%s", err)
 			return
 		}
 

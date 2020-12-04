@@ -29,7 +29,7 @@ Example: civo domain ls -o custom -f "ID: Name"`,
 
 		domains, err := client.ListDNSDomains()
 		if err != nil {
-			utility.Error("Unable to list domains %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

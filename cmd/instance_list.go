@@ -53,7 +53,7 @@ If you wish to use a custom format, the available fields are:
 
 		instances, err := client.ListAllInstances()
 		if err != nil {
-			utility.Error("Listing instances failed with  %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

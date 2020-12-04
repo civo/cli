@@ -57,7 +57,7 @@ If you wish to use a custom format, the available fields are:
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Searching instances failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

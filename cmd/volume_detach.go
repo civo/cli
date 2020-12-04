@@ -28,7 +28,7 @@ var volumeDetachCmd = &cobra.Command{
 
 		volume, err := client.FindVolume(args[0])
 		if err != nil {
-			utility.Error("Finding the volume for your search failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
@@ -44,7 +44,7 @@ var volumeDetachCmd = &cobra.Command{
 			for stillDetaching {
 				volumeCheck, err := client.FindVolume(volume.ID)
 				if err != nil {
-					utility.Error("Finding the volume failed with %s", err)
+					utility.Error("%s", err)
 					os.Exit(1)
 				}
 				if volumeCheck.MountPoint == "" {

@@ -34,7 +34,7 @@ var volumeCreateCmd = &cobra.Command{
 
 		volume, err := client.NewVolume(volumeConfig)
 		if err != nil {
-			utility.Error("Creating the volume failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

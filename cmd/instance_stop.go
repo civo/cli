@@ -32,13 +32,13 @@ If you wish to use a custom format, the available fields are:
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Finding instance failed with %s\n", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		_, err = client.StopInstance(instance.ID)
 		if err != nil {
-			utility.Error("Stopping instance failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

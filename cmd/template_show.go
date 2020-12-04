@@ -39,7 +39,7 @@ Example: civo template show CODE -o custom -f "ID: Code (DefaultUsername)"`,
 
 		template, err := client.GetTemplateByCode(args[0])
 		if err != nil {
-			utility.Error("Searching for the template failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

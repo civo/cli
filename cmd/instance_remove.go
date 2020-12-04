@@ -45,7 +45,7 @@ If you wish to use a custom format, the available fields are:
 
 			_, err = client.DeleteInstance(instance.ID)
 			if err != nil {
-				utility.Error("Removing instancefailed with  %s", err)
+				utility.Error("%s", err)
 				os.Exit(1)
 			}
 

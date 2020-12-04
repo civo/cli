@@ -26,7 +26,7 @@ var kubernetesRenameCmd = &cobra.Command{
 
 		kubernetesFindCluster, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			utility.Error("Finding Kubernetes cluster failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
@@ -36,7 +36,7 @@ var kubernetesRenameCmd = &cobra.Command{
 
 		kubernetesCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)
 		if err != nil {
-			utility.Error("Unable to rename a kubernetes cluster %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

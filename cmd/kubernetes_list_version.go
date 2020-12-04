@@ -30,7 +30,7 @@ If you wish to use a custom format, the available fields are:
 
 		kubeVersions, err := client.ListAvailableKubernetesVersions()
 		if err != nil {
-			utility.Error("Unable to list Kubernetes cluster %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

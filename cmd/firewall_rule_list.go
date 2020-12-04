@@ -37,13 +37,13 @@ Example: civo firewall rule ls FIREWALL_NAME -o custom -f "ID: Label"`,
 
 		firewall, err := client.FindFirewall(args[0])
 		if err != nil {
-			utility.Error("Unable to find firewall %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		firewallRules, err := client.ListFirewallRules(firewall.ID)
 		if err != nil {
-			utility.Error("Unable to list firewall's rules %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

@@ -33,7 +33,7 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 
 		firewalls, err := client.ListFirewalls()
 		if err != nil {
-			utility.Error("Unable to list firewalls %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

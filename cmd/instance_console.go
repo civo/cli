@@ -32,13 +32,13 @@ Example: civo instance console ID/NAME`,
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Finding instance %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		url, err := client.GetInstanceConsoleURL(instance.ID)
 		if err != nil {
-			utility.Error("Getting console URL %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

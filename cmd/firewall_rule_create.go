@@ -31,7 +31,7 @@ var firewallRuleCreateCmd = &cobra.Command{
 
 		firewall, err := client.FindFirewall(args[0])
 		if err != nil {
-			utility.Error("Unable to find the firewall for your search %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
@@ -60,7 +60,7 @@ var firewallRuleCreateCmd = &cobra.Command{
 
 		rule, err := client.NewFirewallRule(newRuleConfig)
 		if err != nil {
-			utility.Error("Unable to create the new firewall rule %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

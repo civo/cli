@@ -24,13 +24,13 @@ var firewallUpdateCmd = &cobra.Command{
 
 		firewall, err := client.FindFirewall(args[0])
 		if err != nil {
-			utility.Error("Unable to find firewall for your search %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		_, err = client.RenameFirewall(firewall.ID, args[1])
 		if err != nil {
-			utility.Error("Unable to rename firewall %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

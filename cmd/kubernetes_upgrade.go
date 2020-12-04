@@ -27,7 +27,7 @@ var kubernetesUpgradeCmd = &cobra.Command{
 
 		kubernetesFindCluster, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			utility.Error("Finding the kubernetes cluster failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
@@ -37,7 +37,7 @@ var kubernetesUpgradeCmd = &cobra.Command{
 
 		kubernetesCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)
 		if err != nil {
-			utility.Error("Upgrading the kubernetes cluster failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

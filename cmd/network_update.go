@@ -24,13 +24,13 @@ var networkUpdateCmd = &cobra.Command{
 
 		oldNetwork, err := client.FindNetwork(args[0])
 		if err != nil {
-			utility.Error("Finding the network failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		network, err := client.RenameNetwork(args[1], oldNetwork.ID)
 		if err != nil {
-			utility.Error("Renaming the network failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

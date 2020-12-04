@@ -27,13 +27,13 @@ var kubernetesAppAddCmd = &cobra.Command{
 
 		kubernetesFindCluster, err := client.FindKubernetesCluster(kubernetesClusterApp)
 		if err != nil {
-			utility.Error("Finding a Kubernetes cluster failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		appList, err := client.ListKubernetesMarketplaceApplications()
 		if err != nil {
-			utility.Error("Listing all Kubernetes cluster Applications failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
@@ -44,7 +44,7 @@ var kubernetesAppAddCmd = &cobra.Command{
 
 		kubeCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)
 		if err != nil {
-			utility.Error("Installing the application in the Kubernetes cluster failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

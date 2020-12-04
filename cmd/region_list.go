@@ -28,7 +28,7 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 
 		regions, err := client.ListRegions()
 		if err != nil {
-			utility.Error("Listing regions failed with %s", err)
+			utility.Error("%s", err)
 			return
 		}
 

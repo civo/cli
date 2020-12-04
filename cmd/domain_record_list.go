@@ -24,6 +24,12 @@ If you wish to use a custom format, the available fields are:
 	* Type
 	* TTL
 	* Priority`,
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		if len(args) == 0 {
+			return getAllDomainList(), cobra.ShellCompDirectiveNoFileComp
+		}
+		return getDomainList(toComplete), cobra.ShellCompDirectiveNoFileComp
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -33,13 +39,13 @@ If you wish to use a custom format, the available fields are:
 
 		domain, err := client.FindDNSDomain(args[0])
 		if err != nil {
-			utility.Error("Unable to find domain for your search %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		records, err := client.ListDNSRecords(domain.ID)
 		if err != nil {
-			utility.Error("Unable to list domains %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
@@ -65,12 +71,6 @@ If you wish to use a custom format, the available fields are:
 			ow.WriteTable()
 		}
 	},
-	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-		if len(args) != 0 {
-			return nil, cobra.ShellCompDirectiveDefault
-		}
-		return getDomainList(toComplete), cobra.ShellCompDirectiveDefault
-	},
 }
 
 func getDomainList(value string) []string {
@@ -88,6 +88,28 @@ func getDomainList(value string) []string {
 
 	var domainList []string
 	domainList = append(domainList, domain.Name)
+
+	return domainList
+
+}
+
+func getAllDomainList() []string {
+	client, err := config.CivoAPIClient()
+	if err != nil {
+		utility.Error("Creating the connection to Civo's API failed with %s", err)
+		os.Exit(1)
+	}
+
+	domain, err := client.ListDNSDomains()
+	if err != nil {
+		utility.Error("Unable to list domains %s", err)
+		os.Exit(1)
+	}
+
+	var domainList []string
+	for _, v := range domain {
+		domainList = append(domainList, v.Name)
+	}
 
 	return domainList
 

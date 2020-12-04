@@ -17,6 +17,12 @@ var domainRecordRemoveCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(2),
 	Short:   "Remove domain record",
 	Example: "civo domain record remove DOMAIN/DOMAIN_ID RECORD_ID",
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		if len(args) == 0 {
+			return getAllDomainList(), cobra.ShellCompDirectiveNoFileComp
+		}
+		return getDomainList(toComplete), cobra.ShellCompDirectiveNoFileComp
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

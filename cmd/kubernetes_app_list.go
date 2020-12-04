@@ -30,7 +30,7 @@ If you wish to use a custom format, the available fields are:
 
 		kubeApps, err := client.ListKubernetesMarketplaceApplications()
 		if err != nil {
-			utility.Error("Listing Kubernetes cluster application failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

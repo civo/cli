@@ -33,7 +33,7 @@ Example: civo template ls -o custom -f "ID: Code (DefaultUsername)"`,
 
 		templates, err := client.ListTemplates()
 		if err != nil {
-			utility.Error("Listing templates failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

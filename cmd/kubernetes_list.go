@@ -32,7 +32,7 @@ If you wish to use a custom format, the available fields are:
 
 		kubernetesClusters, err := client.ListKubernetesClusters()
 		if err != nil {
-			utility.Error("Listing Kubernetes clusters failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

@@ -42,7 +42,7 @@ Example: civo snapshot ls -o custom -f "ID: Name (Hostname)"`,
 
 		snapshots, err := client.ListSnapshots()
 		if err != nil {
-			utility.Error("Listing snapshots failed with %s", err)
+			utility.Error("%s", err)
 			return
 		}
 

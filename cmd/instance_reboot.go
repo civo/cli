@@ -29,13 +29,13 @@ If you wish to use a custom format, the available fields are:
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("Finding instance %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		_, err = client.RebootInstance(instance.ID)
 		if err != nil {
-			utility.Error("Rebooting instance %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

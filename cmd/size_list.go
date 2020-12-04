@@ -35,7 +35,7 @@ Example: civo size ls -o custom -f "Code: Name (size)"`,
 
 		sizes, err := client.ListInstanceSizes()
 		if err != nil {
-			utility.Error("Listing sizes failed with %s", err)
+			utility.Error("%s", err)
 			return
 		}
 

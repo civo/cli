@@ -31,13 +31,13 @@ var kubernetesRecycleCmd = &cobra.Command{
 
 		kubernetesFindCluster, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			utility.Error("Finding a Kubernetes cluster failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		_, err = client.RecycleKubernetesCluster(kubernetesFindCluster.ID, kubernetesNode)
 		if err != nil {
-			utility.Error("Recycle the Kubernetes cluster failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

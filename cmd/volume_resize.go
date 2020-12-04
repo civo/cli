@@ -26,7 +26,7 @@ var volumeResizeCmd = &cobra.Command{
 
 		volume, err := client.FindVolume(args[0])
 		if err != nil {
-			utility.Error("Finding the volume failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
@@ -37,7 +37,7 @@ var volumeResizeCmd = &cobra.Command{
 
 		_, err = client.ResizeVolume(volume.ID, newSizeGB)
 		if err != nil {
-			utility.Error("Unable to resize the volume %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

@@ -81,7 +81,7 @@ var kubernetesCreateCmd = &cobra.Command{
 
 		kubernetesCluster, err := client.NewKubernetesClusters(configKubernetes)
 		if err != nil {
-			utility.Error("Creating a Kubernetes cluster failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
@@ -98,7 +98,7 @@ var kubernetesCreateCmd = &cobra.Command{
 			for stillCreating {
 				kubernetesCheck, err := client.FindKubernetesCluster(kubernetesCluster.ID)
 				if err != nil {
-					utility.Error("Finding the Kubernetes cluster failed with %s", err)
+					utility.Error("%s", err)
 					os.Exit(1)
 				}
 				if kubernetesCheck.Ready {
@@ -115,7 +115,7 @@ var kubernetesCreateCmd = &cobra.Command{
 		if saveConfigKubernetes {
 			kube, err := client.FindKubernetesCluster(kubernetesCluster.ID)
 			if err != nil {
-				utility.Error("Finding the Kubernetes cluster failed with %s", err)
+				utility.Error("%s", err)
 				os.Exit(1)
 			}
 

@@ -41,7 +41,7 @@ If you wish to use a custom format, the available fields are:
 
 		kubernetesCluster, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			utility.Error("Finding the Kubernetes cluster failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

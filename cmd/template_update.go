@@ -31,7 +31,7 @@ var templateUpdateCmd = &cobra.Command{
 
 		template, err := client.GetTemplateByCode(args[0])
 		if err != nil {
-			utility.Error("Finding the template failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
@@ -78,7 +78,7 @@ var templateUpdateCmd = &cobra.Command{
 
 		templateUpdate, err := client.UpdateTemplate(template.ID, configTemplateUpdate)
 		if err != nil {
-			utility.Error("Updating the template failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

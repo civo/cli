@@ -76,13 +76,13 @@ var templateCreateCmd = &cobra.Command{
 
 		_, err = client.NewTemplate(configTemplate)
 		if err != nil {
-			utility.Error("Creating the template failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		template, err := client.GetTemplateByCode(codeCreate)
 		if err != nil {
-			utility.Error("Finding the template failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

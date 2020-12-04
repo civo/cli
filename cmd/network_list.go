@@ -30,7 +30,7 @@ If you wish to use a custom format, the available fields are:
 
 		networks, err := client.ListNetworks()
 		if err != nil {
-			utility.Error("Listing networks failed with %s", err)
+			utility.Error("%s", err)
 			return
 		}
 

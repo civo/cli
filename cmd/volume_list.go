@@ -37,7 +37,7 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 
 		volumes, err := client.ListVolumes()
 		if err != nil {
-			utility.Error("Listing volumes failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

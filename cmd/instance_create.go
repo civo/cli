@@ -97,7 +97,7 @@ If you wish to use a custom format, the available fields are:
 		if sshkey != "" {
 			sshKey, err := client.FindSSHKey(sshkey)
 			if err != nil {
-				utility.Error("Unable to find the ssh key %s", err)
+				utility.Error("%s", err)
 				os.Exit(1)
 			}
 			config.SSHKeyID = sshKey.ID
@@ -106,7 +106,7 @@ If you wish to use a custom format, the available fields are:
 		if network != "" {
 			net, err := client.FindNetwork(network)
 			if err != nil {
-				utility.Error("Unable to find the network %s", err)
+				utility.Error("%s", err)
 				os.Exit(1)
 			}
 			config.NetworkID = net.ID
@@ -122,7 +122,7 @@ If you wish to use a custom format, the available fields are:
 		var instance *civogo.Instance
 		resp, err := client.CreateInstance(config)
 		if err != nil {
-			utility.Error("error creating instance %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
@@ -135,7 +135,7 @@ If you wish to use a custom format, the available fields are:
 			for stillCreating {
 				instance, err = client.FindInstance(resp.ID)
 				if err != nil {
-					utility.Error("Unable to find the network %s", err)
+					utility.Error("%s", err)
 					os.Exit(1)
 				}
 				if instance.Status == "ACTIVE" {
@@ -152,7 +152,7 @@ If you wish to use a custom format, the available fields are:
 			// like PublicIP
 			instance, err = client.FindInstance(resp.ID)
 			if err != nil {
-				utility.Error("Unable to find the instance %s", err)
+				utility.Error("%s", err)
 				os.Exit(1)
 			}
 		}

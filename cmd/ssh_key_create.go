@@ -34,13 +34,13 @@ var sshKeyCreateCmd = &cobra.Command{
 
 		_, err = client.NewSSHKey(args[0], string(data))
 		if err != nil {
-			utility.Error("Creating the SSH key failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		sshKey, err := client.FindSSHKey(args[0])
 		if err != nil {
-			utility.Error("Finding the SSH key failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

@@ -27,7 +27,7 @@ var snapshotCreateCmd = &cobra.Command{
 
 		instance, err := client.FindInstance(args[1])
 		if err != nil {
-			utility.Error("Finding the instance failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

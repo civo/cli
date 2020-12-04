@@ -30,7 +30,7 @@ Example: civo ssh ls -o custom -f "ID: Name"`,
 
 		sshKeys, err := client.ListSSHKeys()
 		if err != nil {
-			utility.Error("Listing SSH keys failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

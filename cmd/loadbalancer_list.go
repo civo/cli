@@ -39,7 +39,7 @@ If you wish to use a custom format, the available fields are:
 
 		lbs, err := client.ListLoadBalancers()
 		if err != nil {
-			utility.Error("Listing load balancers failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

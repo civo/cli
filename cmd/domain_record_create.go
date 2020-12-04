@@ -62,7 +62,7 @@ var domainRecordCreateCmd = &cobra.Command{
 
 		record, err := client.CreateDNSRecord(domain.ID, newRecordConfig)
 		if err != nil {
-			utility.Error("Unable to find domain for your search %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

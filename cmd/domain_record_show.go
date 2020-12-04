@@ -39,13 +39,13 @@ Example: civo domain record show RECORD_ID -o custom -f "ID: Name"`,
 
 		domain, err := client.FindDNSDomain(args[0])
 		if err != nil {
-			utility.Error("Unable to find domain for your search %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		record, err := client.GetDNSRecord(domain.ID, args[1])
 		if err != nil {
-			utility.Error("Unable to find the domain record %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

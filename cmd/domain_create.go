@@ -24,7 +24,7 @@ var domainCreateCmd = &cobra.Command{
 
 		domain, err := client.CreateDNSDomain(args[0])
 		if err != nil {
-			utility.Error("Unable to create domains %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

@@ -29,7 +29,7 @@ var kubernetesScaleCmd = &cobra.Command{
 
 		kubernetesFindCluster, err := client.FindKubernetesCluster(args[0])
 		if err != nil {
-			utility.Error("Finding a Kubernetes cluster failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
@@ -39,7 +39,7 @@ var kubernetesScaleCmd = &cobra.Command{
 
 		kubernetesCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)
 		if err != nil {
-			utility.Error("Renaming the Kubernetes cluster failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 

@@ -24,7 +24,7 @@ var networkCreateCmd = &cobra.Command{
 
 		network, err := client.NewNetwork(args[0])
 		if err != nil {
-			utility.Error("Creating the network failed with %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
