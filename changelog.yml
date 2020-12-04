@@ -1,3 +1,31 @@
+- semver: 0.6.44
+  date: 2020-12-04T12:18:52.416185-05:00
+  packager: ""
+  changes:
+  - commit: 2b8f4d9284a4748245ad0f47385aef444d702d5c
+    note: Update the civogo lib to v0.2.23
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 9355e877ae7b8796f3ce099602a313898671a225
+    note: Merge branch 'master' of https://github.com/civo/cli
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 585b9d16020c661c471893228cfd0c1cb0c46da3
+    note: Fixed bug in the install script
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.43
   date: 2020-11-29T08:28:53.543806-05:00
   packager: ""

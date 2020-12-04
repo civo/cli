@@ -1,4 +1,12 @@
 
+0.6.44
+=============
+2020-12-04
+
+* Update the civogo lib to v0.2.23 (2b8f4d92)
+* Merge branch 'master' of https://github.com/civo/cli (9355e877)
+* Fixed bug in the install script (585b9d16)
+
 0.6.43
 =============
 2020-11-29
