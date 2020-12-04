@@ -1,3 +1,15 @@
+- semver: 0.6.45
+  date: 2020-12-04T13:10:51.209979-05:00
+  packager: ""
+  changes:
+  - commit: 5e789fe32d37087f9864e303dc79b1bfd455230a
+    note: Fixed error handling in all commands
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.44
   date: 2020-12-04T12:18:52.416185-05:00
   packager: ""
