@@ -137,7 +137,7 @@ You can list all stored API keys in your configuration by invoking `civo apikey 
 To see the secret key you can use `civo apikey show` which will show only the default key, to see others just use `civo apikey show NAME`
 
 ```sh
-civo apikey list    
+civo apikey list
 +--------------+---------+
 | Name         | Default |
 +--------------+---------+
@@ -194,11 +194,11 @@ Openstack Server ID : 986529e8-4063-4576-8952-1cbcd5743e44
              Region : lon1
          Network ID : cc3aceb1-66a8-4060-ae35-36e862ba4f82
         Template ID : fffbe2e5-0dd8-476b-b480-cb7c9fccbe39
-        Snapshot ID : 
+        Snapshot ID :
        Initial User : demo-user
             SSH Key : bcdd0589-7543-459a-8452-b5fe2252c170
         Firewall ID : default
-               Tags : 
+               Tags :
          Created At : Thu, 18 Jun 2020 03:35:24 +0100
          Private IP : 10.173.156.59
           Public IP : 172.31.6.7 => 185.136.234.101
@@ -428,6 +428,17 @@ You can change the total number of nodes in the cluster (obviously 1 is the mini
 civo kubernetes scale my-first-cluster --nodes=4
 Kubernetes cluster my-first-cluster will now have 4 nodes
 ```
+
+#### Recycling nodes in your cluster
+
+If you need to recycle a particular node in your cluster for any reason, you can use the `recycle` command. This requires the name or ID of the cluster, and the name of the node you wish to recycle preceded by `--node=`:
+
+```sh
+$ civo k8s recycle my-first-cluster --node=kube-node-e9ca
+The node (kube-node-e9ca) was recycled
+```
+
+*Note:* When a node is recycled, it is fully deleted. The recycle command does not [drain](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/) a node, it simply deletes it before building a new node and attaching it to a cluster. It is intended for scenarios where the node itself develops an issue and must be replaced with a new one.
 
 #### Viewing or Saving the cluster configuration
 
@@ -1167,7 +1178,7 @@ If you have an alias for civo, you can extend shell completion to work with that
 echo 'alias c=civo' >>~/.zshrc
 echo 'complete -F __start_civo c' >>~/.zshrc
 ```
-    
+
 After reloading your shell, civo autocompletion should be working.
 
 If you get an error like `complete:13: command not found: compdef`, then add the following to the beginning of your `~/.zshrc` file:
