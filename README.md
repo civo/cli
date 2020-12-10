@@ -723,7 +723,7 @@ You can see an overview of your firewalls using `civo firewall list` showing you
 ```sh
 $ civo firewall list
 +--------------------------------------+--------------+-------------+----------------+--------+
-| ID                                   | Name         | Total rules | Total Intances | Region |
+| ID                                   | Name         | Total rules | Total Instances | Region |
 +--------------------------------------+--------------+-------------+----------------+--------+
 | 232d91e9-1550-4c96-bcb6-e9dfecd3e9ee | civocli_demo |           4 |              3 | lon1   |
 +--------------------------------------+--------------+-------------+----------------+--------+
