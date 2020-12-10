@@ -1,3 +1,39 @@
+- semver: 0.6.46
+  date: 2020-12-10T12:09:34.642403-05:00
+  packager: ""
+  changes:
+  - commit: a1c3a5871bf77640dab14b740fb304d7c816d64d
+    note: Fixed error in the kubernetes list command
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 17007e301789b9c71b0050cc0df5a93b584b6d93
+    note: |-
+      Typo and readability fixes (#40)
+
+      * Fix typo in output of firewall listings
+
+      * Clarifications, typo fixes
+    author:
+      name: Kai Hoffman
+      email: 44998809+kaihoffman@users.noreply.github.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
+  - commit: 98f6850d70d67ef4d2dc5a8e9f4f4fecb866f871
+    note: |-
+      Merge pull request #38 from kaihoffman/master
+
+      Add recycle node info to README
+    author:
+      name: Kai Hoffman
+      email: 44998809+kaihoffman@users.noreply.github.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
 - semver: 0.6.45
   date: 2020-12-04T13:10:51.209979-05:00
   packager: ""

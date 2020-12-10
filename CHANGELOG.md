@@ -1,4 +1,12 @@
 
+0.6.46
+=============
+2020-12-10
+
+* Fixed error in the kubernetes list command (a1c3a587)
+* Typo and readability fixes (#40) (17007e30)
+* Merge pull request #38 from kaihoffman/master (98f6850d)
+
 0.6.45
 =============
 2020-12-04
