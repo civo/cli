@@ -46,14 +46,17 @@ or if you prefer you can run this in the console:
 $ curl -sL https://civo.com/get | sh
 ```
 
-### Installing on windows
-First you need [scoop](https://scoop.sh/) installed then:
+### Installing on Windows
+
+First you need [Scoop](https://scoop.sh/) installed as a package manager, then:
 - add the extras bucket with `scoop bucket add extras`
 - install civo with `scoop install civo`.
 
 You will also, of course, need a Civo account, for which you can [register here](https://www.civo.com/signup).
 
-To run the tool, simply run `civo` with your chosen options. You can find context-sensitive help for commands and their options by invoking the `help` or `-h` command:
+### Running the Civo CLI tool and getting help
+
+To use the tool, simply run `civo` with your chosen options. You can find context-sensitive help for commands and their options by invoking the `help` or `-h` command:
 `civo help`,
 `civo instance help`,
 `civo instance create help`
@@ -393,7 +396,7 @@ Please note that resizing can take a few minutes.
 
 #### List clusters
 
-To see your created clusters, simply call `civo kubernetes list`:
+To see your created clusters, call `civo kubernetes list`:
 
 ```sh
 $ civo kubernetes list
@@ -616,7 +619,7 @@ Created a domain called civoclidemo.xyz with ID 418181b2-fcd2-46a2-ba7f-c843c331
 You can then proceed to add DNS records to this domain.
 
 #### List Domain Names
-To see your created domains, simply call `civo domain list`:
+To see your created domains, call `civo domain list`:
 
 ```sh
 $ civo domain list
@@ -775,7 +778,7 @@ Create a private network called cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa
 
 #### Removing Networks
 
-Removal of a network, provided you do not need it and your applications do not depend on routing through it, is simple - simply call `civo network remove network_ID`:
+Removal of a network, provided you do not need it and your applications do not depend on routing through it, is simple - you call `civo network remove network_ID`:
 
 ```sh
 $ civo network remove 74b69006-ea59-46a0-96c4-63f5bfa290e1
@@ -829,7 +832,7 @@ Updated Load Balancer
 
 #### Removing Load Balancers
 
-Removing a load balancer is simple - simply call `civo loadbalancer remove loadbalancer_id`. Please note that this change is immediate:
+Removing a load balancer is done through calling `civo loadbalancer remove loadbalancer_id`. Please note that this change is immediate:
 
 ```sh
 $ civo loadbalancer remove 01da06bc-40ef-4d4c-bb68-d0765d288b54
