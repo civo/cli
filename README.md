@@ -656,7 +656,7 @@ Created a record www1 for civoclidemo.xyz with a TTL of 600 seconds and with a p
 ```
 
 #### Listing DNS Records
-You can get an overview of all records you have created for a particular domain by requesting `civo domainrecord list domain.name`:
+You can get an overview of all records you have created for a particular domain by requesting `civo domain record list domain.name`:
 
 ```sh
 $ civo domain record list civoclidemo.xyz
