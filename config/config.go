@@ -32,6 +32,11 @@ var Filename string
 
 // ReadConfig reads in config file and ENV variables if set.
 func ReadConfig() {
+	filename, found := os.LookupEnv("CIVOCONFIG")
+	if found {
+		Filename = filename
+	}
+
 	if Filename != "" {
 		loadConfig(Filename)
 	} else {
@@ -140,5 +145,5 @@ func DefaultAPIKey() string {
 
 // CivoAPIClient returns a civogo client using the current default API key
 func CivoAPIClient() (*civogo.Client, error) {
-	return civogo.NewClient(DefaultAPIKey())
+	return civogo.NewClientWithURL(DefaultAPIKey(), Current.Meta.URL)
 }
