@@ -41,7 +41,7 @@ var regionCurrentCmd = &cobra.Command{
 			}
 		}
 
-		fmt.Printf("The region do you try to use don't exist: %s\n", utility.Red(args[0]))
+		fmt.Printf("The region you tried to set %s doesn't exist, please use 'civo region ls' to get the code of a valid region", utility.Red(args[0]))
 		os.Exit(1)
 	},
 }
