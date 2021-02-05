@@ -43,11 +43,11 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 			if outputFormat == "json" || outputFormat == "custom" {
 				defaultLabel = utility.BoolToYesNo(region.Default)
 			} else {
-				if region.Default {
+				if region.Code == config.Current.Meta.DefaultRegion {
 					defaultLabel = "<====="
 				}
 			}
-			ow.AppendData("Default", defaultLabel)
+			ow.AppendData("Current", defaultLabel)
 		}
 
 		switch outputFormat {

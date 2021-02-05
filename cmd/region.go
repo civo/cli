@@ -13,4 +13,5 @@ var regionCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(regionCmd)
 	regionCmd.AddCommand(regionListCmd)
+	regionCmd.AddCommand(regionCurrentCmd)
 }
