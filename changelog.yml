@@ -1,3 +1,44 @@
+- semver: 0.7.0
+  date: 2021-02-08T17:49:13.636336-05:00
+  packager: ""
+  changes:
+  - commit: cc0a3c2a6be83e860223e891e8e9f8b10bd2e148
+    note: |-
+      Added region to the CLI
+      - Now you can pick a region and set as default
+      - Added new flag to use in non-interactive mode `--region`
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: b9179edb91e83e8e9b78e7fa09bec159d19fd410
+    note: Added the option to set the region in the config file
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: aeab445273a4ccb7f62eb4ecc71feac0ac3c2827
+    note: Support CIVOCONFIG as an ENV variable to override config file location
+    author:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+    committer:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+  - commit: 82e09be5c2e9b50e1ef6267899471128cb66e3ca
+    note: |-
+      Fixed error in the README
+      Close #41
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.6.46
   date: 2020-12-10T12:09:34.642403-05:00
   packager: ""

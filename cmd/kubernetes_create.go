@@ -16,7 +16,7 @@ import (
 
 var numTargetNodes int
 var waitKubernetes, saveConfigKubernetes, switchConfigKubernetes bool
-var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications string
+var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications, networkID string
 
 var kubernetesCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -25,6 +25,16 @@ var kubernetesCreateCmd = &cobra.Command{
 	Short:   "Create a new Kubernetes cluster",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
+		if regionSet != "" {
+			client.Region = regionSet
+		}
+
+		// fix to the kubernetes because in other region
+		// we use g3.medium
+		if client.Region != "SVG1" {
+			targetNodesSize = "g3.medium"
+		}
+
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
@@ -48,10 +58,30 @@ var kubernetesCreateCmd = &cobra.Command{
 			clusterName = utility.RandomName()
 		}
 
+		if networkID == "default" {
+			network, err := client.GetDefaultNetwork()
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+
+			networkID = network.ID
+
+		} else {
+			network, err := client.FindNetwork(networkID)
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+
+			networkID = network.ID
+		}
+
 		configKubernetes := &civogo.KubernetesClusterConfig{
 			Name:            clusterName,
 			NumTargetNodes:  numTargetNodes,
 			TargetNodesSize: targetNodesSize,
+			NetworkID:       networkID,
 		}
 
 		if kubernetesVersion != "latest" {

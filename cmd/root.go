@@ -5,11 +5,11 @@ import (
 	"os"
 
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
-var outputFields string
-var outputFormat string
+var outputFields, outputFormat, regionSet string
 var defaultYes bool
 
 // rootCmd represents the base command when called without any subcommands
@@ -36,5 +36,12 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&outputFields, "fields", "f", "", "output fields for custom format output (use -h to determine fields)")
 	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output", "o", "human", "output format (json/human/custom)")
 	rootCmd.PersistentFlags().BoolVarP(&defaultYes, "yes", "y", false, "Automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively")
-	// add global --region this will overwrite the configuration
+	rootCmd.PersistentFlags().StringVarP(&regionSet, "region", "", "", "Choose the region to connect to, if you use this option it will use it over the default region")
+
+	// Add warning if the region is empty, for the user with the old config
+	config.ReadConfig()
+	if config.Current.Meta.DefaultRegion == "" {
+		utility.Warning("No region set - using the default of SVG1 - set a default using \"civo region current REGION\" or specify one with every command using \"--region=REGION\"")
+	}
+
 }

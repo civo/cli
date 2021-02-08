@@ -30,6 +30,9 @@ If you wish to use a custom format, the available fields are:
 Example: civo firewall rule ls FIREWALL_NAME -o custom -f "ID: Label"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
+		if regionSet != "" {
+			client.Region = regionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)

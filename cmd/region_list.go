@@ -33,15 +33,29 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 		}
 
 		ow := utility.NewOutputWriter()
-
+		// 		Type
+		// OutOfCapacity
+		// Country
+		// CountryName
+		// Features
+		// Iaas
+		// Kubernetes
 		for _, region := range regions {
 			ow.StartLine()
 			ow.AppendData("Code", region.Code)
 			ow.AppendData("Name", region.Name)
+			ow.AppendData("Out Of Capacity", utility.BoolToYesNo(region.OutOfCapacity))
+			ow.AppendData("Country", region.CountryName)
+			ow.AppendData("Iaas", utility.BoolToYesNo(region.Features.Iaas))
+			ow.AppendData("Kubernetes", utility.BoolToYesNo(region.Features.Kubernetes))
 
 			defaultLabel := ""
 			if outputFormat == "json" || outputFormat == "custom" {
-				defaultLabel = utility.BoolToYesNo(region.Default)
+				if region.Code == config.Current.Meta.DefaultRegion {
+					defaultLabel = "Yes"
+				} else {
+					defaultLabel = "No"
+				}
 			} else {
 				if region.Code == config.Current.Meta.DefaultRegion {
 					defaultLabel = "<====="

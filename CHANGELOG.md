@@ -1,4 +1,13 @@
 
+0.7.0
+=============
+2021-02-08
+
+* Added region to the CLI (cc0a3c2a)
+* Added the option to set the region in the config file (b9179edb)
+* Support CIVOCONFIG as an ENV variable to override config file location (aeab4452)
+* Fixed error in the README (82e09be5)
+
 0.6.46
 =============
 2020-12-10

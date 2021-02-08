@@ -20,6 +20,9 @@ var kubernetesAppAddCmd = &cobra.Command{
 	Short:   "Add the marketplace application to a Kubernetes cluster",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
+		if regionSet != "" {
+			client.Region = regionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)

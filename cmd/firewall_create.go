@@ -22,7 +22,13 @@ var firewallCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		firewall, err := client.NewFirewall(args[0])
+		defautlNetwork, err := client.GetDefaultNetwork()
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
+		firewall, err := client.NewFirewall(args[0], defautlNetwork.ID)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)

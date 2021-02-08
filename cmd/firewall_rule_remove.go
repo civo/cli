@@ -21,6 +21,9 @@ var firewallRuleRemoveCmd = &cobra.Command{
 	Example: "civo firewall rule remove FIREWALL_NAME/FIREWALL_ID FIREWALL_RULE_ID",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
+		if regionSet != "" {
+			client.Region = regionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)

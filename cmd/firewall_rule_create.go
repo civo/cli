@@ -24,6 +24,9 @@ var firewallRuleCreateCmd = &cobra.Command{
 	Example: "civo firewall rule create FIREWALL_NAME/FIREWALL_ID [flags]",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
+		if regionSet != "" {
+			client.Region = regionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)

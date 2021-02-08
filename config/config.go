@@ -105,7 +105,7 @@ func SaveConfig() {
 
 func checkConfigFile(filename string) error {
 	file, err := os.Stat(filename)
-	fileContend := []byte(fmt.Sprintf("{\"apikeys\":{},\"meta\":{\"admin\":false,\"current_apikey\":\"\",\"default_region\":\"lon1\",\"latest_release_check\":\"%s\",\"url\":\"https://api.civo.com\"}}", time.Now().Format(time.RFC3339)))
+	fileContend := []byte(fmt.Sprintf("{\"apikeys\":{},\"meta\":{\"admin\":false,\"current_apikey\":\"\",\"default_region\":\"SGV1\",\"latest_release_check\":\"%s\",\"url\":\"https://api.civo.com\"}}", time.Now().Format(time.RFC3339)))
 	if os.IsNotExist(err) {
 		_, err := os.Create(filename)
 		if err != nil {
@@ -145,5 +145,5 @@ func DefaultAPIKey() string {
 
 // CivoAPIClient returns a civogo client using the current default API key
 func CivoAPIClient() (*civogo.Client, error) {
-	return civogo.NewClientWithURL(DefaultAPIKey(), Current.Meta.URL)
+	return civogo.NewClientWithURL(DefaultAPIKey(), Current.Meta.URL, Current.Meta.DefaultRegion)
 }

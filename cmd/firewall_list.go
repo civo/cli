@@ -26,6 +26,9 @@ If you wish to use a custom format, the available fields are:
 Example: civo firewall ls -o custom -f "ID: Name"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
+		if regionSet != "" {
+			client.Region = regionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
@@ -45,7 +48,7 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 			ow.AppendData("Name", firewall.Name)
 			ow.AppendDataWithLabel("RulesCount", strconv.Itoa(firewall.RulesCount), "Total rules")
 			ow.AppendDataWithLabel("InstancesCount", strconv.Itoa(firewall.InstancesCount), "Total Instances")
-			ow.AppendData("Region", firewall.Region)
+			ow.AppendData("Region", client.Region)
 		}
 
 		switch outputFormat {

@@ -45,6 +45,7 @@ func init() {
 	kubernetesConfigCmd.Flags().StringVarP(&localPathConfig, "local-path", "p", fmt.Sprintf("%s/.kube/config", home), "local path to save the kubeconfig file")
 
 	kubernetesCreateCmd.Flags().StringVarP(&targetNodesSize, "size", "s", "g2.medium", "the size of nodes to create.")
+	kubernetesCreateCmd.Flags().StringVarP(&networkID, "network", "t", "default", "the name of the network to use in the creation")
 	kubernetesCreateCmd.Flags().IntVarP(&numTargetNodes, "nodes", "n", 3, "the number of nodes to create (the master also acts as a node).")
 	kubernetesCreateCmd.Flags().StringVarP(&kubernetesVersion, "version", "v", "latest", "the k3s version to use on the cluster. Defaults to the latest.")
 	kubernetesCreateCmd.Flags().StringVarP(&applications, "applications", "a", "", "optional, use names shown by running 'civo kubernetes applications ls'")
