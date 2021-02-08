@@ -25,6 +25,7 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 - [SSH Keys](#ssh-keys)
 - [Templates](#templates)
 - [Volumes](#volumes)
+- [Region](#region)
 - [Enabling shell autocompletion](#enabling-shell-autocompletion)
 - [Contributing](#contributing)
 - [License](#license)
@@ -411,7 +412,8 @@ $ civo kubernetes list
 
 You can create a cluster by running `civo kubernetes create` with a cluster name parameter, as well as any options you provide:
 
-* `size` -  The size of nodes to create, from the current list of sizes  available at [`civo sizes`](#sizes). Defaults to `g2.medium`.
+* `size` -  The size of nodes to create, from the current list of sizes  available at [`civo sizes`](#sizes). Defaults to `g2.medium` in `SVG1` and `g3.medium` in `NYC1`
+* `network` - The name of the network to use in the creation (default "default")
 * `nodes` -  The number of nodes to create (the master also acts as a node).
 * `version` - the `k3s` version to use on the cluster. Defaults to the latest.
 * `wait` - a simple flag (e.g. `--wait`) that will cause the CLI to spin and wait for the cluster to be `ACTIVE`.
@@ -1116,6 +1118,35 @@ To free up quota and therefore the amount to be billed to your account, you can 
 $ civo volume delete 9b232ffa-7e05-45a4-85d8-d3643e68952e
 Removed volume CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e (was 30GB)
 $ civo volume list
+```
+
+
+## Region
+
+#### List all region
+
+You can run `civo region ls` to get the list of all region
+```sh
++------+-------------+-----------------+----------------+------+------------+---------+
+| Code | Name        | Out Of Capacity | Country        | Iaas | Kubernetes | Current |
++------+-------------+-----------------+----------------+------+------------+---------+
+| NYC1 | New York 1  | No              | United States  | No   | Yes        | <=====  |
+| SVG1 | Stevenage 1 | Yes             | United Kingdom | Yes  | Yes        |         |
++------+-------------+-----------------+----------------+------+------------+---------+
+```
+
+#### Change region
+
+To change the region the only cmd you need run is `civo region current <REGION-CODE>` and you will see a message like this
+```sh
+The default region was set to (New York 1) NYC1
+```
+#### Use region in non-interective mode
+
+To set the region in non-interactive mode, you only need pass to the command this `--region <REGION-CODE>` like this
+
+```sh
+civo kubernetes create production-01 -n 4 --wait --region NYC1
 ```
 
 ## Enabling shell autocompletion
