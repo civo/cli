@@ -1,3 +1,40 @@
+- semver: 0.7.1
+  date: 2021-02-09T13:14:28.929673-05:00
+  packager: ""
+  changes:
+  - commit: 57186e0c23a44d9390aa37b745a545bdc5980fad
+    note: Fixed error in the goreleaser file
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: a8973554ad592eb89532b1a6bd8d4e3dafbd21e5
+    note: Updated gorelease to remove some deprecated options
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 63385a006805e1b8b4681b6c3e2ba58d82d86376
+    note: |-
+      Updated the civogo lib to v0.2.26, Added a check in the instance and kubernetes command and remove some field from the region list
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 30439ca98d5520bee7a0696babddb804d4f26ec2
+    note: Updated the README.md
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.0
   date: 2021-02-08T17:49:13.636336-05:00
   packager: ""

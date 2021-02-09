@@ -1,4 +1,13 @@
 
+0.7.1
+=============
+2021-02-09
+
+* Fixed error in the goreleaser file (57186e0c)
+* Updated gorelease to remove some deprecated options (a8973554)
+* Updated the civogo lib to v0.2.26, Added a check in the instance and kubernetes command and remove some field from the region list (63385a00)
+* Updated the README.md (30439ca9)
+
 0.7.0
 =============
 2021-02-08
