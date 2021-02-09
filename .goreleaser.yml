@@ -47,7 +47,7 @@ brews:
 dockers:
   - goos: linux
     goarch: amd64
-    ips:
+    ids:
       - civo
     image_templates:
       - "civo/cli:latest"
