@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"math"
 	"runtime"
+
+	"github.com/civo/civogo"
+	"github.com/civo/cli/config"
 )
 
 // CheckOS is a function to check the OS of the user
@@ -42,4 +45,49 @@ func CheckQuotaPercent(limit int, usage int) string {
 	}
 
 	return returnText
+}
+
+// CheckAvailability is a function to check if the user can
+// create Iaas and k8s cluster base on the result of region
+func CheckAvailability(resource string, regionSet string) (bool, string, error) {
+	var defaultRegion *civogo.Region
+	client, err := config.CivoAPIClient()
+	if err != nil {
+		return false, "", err
+	}
+
+	if regionSet != "" {
+		client.Region = regionSet
+	}
+
+	switch {
+	case config.Current.Meta.DefaultRegion == "" && regionSet != "" || config.Current.Meta.DefaultRegion != "" && regionSet != "":
+		defaultRegion, err = client.FindRegion(regionSet)
+		if err != nil {
+			return false, "", err
+		}
+	case config.Current.Meta.DefaultRegion != "" && regionSet == "":
+		defaultRegion, err = client.FindRegion(config.Current.Meta.DefaultRegion)
+		if err != nil {
+			return false, "", err
+		}
+	default:
+		defaultRegion, err = client.GetDefaultRegion()
+		if err != nil {
+			return false, "", err
+		}
+	}
+
+	if resource == "kubernetes" {
+		if defaultRegion.Features.Kubernetes && defaultRegion.OutOfCapacity == false {
+			return true, "", nil
+		}
+	}
+	if resource == "instance" {
+		if defaultRegion.Features.Iaas && defaultRegion.OutOfCapacity == false {
+			return true, "", nil
+		}
+	}
+
+	return false, defaultRegion.Code, nil
 }

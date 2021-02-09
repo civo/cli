@@ -44,22 +44,22 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 			ow.StartLine()
 			ow.AppendData("Code", region.Code)
 			ow.AppendData("Name", region.Name)
-			ow.AppendData("Out Of Capacity", utility.BoolToYesNo(region.OutOfCapacity))
 			ow.AppendData("Country", region.CountryName)
-			ow.AppendData("Iaas", utility.BoolToYesNo(region.Features.Iaas))
-			ow.AppendData("Kubernetes", utility.BoolToYesNo(region.Features.Kubernetes))
 
 			defaultLabel := ""
 			if outputFormat == "json" || outputFormat == "custom" {
-				if region.Code == config.Current.Meta.DefaultRegion {
-					defaultLabel = "Yes"
-				} else {
-					defaultLabel = "No"
-				}
+				defaultLabel = utility.BoolToYesNo(region.Default)
 			} else {
-				if region.Code == config.Current.Meta.DefaultRegion {
-					defaultLabel = "<====="
+				if config.Current.Meta.DefaultRegion != "" {
+					if region.Code == config.Current.Meta.DefaultRegion {
+						defaultLabel = "<====="
+					}
+				} else {
+					if region.Default {
+						defaultLabel = "<====="
+					}
 				}
+
 			}
 			ow.AppendData("Current", defaultLabel)
 		}

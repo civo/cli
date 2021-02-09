@@ -49,6 +49,18 @@ If you wish to use a custom format, the available fields are:
 	* Script
 	* CreatedAt`,
 	Run: func(cmd *cobra.Command, args []string) {
+
+		check, region, err := utility.CheckAvailability("kubernetes", regionSet)
+		if err != nil {
+			utility.Error("Error checking availability %s", err)
+			os.Exit(1)
+		}
+
+		if check == false {
+			utility.Error("Sorry you can't create a instance in the %s region", region)
+			os.Exit(1)
+		}
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet
