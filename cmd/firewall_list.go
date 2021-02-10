@@ -42,13 +42,15 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 
 		ow := utility.NewOutputWriter()
 		for _, firewall := range firewalls {
+			network, _ := client.FindNetwork(firewall.NetworkID)
+
 			ow.StartLine()
 
 			ow.AppendData("ID", firewall.ID)
 			ow.AppendData("Name", firewall.Name)
+			ow.AppendData("Network", network.Name)
 			ow.AppendDataWithLabel("RulesCount", strconv.Itoa(firewall.RulesCount), "Total rules")
 			ow.AppendDataWithLabel("InstancesCount", strconv.Itoa(firewall.InstancesCount), "Total Instances")
-			ow.AppendData("Region", client.Region)
 		}
 
 		switch outputFormat {

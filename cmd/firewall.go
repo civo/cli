@@ -23,6 +23,8 @@ func init() {
 	firewallCmd.AddCommand(firewallUpdateCmd)
 	firewallCmd.AddCommand(firewallRemoveCmd)
 
+	firewallCreateCmd.Flags().StringVarP(&firewallnetwork, "network", "n", "default", "the network to create the firewall")
+
 	// Firewalls rule cmd
 	firewallCmd.AddCommand(firewallRuleCmd)
 	firewallRuleCmd.AddCommand(firewallRuleListCmd)

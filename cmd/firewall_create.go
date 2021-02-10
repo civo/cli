@@ -4,10 +4,14 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
+
+var firewallnetwork string
+var defautlNetwork *civogo.Network
 
 var firewallCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -17,15 +21,26 @@ var firewallCreateCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
+		if regionSet != "" {
+			client.Region = regionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
-		defautlNetwork, err := client.GetDefaultNetwork()
-		if err != nil {
-			utility.Error("%s", err)
-			os.Exit(1)
+		if firewallnetwork == "default" {
+			defautlNetwork, err = client.GetDefaultNetwork()
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+		} else {
+			defautlNetwork, err = client.FindNetwork(firewallnetwork)
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
 		}
 
 		firewall, err := client.NewFirewall(args[0], defautlNetwork.ID)
