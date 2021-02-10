@@ -65,7 +65,7 @@ and so on. The main components of Civo CLI are outlined in the following section
 
 ## Docker Usage
 
-Civo's CLI utilty can also run within a Docker container, if you prefer to keep your base OS clean.
+Civo's CLI utility can also run within a Docker container, if you prefer to keep your base OS clean.
 
 To run, you generally will want to map the API key for persistence.
 
@@ -791,7 +791,7 @@ Removed the network cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa290e1
 
 #### Introduction
 
-Civo supports load balancing for your instances, allowing you to spread web traffic between them to maximise availability. You can view details about load balancers you may have running, create new oness, update information and even remove them from the command line.
+Civo supports load balancing for your instances, allowing you to spread web traffic between them to maximize availability. You can view details about load balancers you may have running, create new ones, update information and even remove them from the command line.
 
 #### Viewing Load Balancers
 
@@ -865,19 +865,7 @@ $ civo quota show
 Any items in red are at least 80% of your limit
 ```
 
-If you have a legitimate need for a quota increase, visit the [Quota page](https://www.civo.com/account/quota) to place your request - we won't unreasonably withhold any increase, it's just in place so we can control the rate of growth of our platform and so that erran scripts using our API don't suddenly exhaust our available resources.
-
-## Regions
-
-As Civo grows, more regions for hosting your instances will become available. You can run `civo region ls` to list the regions available. Block storage (Volumes) is region-specific, so if you configure an instance in one region, any volumes you wish to attach to that instance would have to be in the same region.
-```
-$ civo region ls
-+------+----------+---------+
-| Code | Name     | Default |
-+------+----------+---------+
-| lon1 | London 1 | <=====  |
-+------+----------+---------+
-```
+If you have a legitimate need for a quota increase, visit the [Quota page](https://www.civo.com/account/quota) to place your request - we won't unreasonably withhold any increase, it's just in place so we can control the rate of growth of our platform and so that errand scripts using our API don't suddenly exhaust our available resources.
 
 ## Sizes
 
@@ -1122,25 +1110,29 @@ $ civo volume list
 
 
 ## Region
+As Civo grows, more regions for your instances will become available. You can run `civo region ls` to list the regions available. Block storage (Volumes) is region-specific, so if you configure an instance in one region, any volumes you wish to attach to that instance would have to be in the same region.
 
 #### List all region
 
 You can run `civo region ls` to get the list of all region
 ```sh
-+------+-------------+-----------------+----------------+------+------------+---------+
-| Code | Name        | Out Of Capacity | Country        | Iaas | Kubernetes | Current |
-+------+-------------+-----------------+----------------+------+------------+---------+
-| NYC1 | New York 1  | No              | United States  | No   | Yes        | <=====  |
-| SVG1 | Stevenage 1 | Yes             | United Kingdom | Yes  | Yes        |         |
-+------+-------------+-----------------+----------------+------+------------+---------+
++------+-------------+----------------+---------+
+| Code | Name        | Country        | Current |
++------+-------------+----------------+---------+
+| NYC1 | New York 1  | United States  | <=====  |
+| SVG1 | Stevenage 1 | United Kingdom |         |
++------+-------------+----------------+---------+
 ```
 
 #### Change region
 
 To change the region the only cmd you need run is `civo region current <REGION-CODE>` and you will see a message like this
 ```sh
-The default region was set to (New York 1) NYC1
+ civo region current NYC1
+
 ```
+The default region was set to (New York 1) NYC1
+
 #### Use region in non-interective mode
 
 To set the region in non-interactive mode, you only need pass to the command this `--region <REGION-CODE>` like this
