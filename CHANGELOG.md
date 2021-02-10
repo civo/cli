@@ -1,4 +1,11 @@
 
+0.7.2
+=============
+2021-02-10
+
+* Added the `-network` param to the firewall cmd also added the network to the list of firewall and updated to the last version of the civogo lib v0.2.27 (8bcd181d)
+* Updated the changelog (92905a29)
+
 0.7.1
 =============
 2021-02-09

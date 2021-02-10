@@ -1,3 +1,24 @@
+- semver: 0.7.2
+  date: 2021-02-09T22:58:17.97599-05:00
+  packager: ""
+  changes:
+  - commit: 8bcd181d9789793b5d1e94e7ea2b90d64390ef30
+    note: |-
+      Added the `-network` param to the firewall cmd also added the network to the list of firewall and updated to the last version of the civogo lib v0.2.27
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 92905a2948f0945c504c5b94497c68a18a8af293
+    note: Updated the changelog
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.1
   date: 2021-02-09T13:14:28.929673-05:00
   packager: ""
@@ -19,8 +40,7 @@
       name: Alejandro JNM
       email: alejandrojnm@gmail.com
   - commit: 63385a006805e1b8b4681b6c3e2ba58d82d86376
-    note: |-
-      Updated the civogo lib to v0.2.26, Added a check in the instance and kubernetes command and remove some field from the region list
+    note: Updated the civogo lib to v0.2.26, Added a check in the instance and kubernetes command and remove some field from the region list
     author:
       name: Alejandro JNM
       email: alejandrojnm@gmail.com
