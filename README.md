@@ -1133,7 +1133,7 @@ To change the region the only cmd you need run is `civo region current <REGION-C
 ```
 The default region was set to (New York 1) NYC1
 
-#### Use region in non-interective mode
+#### Use region in non-interactive mode
 
 To set the region in non-interactive mode, you only need pass to the command this `--region <REGION-CODE>` like this
 
@@ -1214,7 +1214,7 @@ autoload -Uz compinit
 compinit
 ```
 
-To set the civo completion code for zsh to autoload on start up yo can run this command.
+To set the civo completion code for zsh to auto-load on start up yo can run this command.
 ```bash
 civo completion zsh > "${fpath[1]}/_civo"
 ```
