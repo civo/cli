@@ -77,6 +77,8 @@ func ColorStatus(status string) string {
 		returnText = Red(status)
 	case status == "REBOOTING":
 		returnText = Yellow(status)
+	case status == "BUILDING":
+		returnText = Yellow(status)
 	case status == "INSTANCE-CREATE":
 		returnText = Blue(status)
 	case status == "INSTALLING":

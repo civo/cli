@@ -41,12 +41,6 @@ var kubernetesCreateCmd = &cobra.Command{
 			client.Region = regionSet
 		}
 
-		// fix to the kubernetes because in other region
-		// we use g3.medium
-		if client.Region != "SVG1" {
-			targetNodesSize = "g3.medium"
-		}
-
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
