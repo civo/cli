@@ -15,8 +15,9 @@ import (
 )
 
 var numTargetNodes int
-var waitKubernetes, saveConfigKubernetes, switchConfigKubernetes bool
+var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes bool
 var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications, networkID string
+var kubernetesCluster *civogo.KubernetesCluster
 
 var kubernetesCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -46,12 +47,21 @@ var kubernetesCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		if !strings.Contains(targetNodesSize, "k3s") {
+			utility.Error("You can create a cluster with this %s size, you need choise one with k3s in the name", targetNodesSize)
+			os.Exit(1)
+		}
+
 		if !waitKubernetes {
-			if saveConfigKubernetes || switchConfigKubernetes {
-				utility.Error("you can't use --save or --switch without --wait")
+			if saveConfigKubernetes || switchConfigKubernetes || mergeConfigKubernetes {
+				utility.Error("you can't use --save, --switch or --merge without --wait")
 				os.Exit(1)
 			}
 		} else {
+			if mergeConfigKubernetes && !saveConfigKubernetes {
+				utility.Error("you can't use --merge without --save")
+				os.Exit(1)
+			}
 			if switchConfigKubernetes && !saveConfigKubernetes {
 				utility.Error("you can't use --switch without --save")
 				os.Exit(1)
@@ -115,10 +125,23 @@ var kubernetesCreateCmd = &cobra.Command{
 			configKubernetes.Applications = installApplications
 		}
 
-		kubernetesCluster, err := client.NewKubernetesClusters(configKubernetes)
-		if err != nil {
-			utility.Error("%s", err)
-			os.Exit(1)
+		if !mergeConfigKubernetes {
+			if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) == true {
+				kubernetesCluster, err = client.NewKubernetesClusters(configKubernetes)
+				if err != nil {
+					utility.Error("%s", err)
+					os.Exit(1)
+				}
+			} else {
+				fmt.Println("Operation aborted.")
+				os.Exit(1)
+			}
+		} else {
+			kubernetesCluster, err = client.NewKubernetesClusters(configKubernetes)
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
 		}
 
 		var executionTime string
@@ -155,11 +178,12 @@ var kubernetesCreateCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			err = utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, true, switchConfigKubernetes, kube.Name)
+			err = utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfigKubernetes, switchConfigKubernetes, kube.Name)
 			if err != nil {
 				utility.Error("Saving the cluster config failed with %s", err)
 				os.Exit(1)
 			}
+
 		}
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": kubernetesCluster.ID, "Name": kubernetesCluster.Name})
