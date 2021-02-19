@@ -1,4 +1,15 @@
 
+0.7.3
+=============
+2021-02-19
+
+* - Added the merge flag to the create command (9c259c32)
+* Merge branch 'master' of https://github.com/civo/cli (0aa31637)
+* Fix error in the creation of kubernertes (ad87c6f8)
+* Merge branch 'master' of https://github.com/civo/cli (6ac46a0e)
+* modified the network field to use the label value and not the name (69d94728)
+* Updated the changelog (32dfda47)
+
 0.7.2
 =============
 2021-02-10

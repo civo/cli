@@ -1,10 +1,66 @@
+- semver: 0.7.3
+  date: 2021-02-19T16:11:11.605972-05:00
+  packager: ""
+  changes:
+  - commit: 9c259c32f9f9a04ec93a9e8b75875f776095545f
+    note: |-
+      - Added the merge flag to the create command
+      - Add some verification to kubernetes create, now you need pick the right size of Instance
+      - Add auto-complete to the kubernetes show command
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 0aa316370665a3cb86e83b7a27f7429a35586e8a
+    note: Merge branch 'master' of https://github.com/civo/cli
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: ad87c6f8f440b86272b970c427cc6d742e0952cd
+    note: |-
+      Fix error in the creation of kubernertes
+      Close #46
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 6ac46a0e13268796b491a6338b718e0665593907
+    note: Merge branch 'master' of https://github.com/civo/cli
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 69d947287161b4b81d4c88a103aa3f2c8aae4551
+    note: modified the network field to use the label value and not the name
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 32dfda4782f9973dd3b20b53800876eb3873f855
+    note: Updated the changelog
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.2
   date: 2021-02-09T22:58:17.97599-05:00
   packager: ""
   changes:
   - commit: 8bcd181d9789793b5d1e94e7ea2b90d64390ef30
-    note: |-
-      Added the `-network` param to the firewall cmd also added the network to the list of firewall and updated to the last version of the civogo lib v0.2.27
+    note: Added the `-network` param to the firewall cmd also added the network to the list of firewall and updated to the last version of the civogo lib v0.2.27
     author:
       name: Alejandro JNM
       email: alejandrojnm@gmail.com
