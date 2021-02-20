@@ -44,7 +44,7 @@ func init() {
 	kubernetesConfigCmd.Flags().BoolVarP(&mergeConfig, "merge", "m", false, "merge the config with existing kubeconfig if it already exists.")
 	kubernetesConfigCmd.Flags().StringVarP(&localPathConfig, "local-path", "p", fmt.Sprintf("%s/.kube/config", home), "local path to save the kubeconfig file")
 
-	kubernetesCreateCmd.Flags().StringVarP(&targetNodesSize, "size", "s", "", "the size of nodes to create.")
+	kubernetesCreateCmd.Flags().StringVarP(&targetNodesSize, "size", "s", "g3.k3s.medium", "the size of nodes to create.")
 	kubernetesCreateCmd.Flags().StringVarP(&networkID, "network", "t", "default", "the name of the network to use in the creation")
 	kubernetesCreateCmd.Flags().IntVarP(&numTargetNodes, "nodes", "n", 3, "the number of nodes to create (the master also acts as a node).")
 	kubernetesCreateCmd.Flags().StringVarP(&kubernetesVersion, "version", "v", "latest", "the k3s version to use on the cluster. Defaults to the latest.")

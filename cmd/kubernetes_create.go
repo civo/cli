@@ -48,7 +48,14 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		if !strings.Contains(targetNodesSize, "k3s") {
-			utility.Error("You can create a cluster with this %s size, you need choise one with k3s in the name", targetNodesSize)
+
+			k8sSize, err := utility.GetK3sSize()
+			if err != nil {
+				utility.Error("Error %s", err)
+				os.Exit(1)
+			}
+
+			utility.Error("You can create a cluster with this %s size, Possible values: %s", targetNodesSize, k8sSize)
 			os.Exit(1)
 		}
 

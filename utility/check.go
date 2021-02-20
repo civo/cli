@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"runtime"
+	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
@@ -45,6 +46,29 @@ func CheckQuotaPercent(limit int, usage int) string {
 	}
 
 	return returnText
+}
+
+// GetK3sSize is a functon to return only the k3s size
+func GetK3sSize() ([]string, error) {
+
+	client, err := config.CivoAPIClient()
+	if err != nil {
+		return nil, err
+	}
+
+	k8sSize := []string{}
+	allSize, err := client.ListInstanceSizes()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, v := range allSize {
+		if strings.Contains(v.Name, "k3s") {
+			k8sSize = append(k8sSize, v.Name)
+		}
+	}
+
+	return k8sSize, nil
 }
 
 // CheckAvailability is a function to check if the user can
