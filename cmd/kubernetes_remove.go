@@ -17,6 +17,12 @@ var kubernetesRemoveCmd = &cobra.Command{
 	Example: "civo kubernetes remove CLUSTER_NAME",
 	Short:   "Remove a Kubernetes cluster",
 	Args:    cobra.MinimumNArgs(1),
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		if len(args) == 0 {
+			return getAllKubernetesList(), cobra.ShellCompDirectiveNoFileComp
+		}
+		return getKubernetesList(toComplete), cobra.ShellCompDirectiveNoFileComp
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {

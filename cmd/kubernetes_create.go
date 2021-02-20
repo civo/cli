@@ -132,7 +132,7 @@ var kubernetesCreateCmd = &cobra.Command{
 			configKubernetes.Applications = installApplications
 		}
 
-		if !mergeConfigKubernetes {
+		if !mergeConfigKubernetes && saveConfigKubernetes {
 			if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) == true {
 				kubernetesCluster, err = client.NewKubernetesClusters(configKubernetes)
 				if err != nil {

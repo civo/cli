@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
@@ -73,4 +74,46 @@ func init() {
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppAddCmd)
 
 	kubernetesAppAddCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to install the app.")
+}
+
+func getKubernetesList(value string) []string {
+	client, err := config.CivoAPIClient()
+	if err != nil {
+		utility.Error("Creating the connection to Civo's API failed with %s", err)
+		os.Exit(1)
+	}
+
+	cluster, err := client.FindKubernetesCluster(value)
+	if err != nil {
+		utility.Error("Unable to list domains %s", err)
+		os.Exit(1)
+	}
+
+	var clusterList []string
+	clusterList = append(clusterList, cluster.Name)
+
+	return clusterList
+
+}
+
+func getAllKubernetesList() []string {
+	client, err := config.CivoAPIClient()
+	if err != nil {
+		utility.Error("Creating the connection to Civo's API failed with %s", err)
+		os.Exit(1)
+	}
+
+	cluster, err := client.ListKubernetesClusters()
+	if err != nil {
+		utility.Error("Unable to list kubernetes cluster %s", err)
+		os.Exit(1)
+	}
+
+	var clusterList []string
+	for _, v := range cluster.Items {
+		clusterList = append(clusterList, v.Name)
+	}
+
+	return clusterList
+
 }
