@@ -1,3 +1,35 @@
+- semver: 0.7.4
+  date: 2021-02-20T17:37:50.394488-05:00
+  packager: ""
+  changes:
+  - commit: 8346ff2023d19f494c1f945337f9f0d5926432e8
+    note: |-
+      Fixed bug when you create a kubernetes cluster, also add suggest to the remove command
+      Close #51
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 2ea5e0d6a4c8cc7a43285dad34aa9de4bed75144
+    note: |-
+      Fixed bug in the kubernetes create command
+      Close #51
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: b4d974b92b49f6ebc62bd597176eeb54b8701b67
+    note: Updated the changelog
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.3
   date: 2021-02-19T16:11:11.605972-05:00
   packager: ""

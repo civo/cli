@@ -1,4 +1,12 @@
 
+0.7.4
+=============
+2021-02-20
+
+* Fixed bug when you create a kubernetes cluster, also add suggest to the remove command (8346ff20)
+* Fixed bug in the kubernetes create command (2ea5e0d6)
+* Updated the changelog (b4d974b9)
+
 0.7.3
 =============
 2021-02-19
