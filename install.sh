@@ -185,6 +185,13 @@ check_hash() {
   fi
 }
 
+# Error: Show error message in red and exit
+fatal() {
+  printf "Error: \033[31m${1}\033[39m\n"
+  exit 1
+}
+
+
 {
   hasCurl
   setup_verify_arch
