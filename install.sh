@@ -17,7 +17,7 @@ get_last_version() {
   VERSION=""
 
   echo "Finding latest version from GitHub"
-  VERSION=$(curl -sI https://github.com/$OWNER/$REPO/releases/latest | grep -i location | awk -F"/" '{ printf "%s", $NF }' | tr -d '\r')
+  VERSION=$(curl -sI https://github.com/$OWNER/$REPO/releases/latest | grep -i "location:" | awk -F"/" '{ printf "%s", $NF }' | tr -d '\r')
   VERSION_NUMBER=$(echo "$VERSION" | cut -d "v" -f 2)
   echo "$VERSION_NUMBER"
 
@@ -69,7 +69,7 @@ setup_verify_arch() {
     ;;
   arm*)
     ARCH=-arm
-    SUFFIX=-${ARCH}hf
+    SUFFIX=
     ;;
   *)
     fatal "Unsupported architecture $ARCH"
@@ -79,7 +79,7 @@ setup_verify_arch() {
 
 setup_verify_os() {
   if [ -z "$SUFFIX" ]; then
-    SUFFIX=$(uname)
+    SUFFIX=$(uname -s)
   fi
   case $SUFFIX in
   "Darwin")
@@ -92,7 +92,7 @@ setup_verify_os() {
     SUFFIX="-linux"
     ;;
   *)
-    fatal "Unsupported architecture $ARCH"
+    fatal "Unsupported OS $SUFFIX"
     ;;
   esac
 }
@@ -184,6 +184,13 @@ check_hash() {
     fi
   fi
 }
+
+# Error: Show error message in red and exit
+fatal() {
+  printf "Error: \033[31m${1}\033[39m\n"
+  exit 1
+}
+
 
 {
   hasCurl
