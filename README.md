@@ -70,6 +70,8 @@ export PATH="$HOME/cli:$PATH"
 ```
 With this, we have installed the civo cli successfully, check the working by running any of the following commands.
 
+**Note:** For the first time when you are running, make sure you set your current region. check ----> [Region](#region)
+
 
 ### Running the Civo CLI tool and getting help
 
