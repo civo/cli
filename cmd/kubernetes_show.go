@@ -125,7 +125,7 @@ If you wish to use a custom format, the available fields are:
 				for _, app := range kubernetesCluster.InstalledApplications {
 					owApp.StartLine()
 
-					owApp.AppendData("Name", app.Application)
+					owApp.AppendData("Name", app.Name)
 					owApp.AppendData("Version", app.Version)
 					owApp.AppendData("Installed", strconv.FormatBool(app.Installed))
 					owApp.AppendData("Category", app.Category)
