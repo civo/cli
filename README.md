@@ -34,6 +34,8 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 
 Civo CLI is built with Go and distributed as binary files, available for multiple operating systems and downloadable from https://github.com/civo/cli/releases.
 
+### Installing on MAC
+
 If you have a Mac, you can install it using [Homebrew](https://brew.sh):
 
 ```sh
@@ -54,6 +56,22 @@ First you need [Scoop](https://scoop.sh/) installed as a package manager, then:
 - install civo with `scoop install civo`.
 
 You will also, of course, need a Civo account, for which you can [register here](https://www.civo.com/signup).
+
+
+### Installing on Linux
+
+```sh
+git clone https://github.com/civo/cli.git
+cd cli
+make
+cd ..
+cp -r cli ./$HOME
+export PATH="$HOME/cli:$PATH"
+```
+With this, we have installed the civo cli successfully, check the working by running any of the following commands.
+
+**Note:** For the first time when you are running, make sure you set your current region. check ----> [Region](#region)
+
 
 ### Running the Civo CLI tool and getting help
 
