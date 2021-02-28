@@ -11,19 +11,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      
+
       - name: Unshallow
         run: git fetch --prune --unshallow
-      
+
       - name: Set up Go
         uses: actions/setup-go@v1
         with:
-          go-version: 1.15.x
-      
+          go-version: 1.16.x
+
       # - name: Set up Snapcraft
       #   run: |
       #     sudo apt-get -yq --no-install-suggests --no-install-recommends install snapcraft
-      
+
       - name: Docker Login
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
