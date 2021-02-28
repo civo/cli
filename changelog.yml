@@ -1,3 +1,52 @@
+- semver: 0.7.6
+  date: 2021-02-28T00:04:37.303073-05:00
+  packager: ""
+  changes:
+  - commit: ea7b5b89c8513f254cfef6f18fd15736b250d3bb
+    note: Merge branch 'master' of https://github.com/civo/cli
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 3156e008f60ce31a42b3865a5b4184f9aa7e4d07
+    note: Chnage to go 1.16 to build the binary for Apple M1 too
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: ee1783fa8424373079cfa375e44d64b546ecf3d7
+    note: |-
+      Update the the civogo lib to 0.2.28 and fix error in the show command of kubernetes
+      Close #57
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 621e66a6571c1d5b47fda139a2de519ae1a7e07b
+    note: |-
+      Merge pull request #55 from martynbristow/master
+
+      Resolve Issues with install.sh Script
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandro@civo.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
+  - commit: 3f876df757ab81bf4bc12b01bb1376c232dd5681
+    note: Updated the changelog
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.4
   date: 2021-02-20T17:37:50.394488-05:00
   packager: ""

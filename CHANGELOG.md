@@ -1,4 +1,14 @@
 
+0.7.6
+=============
+2021-02-28
+
+* Merge branch 'master' of https://github.com/civo/cli (ea7b5b89)
+* Chnage to go 1.16 to build the binary for Apple M1 too (3156e008)
+* Update the the civogo lib to 0.2.28 and fix error in the show command of kubernetes (ee1783fa)
+* Merge pull request #55 from martynbristow/master (621e66a6)
+* Updated the changelog (3f876df7)
+
 0.7.4
 =============
 2021-02-20
