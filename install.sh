@@ -62,10 +62,10 @@ setup_verify_arch() {
     SUFFIX=
     ;;
   arm64)
-    ARCH=-arm
+    ARCH=-arm64
     ;;
   aarch64)
-    ARCH=-arm
+    ARCH=-arm64
     ;;
   arm*)
     ARCH=-arm
