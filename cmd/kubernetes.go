@@ -34,6 +34,7 @@ func init() {
 	kubernetesCmd.AddCommand(kubernetesRemoveCmd)
 	kubernetesCmd.AddCommand(kubernetesRecycleCmd)
 
+
 	home, err := os.UserHomeDir()
 	if err != nil {
 		utility.Error("%s", err)
@@ -74,6 +75,8 @@ func init() {
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppAddCmd)
 
 	kubernetesAppAddCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to install the app.")
+
+	kubernetesApplicationsCmd.AddCommand(kubernetesAppViewPostInstallCmd)
 }
 
 func getKubernetesList(value string) []string {

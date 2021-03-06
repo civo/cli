@@ -620,6 +620,20 @@ Thank you, next time you could use "MariaDB:10GB" to choose automatically
 Added MariaDB 10.4.7 to Kubernetes cluster apps-demo-cluster
 ```
 
+#### Viewing the post install instructions for an Application
+
+If you want to view the post install instructions(`post_install.md`) for a given application you can use:
+
+```sh
+$ civo kubernetes applications postinstall argo
+      0.1 Argo CI/CD
+
+      0.1.1 Usage instruction
+
+      See the [documentations](https://argoproj.github.io/argo-cd/)
+```
+
+
 ## Domains and Domain Records
 
 #### Introduction

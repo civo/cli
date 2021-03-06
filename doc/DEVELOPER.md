@@ -19,6 +19,7 @@ Currently all the components are integrated using [Cobra](https://github.com/spf
 * [Go-homedir](https://github.com/mitchellh/go-homedir) (to get the home of the system user)
 * [Tablewriter](https://github.com/olekukonko/tablewriter) (the utility to make the output tables to the terminal)
 * [Go-update](https://github.com/tj/go-update) (it is to be able to auto-update the binary)
+* [Go-Term-Markdown](https://github.com/MichaelMure/go-term-markdown) (To render markdown to the terminal )
 
 ## Release
 
