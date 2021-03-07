@@ -65,6 +65,22 @@ You will also, of course, need a Civo account, for which you can [register here]
 
 ### Installing on Linux
 
+For Linux Civo CLI can be installed in various method.
+
+* Install via brew, as shows in above step.
+
+* Install via wget, 
+
+```
+wget https://github.com/civo/cli/releases/download/v0.7.6/civo-0.7.6-linux-amd64.tar.gz
+tar -xvf civo-0.7.6-linux-amd64.tar.gz
+chmod +x civo
+mv ./civo /usr/local/bin/
+```
+
+* You can also build the binary, but make sure you have go installed,
+
+
 ```sh
 git clone https://github.com/civo/cli.git
 cd cli
@@ -147,7 +163,7 @@ You can add the API Key to the CLI tool through the API Keys command.
 
 ```sh
 $ civo apikey add Demo_Test_Key DAb75oyqVeaE7BI6Aa74FaRSP0E2tMZXkDWLC9wNQdcpGfH51r
-  Saved the API Key DAb75oyqVeaE7BI6Aa74FaRSP0E2tMZXkDWLC9wNQdcpGfH51r as Demo_Test_Key
+  Saved the API Key Demo_Test_Key as DAb75oyqVeaE7BI6Aa74FaRSP0E2tMZXkDWLC9wNQdcpGfH51r
 ```
 
 As you can have multiple API keys stored to handle multiple accounts, you will need to tell which key the tool should use to authenticate with `civo apikey current [apikey_name]`. This sets your chosen API key as the default key to use for any subsequent commands:
