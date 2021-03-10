@@ -574,6 +574,15 @@ To get an up-to-date list of available applications on the Marketplace, run `civ
 | Traefik                   | (default)   | architecture |                 |                             |
 +---------------------------+-------------+--------------+-----------------+-----------------------------+
 ```
+#### Show Applications details when is installed in the cluster
+
+This option will be allow you to see the post-install instruction of every app installed in the cluster
+
+```sh
+$ civo kubernetes application show Traefik apps-demo-cluster
+```
+
+the first parameter is for the name of the app and the second is the name of the cluster
 
 
 #### Installing Applications Onto a New Cluster

@@ -70,8 +70,8 @@ func init() {
 	// Kubernetes Applications
 	kubernetesCmd.AddCommand(kubernetesApplicationsCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppListCmd)
-	// TODO: show command
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppAddCmd)
+	kubernetesApplicationsCmd.AddCommand(kubernetesAppShowCmd)
 
 	kubernetesAppAddCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to install the app.")
 }
