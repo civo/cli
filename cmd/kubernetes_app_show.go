@@ -56,7 +56,7 @@ var kubernetesAppShowCmd = &cobra.Command{
 		}
 
 		if foundAPP == false {
-			utility.Error("Sorry the app %s was not foun in the cluster %s", args[0], args[1])
+			utility.Error("Sorry the app %s was not found in the cluster %s", args[0], args[1])
 			os.Exit(1)
 		}
 
