@@ -1,3 +1,37 @@
+- semver: 0.7.7
+  date: 2021-03-10T08:33:26.227557-05:00
+  packager: ""
+  changes:
+  - commit: 48dbcaf218c01ddcda253c624f1c62c942e4f56e
+    note: Added new cmd to show the post-install for every app installed in the cluster
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: f851ed70253483f83ecec31789fe8879f874c3e9
+    note: |-
+      Merge pull request #66 from DoNnMyTh/patch-4
+
+      Updated readme.md
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandro@civo.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
+  - commit: ef8e37eda068466cffb492bdca7e6ef5a6b52121
+    note: |-
+      Merge pull request #62 from beret/darwin-arm64
+
+      Make install.sh prefer arm64 when compatible
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandro@civo.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
 - semver: 0.7.6
   date: 2021-02-28T00:04:37.303073-05:00
   packager: ""

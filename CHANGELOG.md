@@ -1,4 +1,12 @@
 
+0.7.7
+=============
+2021-03-10
+
+* Added new cmd to show the post-install for every app installed in the cluster (48dbcaf2)
+* Merge pull request #66 from DoNnMyTh/patch-4 (f851ed70)
+* Merge pull request #62 from beret/darwin-arm64 (ef8e37ed)
+
 0.7.6
 =============
 2021-02-28
