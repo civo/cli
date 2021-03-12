@@ -39,9 +39,13 @@ var volumeRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if utility.UserConfirmedDeletion("volume", defaultYes, volume.Name) == true {
+		if utility.UserConfirmedDeletion("volume", defaultYes, volume.Name) {
 
 			_, err = client.DeleteVolume(volume.ID)
+			if err != nil {
+				utility.Error("error deleting the volume: %s", err)
+				os.Exit(1)
+			}
 
 			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": volume.ID, "Name": volume.Name})
 

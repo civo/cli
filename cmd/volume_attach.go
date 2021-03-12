@@ -42,8 +42,12 @@ var volumeAttachCmd = &cobra.Command{
 		}
 
 		_, err = client.AttachVolume(volume.ID, instance.ID)
+		if err != nil {
+			utility.Error("error attaching the volume: %s", err)
+			os.Exit(1)
+		}
 
-		if waitVolumeAttach == true {
+		if waitVolumeAttach {
 
 			stillAttaching := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)

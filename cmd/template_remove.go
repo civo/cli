@@ -36,9 +36,13 @@ var templateRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if utility.UserConfirmedDeletion("template", defaultYes, template.Name) == true {
+		if utility.UserConfirmedDeletion("template", defaultYes, template.Name) {
 
 			_, err = client.DeleteTemplate(template.ID)
+			if err != nil {
+				utility.Error("error deleting the template: %s", err)
+				os.Exit(1)
+			}
 
 			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": template.ID, "Name": template.Name})
 

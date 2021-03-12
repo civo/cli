@@ -39,7 +39,7 @@ var snapshotRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if utility.UserConfirmedDeletion("snapshot", defaultYes, snapshot.Name) == true {
+		if utility.UserConfirmedDeletion("snapshot", defaultYes, snapshot.Name) {
 			_, err = client.DeleteSnapshot(snapshot.Name)
 			if err != nil {
 				if errors.Is(err, civogo.DatabaseSnapshotCannotDeleteInUseError) {

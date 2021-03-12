@@ -36,8 +36,12 @@ var volumeDetachCmd = &cobra.Command{
 		}
 
 		_, err = client.DetachVolume(volume.ID)
+		if err != nil {
+			utility.Error("error detaching the volume: %s", err)
+			os.Exit(1)
+		}
 
-		if waitVolumeDetach == true {
+		if waitVolumeDetach {
 
 			stillDetaching := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)

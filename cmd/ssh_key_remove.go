@@ -36,9 +36,13 @@ var sshKeyRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if utility.UserConfirmedDeletion("ssh key", defaultYes, sshKey.Name) == true {
+		if utility.UserConfirmedDeletion("ssh key", defaultYes, sshKey.Name) {
 
 			_, err = client.DeleteSSHKey(sshKey.ID)
+			if err != nil {
+				utility.Error("error deleting the ssh key: %s", err)
+				os.Exit(1)
+			}
 
 			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": sshKey.ID, "Name": sshKey.Name})
 
