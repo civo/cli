@@ -1,4 +1,16 @@
 
+0.7.9
+=============
+2021-03-12
+
+* Fixed error in the output of the CLI (1e962709)
+* Added verification to the kubernetes utils (a7e16d8e)
+* Fixed more error in golang code (ed88a8a9)
+* Added some verification to k8s cluster (3af72def)
+* Updated the civogo lib to v0.2.32 (efdfff99)
+* Merge pull request #72 from stiantoften/typofix (0b4e3570)
+* Merge pull request #69 from DoNnMyTh/patch-1 (b686accc)
+
 0.7.7
 =============
 2021-03-10

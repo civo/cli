@@ -1,3 +1,74 @@
+- semver: 0.7.9
+  date: 2021-03-12T14:24:01.856311-05:00
+  packager: ""
+  changes:
+  - commit: 1e962709faeb3c24bcd83cf5820b750a20655822
+    note: Fixed error in the output of the CLI
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: a7e16d8ebf28691b313809c7423a28448a8d1205
+    note: |-
+      Added verification to the kubernetes utils
+      close #27
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: ed88a8a92c29f2e8cb504de2053d76ffc6a34c34
+    note: Fixed more error in golang code
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 3af72defdd5d8b631459f751608f03d567088411
+    note: |-
+      Added some verification to k8s cluster
+      Fixed error in golang code
+      Close #64
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: efdfff99f11b2479d8cff450b7ce5e26f6f26304
+    note: Updated the civogo lib to v0.2.32
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 0b4e35703f0a57519ff9b74dda17028b3a3d9293
+    note: |-
+      Merge pull request #72 from stiantoften/typofix
+
+      Fix typo in default config
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandro@civo.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
+  - commit: b686acccc4d05dc8732e37fc809979e9a010ab4d
+    note: |-
+      Merge pull request #69 from DoNnMyTh/patch-1
+
+      Fixed spelling mistake
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandro@civo.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
 - semver: 0.7.7
   date: 2021-03-10T08:33:26.227557-05:00
   packager: ""
