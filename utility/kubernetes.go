@@ -105,6 +105,9 @@ func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bo
 		}
 	}
 
+	// we check if the .kube dir is present
+	checkKubeDir()
+
 	var _, err = os.Stat(path)
 
 	// create file if not exists
@@ -215,4 +218,17 @@ func switchKubernetesContext(context string) (bool, error) {
 		return false, fmt.Errorf("could not change to the context: (%s) %s", context, err)
 	}
 	return true, nil
+}
+
+func checkKubeDir() {
+
+	home, err := os.UserHomeDir()
+	if err != nil {
+		Error("%s", err)
+		os.Exit(1)
+	}
+
+	if _, err := os.Stat(fmt.Sprintf("%s/.kube/", home)); os.IsNotExist(err) {
+		os.Mkdir(fmt.Sprintf("%s/.kube/", home), 0755)
+	}
 }
