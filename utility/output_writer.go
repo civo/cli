@@ -214,7 +214,7 @@ func (ow *OutputWriter) WriteCustomOutput(fields string) {
 	for i := range ow.Values {
 		output := fields
 		for key, name := range ow.Keys {
-			var re = regexp.MustCompile(fmt.Sprintf(`%s`, name))
+			var re = regexp.MustCompile(name)
 			if len(re.FindStringIndex(output)) > 0 {
 				output = replaceNth(output, name, fmt.Sprintf("$%v$", key), 1)
 			}
