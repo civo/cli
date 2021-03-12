@@ -8,7 +8,7 @@ require (
 	github.com/bradfitz/iter v0.0.0-20191230175014-e8f45d346db8 // indirect
 	github.com/briandowns/spinner v1.11.1
 	github.com/c4milo/unpackit v0.0.0-20170704181138-4ed373e9ef1c // indirect
-	github.com/civo/civogo v0.2.28
+	github.com/civo/civogo v0.2.32
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/google/go-github v17.0.0+incompatible // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
@@ -29,5 +29,5 @@ require (
 	github.com/ulikunitz/xz v0.5.7 // indirect
 	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381 // indirect
-	golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae
+	golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae // indirect
 )
