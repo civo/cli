@@ -105,7 +105,7 @@ func SaveConfig() {
 
 func checkConfigFile(filename string) error {
 	file, err := os.Stat(filename)
-	fileContend := []byte(fmt.Sprintf("{\"apikeys\":{},\"meta\":{\"admin\":false,\"current_apikey\":\"\",\"default_region\":\"SGV1\",\"latest_release_check\":\"%s\",\"url\":\"https://api.civo.com\"}}", time.Now().Format(time.RFC3339)))
+	fileContend := []byte(fmt.Sprintf("{\"apikeys\":{},\"meta\":{\"admin\":false,\"current_apikey\":\"\",\"default_region\":\"SVG1\",\"latest_release_check\":\"%s\",\"url\":\"https://api.civo.com\"}}", time.Now().Format(time.RFC3339)))
 	if os.IsNotExist(err) {
 		_, err := os.Create(filename)
 		if err != nil {
