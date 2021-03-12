@@ -38,10 +38,13 @@ var domainRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if utility.UserConfirmedDeletion("domain", defaultYes, domain.Name) == true {
+		if utility.UserConfirmedDeletion("domain", defaultYes, domain.Name) {
 
 			_, err = client.DeleteDNSDomain(domain)
-
+			if err != nil {
+				utility.Error("error deleting the DNS domain: %s", err)
+				os.Exit(1)
+			}
 			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": domain.ID, "Name": domain.Name})
 
 			switch outputFormat {

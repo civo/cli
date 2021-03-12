@@ -45,9 +45,13 @@ var kubernetesRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if utility.UserConfirmedDeletion("Kubernetes cluster", defaultYes, kubernetesCluster.Name) == true {
+		if utility.UserConfirmedDeletion("Kubernetes cluster", defaultYes, kubernetesCluster.Name) {
 
 			_, err = client.DeleteKubernetesCluster(kubernetesCluster.ID)
+			if err != nil {
+				utility.Error("error deleting the kubernetes cluster: %s", err)
+				os.Exit(1)
+			}
 
 			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": kubernetesCluster.ID, "Name": kubernetesCluster.Name})
 

@@ -12,8 +12,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var showApp string
-
 var kubernetesAppShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"get", "inspect"},
@@ -55,7 +53,7 @@ var kubernetesAppShowCmd = &cobra.Command{
 			}
 		}
 
-		if foundAPP == false {
+		if foundAPP {
 			utility.Error("Sorry the app %s was not found in the cluster %s", args[0], args[1])
 			os.Exit(1)
 		}

@@ -36,9 +36,13 @@ var loadBalancerRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if utility.UserConfirmedDeletion("load balancer", defaultYes, lb.Hostname) == true {
+		if utility.UserConfirmedDeletion("load balancer", defaultYes, lb.Hostname) {
 
 			_, err = client.DeleteLoadBalancer(lb.ID)
+			if err != nil {
+				utility.Error("error deleting the loadbalancer: %s", err)
+				os.Exit(1)
+			}
 
 			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": lb.ID, "Hostname": lb.Hostname})
 

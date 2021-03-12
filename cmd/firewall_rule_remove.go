@@ -53,9 +53,13 @@ var firewallRuleRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if utility.UserConfirmedDeletion("firewall", defaultYes, rule.Label) == true {
+		if utility.UserConfirmedDeletion("firewall", defaultYes, rule.Label) {
 
 			_, err = client.DeleteFirewallRule(firewall.ID, rule.ID)
+			if err != nil {
+				utility.Error("error deleting the firewall rule: %s", err)
+				os.Exit(1)
+			}
 
 			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": rule.ID, "Label": rule.Label})
 

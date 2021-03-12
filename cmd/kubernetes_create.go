@@ -32,7 +32,7 @@ var kubernetesCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if check == false {
+		if !check {
 			utility.Error("Sorry you can't create a kubernetes cluster in the %s region", region)
 			os.Exit(1)
 		}
@@ -118,22 +118,40 @@ var kubernetesCreateCmd = &cobra.Command{
 		if removeapplications != "" {
 			var rmApp []string
 			for _, v := range strings.Split(removeapplications, ",") {
-				rmApp = append(rmApp, fmt.Sprintf("-%s", v))
+				if utility.CheckAPPName(v) {
+					rmApp = append(rmApp, fmt.Sprintf("-%s", v))
+				} else {
+					utility.Warning("the app that tries to remove %s is not valid", v)
+					os.Exit(1)
+				}
+
 			}
 			if installApplications != "" {
+				for _, v := range strings.Split(installApplications, ",") {
+					if !utility.CheckAPPName(v) {
+						utility.Warning("the app that tries to install %s is not valid", v)
+						os.Exit(1)
+					}
+				}
 				installApplications = fmt.Sprintf("%s,%s", installApplications, strings.Join(rmApp, ","))
 			} else {
-				installApplications = fmt.Sprintf("%s", strings.Join(rmApp, ","))
+				installApplications = strings.Join(rmApp, ",")
 			}
 
 		}
 
 		if installApplications != "" {
+			for _, v := range strings.Split(installApplications, ",") {
+				if !utility.CheckAPPName(v) {
+					utility.Warning("the app that tries to install %s is not valid", v)
+					os.Exit(1)
+				}
+			}
 			configKubernetes.Applications = installApplications
 		}
 
 		if !mergeConfigKubernetes && saveConfigKubernetes {
-			if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) == true {
+			if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) {
 				kubernetesCluster, err = client.NewKubernetesClusters(configKubernetes)
 				if err != nil {
 					utility.Error("%s", err)

@@ -211,7 +211,7 @@ func (ow *OutputWriter) WriteCustomOutput(fields string) {
 		}
 	}
 
-	for i, _ := range ow.Values {
+	for i := range ow.Values {
 		output := fields
 		for key, name := range ow.Keys {
 			var re = regexp.MustCompile(fmt.Sprintf(`%s`, name))
@@ -239,5 +239,5 @@ func (ow *OutputWriter) WriteSubheader(label string) {
 
 // WriteHeader WriteSubheader writes a centred heading line in to output
 func (ow *OutputWriter) WriteHeader(label string) {
-	fmt.Println(fmt.Sprintf("%s:", label))
+	fmt.Printf("%s:", label)
 }

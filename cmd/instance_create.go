@@ -16,7 +16,7 @@ import (
 )
 
 var wait bool
-var hostnameCreate, size, template, snapshot, publicip, initialuser, sshkey, tags, network, region string
+var hostnameCreate, size, template, snapshot, publicip, initialuser, sshkey, tags, network string
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -56,7 +56,7 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if check == false {
+		if check {
 			utility.Error("Sorry you can't create a instance in the %s region", region)
 			os.Exit(1)
 		}
@@ -141,7 +141,7 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if wait == true {
+		if wait {
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
 			s.Prefix = fmt.Sprintf("Creating instance (%s)... ", resp.Hostname)

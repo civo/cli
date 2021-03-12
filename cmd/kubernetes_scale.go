@@ -46,7 +46,7 @@ var kubernetesScaleCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if waitKubernetesNodes == true {
+		if waitKubernetesNodes {
 
 			stillScaling := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)

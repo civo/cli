@@ -71,6 +71,28 @@ func GetK3sSize() ([]string, error) {
 	return k8sSize, nil
 }
 
+// CheckAPPName is a function to check if the app name is valid
+func CheckAPPName(appName string) bool {
+
+	client, err := config.CivoAPIClient()
+	if err != nil {
+		return false
+	}
+
+	allAPP, err := client.ListKubernetesMarketplaceApplications()
+	if err != nil {
+		return false
+	}
+
+	for _, v := range allAPP {
+		if strings.Contains(v.Name, appName) {
+			return true
+		}
+	}
+
+	return false
+}
+
 // CheckAvailability is a function to check if the user can
 // create Iaas and k8s cluster base on the result of region
 func CheckAvailability(resource string, regionSet string) (bool, string, error) {
@@ -103,12 +125,12 @@ func CheckAvailability(resource string, regionSet string) (bool, string, error) 
 	}
 
 	if resource == "kubernetes" {
-		if defaultRegion.Features.Kubernetes && defaultRegion.OutOfCapacity == false {
+		if defaultRegion.Features.Kubernetes && !defaultRegion.OutOfCapacity {
 			return true, "", nil
 		}
 	}
 	if resource == "instance" {
-		if defaultRegion.Features.Iaas && defaultRegion.OutOfCapacity == false {
+		if defaultRegion.Features.Iaas && !defaultRegion.OutOfCapacity {
 			return true, "", nil
 		}
 	}

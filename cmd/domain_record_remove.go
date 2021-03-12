@@ -50,9 +50,13 @@ var domainRecordRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if utility.UserConfirmedDeletion("domain record", defaultYes, record.Name) == true {
+		if utility.UserConfirmedDeletion("domain record", defaultYes, record.Name) {
 
 			_, err = client.DeleteDNSRecord(record)
+			if err != nil {
+				utility.Error("error deleting the DNS record: %s", err)
+				os.Exit(1)
+			}
 
 			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": record.ID, "Name": record.Name})
 

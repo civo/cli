@@ -44,11 +44,11 @@ If you wish to use a custom format, the available fields are:
 			}
 		}
 
-		if utility.UserConfirmedDeletion("instance", defaultYes, instance.Hostname) == true {
+		if utility.UserConfirmedDeletion("instance", defaultYes, instance.Hostname) {
 
 			_, err = client.DeleteInstance(instance.ID)
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Error deleting the instance: %s", err)
 				os.Exit(1)
 			}
 

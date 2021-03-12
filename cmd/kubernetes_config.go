@@ -51,7 +51,7 @@ If you wish to use a custom format, the available fields are:
 
 		if saveConfig {
 			if !mergeConfig && strings.Contains(localPathConfig, ".kube") {
-				if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) == true {
+				if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) {
 					err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig, switchConfig, kube.Name)
 					if err != nil {
 						utility.Error("Saving the cluster config failed with %s", err)

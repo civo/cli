@@ -45,7 +45,7 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if waitStop == true {
+		if waitStop {
 			stillStopping := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
 			s.Prefix = "Stopping instance... "

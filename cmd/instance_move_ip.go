@@ -45,6 +45,11 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		instances, err := client.ListAllInstances()
+		if err != nil {
+			utility.Error("error listing all instances: %s", err)
+			os.Exit(1)
+		}
+
 		var moving bool
 		for _, i := range instances {
 			if i.PublicIP == args[1] && i.ID != instance.ID {
