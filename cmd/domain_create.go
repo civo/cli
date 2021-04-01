@@ -37,6 +37,9 @@ var domainCreateCmd = &cobra.Command{
 			ow.WriteCustomOutput(outputFields)
 		default:
 			fmt.Printf("Created a domain called %s with ID %s\n", utility.Green(domain.Name), utility.Green(domain.ID))
+			fmt.Println("Please point your domain registrar to Civo nameservers:")
+			fmt.Printf("%s\n", utility.Green("ns0.civo.com"))
+			fmt.Printf("%s\n", utility.Green("ns1.civo.com"))
 		}
 	},
 }
