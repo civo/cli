@@ -85,7 +85,7 @@ func CheckAPPName(appName string) bool {
 	}
 
 	for _, v := range allAPP {
-		if strings.Contains(v.Name, appName) {
+		if strings.Contains(appName, v.Name) {
 			return true
 		}
 	}
