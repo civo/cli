@@ -1,3 +1,37 @@
+- semver: 0.7.10
+  date: 2021-04-02T09:42:35.143163-04:00
+  packager: ""
+  changes:
+  - commit: 5bde617f0d2a0552ff07179ebdda2414c8435370
+    note: |-
+      Updated the civogo lib to v0.2.35
+      close #73
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: b6b7dd60304888b0aca4050e01dd324bb769e6d5
+    note: |-
+      Now domain create show nameserver
+      close #74
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 4fe4112637195d313ce2271141251484790f2b7a
+    note: |-
+      Fixed error in CheckAPPName func
+      close #76
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.9
   date: 2021-03-12T14:24:01.856311-05:00
   packager: ""

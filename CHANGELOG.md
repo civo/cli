@@ -1,4 +1,12 @@
 
+0.7.10
+=============
+2021-04-02
+
+* Updated the civogo lib to v0.2.35 (5bde617f)
+* Now domain create show nameserver (b6b7dd60)
+* Fixed error in CheckAPPName func (4fe41126)
+
 0.7.9
 =============
 2021-03-12
