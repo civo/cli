@@ -1,4 +1,10 @@
 
+0.7.11
+=============
+2021-04-06
+
+* Updated the civogo lib to 0.2.36 this will be fix scaling , rename bugs (52b2612a)
+
 0.7.10
 =============
 2021-04-02

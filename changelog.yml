@@ -1,3 +1,17 @@
+- semver: 0.7.11
+  date: 2021-04-06T17:57:39.989017-04:00
+  packager: ""
+  changes:
+  - commit: 52b2612ac1c7cc491eeca594be311ad31f6761fb
+    note: |-
+      Updated the civogo lib to 0.2.36 this will be fix scaling , rename bugs
+      close #71
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.10
   date: 2021-04-02T09:42:35.143163-04:00
   packager: ""
