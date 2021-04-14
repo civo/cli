@@ -1,3 +1,23 @@
+- semver: 0.7.12
+  date: 2021-04-14T10:28:18.868863-04:00
+  packager: ""
+  changes:
+  - commit: 8d95e5473855eba704a43ba9f3ba418f89a33d70
+    note: Fixed error in the CLI also added new cmd to instance and kuberntes and new param to the size and updated the README
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: a762c1d705870520785f60c0c0d782c34803fdbe
+    note: Added the last version of civogo lib v0.2.37
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.11
   date: 2021-04-06T17:57:39.989017-04:00
   packager: ""

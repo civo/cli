@@ -1,4 +1,11 @@
 
+0.7.12
+=============
+2021-04-14
+
+* Fixed error in the CLI also added new cmd to instance and kuberntes and new param to the size and updated the README (8d95e547)
+* Added the last version of civogo lib v0.2.37 (a762c1d7)
+
 0.7.11
 =============
 2021-04-06
