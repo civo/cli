@@ -1,35 +1,22 @@
 package cmd
 
 import (
+	"os"
 	"strconv"
 	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
 )
 
-var filterSize string
-
-var sizeListCmd = &cobra.Command{
-	Use:     "ls",
-	Aliases: []string{"list", "all"},
-	Example: `civo size ls`,
-	Short:   "List sizes",
-	Long: `List all available sizes for instances or Kubernetes nodes.
-If you wish to use a custom format, the available fields are:
-
-	* Name
-	* NiceName
-	* CPUCores
-	* RAMMegabytes
-	* DiskGigabytes
-	* Description
-	* Selectable
-
-Example: civo size ls -o custom -f "Code: Name (size)"`,
+var instanceSizeCmd = &cobra.Command{
+	Use:     "size",
+	Example: `civo instance size"`,
+	Aliases: []string{"sizes", "all"},
+	Short:   "List instances size",
+	Long:    `List all current instances size.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
@@ -37,7 +24,7 @@ Example: civo size ls -o custom -f "Code: Name (size)"`,
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
-			return
+			os.Exit(1)
 		}
 
 		filter := []civogo.InstanceSize{}
@@ -47,50 +34,18 @@ Example: civo size ls -o custom -f "Code: Name (size)"`,
 			return
 		}
 
-		if filterSize != "" {
-			search := ""
-
-			switch {
-			case filterSize == "database" || filterSize == "Database":
-				search = "db"
-			case filterSize == "kubernetes" || filterSize == "Kubernetes":
-				search = "k3s"
-			case filterSize == "instance" || filterSize == "Instance":
-				search = "iaas"
+		for _, size := range sizes {
+			if !strings.Contains(size.Name, "db") && !strings.Contains(size.Name, "k3s") {
+				filter = append(filter, size)
 			}
-
-			for _, size := range sizes {
-				if search == "iaas" {
-					if !strings.Contains(size.Name, "db") && !strings.Contains(size.Name, "k3s") {
-						filter = append(filter, size)
-					}
-				} else {
-					if strings.Contains(size.Name, search) {
-						filter = append(filter, size)
-					}
-				}
-			}
-
-			sizes = filter
 		}
 
 		ow := utility.NewOutputWriter()
-
-		for _, size := range sizes {
-
+		for _, size := range filter {
 			ow.StartLine()
 			ow.AppendData("Name", size.Name)
 			ow.AppendData("Description", size.Description)
-
-			switch {
-			case strings.Contains(size.Name, "db"):
-				ow.AppendData("Type", "Database")
-			case strings.Contains(size.Name, "k3s"):
-				ow.AppendData("Type", "Kubernetes")
-			default:
-				ow.AppendData("Type", "Instance")
-			}
-
+			ow.AppendData("Type", "Instance")
 			ow.AppendData("Description", size.Description)
 			ow.AppendData("CPU", strconv.Itoa(size.CPUCores))
 

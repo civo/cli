@@ -24,6 +24,7 @@ var kubernetesApplicationsCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(kubernetesCmd)
 	kubernetesCmd.AddCommand(kubernetesListCmd)
+	kubernetesCmd.AddCommand(kubernetesSizeCmd)
 	kubernetesCmd.AddCommand(kubernetesListVersionCmd)
 	kubernetesCmd.AddCommand(kubernetesShowCmd)
 	kubernetesCmd.AddCommand(kubernetesConfigCmd)

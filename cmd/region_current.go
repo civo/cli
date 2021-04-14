@@ -12,7 +12,7 @@ import (
 var regionCurrentCmd = &cobra.Command{
 	Use:     "current [NAME]",
 	Aliases: []string{"use", "default", "set"},
-	Short:   "Set the current API key",
+	Short:   "Set the current region",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()

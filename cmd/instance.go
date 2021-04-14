@@ -13,6 +13,7 @@ var instanceCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(instanceCmd)
 	instanceCmd.AddCommand(instanceListCmd)
+	instanceCmd.AddCommand(instanceSizeCmd)
 	instanceCmd.AddCommand(instanceCreateCmd)
 	instanceCmd.AddCommand(instanceShowCmd)
 	instanceCmd.AddCommand(instanceUpdateCmd)

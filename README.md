@@ -9,6 +9,7 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 ## Table of contents
 
 - [Introduction](#introduction)
+- [Global Options](#global-options)
 - [Set-Up](#set-up)
 - [Docker Usage](#docker-usage)
 - [API Keys](#api-keys)
@@ -148,6 +149,18 @@ civo sshkey list
 civo instance list
 civo instance create --size g2.xsmall
 civo k8s list
+```
+
+## Global Options
+
+The civo cli have mutiple global options, that you can use, like this:
+
+```
+	--config string   config file (default is $HOME/.civo.json)
+-f, --fields string   output fields for custom format output (use -h to determine fields)
+-o, --output string   output format (json/human/custom) (default "human")
+	--region string   Choose the region to connect to, if you use this option it will use it over the default region
+-y, --yes             Automatic yes to prompts; assume "yes" as answer to all prompts and run non-interactively
 ```
 
 ## API Keys
@@ -293,6 +306,10 @@ Set api-demo.test to use firewall firewall_1
 
 You can list all instances associated with a particular API key by running `civo instance list`.
 
+#### Listing Instances sizes
+
+You can list all instances sizes by running `civo instance size`.
+
 #### Moving a Public IP Between Instances
 
 Given two instances, one with a public IP and one without, you can move the public IP by `civo instance move-ip instance ip_address`:
@@ -437,6 +454,10 @@ Please note that resizing can take a few minutes.
 #### List clusters
 
 To see your created clusters, call `civo kubernetes list`:
+
+#### Listing kubernetes sizes
+
+You can list all kubernetes sizes by running `civo kubernetes size`.
 
 ```sh
 $ civo kubernetes list
@@ -917,24 +938,45 @@ If you have a legitimate need for a quota increase, visit the [Quota page](https
 
 ## Sizes
 
-Civo instances come in a variety of sizes depending on your need and budget. You can get details of the sizes of instances available by calling `civo sizes list`. You will get something along the lines of the following:
+Civo instances come in a variety of sizes depending on your need and budget. You can get details of the sizes of instances available by calling `civo sizes list`. You will get something along the lines of the following, the result will be depends or your selected region:
 
 ```sh
 $ civo sizes list
-+------------+----------------------------------------------------+-----+----------+-----------+
-| Name       | Description                                        | CPU | RAM (MB) | Disk (GB) |
-+------------+----------------------------------------------------+-----+----------+-----------+
-| g2.xsmall  | Extra Small - 1GB RAM, 1 CPU Core, 25GB SSD Disk   | 1   | 1024     | 25        |
-| g2.small   | Small - 2GB RAM, 1 CPU Core, 25GB SSD Disk         | 1   | 2048     | 25        |
-| g2.medium  | Medium - 4GB RAM, 2 CPU Cores, 50GB SSD Disk       | 2   | 4096     | 50        |
-| g2.large   | Large - 8GB RAM, 4 CPU Cores, 100GB SSD Disk       | 4   | 8192     | 100       |
-| g2.xlarge  | Extra Large - 16GB RAM, 6 CPU Core, 150GB SSD Disk | 6   | 16386    | 150       |
-| g2.2xlarge | 2X Large - 32GB RAM, 8 CPU Core, 200GB SSD Disk    | 8   | 32768    | 200       |
-+------------+----------------------------------------------------+-----+----------+-----------+
++----------------+-------------+------------+-----+----------+-----------+------------+
+| Name           | Description | Type       | CPU | RAM (MB) | Disk (GB) | Selectable |
++----------------+-------------+------------+-----+----------+-----------+------------+
+| g3.xsmall      | Extra Small | Instance   |   1 |     1024 |        25 | Yes        |
+| g3.small       | Small       | Instance   |   1 |     2048 |        25 | Yes        |
+| g3.medium      | Medium      | Instance   |   2 |     4096 |        50 | Yes        |
+| g3.large       | Large       | Instance   |   4 |     8192 |       100 | Yes        |
+| g3.xlarge      | Extra Large | Instance   |   6 |    16384 |       150 | Yes        |
+| g3.2xlarge     | 2X Large    | Instance   |   8 |    32768 |       200 | Yes        |
+| g3.k3s.xsmall  | Extra Small | Kubernetes |   1 |     1024 |        25 | Yes        |
+| g3.k3s.small   | Small       | Kubernetes |   1 |     2048 |        25 | Yes        |
+| g3.k3s.medium  | Medium      | Kubernetes |   2 |     4096 |        25 | Yes        |
+| g3.k3s.large   | Large       | Kubernetes |   4 |     8192 |        25 | Yes        |
+| g3.k3s.xlarge  | Extra Large | Kubernetes |   6 |    16384 |        25 | Yes        |
+| g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 |    32768 |        10 | Yes        |
++----------------+-------------+------------+-----+----------+-----------+------------+
 ```
 
 This command is useful for getting the name of the instance type if you do not remember it - you will need to specify the instance size name when creating an instance using the CLI tool.
 
+Also you can use `--filter` to filter the result by the type, the avalible option are (instance, kubernetes) like this:
+
+```sh
+$ civo sizes list --filter kubernetes
++----------------+-------------+------------+-----+----------+-----------+------------+
+| Name           | Description | Type       | CPU | RAM (MB) | Disk (GB) | Selectable |
++----------------+-------------+------------+-----+----------+-----------+------------+
+| g3.k3s.xsmall  | Extra Small | Kubernetes |   1 |     1024 |        25 | Yes        |
+| g3.k3s.small   | Small       | Kubernetes |   1 |     2048 |        25 | Yes        |
+| g3.k3s.medium  | Medium      | Kubernetes |   2 |     4096 |        25 | Yes        |
+| g3.k3s.large   | Large       | Kubernetes |   4 |     8192 |        25 | Yes        |
+| g3.k3s.xlarge  | Extra Large | Kubernetes |   6 |    16384 |        25 | Yes        |
+| g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 |    32768 |        10 | Yes        |
++----------------+-------------+------------+-----+----------+-----------+------------+
+```
 ## Snapshots
 
 #### Introduction

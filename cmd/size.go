@@ -13,4 +13,6 @@ var sizeCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(sizeCmd)
 	sizeCmd.AddCommand(sizeListCmd)
+
+	sizeListCmd.Flags().StringVarP(&filterSize, "filter", "s", "", "filter the result by the type (kubernest, database, inatance)")
 }
