@@ -472,13 +472,19 @@ $ civo kubernetes list
 
 You can create a cluster by running `civo kubernetes create` with a cluster name parameter, as well as any options you provide:
 
-* `size` -  The size of nodes to create, from the current list of sizes  available at [`civo sizes`](#sizes). Defaults to `g2.medium` in `SVG1` and `g3.medium` in `NYC1`
-* `network` - The name of the network to use in the creation (default "default")
-* `nodes` -  The number of nodes to create (the master also acts as a node).
-* `version` - the `k3s` version to use on the cluster. Defaults to the latest.
-* `wait` - a simple flag (e.g. `--wait`) that will cause the CLI to spin and wait for the cluster to be `ACTIVE`.
-* `save` - a simple flag (e.g. `--save`) save the config.
-* `switch` - a simple flag (e.g. `--switch`) switch context to newly-created cluster.
+```bash
+  -a, --applications string          optional, use names shown by running 'civo kubernetes applications ls'
+  -h, --help                         help for create
+  -m, --merge                        merge the config with existing kubeconfig if it already exists.
+  -t, --network string               the name of the network to use in the creation (default "default")
+  -n, --nodes int                    the number of nodes to create (the master also acts as a node). (default 3)
+  -r, --remove-applications string   optional, remove default application names shown by running  'civo kubernetes applications ls'
+      --save                         save the config
+  -s, --size string                  the size of nodes to create. (default "g3.k3s.medium")
+      --switch                       switch context to newly-created cluster
+  -v, --version string               the k3s version to use on the cluster. Defaults to the latest. (default "latest")
+  -w, --wait                         a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE
+```
 
 ```sh
 $ civo kubernetes create my-first-cluster
