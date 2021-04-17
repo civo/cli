@@ -66,11 +66,11 @@ If you wish to use a custom format, the available fields are:
 
 			ow.AppendData("ID", instance.ID)
 			ow.AppendData("Hostname", instance.Hostname)
+			ow.AppendData("Region", client.Region)
 			ow.AppendData("Size", instance.Size)
 			ow.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
 			ow.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
 			ow.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
-			ow.AppendData("Region", instance.Region)
 			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public IP")
 			ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "Private IP")
 			ow.AppendData("Status", utility.ColorStatus(instance.Status))

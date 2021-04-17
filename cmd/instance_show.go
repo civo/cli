@@ -75,7 +75,7 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
 		ow.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
 		ow.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
-		ow.AppendData("Region", instance.Region)
+		ow.AppendData("Region", client.Region)
 		ow.AppendDataWithLabel("NetworkID", instance.NetworkID, "Network ID")
 		ow.AppendDataWithLabel("TemplateID", instance.TemplateID, "Template ID")
 		ow.AppendDataWithLabel("SnapshotID", instance.SnapshotID, "Snapshot ID")

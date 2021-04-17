@@ -239,5 +239,5 @@ func (ow *OutputWriter) WriteSubheader(label string) {
 
 // WriteHeader WriteSubheader writes a centred heading line in to output
 func (ow *OutputWriter) WriteHeader(label string) {
-	fmt.Printf("%s:", label)
+	fmt.Printf("%s:\n", label)
 }
