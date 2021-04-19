@@ -1,4 +1,12 @@
 
+0.7.13
+=============
+2021-04-19
+
+* Added multi remove option to k3s, network, instance, domain, ssh key, firewall (2f2d4a9f)
+* Fixed error in the show cmd in the instance (b779d6c5)
+* Update README.md (d2737d89)
+
 0.7.12
 =============
 2021-04-14

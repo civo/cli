@@ -1,3 +1,36 @@
+- semver: 0.7.13
+  date: 2021-04-18T21:06:58.628264-04:00
+  packager: ""
+  changes:
+  - commit: 2f2d4a9fe3b1902f89de78073cdd2a5f30d8b7e2
+    note: Added multi remove option to k3s, network, instance, domain, ssh key, firewall
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: b779d6c52935440947838e35e3f754a0fe4e97c0
+    note: |-
+      Fixed error in the show cmd in the instance
+      close #81
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: d2737d89dd53351d73cf2196987da4e3a585ca9d
+    note: |-
+      Update README.md
+
+      updated the Kubernetes options
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandro@civo.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
 - semver: 0.7.12
   date: 2021-04-14T10:28:18.868863-04:00
   packager: ""
