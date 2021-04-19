@@ -89,12 +89,24 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if template != "" {
-			findTemplate, err := client.FindTemplate(template)
-			if err != nil {
-				utility.Error("%s", err)
-				os.Exit(1)
+			templateID := ""
+			if client.Region == "NYC1" {
+				findTemplate, err := client.FindDiskImage(template)
+				if err != nil {
+					utility.Error("%s", err)
+					os.Exit(1)
+				}
+				templateID = findTemplate.ID
+			} else {
+				findTemplate, err := client.FindTemplate(template)
+				if err != nil {
+					utility.Error("%s", err)
+					os.Exit(1)
+				}
+				templateID = findTemplate.ID
 			}
-			config.TemplateID = findTemplate.ID
+
+			config.TemplateID = templateID
 		}
 
 		if snapshot != "" {

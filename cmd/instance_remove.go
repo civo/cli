@@ -4,13 +4,18 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
+	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
+// InstanceList is a tmp list to hold all instance to delete
+
+var instanceList []utility.ObjecteList
 var instanceRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Example: "civo instance remove ID/HOSTNAME",
@@ -32,42 +37,67 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		instance, err := client.FindInstance(args[0])
-		if err != nil {
-			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry there is no %s instance in your account", utility.Red(args[0]))
-				os.Exit(1)
+		if len(args) == 1 {
+			instance, err := client.FindInstance(args[0])
+			if err != nil {
+				if errors.Is(err, civogo.ZeroMatchesError) {
+					utility.Error("sorry there is no %s instance in your account", utility.Red(args[0]))
+					os.Exit(1)
+				}
+				if errors.Is(err, civogo.MultipleMatchesError) {
+					utility.Error("sorry we found more than one instance with that name in your account")
+					os.Exit(1)
+				}
 			}
-			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one instance with that name in your account")
-				os.Exit(1)
+
+			instanceList = append(instanceList, utility.ObjecteList{ID: instance.ID, Name: instance.Hostname})
+
+		} else {
+			for _, v := range args {
+				instance, err := client.FindInstance(v)
+				if err == nil {
+					instanceList = append(instanceList, utility.ObjecteList{ID: instance.ID, Name: instance.Hostname})
+				}
 			}
 		}
 
-		if utility.UserConfirmedDeletion("instance", defaultYes, instance.Hostname) {
+		instanceNameList := []string{}
+		for _, v := range instanceList {
+			instanceNameList = append(instanceNameList, v.Name)
+		}
 
-			_, err = client.DeleteInstance(instance.ID)
-			if err != nil {
-				utility.Error("Error deleting the instance: %s", err)
-				os.Exit(1)
+		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(instanceList), "instance"), defaultYes, strings.Join(instanceNameList, ", ")) {
+
+			for _, v := range instanceList {
+				_, err = client.DeleteInstance(v.ID)
+				if err != nil {
+					utility.Error("Error deleting the instance: %s", err)
+					os.Exit(1)
+				}
 			}
 
-			if outputFormat == "human" {
-				fmt.Printf("The instance %s (%s) has been removed\n", utility.Green(instance.Hostname), instance.ID)
-			} else {
-				ow := utility.NewOutputWriter()
+			ow := utility.NewOutputWriter()
+
+			for _, v := range instanceList {
 				ow.StartLine()
-				ow.AppendData("ID", instance.ID)
-				ow.AppendData("Hostname", instance.Hostname)
-				if outputFormat == "json" {
+				ow.AppendData("ID", v.ID)
+				ow.AppendData("Hostname", v.Name)
+			}
+
+			switch outputFormat {
+			case "json":
+				if len(instanceList) == 1 {
 					ow.WriteSingleObjectJSON()
 				} else {
-					ow.WriteCustomOutput(outputFields)
+					ow.WriteMultipleObjectsJSON()
 				}
+			case "custom":
+				ow.WriteCustomOutput(outputFields)
+			default:
+				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(instanceList), "instance"), utility.Green(strings.Join(instanceNameList, ", ")))
 			}
 		} else {
 			fmt.Println("Operation aborted.")
 		}
-
 	},
 }

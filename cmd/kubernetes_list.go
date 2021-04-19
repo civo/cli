@@ -45,7 +45,8 @@ If you wish to use a custom format, the available fields are:
 
 			ow.AppendData("ID", cluster.ID)
 			ow.AppendData("Name", cluster.Name)
-			ow.AppendData("Node", strconv.Itoa(cluster.NumTargetNode))
+			ow.AppendData("Region", client.Region)
+			ow.AppendData("Nodes", strconv.Itoa(cluster.NumTargetNode))
 			ow.AppendData("Size", cluster.TargetNodeSize)
 			ow.AppendData("Status", utility.ColorStatus(cluster.Status))
 

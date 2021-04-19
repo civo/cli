@@ -4,6 +4,7 @@ module github.com/civo/cli
 
 require (
 	github.com/MichaelMure/go-term-markdown v0.1.3
+	github.com/alejandrojnm/go-pluralize v0.1.0
 	github.com/apex/log v1.6.0 // indirect
 	github.com/bradfitz/iter v0.0.0-20191230175014-e8f45d346db8 // indirect
 	github.com/briandowns/spinner v1.11.1

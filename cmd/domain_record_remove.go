@@ -4,13 +4,16 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
+	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
+var domainRecordList []utility.ObjecteList
 var domainRecordRemoveCmd = &cobra.Command{
 	Use:     "remove [DOMAIN|DOMAIN_ID] [RECORD_ID]",
 	Aliases: []string{"delete", "destroy", "rm"},
@@ -42,31 +45,59 @@ var domainRecordRemoveCmd = &cobra.Command{
 			}
 		}
 
-		record, err := client.GetDNSRecord(domain.ID, args[1])
-		if err != nil {
-			if errors.Is(err, civogo.ErrDNSRecordNotFound) {
-				utility.Error("sorry there is no %s domain record in your account", utility.Red(args[0]))
-				os.Exit(1)
+		if len(args) == 2 {
+			record, err := client.GetDNSRecord(domain.ID, args[1])
+			if err != nil {
+				if errors.Is(err, civogo.ErrDNSRecordNotFound) {
+					utility.Error("sorry there is no %s domain record in your account", utility.Red(args[1]))
+					os.Exit(1)
+				}
+			}
+			domainRecordList = append(domainRecordList, utility.ObjecteList{ID: record.ID, Name: record.Name})
+		} else {
+			for _, v := range args[1:] {
+				record, err := client.GetDNSRecord(domain.ID, v)
+				if err == nil {
+					domainRecordList = append(domainRecordList, utility.ObjecteList{ID: record.ID, Name: record.Name})
+				}
 			}
 		}
 
-		if utility.UserConfirmedDeletion("domain record", defaultYes, record.Name) {
+		domainRecordNameList := []string{}
+		for _, v := range domainRecordList {
+			domainRecordNameList = append(domainRecordNameList, v.Name)
+		}
 
-			_, err = client.DeleteDNSRecord(record)
-			if err != nil {
-				utility.Error("error deleting the DNS record: %s", err)
-				os.Exit(1)
+		if utility.UserConfirmedDeletion(fmt.Sprintf("domain %s", pluralize.Pluralize(len(domainRecordList), "record")), defaultYes, strings.Join(domainRecordNameList, ", ")) {
+
+			for _, v := range domainRecordList {
+				record, _ := client.GetDNSRecord(domain.ID, v.ID)
+				_, err = client.DeleteDNSRecord(record)
+				if err != nil {
+					utility.Error("error deleting the DNS record: %s", err)
+					os.Exit(1)
+				}
 			}
 
-			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": record.ID, "Name": record.Name})
+			ow := utility.NewOutputWriter()
+
+			for _, v := range domainRecordList {
+				ow.StartLine()
+				ow.AppendData("ID", v.ID)
+				ow.AppendData("Name", v.Name)
+			}
 
 			switch outputFormat {
 			case "json":
-				ow.WriteSingleObjectJSON()
+				if len(domainRecordList) == 1 {
+					ow.WriteSingleObjectJSON()
+				} else {
+					ow.WriteMultipleObjectsJSON()
+				}
 			case "custom":
 				ow.WriteCustomOutput(outputFields)
 			default:
-				fmt.Printf("The domain record called %s with ID %s was delete\n", utility.Green(record.Name), utility.Green(record.ID))
+				fmt.Printf("The domain %s (%s) has been deleted\n", pluralize.Pluralize(len(domainRecordList), "record"), strings.Join(domainRecordNameList, ", "))
 			}
 		} else {
 			fmt.Println("Operation aborted.")

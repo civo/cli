@@ -8,6 +8,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type TemplateDisk struct {
+	ID      string
+	Name    string
+	Version string
+	Label   string
+}
+
 var templateListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
@@ -26,28 +33,47 @@ If you wish to use a custom format, the available fields are:
 Example: civo template ls -o custom -f "ID: Code (DefaultUsername)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
+		if regionSet != "" {
+			client.Region = regionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
 
-		templates, err := client.ListTemplates()
-		if err != nil {
-			utility.Error("%s", err)
-			os.Exit(1)
+		templateDiskList := []TemplateDisk{}
+
+		if client.Region == "NYC1" {
+			diskImage, err := client.ListDiskImages()
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+
+			for _, v := range diskImage {
+				templateDiskList = append(templateDiskList, TemplateDisk{ID: v.ID, Name: v.Name, Version: v.Version, Label: v.Label})
+			}
+
+		} else {
+			templates, err := client.ListTemplates()
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+
+			for _, v := range templates {
+				templateDiskList = append(templateDiskList, TemplateDisk{ID: v.ID, Name: v.Name, Version: v.Code, Label: v.ShortDescription})
+			}
 		}
 
 		ow := utility.NewOutputWriter()
 
-		for _, template := range templates {
+		for _, template := range templateDiskList {
 			ow.StartLine()
 			ow.AppendData("ID", template.ID)
-			ow.AppendData("Code", template.Code)
 			ow.AppendData("Name", template.Name)
-			ow.AppendDataWithLabel("ImageID", template.ImageID, "Image ID")
-			ow.AppendDataWithLabel("ShortDescription", template.ShortDescription, "Short Description")
-			ow.AppendData("Description", template.Description)
-			ow.AppendDataWithLabel("DefaultUsername", template.DefaultUsername, "Default Username")
+			ow.AppendData("Version", template.Version)
+			ow.AppendData("Label", template.Label)
 		}
 
 		switch outputFormat {

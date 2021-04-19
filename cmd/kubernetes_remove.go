@@ -4,13 +4,16 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
+	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
+var kuberneteList []utility.ObjecteList
 var kubernetesRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -33,35 +36,61 @@ var kubernetesRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		kubernetesCluster, err := client.FindKubernetesCluster(args[0])
-		if err != nil {
-			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry there is no %s Kubernetes cluster in your account", utility.Red(args[0]))
-				os.Exit(1)
+		if len(args) == 1 {
+			kubernetesCluster, err := client.FindKubernetesCluster(args[0])
+			if err != nil {
+				if errors.Is(err, civogo.ZeroMatchesError) {
+					utility.Error("sorry there is no %s Kubernetes cluster in your account", utility.Red(args[0]))
+					os.Exit(1)
+				}
+				if errors.Is(err, civogo.MultipleMatchesError) {
+					utility.Error("sorry we found more than one Kubernetes cluster with that name in your account")
+					os.Exit(1)
+				}
 			}
-			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one Kubernetes cluster with that name in your account")
-				os.Exit(1)
+			kuberneteList = append(kuberneteList, utility.ObjecteList{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
+		} else {
+			for _, v := range args {
+				kubernetesCluster, err := client.FindKubernetesCluster(v)
+				if err == nil {
+					kuberneteList = append(kuberneteList, utility.ObjecteList{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
+				}
 			}
 		}
 
-		if utility.UserConfirmedDeletion("Kubernetes cluster", defaultYes, kubernetesCluster.Name) {
+		kubernetesNameList := []string{}
+		for _, v := range kuberneteList {
+			kubernetesNameList = append(kubernetesNameList, v.Name)
+		}
 
-			_, err = client.DeleteKubernetesCluster(kubernetesCluster.ID)
-			if err != nil {
-				utility.Error("error deleting the kubernetes cluster: %s", err)
-				os.Exit(1)
+		if utility.UserConfirmedDeletion(fmt.Sprintf("Kubernetes %s", pluralize.Pluralize(len(kuberneteList), "cluster")), defaultYes, strings.Join(kubernetesNameList, ", ")) {
+
+			for _, v := range kuberneteList {
+				_, err = client.DeleteKubernetesCluster(v.ID)
+				if err != nil {
+					utility.Error("error deleting the kubernetes cluster: %s", err)
+					os.Exit(1)
+				}
 			}
 
-			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": kubernetesCluster.ID, "Name": kubernetesCluster.Name})
+			ow := utility.NewOutputWriter()
+
+			for _, v := range kuberneteList {
+				ow.StartLine()
+				ow.AppendData("ID", v.ID)
+				ow.AppendData("Name", v.Name)
+			}
 
 			switch outputFormat {
 			case "json":
-				ow.WriteSingleObjectJSON()
-			case "custom":
+				if len(kuberneteList) == 1 {
+					ow.WriteSingleObjectJSON()
+				} else {
+					ow.WriteMultipleObjectsJSON()
+				}
 				ow.WriteCustomOutput(outputFields)
 			default:
-				fmt.Printf("The Kubernetes cluster called %s with ID %s was deleted\n", utility.Green(kubernetesCluster.Name), utility.Green(kubernetesCluster.ID))
+				fmt.Printf("The Kubernetes %s (%s) has been deleted\n", pluralize.Pluralize(len(kuberneteList), "cluster"), utility.Green(strings.Join(kubernetesNameList, ", ")))
 			}
 		} else {
 			fmt.Println("Operation aborted.")

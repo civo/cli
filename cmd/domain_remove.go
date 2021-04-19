@@ -3,7 +3,9 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"strings"
 
+	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -13,6 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var domainList []utility.ObjecteList
 var domainRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -26,34 +29,63 @@ var domainRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		domain, err := client.FindDNSDomain(args[0])
-		if err != nil {
-			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry there is no %s domain in your account", utility.Red(args[0]))
-				os.Exit(1)
+		if len(args) == 1 {
+			domain, err := client.FindDNSDomain(args[0])
+			if err != nil {
+				if errors.Is(err, civogo.ZeroMatchesError) {
+					utility.Error("sorry there is no %s domain in your account", utility.Red(args[0]))
+					os.Exit(1)
+				}
+				if errors.Is(err, civogo.MultipleMatchesError) {
+					utility.Error("sorry we found more than one domain with that name in your account")
+					os.Exit(1)
+				}
 			}
-			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one domain with that name in your account")
-				os.Exit(1)
+			domainList = append(domainList, utility.ObjecteList{ID: domain.ID, Name: domain.Name})
+		} else {
+			for _, v := range args {
+				domain, err := client.FindDNSDomain(v)
+				if err == nil {
+					domainList = append(domainList, utility.ObjecteList{ID: domain.ID, Name: domain.Name})
+				}
 			}
 		}
 
-		if utility.UserConfirmedDeletion("domain", defaultYes, domain.Name) {
+		domainNameList := []string{}
+		for _, v := range domainList {
+			domainNameList = append(domainNameList, v.Name)
+		}
 
-			_, err = client.DeleteDNSDomain(domain)
-			if err != nil {
-				utility.Error("error deleting the DNS domain: %s", err)
-				os.Exit(1)
+		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(domainList), "domain"), defaultYes, strings.Join(domainNameList, ", ")) {
+
+			for _, v := range domainList {
+				domain, _ := client.FindDNSDomain(v.ID)
+				_, err = client.DeleteDNSDomain(domain)
+				if err != nil {
+					utility.Error("error deleting the DNS domain: %s", err)
+					os.Exit(1)
+				}
 			}
-			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": domain.ID, "Name": domain.Name})
+
+			ow := utility.NewOutputWriter()
+
+			for _, v := range domainList {
+				ow.StartLine()
+				ow.AppendData("ID", v.ID)
+				ow.AppendData("Domain", v.Name)
+			}
 
 			switch outputFormat {
 			case "json":
-				ow.WriteSingleObjectJSON()
+				if len(domainList) == 1 {
+					ow.WriteSingleObjectJSON()
+				} else {
+					ow.WriteMultipleObjectsJSON()
+				}
 			case "custom":
 				ow.WriteCustomOutput(outputFields)
 			default:
-				fmt.Printf("The domain called %s with ID %s was deleted\n", utility.Green(domain.Name), utility.Green(domain.ID))
+				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(domainList), "domain"), utility.Green(strings.Join(domainNameList, ", ")))
 			}
 		} else {
 			fmt.Println("Operation aborted")
