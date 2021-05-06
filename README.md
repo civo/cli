@@ -461,11 +461,11 @@ You can list all kubernetes sizes by running `civo kubernetes size`.
 
 ```sh
 $ civo kubernetes list
-+--------------------------------------+------+---------+-----------+--------+
-| ID                                   | Name | # Nodes | Size      | Status |
-+--------------------------------------+------+---------+-----------+--------+
-| f13e3f64-d657-40dd-8449-c42c6e341208 | test | 3       | g2.medium | ACTIVE |
-+--------------------------------------+------+---------+-----------+--------+
++--------------------------------------+----------------+--------+-------+-------+--------+
+| ID                                   | Name           | Region | Nodes | Pools | Status |
++--------------------------------------+----------------+--------+-------+-------+--------+
+| 5604340f-caa3-4ac1-adb7-40c863fe5639 | falling-sunset | NYC1   |     2 |     1 | ACTIVE |
++--------------------------------------+----------------+--------+-------+-------+--------+
 ```
 
 #### Create a cluster
@@ -490,14 +490,29 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
 $ civo kubernetes create my-first-cluster
 Created Kubernetes cluster my-first-cluster
 ```
+#### Adding pools the cluster
 
-#### Scaling the cluster
-
-You can change the total number of nodes in the cluster (obviously 1 is the minimum) live while the cluster is running. It takes the name of the cluster (or the ID) and a parameter of `--nodes` which is the new number of nodes to run
+You can add more pools to your cluster live (obviously 1 is the minimum) while the cluster is running. It takes the name of the cluster (or the ID), the parameter of `--nodes` which is the new number of nodes to run and `--size` wish is the size of the pool,
+if `--node` and `--size` are not expecify will be use the default values.
 
 ```sh
-civo kubernetes scale my-first-cluster --nodes=4
-Kubernetes cluster my-first-cluster will now have 4 nodes
+civo kubernetes node-pool create my-first-cluster
+```
+
+#### Scaling pools in the cluster
+
+You can scale a pool in your cluster, while the cluster is running. It takes the name of the cluster (or the ID), the pool ID, and `--nodes` which is the new number of nodes in the pool
+
+```sh
+civo kubernetes node-pool scale my-first-cluster pool-id --nodes 5
+```
+
+#### Deleting pools in the cluster
+
+You can delete a pool in your cluster. It takes the name of the cluster (or the ID) and the pool ID
+
+```sh
+civo kubernetes node-pool delete my-first-cluster pool-id
 ```
 
 #### Recycling nodes in your cluster

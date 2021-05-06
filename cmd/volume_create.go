@@ -12,6 +12,7 @@ import (
 
 var bootableVolume bool
 var createSizeGB int
+var networkVolumeID string
 
 var volumeCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -33,6 +34,26 @@ var volumeCreateCmd = &cobra.Command{
 			Name:          args[0],
 			SizeGigabytes: createSizeGB,
 			Bootable:      bootableVolume,
+			Region:        client.Region,
+		}
+
+		if networkVolumeID == "default" {
+			network, err := client.GetDefaultNetwork()
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+
+			volumeConfig.NetworkID = network.ID
+
+		} else {
+			network, err := client.FindNetwork(networkVolumeID)
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+
+			volumeConfig.NetworkID = network.ID
 		}
 
 		volume, err := client.NewVolume(volumeConfig)

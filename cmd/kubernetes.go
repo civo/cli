@@ -15,6 +15,12 @@ var kubernetesCmd = &cobra.Command{
 	Short:   "Details of Civo Kubernetes clusters",
 }
 
+var kubernetesNodePoolCmd = &cobra.Command{
+	Use:     "node-pool",
+	Aliases: []string{"pool", "node-pool"},
+	Short:   "Details of Civo Kubernetes applications",
+}
+
 var kubernetesApplicationsCmd = &cobra.Command{
 	Use:     "applications",
 	Aliases: []string{"application", "app", "apps", "app", "application", "addon", "addons", "marketplace", "k8s-apps", "k8s-app", "k3s-apps", "k3s-app"},
@@ -31,7 +37,6 @@ func init() {
 	kubernetesCmd.AddCommand(kubernetesCreateCmd)
 	kubernetesCmd.AddCommand(kubernetesRenameCmd)
 	kubernetesCmd.AddCommand(kubernetesUpgradeCmd)
-	kubernetesCmd.AddCommand(kubernetesScaleCmd)
 	kubernetesCmd.AddCommand(kubernetesRemoveCmd)
 	kubernetesCmd.AddCommand(kubernetesRecycleCmd)
 
@@ -62,9 +67,6 @@ func init() {
 	kubernetesUpgradeCmd.Flags().StringVarP(&kubernetesNewVersion, "version", "v", "", "change the version of the cluster.")
 	kubernetesUpgradeCmd.MarkFlagRequired("version")
 
-	kubernetesScaleCmd.Flags().IntVarP(&kubernetesNewNodes, "nodes", "n", 3, "change the total nodes of the cluster.")
-	kubernetesScaleCmd.Flags().BoolVarP(&waitKubernetesNodes, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE")
-
 	kubernetesRecycleCmd.Flags().StringVarP(&kubernetesNode, "node", "n", "", "the node that needs to be recycled.")
 	kubernetesRecycleCmd.MarkFlagRequired("node")
 
@@ -75,6 +77,17 @@ func init() {
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppShowCmd)
 
 	kubernetesAppAddCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to install the app.")
+
+	// Kubernetes NodePool
+	kubernetesCmd.AddCommand(kubernetesNodePoolCmd)
+	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolCreateCmd)
+	kubernetesNodePoolCreateCmd.Flags().StringVarP(&targetNodesPoolSize, "size", "s", "g3.k3s.medium", "the size of nodes to create.")
+	kubernetesNodePoolCreateCmd.Flags().IntVarP(&numTargetNodesPool, "nodes", "n", 3, "the number of nodes to create for the pool.")
+
+	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolDeleteCmd)
+	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolScaleCmd)
+	kubernetesNodePoolScaleCmd.Flags().IntVarP(&numTargetNodesPoolScale, "nodes", "n", 3, "the number of nodes to scale for the pool.")
+
 }
 
 func getKubernetesList(value string) []string {

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -23,9 +22,22 @@ as instances and Kubernetes clusters at Civo.com.`,
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
+	err := rootCmd.Execute()
+	if err != nil {
+		// if len(config.Current.APIKeys) == 0 {
+		// 	utility.Warning("You need to add a api key")
+		// 	utility.Info("1 - Open https://www.civo.com/account/security")
+		// 	utility.Info("2 - Copy the API key")
+		// 	utility.Info("3 - Run civo apikey add NAME API_KEY")
+		// 	os.Exit(1)
+		// }
+
+		// if config.DefaultAPIKey() == "" {
+		// 	utility.Warning("You need to define a default api key")
+		// 	os.Exit(1)
+		// }
 		fmt.Println(err)
-		os.Exit(1)
+		// os.Exit(1)
 	}
 }
 

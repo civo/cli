@@ -232,3 +232,28 @@ func checkKubeDir() {
 		os.Mkdir(fmt.Sprintf("%s/.kube/", home), 0755)
 	}
 }
+
+// RemoveNodePool is a utility function to remove node pool from a kuberentes cluster
+func RemoveNodePool(s []civogo.KubernetesClusterPoolConfig, id string) []civogo.KubernetesClusterPoolConfig {
+	key := 0
+	for k, v := range s {
+		if strings.Contains(v.ID, id) {
+			key = k
+			break
+		}
+	}
+
+	s[len(s)-1], s[key] = s[key], s[len(s)-1]
+	return s[:len(s)-1]
+}
+
+// UpdateNodePool is a utility function to update node pool from a kuberentes cluster
+func UpdateNodePool(s []civogo.KubernetesClusterPoolConfig, id string, count int) []civogo.KubernetesClusterPoolConfig {
+	for k, v := range s {
+		if strings.Contains(v.ID, id) {
+			s[k].Count = count
+			break
+		}
+	}
+	return s
+}

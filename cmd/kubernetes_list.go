@@ -20,11 +20,13 @@ If you wish to use a custom format, the available fields are:
 
 	* ID
 	* Name
-	* Node
-	* Size
+	* Region
+	* Nodes
+	* Pools
 	* Status`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
+
 		if regionSet != "" {
 			client.Region = regionSet
 		}
@@ -46,8 +48,8 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("ID", cluster.ID)
 			ow.AppendData("Name", cluster.Name)
 			ow.AppendData("Region", client.Region)
-			ow.AppendData("Nodes", strconv.Itoa(cluster.NumTargetNode))
-			ow.AppendData("Size", cluster.TargetNodeSize)
+			ow.AppendData("Nodes", strconv.Itoa(len(cluster.Instances)))
+			ow.AppendData("Pools", strconv.Itoa(len(cluster.Pools)))
 			ow.AppendData("Status", utility.ColorStatus(cluster.Status))
 
 			if outputFormat == "json" || outputFormat == "custom" {

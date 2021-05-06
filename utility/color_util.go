@@ -50,9 +50,13 @@ func Error(msg string, args ...interface{}) {
 }
 
 // Warning is the function to handler all error in the Cli
+func Info(msg string, args ...interface{}) {
+	fmt.Fprintf(os.Stderr, "%s: %s\n", color.Blue.Sprintf("Info"), fmt.Sprintf(msg, args...))
+}
+
+// Warning is the function to handler all error in the Cli
 func Warning(msg string, args ...interface{}) {
 	fmt.Fprintf(os.Stderr, "%s: %s\n", color.Yellow.Sprintf("Warning"), fmt.Sprintf(msg, args...))
-
 }
 
 // YellowConfirm is the function to handler all delete confirm

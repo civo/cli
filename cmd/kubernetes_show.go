@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -71,7 +72,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		ow.AppendDataWithLabel("APIEndPoint", kubernetesCluster.APIEndPoint, "API Endpoint")
-		ow.AppendDataWithLabel("MasterIP", kubernetesCluster.MasterIP, "Master IP")
+		ow.AppendDataWithLabel("MasterIP", kubernetesCluster.MasterIP, "External IP")
 		ow.AppendDataWithLabel("DNSEntry", kubernetesCluster.DNSEntry, "DNS A record")
 
 		if outputFormat == "json" || outputFormat == "custom" {
@@ -101,40 +102,47 @@ If you wish to use a custom format, the available fields are:
 
 			if len(kubernetesCluster.Instances) > 0 {
 				fmt.Println()
-				ow.WriteHeader("Nodes")
-				owNode := utility.NewOutputWriter()
+				for _, pool := range kubernetesCluster.Pools {
+					ow.WriteHeader(fmt.Sprintf("Pool (%s)", pool.ID[:6]))
+					owNode := utility.NewOutputWriter()
 
-				for _, instance := range kubernetesCluster.Instances {
-					owNode.StartLine()
-
-					owNode.AppendData("Name", instance.Hostname)
-					owNode.AppendData("IP", instance.PublicIP)
-					owNode.AppendData("Status", instance.Status)
-					owNode.AppendData("Size", instance.Size)
-					owNode.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
-					owNode.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
-					owNode.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
+					for _, instance := range kubernetesCluster.Instances {
+						for _, pinstance := range pool.InstanceNames {
+							if strings.Contains(pinstance, instance.Hostname[5:]) {
+								owNode.StartLine()
+								owNode.AppendData("Name", instance.Hostname)
+								owNode.AppendData("IP", instance.PublicIP)
+								owNode.AppendData("Status", instance.Status)
+								owNode.AppendData("Size", instance.Size)
+								owNode.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
+								owNode.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
+								owNode.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
+							}
+						}
+					}
+					owNode.WriteTable()
+					ow.WriteHeader("Labels")
+					fmt.Printf("kubernetes.civo.com/node-pool=%s\n", pool.ID)
+					fmt.Printf("kubernetes.civo.com/node-size=%s\n", pool.Size)
+					fmt.Println()
 				}
-				owNode.WriteTable()
-			}
 
-			if len(kubernetesCluster.InstalledApplications) > 0 {
-				fmt.Println()
-				ow.WriteHeader("Applications")
-				owApp := utility.NewOutputWriter()
+				if len(kubernetesCluster.InstalledApplications) > 0 {
+					fmt.Println()
+					ow.WriteHeader("Applications")
+					owApp := utility.NewOutputWriter()
 
-				for _, app := range kubernetesCluster.InstalledApplications {
-					owApp.StartLine()
+					for _, app := range kubernetesCluster.InstalledApplications {
+						owApp.StartLine()
 
-					owApp.AppendData("Name", app.Name)
-					owApp.AppendData("Version", app.Version)
-					owApp.AppendData("Installed", strconv.FormatBool(app.Installed))
-					owApp.AppendData("Category", app.Category)
+						owApp.AppendData("Name", app.Name)
+						owApp.AppendData("Version", app.Version)
+						owApp.AppendData("Installed", strconv.FormatBool(app.Installed))
+						owApp.AppendData("Category", app.Category)
+					}
+					owApp.WriteTable()
 				}
-				owApp.WriteTable()
 			}
-
 		}
-
 	},
 }
