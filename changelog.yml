@@ -1,3 +1,15 @@
+- semver: 0.7.14
+  date: 2021-05-06T10:29:58.339384-04:00
+  packager: ""
+  changes:
+  - commit: 717623a6033dd90ea846cb326eb7ce4e2696abdf
+    note: Fixed kubernetes cmd and hidde volume for now
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.13
   date: 2021-04-18T21:06:58.628264-04:00
   packager: ""

@@ -1,4 +1,10 @@
 
+0.7.14
+=============
+2021-05-06
+
+* Fixed kubernetes cmd and hidde volume for now (717623a6)
+
 0.7.13
 =============
 2021-04-19
