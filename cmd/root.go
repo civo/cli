@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -41,14 +42,39 @@ func Execute() {
 	}
 }
 
+func setCommandFlags(c *cobra.Command) {
+	c.Flags().StringVarP(&config.Filename, "config", "", "", "config file (default is $HOME/.civo.json)")
+	c.Flags().StringVarP(&outputFields, "fields", "f", "", "output fields for custom format output (use -h to determine fields)")
+	c.Flags().StringVarP(&outputFormat, "output", "o", "human", "output format (json/human/custom)")
+	c.Flags().BoolVarP(&defaultYes, "yes", "y", false, "Automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively")
+	c.Flags().StringVarP(&regionSet, "region", "", "", "Choose the region to connect to, if you use this option it will use it over the default region")
+}
+
+func searchAllCommands(allCommands *[]*cobra.Command, commands []*cobra.Command) {
+	for _, c := range commands {
+		*allCommands = append(*allCommands, c)
+		searchAllCommands(allCommands, c.Commands())
+	}
+}
+
+func isKubemart(commandPath string) bool {
+	splitted := strings.Fields(commandPath)
+	return splitted[1] == kubemartCmd.Name()
+}
+
 func init() {
 	cobra.OnInitialize(config.ReadConfig)
+	setCommandFlags(rootCmd)
 
-	rootCmd.PersistentFlags().StringVarP(&config.Filename, "config", "", "", "config file (default is $HOME/.civo.json)")
-	rootCmd.PersistentFlags().StringVarP(&outputFields, "fields", "f", "", "output fields for custom format output (use -h to determine fields)")
-	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output", "o", "human", "output format (json/human/custom)")
-	rootCmd.PersistentFlags().BoolVarP(&defaultYes, "yes", "y", false, "Automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively")
-	rootCmd.PersistentFlags().StringVarP(&regionSet, "region", "", "", "Choose the region to connect to, if you use this option it will use it over the default region")
+	// Set Civo CLI flags to all commands except "kubemart" and its sub-commands.
+	// Show only Kubemart flags when running "civo kubemart" and "civo kubemart <command>".
+	allCommands := []*cobra.Command{}
+	searchAllCommands(&allCommands, rootCmd.Commands())
+	for _, c := range allCommands {
+		if !isKubemart(c.CommandPath()) {
+			setCommandFlags(c)
+		}
+	}
 
 	// Add warning if the region is empty, for the user with the old config
 	config.ReadConfig()
