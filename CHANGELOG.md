@@ -1,4 +1,10 @@
 
+0.7.15
+=============
+2021-05-08
+
+* Fixed error in instance create cmd, now you can delete multiple pool in a cluster (8965abe8)
+
 0.7.14
 =============
 2021-05-06

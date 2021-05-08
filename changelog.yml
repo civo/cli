@@ -1,3 +1,15 @@
+- semver: 0.7.15
+  date: 2021-05-08T13:53:29.918361-04:00
+  packager: ""
+  changes:
+  - commit: 8965abe8b0d0b1aabce13b188793e61244f97fa8
+    note: Fixed error in instance create cmd, now you can delete multiple pool in a cluster
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.14
   date: 2021-05-06T10:29:58.339384-04:00
   packager: ""
