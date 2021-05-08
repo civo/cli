@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
@@ -11,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var kuberneteNodePoolList []utility.ObjecteList
 var kubernetesNodePoolDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"delete", "rm"},
@@ -32,18 +34,37 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
-		if utility.UserConfirmedDeletion(fmt.Sprintf("node %s", pluralize.Pluralize(len(instanceList), "pool")), defaultYes, args[1]) {
+
+		if len(args) == 1 {
+			kuberneteNodePoolList = append(kuberneteNodePoolList, utility.ObjecteList{ID: args[0], Name: args[1]})
+		} else {
+			for _, v := range args[1:] {
+				kuberneteNodePoolList = append(kuberneteNodePoolList, utility.ObjecteList{ID: args[0], Name: v})
+			}
+		}
+
+		kubernetesPoolNameList := []string{}
+		for _, v := range kuberneteNodePoolList {
+			kubernetesPoolNameList = append(kubernetesPoolNameList, v.Name)
+		}
+
+		if utility.UserConfirmedDeletion(fmt.Sprintf("node %s", pluralize.Pluralize(len(kuberneteNodePoolList), "pool")), defaultYes, strings.Join(kubernetesPoolNameList, ", ")) {
+
+			nodePool := []civogo.KubernetesClusterPoolConfig{}
 			kubernetesFindCluster, err := client.FindKubernetesCluster(args[0])
 			if err != nil {
 				utility.Error("%s", err)
 				os.Exit(1)
 			}
 
-			nodePool := []civogo.KubernetesClusterPoolConfig{}
 			for _, v := range kubernetesFindCluster.Pools {
 				nodePool = append(nodePool, civogo.KubernetesClusterPoolConfig{ID: v.ID, Count: v.Count, Size: v.Size})
 			}
-			nodePool = utility.RemoveNodePool(nodePool, args[1])
+
+			for _, kubeList := range kuberneteNodePoolList {
+				nodePool = utility.RemoveNodePool(nodePool, kubeList.Name)
+			}
+
 			configKubernetes := &civogo.KubernetesClusterConfig{
 				Pools: nodePool,
 			}
@@ -54,15 +75,24 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": kubernetesCluster.ID, "Name": kubernetesCluster.Name})
+			ow := utility.NewOutputWriter()
+
+			for _, v := range kuberneteNodePoolList {
+				ow.StartLine()
+				ow.AppendData("ID", v.Name)
+			}
 
 			switch outputFormat {
 			case "json":
-				ow.WriteSingleObjectJSON()
+				if len(kuberneteNodePoolList) == 1 {
+					ow.WriteSingleObjectJSON()
+				} else {
+					ow.WriteMultipleObjectsJSON()
+				}
 			case "custom":
 				ow.WriteCustomOutput(outputFields)
 			default:
-				fmt.Printf("The pool (%s) was delete from the cluster (%s)\n", utility.Green(args[1]), utility.Green(kubernetesCluster.Name))
+				fmt.Printf("The %s (%s) has been deleted from the cluster (%s)\n", fmt.Sprintf("node %s", pluralize.Pluralize(len(kuberneteNodePoolList), "pool")), utility.Green(strings.Join(kubernetesPoolNameList, ", ")), utility.Green(kubernetesCluster.Name))
 			}
 		} else {
 			fmt.Println("Operation aborted.")

@@ -43,7 +43,17 @@ Example: civo template ls -o custom -f "ID: Code (DefaultUsername)"`,
 
 		templateDiskList := []TemplateDisk{}
 
-		if client.Region == "NYC1" {
+		if client.Region == "SVG1" {
+			templates, err := client.ListTemplates()
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+
+			for _, v := range templates {
+				templateDiskList = append(templateDiskList, TemplateDisk{ID: v.ID, Name: v.Name, Version: v.Code, Label: v.ShortDescription})
+			}
+		} else {
 			diskImage, err := client.ListDiskImages()
 			if err != nil {
 				utility.Error("%s", err)
@@ -54,16 +64,6 @@ Example: civo template ls -o custom -f "ID: Code (DefaultUsername)"`,
 				templateDiskList = append(templateDiskList, TemplateDisk{ID: v.ID, Name: v.Name, Version: v.Version, Label: v.Label})
 			}
 
-		} else {
-			templates, err := client.ListTemplates()
-			if err != nil {
-				utility.Error("%s", err)
-				os.Exit(1)
-			}
-
-			for _, v := range templates {
-				templateDiskList = append(templateDiskList, TemplateDisk{ID: v.ID, Name: v.Name, Version: v.Code, Label: v.ShortDescription})
-			}
 		}
 
 		ow := utility.NewOutputWriter()

@@ -90,15 +90,15 @@ If you wish to use a custom format, the available fields are:
 
 		if template != "" {
 			templateID := ""
-			if client.Region == "NYC1" {
-				findTemplate, err := client.FindDiskImage(template)
+			if client.Region == "SVG1" {
+				findTemplate, err := client.FindTemplate(template)
 				if err != nil {
 					utility.Error("%s", err)
 					os.Exit(1)
 				}
 				templateID = findTemplate.ID
 			} else {
-				findTemplate, err := client.FindTemplate(template)
+				findTemplate, err := client.FindDiskImage(template)
 				if err != nil {
 					utility.Error("%s", err)
 					os.Exit(1)
