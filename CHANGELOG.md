@@ -1,4 +1,15 @@
 
+0.7.16
+=============
+2021-05-10
+
+* Add missing default region warning to all commands that need one (48f30857)
+* Remove global warning on default regions as some commands don't need them (f91e4211)
+* Add utility method to check for if a current region is set (36399b76)
+* Don't set a default region when creating blank configs (and certainly not SVG1) (8986e650)
+* Fix typo in variable name (824b617e)
+* Get the default region from the API when adding an API key, if one isn't set (f9df4cd2)
+
 0.7.15
 =============
 2021-05-08

@@ -1,3 +1,55 @@
+- semver: 0.7.16
+  date: 2021-05-10T10:10:46.968076-04:00
+  packager: ""
+  changes:
+  - commit: 48f308578219330c93b84f7eabfe901db8d4facf
+    note: Add missing default region warning to all commands that need one
+    author:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+    committer:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+  - commit: f91e42114bedd4e5d3132c6f2d97c39b23c4b163
+    note: Remove global warning on default regions as some commands don't need them
+    author:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+    committer:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+  - commit: 36399b76710072c8eec0dde4edeb49925748ef3e
+    note: Add utility method to check for if a current region is set
+    author:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+    committer:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+  - commit: 8986e65059275f63ebb5844f0e3a54f5360ceedc
+    note: Don't set a default region when creating blank configs (and certainly not SVG1)
+    author:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+    committer:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+  - commit: 824b617ea575e817f79161bb094e47afe4ff2846
+    note: Fix typo in variable name
+    author:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+    committer:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+  - commit: f9df4cd28c9c96034514ed4a285b31458d6cfe80
+    note: Get the default region from the API when adding an API key, if one isn't set
+    author:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+    committer:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
 - semver: 0.7.15
   date: 2021-05-08T13:53:29.918361-04:00
   packager: ""
