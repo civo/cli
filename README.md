@@ -451,6 +451,15 @@ Please note that resizing can take a few minutes.
 
 *IMPORTANT:* Kubernetes is in closed-access only at the moment, during testing. The endpoints here will be rejected unless you are one of the closed set of users that can launch them.
 
+#### Set Region
+
+Before you can start interacting with your cluster from CLI, one of the things that you need to do is to set your region. To do this call
+
+```civo region current NYC1```
+
+*you can find the name of the region from the UI, where its listed on bottom left of the screen*
+Without running this command, you might see an error like `Error: Error checking availability ZeroMatchesError: unable to find SVG1, zero matches` when trying to create the cluster.
+
 #### List clusters
 
 To see your created clusters, call `civo kubernetes list`:
