@@ -3,6 +3,7 @@ package utility
 import (
 	"fmt"
 	"math"
+	"os"
 	"runtime"
 	"strings"
 
@@ -30,7 +31,6 @@ func CheckOS() string {
 
 // CheckQuotaPercent function to check the percent of the quota
 func CheckQuotaPercent(limit int, usage int) string {
-
 	var returnText string
 
 	calculation := float64(usage) / float64(limit) * 100
@@ -50,7 +50,6 @@ func CheckQuotaPercent(limit int, usage int) string {
 
 // GetK3sSize is a functon to return only the k3s size
 func GetK3sSize() ([]string, error) {
-
 	client, err := config.CivoAPIClient()
 	if err != nil {
 		return nil, err
@@ -73,7 +72,6 @@ func GetK3sSize() ([]string, error) {
 
 // CheckAPPName is a function to check if the app name is valid
 func CheckAPPName(appName string) bool {
-
 	client, err := config.CivoAPIClient()
 	if err != nil {
 		return false
@@ -136,4 +134,12 @@ func CheckAvailability(resource string, regionSet string) (bool, string, error) 
 	}
 
 	return false, defaultRegion.Code, nil
+}
+
+// EnsureCurrentRegion there's a current region set, error out if not
+func EnsureCurrentRegion() {
+	if config.Current.Meta.DefaultRegion == "" {
+		Error("No region set - list available regions with \"civo region ls\" and choose a default using \"civo region current REGION\", or specify one with every command using \"--region=REGION\"\n")
+		os.Exit(1)
+	}
 }
