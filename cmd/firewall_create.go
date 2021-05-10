@@ -11,7 +11,7 @@ import (
 )
 
 var firewallnetwork string
-var defautlNetwork *civogo.Network
+var defaultNetwork *civogo.Network
 
 var firewallCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -30,20 +30,20 @@ var firewallCreateCmd = &cobra.Command{
 		}
 
 		if firewallnetwork == "default" {
-			defautlNetwork, err = client.GetDefaultNetwork()
+			defaultNetwork, err = client.GetDefaultNetwork()
 			if err != nil {
 				utility.Error("%s", err)
 				os.Exit(1)
 			}
 		} else {
-			defautlNetwork, err = client.FindNetwork(firewallnetwork)
+			defaultNetwork, err = client.FindNetwork(firewallnetwork)
 			if err != nil {
 				utility.Error("%s", err)
 				os.Exit(1)
 			}
 		}
 
-		firewall, err := client.NewFirewall(args[0], defautlNetwork.ID)
+		firewall, err := client.NewFirewall(args[0], defaultNetwork.ID)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
