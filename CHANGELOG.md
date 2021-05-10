@@ -1,4 +1,10 @@
 
+0.7.17
+=============
+2021-05-10
+
+* Updated the civogo lib to 0.2.45 how fix problem in the instance cmd (faff826d)
+
 0.7.16
 =============
 2021-05-10

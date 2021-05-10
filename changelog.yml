@@ -1,3 +1,15 @@
+- semver: 0.7.17
+  date: 2021-05-10T19:37:38.025607-04:00
+  packager: ""
+  changes:
+  - commit: faff826d05639dbf9a2ea9531133b43aa0de0f24
+    note: Updated the civogo lib to 0.2.45 how fix problem in the instance cmd
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.16
   date: 2021-05-10T10:10:46.968076-04:00
   packager: ""
