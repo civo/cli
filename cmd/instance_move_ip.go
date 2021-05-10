@@ -24,6 +24,8 @@ If you wish to use a custom format, the available fields are:
 	* Hostname
 	* PublicIP`,
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		if len(args) != 2 {
 			fmt.Printf("You must specify %s parameters (you gave %s), the ID/name and the public IP\n", utility.Red("2"), utility.Red(strconv.Itoa(len(args))))
 			os.Exit(1)

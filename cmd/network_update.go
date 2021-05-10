@@ -16,6 +16,8 @@ var networkUpdateCmd = &cobra.Command{
 	Short:   "Rename a network",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

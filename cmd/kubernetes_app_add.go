@@ -19,6 +19,8 @@ var kubernetesAppAddCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Add the marketplace application to a Kubernetes cluster",
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

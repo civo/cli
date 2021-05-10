@@ -25,6 +25,7 @@ var kubernetesCreateCmd = &cobra.Command{
 	Example: "civo kubernetes create CLUSTER_NAME [flags]",
 	Short:   "Create a new Kubernetes cluster",
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
 
 		check, region, err := utility.CheckAvailability("kubernetes", regionSet)
 		if err != nil {

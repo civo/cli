@@ -23,6 +23,8 @@ var firewallRuleCreateCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(1),
 	Example: "civo firewall rule create FIREWALL_NAME/FIREWALL_ID [flags]",
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

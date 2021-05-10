@@ -18,6 +18,8 @@ var kubernetesRenameCmd = &cobra.Command{
 	Example: "civo kubernetes rename OLD_CLUSTER_NAME --name NEW_CLUSTER_NAME",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

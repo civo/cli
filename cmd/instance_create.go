@@ -49,6 +49,7 @@ If you wish to use a custom format, the available fields are:
 	* Script
 	* CreatedAt`,
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
 
 		check, region, err := utility.CheckAvailability("iaas", regionSet)
 		if err != nil {

@@ -18,6 +18,8 @@ var instanceSizeCmd = &cobra.Command{
 	Short:   "List instances size",
 	Long:    `List all current instances size.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

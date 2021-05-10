@@ -21,6 +21,8 @@ var volumeCreateCmd = &cobra.Command{
 	Short:   "Create a new volume",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet
