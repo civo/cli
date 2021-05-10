@@ -20,6 +20,8 @@ var volumeAttachCmd = &cobra.Command{
 	Short:   "Attach a volume to an instance",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

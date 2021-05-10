@@ -40,5 +40,4 @@ func init() {
 	firewallRuleCreateCmd.Flags().StringArrayVarP(&cidr, "cidr", "c", []string{}, "the CIDR of the rule you can use (e.g. -c 10.10.10.1/32, 10.10.10.2/32)")
 	firewallRuleCreateCmd.Flags().StringVarP(&direction, "direction", "d", "", "the direction of the rule need to be ingress")
 	firewallRuleCreateCmd.Flags().StringVarP(&label, "label", "l", "", "a string that will be the displayed as the name/reference for this rule")
-
 }

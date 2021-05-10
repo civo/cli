@@ -46,7 +46,6 @@ func Red(value string) string {
 // Error is the function to handler all error in the Cli
 func Error(msg string, args ...interface{}) {
 	fmt.Fprintf(os.Stderr, "%s: %s\n", color.Red.Sprintf("Error"), fmt.Sprintf(msg, args...))
-
 }
 
 // Warning is the function to handler all error in the Cli

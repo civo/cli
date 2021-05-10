@@ -25,6 +25,8 @@ If you wish to use a custom format, the available fields are:
 
 Example: civo firewall ls -o custom -f "ID: Name"`,
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

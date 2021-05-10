@@ -27,6 +27,8 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 		return getKubernetesList(toComplete), cobra.ShellCompDirectiveNoFileComp
 	},
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

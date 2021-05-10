@@ -14,15 +14,21 @@ var instancePublicIPCmd = &cobra.Command{
 	Use:     "public-ip",
 	Example: "civo instance public-ip ID/HOSTNAME",
 	Args:    cobra.MinimumNArgs(1),
-	Short:   "Show instance's public IP",
+	Short:   "Show instance's public IP [deprectated]",
 	Aliases: []string{"ip", "publicip"},
 	Long: `Show the specified instance's public IP by part of the instance's ID or name.
 If you wish to use a custom format, the available fields are:
 
 	* ID
 	* Hostname
-	* PublicIP`,
+	* PublicIP
+
+This command is deprecated and instead you should use:
+
+civo instance show ID/HOSTNAME -o custom -f "PublicIP"`,
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

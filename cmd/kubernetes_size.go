@@ -18,6 +18,8 @@ var kubernetesSizeCmd = &cobra.Command{
 	Short:   "List kubernetes size",
 	Long:    `List all current kubernetes size.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

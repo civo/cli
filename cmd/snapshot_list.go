@@ -34,6 +34,8 @@ If you wish to use a custom format, the available fields are:
 
 Example: civo snapshot ls -o custom -f "ID: Name (Hostname)"`,
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

@@ -17,6 +17,8 @@ var firewallUpdateCmd = &cobra.Command{
 	Example: "civo firewall update OLD_NAME NEW_NAME",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
 			client.Region = regionSet

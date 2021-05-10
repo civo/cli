@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/civo/cli/config"
-	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
@@ -52,8 +51,4 @@ func init() {
 
 	// Add warning if the region is empty, for the user with the old config
 	config.ReadConfig()
-	if config.Current.Meta.DefaultRegion == "" {
-		utility.Warning("No region set - using the default one - set a default using \"civo region current REGION\" or specify one with every command using \"--region=REGION\"")
-	}
-
 }
