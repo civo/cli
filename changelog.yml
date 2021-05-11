@@ -1,3 +1,15 @@
+- semver: 0.7.19
+  date: 2021-05-11T14:19:26.479607-04:00
+  packager: ""
+  changes:
+  - commit: 1994ff59fbe6663a630f539f3aa31745e6db000f
+    note: 'Fixed error introduce fixing the issue #90'
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.18
   date: 2021-05-11T11:44:57.324296-04:00
   packager: ""
