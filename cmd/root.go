@@ -23,7 +23,7 @@ as instances and Kubernetes clusters at Civo.com.`,
 		if err != nil {
 			return err
 		}
-		return errors.New("command is required")
+		return errors.New("a valid subcommand is required")
 	},
 }
 

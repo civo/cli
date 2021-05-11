@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"os"
 	"strconv"
 
@@ -25,13 +24,6 @@ If you wish to use a custom format, the available fields are:
 	* Type
 	* TTL
 	* Priority`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		if len(args) == 0 {
 			return getAllDomainList(), cobra.ShellCompDirectiveNoFileComp

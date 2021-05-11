@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -18,13 +17,6 @@ var kubernetesRenameCmd = &cobra.Command{
 	Short:   "Rename a kubernetes cluster",
 	Example: "civo kubernetes rename OLD_CLUSTER_NAME --name NEW_CLUSTER_NAME",
 	Args:    cobra.MinimumNArgs(1),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 

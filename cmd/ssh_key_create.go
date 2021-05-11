@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -19,13 +18,6 @@ var sshKeyCreateCmd = &cobra.Command{
 	Example: "civo ssh create NAME --key PATH_TO_SSH_KEY",
 	Short:   "Create a new SSH key",
 	Args:    cobra.MinimumNArgs(1),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

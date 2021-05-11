@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -21,13 +20,6 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 	Short:   "Add a node pool to Kubernetes cluster",
 	Example: "civo kubernetes node-pool create CLUSTER_NAME [flags]",
 	Args:    cobra.MinimumNArgs(1),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		if len(args) == 0 {
 			return getAllKubernetesList(), cobra.ShellCompDirectiveNoFileComp

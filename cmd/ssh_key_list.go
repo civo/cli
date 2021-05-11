@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"os"
 
 	"github.com/civo/cli/config"
@@ -22,13 +21,6 @@ If you wish to use a custom format, the available fields are:
 	* Fingerprint
 
 Example: civo ssh ls -o custom -f "ID: Name"`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

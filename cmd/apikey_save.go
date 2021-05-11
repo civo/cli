@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -16,13 +15,6 @@ var apikeySaveCmd = &cobra.Command{
 	Short:   "Save a new API key",
 	Args:    cobra.MinimumNArgs(2),
 	Example: "civo apikey save NAME KEY",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		config.Current.APIKeys[args[0]] = args[1]
 

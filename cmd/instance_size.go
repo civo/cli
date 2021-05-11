@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"os"
 	"strconv"
 	"strings"
@@ -18,13 +17,6 @@ var instanceSizeCmd = &cobra.Command{
 	Aliases: []string{"sizes", "all"},
 	Short:   "List instances size",
 	Long:    `List all current instances size.`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 

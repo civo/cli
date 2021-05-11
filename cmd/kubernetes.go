@@ -19,7 +19,7 @@ var kubernetesCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		return errors.New("command is required")
+		return errors.New("a valid subcommand is required")
 	},
 }
 
@@ -32,7 +32,7 @@ var kubernetesNodePoolCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		return errors.New("command is required")
+		return errors.New("a valid subcommand is required")
 	},
 }
 
@@ -45,7 +45,7 @@ var kubernetesApplicationsCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		return errors.New("command is required")
+		return errors.New("a valid subcommand is required")
 	},
 }
 

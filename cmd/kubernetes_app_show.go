@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -20,13 +19,6 @@ var kubernetesAppShowCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(2),
 	Short:   "Shows the details of an application installed in the cluster.",
 	Long:    `Shows the details of an application installed in the cluster`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	// ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	// 	if len(args) == 0 {
 	// 		return getAllKubernetesList(), cobra.ShellCompDirectiveNoFileComp

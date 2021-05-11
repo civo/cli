@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -22,13 +21,6 @@ var loadBalancerCreateCmd = &cobra.Command{
 	Aliases: []string{"new", "add"},
 	Example: "civo loadbalancer create [flags]",
 	Short:   "Create a new load balancer",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	//Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()

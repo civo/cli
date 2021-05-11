@@ -15,7 +15,7 @@ var snapshotCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		return errors.New("subcommand is required")
+		return errors.New("a valid subcommand is required")
 	},
 }
 

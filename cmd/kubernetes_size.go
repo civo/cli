@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"os"
 	"strconv"
 	"strings"
@@ -18,13 +17,6 @@ var kubernetesSizeCmd = &cobra.Command{
 	Aliases: []string{"sizes", "all"},
 	Short:   "List kubernetes size",
 	Long:    `List all current kubernetes size.`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 

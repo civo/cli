@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -16,13 +15,6 @@ var apikeyRemoveCmd = &cobra.Command{
 	Short:   "Remove a saved API key",
 	Args:    cobra.MinimumNArgs(1),
 	Example: "civo apikey remove NAME",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		index, err := apiKeyFind(args[0])
 		if err != nil {

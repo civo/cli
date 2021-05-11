@@ -17,13 +17,6 @@ var templateRemoveCmd = &cobra.Command{
 	Example: "civo template remove CODE",
 	Short:   "Remove a template",
 	Args:    cobra.MinimumNArgs(1),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("subcommand is required")
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
