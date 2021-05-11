@@ -30,7 +30,7 @@ var apikeyRemoveCmd = &cobra.Command{
 			if numKeys > len(config.Current.APIKeys) {
 				fmt.Printf("Removed the API Key %s\n", utility.Green(index))
 			} else {
-				utility.Error("The API Key couldn't be found", args[0])
+				utility.Error("The API Key %q couldn't be found", args[0])
 				os.Exit(1)
 			}
 		} else {
