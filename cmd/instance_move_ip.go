@@ -65,7 +65,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if !moving {
-			utility.Error("Unable to find that public IP connected to one of your instances", args[1])
+			utility.Error("Unable to find that public IP %q connected to one of your instances", args[1])
 			os.Exit(1)
 		}
 
