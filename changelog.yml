@@ -1,3 +1,28 @@
+- semver: 0.7.18
+  date: 2021-05-11T11:44:57.324296-04:00
+  packager: ""
+  changes:
+  - commit: 2d838d495a5717ee1ee79e725c15318cc5de907d
+    note: |-
+      Fixed error in every command exit status zero
+      close #90
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: dc7246565d59d35ac963e36efda6a21331d9f38e
+    note: |-
+      Merge pull request #89 from rajatjindal/fix-log-msg
+
+      fix log msg warnings
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandro@civo.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
 - semver: 0.7.17
   date: 2021-05-10T19:37:38.025607-04:00
   packager: ""

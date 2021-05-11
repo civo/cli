@@ -1,4 +1,11 @@
 
+0.7.18
+=============
+2021-05-11
+
+* Fixed error in every command exit status zero (2d838d49)
+* Merge pull request #89 from rajatjindal/fix-log-msg (dc724656)
+
 0.7.17
 =============
 2021-05-10
