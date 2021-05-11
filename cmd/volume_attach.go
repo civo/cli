@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"time"
@@ -19,6 +20,13 @@ var volumeAttachCmd = &cobra.Command{
 	Example: "civo volume attach VOLUME_NAME INSTANCE_HOSTNAME",
 	Short:   "Attach a volume to an instance",
 	Args:    cobra.MinimumNArgs(2),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 

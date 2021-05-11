@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"sort"
 	"strings"
 
@@ -20,6 +21,13 @@ If you wish to use a custom format, the available fields are:
 * Name
 * Key
 `,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		keys := make([]string, 0, len(config.Current.APIKeys))
 		for k := range config.Current.APIKeys {

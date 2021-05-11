@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"time"
@@ -19,6 +20,13 @@ var volumeDetachCmd = &cobra.Command{
 	Example: "civo volume detach VOLUME_NAME",
 	Short:   "Detach a volume from an instance",
 	Args:    cobra.MinimumNArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 

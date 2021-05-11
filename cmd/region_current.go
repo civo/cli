@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -14,6 +15,13 @@ var regionCurrentCmd = &cobra.Command{
 	Aliases: []string{"use", "default", "set"},
 	Short:   "Set the current region",
 	Args:    cobra.MinimumNArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

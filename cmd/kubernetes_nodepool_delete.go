@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -19,6 +20,13 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 	Short:   "Delete a node pool from Kubernetes cluster",
 	Example: "civo kubernetes node-pool delete CLUSTER_NAME NODEPOOL_ID [flags]",
 	Args:    cobra.MinimumNArgs(2),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		if len(args) == 0 {
 			return getAllKubernetesList(), cobra.ShellCompDirectiveNoFileComp

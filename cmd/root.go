@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"os"
 
 	"github.com/civo/cli/config"
 	"github.com/spf13/cobra"
@@ -16,6 +18,13 @@ var rootCmd = &cobra.Command{
 	Short: "CLI to manage cloud resources at Civo.com",
 	Long: `civo is a CLI library for managing cloud resources such
 as instances and Kubernetes clusters at Civo.com.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("command is required")
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -23,20 +32,8 @@ as instances and Kubernetes clusters at Civo.com.`,
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
-		// if len(config.Current.APIKeys) == 0 {
-		// 	utility.Warning("You need to add a api key")
-		// 	utility.Info("1 - Open https://www.civo.com/account/security")
-		// 	utility.Info("2 - Copy the API key")
-		// 	utility.Info("3 - Run civo apikey add NAME API_KEY")
-		// 	os.Exit(1)
-		// }
-
-		// if config.DefaultAPIKey() == "" {
-		// 	utility.Warning("You need to define a default api key")
-		// 	os.Exit(1)
-		// }
 		fmt.Println(err)
-		// os.Exit(1)
+		os.Exit(1)
 	}
 }
 

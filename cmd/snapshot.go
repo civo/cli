@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"errors"
+
 	"github.com/spf13/cobra"
 )
 
@@ -8,6 +10,13 @@ var snapshotCmd = &cobra.Command{
 	Use:     "snapshot",
 	Aliases: []string{"snapshots"},
 	Short:   "Details of Civo snapshots",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 }
 
 func init() {

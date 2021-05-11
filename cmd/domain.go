@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"errors"
+
 	"github.com/spf13/cobra"
 )
 
@@ -8,12 +10,26 @@ var domainCmd = &cobra.Command{
 	Use:     "domain",
 	Aliases: []string{"domains"},
 	Short:   "Details of Civo domains",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("command is required")
+	},
 }
 
 var domainRecordCmd = &cobra.Command{
 	Use:     "record",
 	Aliases: []string{"records"},
 	Short:   "Details of Civo domains records",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("command is required")
+	},
 }
 
 func init() {

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -15,6 +16,13 @@ var domainCreateCmd = &cobra.Command{
 	Short:   "Create a new domain",
 	Args:    cobra.MinimumNArgs(1),
 	Example: "civo domain create NAME",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {

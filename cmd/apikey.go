@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -15,6 +16,13 @@ var apikeyCmd = &cobra.Command{
 	Long: `If you use multiple Civo accounts, e.g. one for personal and one
 for work, then you can setup multiple API keys and switch
 between them when required.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 }
 
 func apiKeyFind(search string) (string, error) {

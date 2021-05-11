@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -14,6 +15,13 @@ var apikeyCurrentCmd = &cobra.Command{
 	Aliases: []string{"use", "default", "set"},
 	Short:   "Set the current API key",
 	Args:    cobra.MinimumNArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		index, err := apiKeyFind(args[0])
 		if err != nil {

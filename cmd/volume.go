@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"errors"
+
 	"github.com/spf13/cobra"
 )
 
@@ -8,6 +10,13 @@ var volumeCmd = &cobra.Command{
 	Use:     "volume",
 	Aliases: []string{"volumes"},
 	Short:   "Details of Civo volumes",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("command is required")
+	},
 }
 
 func init() {

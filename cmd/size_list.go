@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 
@@ -30,6 +31,13 @@ If you wish to use a custom format, the available fields are:
 	* Selectable
 
 Example: civo size ls -o custom -f "Code: Name (size)"`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {

@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"errors"
+
 	"github.com/spf13/cobra"
 )
 
@@ -8,12 +10,26 @@ var firewallCmd = &cobra.Command{
 	Use:     "firewall",
 	Aliases: []string{"firewalls", "fw"},
 	Short:   "Details of Civo firewalls",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("command is required")
+	},
 }
 
 var firewallRuleCmd = &cobra.Command{
 	Use:     "rule",
 	Aliases: []string{"rules"},
 	Short:   "Details of Civo firewalls rules",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("command is required")
+	},
 }
 
 func init() {

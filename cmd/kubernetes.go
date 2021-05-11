@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -13,18 +14,39 @@ var kubernetesCmd = &cobra.Command{
 	Use:     "kubernetes",
 	Aliases: []string{"k3s", "k8s", "kube"},
 	Short:   "Details of Civo Kubernetes clusters",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("command is required")
+	},
 }
 
 var kubernetesNodePoolCmd = &cobra.Command{
 	Use:     "node-pool",
 	Aliases: []string{"pool", "node-pool"},
 	Short:   "Details of Civo Kubernetes applications",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("command is required")
+	},
 }
 
 var kubernetesApplicationsCmd = &cobra.Command{
 	Use:     "applications",
 	Aliases: []string{"application", "app", "apps", "app", "application", "addon", "addons", "marketplace", "k8s-apps", "k8s-app", "k3s-apps", "k3s-app"},
 	Short:   "Details of Civo Kubernetes applications",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("command is required")
+	},
 }
 
 func init() {

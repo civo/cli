@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -18,6 +19,13 @@ var snapshotCreateCmd = &cobra.Command{
 	Example: "civo snapshot create SNAPSHOT_NAME INSTANCE_HOSTNAME",
 	Short:   "Create a new snapshot",
 	Args:    cobra.MinimumNArgs(2),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 

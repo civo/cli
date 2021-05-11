@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"errors"
+
 	"github.com/spf13/cobra"
 )
 
@@ -8,6 +10,13 @@ var instanceCmd = &cobra.Command{
 	Use:     "instance",
 	Aliases: []string{"instances"},
 	Short:   "Details of Civo instances",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("command is required")
+	},
 }
 
 func init() {

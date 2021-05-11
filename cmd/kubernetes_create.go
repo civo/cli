@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -24,6 +25,13 @@ var kubernetesCreateCmd = &cobra.Command{
 	Aliases: []string{"new", "add"},
 	Example: "civo kubernetes create CLUSTER_NAME [flags]",
 	Short:   "Create a new Kubernetes cluster",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("subcommand is required")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
