@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -19,8 +20,9 @@ var apikeySaveCmd = &cobra.Command{
 		config.Current.APIKeys[args[0]] = args[1]
 
 		if config.Current.Meta.DefaultRegion == "" {
-			client, err := config.CivoAPIClient()
+			client, err := civogo.NewClientWithURL(args[1], config.Current.Meta.URL, "")
 			if err != nil {
+				fmt.Println(err.Error())
 				utility.Error("Unable to create a Civo API client, please report this at https://github.com/civo/cli")
 				os.Exit(1)
 			}
