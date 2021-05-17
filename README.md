@@ -66,11 +66,11 @@ You will also, of course, need a Civo account, for which you can [register here]
 
 ### Installing on Linux
 
-For Linux Civo CLI can be installed in various method.
+For Linux Civo CLI can be installed by various methods.
 
 * Install via brew, as shows in above step.
 
-* Install via wget, 
+* Install via wget, specifying the release version you want: 
 
 ```
 wget https://github.com/civo/cli/releases/download/v0.7.6/civo-0.7.6-linux-amd64.tar.gz
@@ -90,9 +90,9 @@ cd ..
 cp -r cli ./$HOME
 export PATH="$HOME/cli:$PATH"
 ```
-With this, we have installed the Civo CLI successfully, check the working by running any of the following commands.
+With this, we have installed the Civo CLI successfully. Check it is working by running any of the following commands.
 
-**Note:** For the first time when you are running, make sure you set your current region. check ----> [Region](#region)
+**Note:** For the first time when you are running, make sure you set your current region. Check [Region](#region) for more information.
 
 
 ### Running the Civo CLI tool and getting help
@@ -449,7 +449,7 @@ Please note that resizing can take a few minutes.
 
 #### Introduction
 
-*IMPORTANT:* Kubernetes is in closed-access only at the moment, during testing. The endpoints here will be rejected unless you are one of the closed set of users that can launch them.
+You can manage Kubernetes clusters on Civo using the Kubernetes subcommands.
 
 #### List clusters
 
@@ -490,10 +490,11 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
 $ civo kubernetes create my-first-cluster
 Created Kubernetes cluster my-first-cluster
 ```
+
 #### Adding pools the cluster
 
-You can add more pools to your cluster live (obviously 1 is the minimum) while the cluster is running. It takes the name of the cluster (or the ID), the parameter of `--nodes` which is the new number of nodes to run and `--size` wish is the size of the pool,
-if `--node` and `--size` are not expecify will be use the default values.
+You can add more pools to your cluster live (obviously 1 is the minimum) while the cluster is running. It takes the name of the cluster (or the ID), the parameter of `--nodes` which is the new number of nodes to run and `--size` which is the size of the pool,
+if `--node` and `--size` are not expecified, the default values will be used.
 
 ```sh
 civo kubernetes node-pool create my-first-cluster
@@ -560,10 +561,10 @@ Kubernetes cluster my-first-cluster is now named Production
 
 #### Starting a cluster without default applications
 
-By default, `traefik` is bundled in with `k3s` to act as the ingress controller. If you want to set up a cluster without `traefik`, you can use the `remove-applications` option in the creation command to start a cluster without it:
+By default, `Traefik` is bundled in with `k3s` to act as the ingress controller. If you want to set up a cluster without `traefik`, you can use the `remove-applications` option in the creation command to start a cluster without it:
 
 ```sh
-civo kubernetes create --remove-applications=traefik --nodes=2 --wait
+civo kubernetes create --remove-applications=Traefik --nodes=2 --wait
 ```
 
 #### Removing the cluster
