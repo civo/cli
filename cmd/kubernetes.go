@@ -117,6 +117,7 @@ func init() {
 	kubernetesAppInstalledCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
 	kubernetesAppUninstallCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
 	kubernetesAppUpdateCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
+	kubernetesAppListCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
 
 	// Kubernetes NodePool
 	kubernetesCmd.AddCommand(kubernetesNodePoolCmd)
