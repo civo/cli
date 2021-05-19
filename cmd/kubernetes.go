@@ -1,14 +1,25 @@
 package cmd
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
+	kubemartutils "github.com/kubemart/kubemart-cli/pkg/utils"
 	"github.com/spf13/cobra"
+	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/clientcmd"
 )
+
+var debug bool
+var kubernetesClusterApp string
+
+var legacyMarketplaceWarning = "This command is only available for the new version of marketplace. Your current cluster is running on legacy marketplace.\nYou can launch a new cluster to start using the new marketplace."
 
 var kubernetesCmd = &cobra.Command{
 	Use:     "kubernetes",
@@ -93,12 +104,19 @@ func init() {
 	kubernetesRecycleCmd.MarkFlagRequired("node")
 
 	// Kubernetes Applications
+	kubernetesApplicationsCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "print verbose logs when running command")
+	cobra.OnInitialize(setLogLevelEnvIfFlagIsTrue)
 	kubernetesCmd.AddCommand(kubernetesApplicationsCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppListCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppAddCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppShowCmd)
-
-	kubernetesAppAddCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to install the app.")
+	kubernetesApplicationsCmd.AddCommand(kubernetesAppInstalledCmd)
+	kubernetesApplicationsCmd.AddCommand(kubernetesAppUninstallCmd)
+	kubernetesApplicationsCmd.AddCommand(kubernetesAppUpdateCmd)
+	kubernetesAppAddCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
+	kubernetesAppInstalledCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
+	kubernetesAppUninstallCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
+	kubernetesAppUpdateCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
 
 	// Kubernetes NodePool
 	kubernetesCmd.AddCommand(kubernetesNodePoolCmd)
@@ -152,4 +170,69 @@ func getAllKubernetesList() []string {
 
 	return clusterList
 
+}
+
+// setLogLevelEnvIfFlagIsTrue will set LOGLEVEL env variable
+// when user use '--debug' or '-d' flag
+func setLogLevelEnvIfFlagIsTrue() {
+	if debug {
+		os.Setenv("LOGLEVEL", "debug")
+	}
+}
+
+// isKubemartCluster will return true if the cluster has
+// Kubemart ConfigMap (inside "kubemart-system" namespace)
+func isKubemartCluster(clusterIdentifier string) (bool, error) {
+	namespace := "kubemart-system"
+	if clusterIdentifier == "" {
+		return false, fmt.Errorf("cluster is not set")
+	}
+
+	kubemartutils.DebugPrintf("Creating Civo API client\n")
+	client, err := config.CivoAPIClient()
+	if regionSet != "" {
+		client.Region = regionSet
+	}
+	if err != nil {
+		return false, err
+	}
+
+	kubemartutils.DebugPrintf("Finding Civo Kubernetes cluster\n")
+	kubernetesCluster, err := client.FindKubernetesCluster(clusterIdentifier)
+	if err != nil {
+		return false, err
+	}
+
+	kubemartutils.DebugPrintf("Finding kubeconfig\n")
+	kubeconfigStr := kubernetesCluster.KubeConfig
+	kcBytes := []byte(kubeconfigStr)
+
+	kubemartutils.DebugPrintf("Getting REST config from kubeconfig\n")
+	rc, err := clientcmd.RESTConfigFromKubeConfig(kcBytes)
+	if err != nil {
+		return false, err
+	}
+
+	kubemartutils.DebugPrintf("Creating Kubernetes clientset from REST config\n")
+	cs, err := kubernetes.NewForConfig(rc)
+	if err != nil {
+		return false, err
+	}
+
+	kubemartutils.DebugPrintf("Creating ConfigMap client from Kubernetes clientset\n")
+	cmClient := cs.CoreV1().ConfigMaps(namespace)
+
+	kubemartutils.DebugPrintf("Checking Kubemart ConfigMap\n")
+	_, err = cmClient.Get(context.Background(), "kubemart-config", metav1.GetOptions{})
+	if err != nil {
+		if k8serrors.IsNotFound(err) {
+			kubemartutils.DebugPrintf("Kubemart ConfigMap not found\n")
+			return false, nil
+		}
+		kubemartutils.DebugPrintf("Error occured when checking Kubemart ConfigMap\n")
+		return false, err
+	}
+
+	kubemartutils.DebugPrintf("Kubemart ConfigMap found\n")
+	return true, nil
 }
