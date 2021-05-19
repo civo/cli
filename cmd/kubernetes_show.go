@@ -87,9 +87,14 @@ If you wish to use a custom format, the available fields are:
 			}
 
 			ow.AppendDataWithLabel("UpgradeAvailableTo", kubernetesCluster.UpgradeAvailableTo, "Upgrade Available")
+			// for _, v := range kubernetesCluster.Instances {
+			// 	// ow.StartLine()
+			// 	ow.AppendData("ID", v.ID)
+			// 	ow.AppendData("Hostname", v.Hostname)
+			// }
 
 			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON()
+				ow.WriteSingleObjectJSON(prettySet)
 			} else {
 				ow.WriteCustomOutput(outputFields)
 			}

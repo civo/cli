@@ -89,9 +89,9 @@ If you wish to use a custom format, the available fields are:
 			switch outputFormat {
 			case "json":
 				if len(instanceList) == 1 {
-					ow.WriteSingleObjectJSON()
+					ow.WriteSingleObjectJSON(prettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON()
+					ow.WriteMultipleObjectsJSON(prettySet)
 				}
 			case "custom":
 				ow.WriteCustomOutput(outputFields)

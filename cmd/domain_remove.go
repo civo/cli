@@ -78,9 +78,9 @@ var domainRemoveCmd = &cobra.Command{
 			switch outputFormat {
 			case "json":
 				if len(domainList) == 1 {
-					ow.WriteSingleObjectJSON()
+					ow.WriteSingleObjectJSON(prettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON()
+					ow.WriteMultipleObjectsJSON(prettySet)
 				}
 			case "custom":
 				ow.WriteCustomOutput(outputFields)

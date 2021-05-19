@@ -66,7 +66,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("Hostname", instance.Hostname)
 			ow.AppendDataWithLabel("FirewallID", firewall.ID, "Firewall ID")
 			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON()
+				ow.WriteSingleObjectJSON(prettySet)
 			} else {
 				ow.WriteCustomOutput(outputFields)
 			}

@@ -10,7 +10,7 @@ import (
 )
 
 var outputFields, outputFormat, regionSet string
-var defaultYes bool
+var defaultYes, prettySet bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -45,6 +45,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output", "o", "human", "output format (json/human/custom)")
 	rootCmd.PersistentFlags().BoolVarP(&defaultYes, "yes", "y", false, "Automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively")
 	rootCmd.PersistentFlags().StringVarP(&regionSet, "region", "", "", "Choose the region to connect to, if you use this option it will use it over the default region")
+	rootCmd.PersistentFlags().BoolVarP(&prettySet, "pretty", "", false, "Print pretty the json output")
 
 	// Add warning if the region is empty, for the user with the old config
 	config.ReadConfig()

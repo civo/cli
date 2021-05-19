@@ -84,7 +84,7 @@ Example: civo domain record show RECORD_ID -o custom -f "ID: Name"`,
 
 		switch outputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON()
+			ow.WriteMultipleObjectsJSON(prettySet)
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:

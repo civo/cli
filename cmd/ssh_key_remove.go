@@ -75,9 +75,9 @@ var sshKeyRemoveCmd = &cobra.Command{
 			switch outputFormat {
 			case "json":
 				if len(sshList) == 1 {
-					ow.WriteSingleObjectJSON()
+					ow.WriteSingleObjectJSON(prettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON()
+					ow.WriteMultipleObjectsJSON(prettySet)
 				}
 			case "custom":
 				ow.WriteCustomOutput(outputFields)

@@ -57,7 +57,7 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 
 		switch outputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON()
+			ow.WriteMultipleObjectsJSON(prettySet)
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:

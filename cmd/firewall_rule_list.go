@@ -71,7 +71,7 @@ Example: civo firewall rule ls FIREWALL_NAME -o custom -f "ID: Label"`,
 
 		switch outputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON()
+			ow.WriteMultipleObjectsJSON(prettySet)
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:

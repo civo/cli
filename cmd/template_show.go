@@ -59,7 +59,7 @@ Example: civo template show CODE -o custom -f "ID: Code (DefaultUsername)"`,
 		if outputFormat == "json" || outputFormat == "custom" {
 			ow.AppendData("CloudConfig", template.CloudConfig)
 			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON()
+				ow.WriteSingleObjectJSON(prettySet)
 			} else {
 				ow.WriteCustomOutput(outputFields)
 			}

@@ -219,7 +219,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("PseudoIP", resp.PseudoIP)
 
 			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON()
+				ow.WriteSingleObjectJSON(prettySet)
 			} else {
 				ow.WriteCustomOutput(outputFields)
 			}

@@ -78,7 +78,7 @@ Example: civo template ls -o custom -f "ID: Code (DefaultUsername)"`,
 
 		switch outputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON()
+			ow.WriteMultipleObjectsJSON(prettySet)
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:

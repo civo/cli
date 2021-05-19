@@ -86,9 +86,9 @@ var kubernetesRemoveCmd = &cobra.Command{
 			switch outputFormat {
 			case "json":
 				if len(kuberneteList) == 1 {
-					ow.WriteSingleObjectJSON()
+					ow.WriteSingleObjectJSON(prettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON()
+					ow.WriteMultipleObjectsJSON(prettySet)
 				}
 				ow.WriteCustomOutput(outputFields)
 			default:

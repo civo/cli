@@ -98,7 +98,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("PublicIP", instance.PublicIP)
 			ow.AppendData("PseudoIP", instance.PseudoIP)
 			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON()
+				ow.WriteSingleObjectJSON(prettySet)
 			} else {
 				ow.WriteCustomOutput(outputFields)
 			}

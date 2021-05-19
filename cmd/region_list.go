@@ -66,7 +66,7 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 
 		switch outputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON()
+			ow.WriteMultipleObjectsJSON(prettySet)
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:

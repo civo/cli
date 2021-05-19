@@ -80,7 +80,7 @@ Example: civo snapshot ls -o custom -f "ID: Name (Hostname)"`,
 
 		switch outputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON()
+			ow.WriteMultipleObjectsJSON(prettySet)
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:

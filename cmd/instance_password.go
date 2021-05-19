@@ -50,7 +50,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("Password", instance.InitialPassword)
 			ow.AppendData("User", instance.InitialUser)
 			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON()
+				ow.WriteSingleObjectJSON(prettySet)
 			} else {
 				ow.WriteCustomOutput(outputFields)
 			}

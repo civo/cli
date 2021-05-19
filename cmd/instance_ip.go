@@ -53,7 +53,7 @@ civo instance show ID/HOSTNAME -o custom -f "PublicIP"`,
 			ow.AppendData("Hostname", instance.Hostname)
 			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public ID")
 			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON()
+				ow.WriteSingleObjectJSON(prettySet)
 			} else {
 				ow.WriteCustomOutput(outputFields)
 			}

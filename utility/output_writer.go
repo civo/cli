@@ -3,6 +3,7 @@
 package utility
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -101,7 +102,7 @@ func (ow *OutputWriter) AppendData(key, value string) {
 }
 
 // WriteSingleObjectJSON writes the JSON for a single object to STDOUT
-func (ow *OutputWriter) WriteSingleObjectJSON() {
+func (ow *OutputWriter) WriteSingleObjectJSON(pretty bool) {
 	ow.finishExistingLine()
 
 	data := map[string]string{}
@@ -116,11 +117,18 @@ func (ow *OutputWriter) WriteSingleObjectJSON() {
 		os.Exit(-1)
 	}
 
-	fmt.Println(string(jsonString))
+	switch pretty {
+	case true:
+		result, _ := prettyprint(jsonString)
+		fmt.Println(string(result))
+	default:
+		fmt.Println(string(jsonString))
+	}
+
 }
 
 // WriteMultipleObjectsJSON writes the JSON for multiple objects to STDOUT
-func (ow *OutputWriter) WriteMultipleObjectsJSON() {
+func (ow *OutputWriter) WriteMultipleObjectsJSON(pretty bool) {
 	ow.finishExistingLine()
 
 	data := make([]map[string]string, len(ow.Values))
@@ -138,7 +146,14 @@ func (ow *OutputWriter) WriteMultipleObjectsJSON() {
 		os.Exit(-1)
 	}
 
-	fmt.Println(string(jsonString))
+	switch pretty {
+	case true:
+		result, _ := prettyprint(jsonString)
+		fmt.Println(string(result))
+	default:
+		fmt.Println(string(jsonString))
+	}
+
 }
 
 // WriteKeyValues prints a single object stored in the OutputWriter
@@ -240,4 +255,10 @@ func (ow *OutputWriter) WriteSubheader(label string) {
 // WriteHeader WriteSubheader writes a centred heading line in to output
 func (ow *OutputWriter) WriteHeader(label string) {
 	fmt.Printf("%s:\n", label)
+}
+
+func prettyprint(b []byte) ([]byte, error) {
+	var out bytes.Buffer
+	err := json.Indent(&out, b, "", "  ")
+	return out.Bytes(), err
 }

@@ -83,9 +83,9 @@ var networkRemoveCmd = &cobra.Command{
 			switch outputFormat {
 			case "json":
 				if len(networkList) == 1 {
-					ow.WriteSingleObjectJSON()
+					ow.WriteSingleObjectJSON(prettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON()
+					ow.WriteMultipleObjectsJSON(prettySet)
 				}
 			case "custom":
 				ow.WriteCustomOutput(outputFields)

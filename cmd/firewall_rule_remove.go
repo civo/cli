@@ -94,9 +94,9 @@ var firewallRuleRemoveCmd = &cobra.Command{
 			switch outputFormat {
 			case "json":
 				if len(firewallRuleList) == 1 {
-					ow.WriteSingleObjectJSON()
+					ow.WriteSingleObjectJSON(prettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON()
+					ow.WriteMultipleObjectsJSON(prettySet)
 				}
 			case "custom":
 				ow.WriteCustomOutput(outputFields)

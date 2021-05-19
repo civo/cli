@@ -81,7 +81,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("OldSize", instance.Size, "Old Size")
 			ow.AppendDataWithLabel("NewSize", args[1], "New Size")
 			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON()
+				ow.WriteSingleObjectJSON(prettySet)
 			} else {
 				ow.WriteCustomOutput(outputFields)
 			}

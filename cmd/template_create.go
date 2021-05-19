@@ -90,7 +90,7 @@ var templateCreateCmd = &cobra.Command{
 
 		switch outputFormat {
 		case "json":
-			ow.WriteSingleObjectJSON()
+			ow.WriteSingleObjectJSON(prettySet)
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:

@@ -59,7 +59,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("ReverseDNS", instance.ReverseDNS, "Reverse DNS")
 			ow.AppendData("Notes", instance.Notes)
 			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON()
+				ow.WriteSingleObjectJSON(prettySet)
 			} else {
 				ow.WriteCustomOutput(outputFields)
 			}

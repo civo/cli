@@ -57,7 +57,7 @@ Example: civo instance console ID/NAME`,
 			ow.AppendDataWithLabel("URL", url, "Console URL")
 			ow.AppendData("Hostname", instance.Hostname)
 			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON()
+				ow.WriteSingleObjectJSON(prettySet)
 			} else {
 				ow.WriteCustomOutput(outputFields)
 			}

@@ -87,9 +87,9 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 			switch outputFormat {
 			case "json":
 				if len(kuberneteNodePoolList) == 1 {
-					ow.WriteSingleObjectJSON()
+					ow.WriteSingleObjectJSON(prettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON()
+					ow.WriteMultipleObjectsJSON(prettySet)
 				}
 			case "custom":
 				ow.WriteCustomOutput(outputFields)
