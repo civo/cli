@@ -1,3 +1,77 @@
+- semver: 0.7.21
+  date: 2021-05-23T13:48:16.204708-04:00
+  packager: ""
+  changes:
+  - commit: e768441c0af3d94f05d989168e15c22fccc0686e
+    note: |-
+      Updated the civogo lib to 0.2.47
+      close #82
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 4f6e53f87f7f779b256c46a23635afbd94d4815d
+    note: Merge branch 'master' of https://github.com/civo/cli
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 32a6e079c370b0cb902242cd763be61e7d7ccd62
+    note: |-
+      Added changes in the json output for all cmd
+      close #92
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 52bdd8064cd929b5a17e2810a3d26b386f1c4f98
+    note: Added the --pretty global flag to print the json in pretty format
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: a77bb4304f889c35c9614b4dac33b2a7ecdf91e9
+    note: Merge branch 'master' of https://github.com/civo/cli
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: c54fdf15b707d5824ef677ae100b68c0bddb2357
+    note: |-
+      Fix error in the application show cmd
+      close #94
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+  - commit: 912d2ba929fdcf55cb51627fe9707840d804cb2f
+    note: Remove debug statement
+    author:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+    committer:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+  - commit: 0172994e69e3773816b08b77088ba27086ae6949
+    note: Fix for breaking new customers adding their first key
+    author:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
+    committer:
+      name: Andy Jeffries
+      email: andy@andyjeffries.co.uk
 - semver: 0.7.19
   date: 2021-05-11T14:19:26.479607-04:00
   packager: ""

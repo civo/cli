@@ -1,4 +1,17 @@
 
+0.7.21
+=============
+2021-05-23
+
+* Updated the civogo lib to 0.2.47 (e768441c)
+* Merge branch 'master' of https://github.com/civo/cli (4f6e53f8)
+* Added changes in the json output for all cmd (32a6e079)
+* Added the --pretty global flag to print the json in pretty format (52bdd806)
+* Merge branch 'master' of https://github.com/civo/cli (a77bb430)
+* Fix error in the application show cmd (c54fdf15)
+* Remove debug statement (912d2ba9)
+* Fix for breaking new customers adding their first key (0172994e)
+
 0.7.19
 =============
 2021-05-11
