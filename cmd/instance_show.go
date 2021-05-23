@@ -26,8 +26,8 @@ If you wish to use a custom format, the available fields are:
 	* status
 	* size
 	* cpu_cores
-	* ram_megabytes
-	* disk_gigabytes
+	* ram_mb
+	* disk_gb
 	* region
 	* network_id
 	* template_id
@@ -69,8 +69,8 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("status", utility.ColorStatus(instance.Status), "Status")
 		ow.AppendDataWithLabel("size", instance.Size, "Size")
 		ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
-		ow.AppendDataWithLabel("ram_megabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
-		ow.AppendDataWithLabel("disk_gigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
+		ow.AppendDataWithLabel("ram_mb", strconv.Itoa(instance.RAMMegabytes), "Ram")
+		ow.AppendDataWithLabel("disk_gb", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
 		ow.AppendDataWithLabel("region", client.Region, "Region")
 		ow.AppendDataWithLabel("network_id", instance.NetworkID, "Network ID")
 		ow.AppendDataWithLabel("template_id", instance.TemplateID, "Template ID")

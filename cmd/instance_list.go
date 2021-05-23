@@ -24,8 +24,8 @@ If you wish to use a custom format, the available fields are:
 	* region
 	* size
 	* cpu_cores
-	* ram_megabytes
-	* disk_gigabytes
+	* ram_mb
+	* disk_gb
 	* public_ip
 	* private_ip
 	* status
@@ -67,8 +67,8 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("region", client.Region, "Region")
 			ow.AppendDataWithLabel("size", instance.Size, "Size")
 			ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
-			ow.AppendDataWithLabel("ram_megabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
-			ow.AppendDataWithLabel("disk_gigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
+			ow.AppendDataWithLabel("ram_mb", strconv.Itoa(instance.RAMMegabytes), "Ram")
+			ow.AppendDataWithLabel("disk_gb", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
 			ow.AppendDataWithLabel("public_ip", instance.PublicIP, "Public IP")
 			ow.AppendDataWithLabel("private_ip", instance.PrivateIP, "Private IP")
 			ow.AppendDataWithLabel("status", utility.ColorStatus(instance.Status), "Status")

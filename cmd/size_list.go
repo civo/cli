@@ -25,8 +25,8 @@ If you wish to use a custom format, the available fields are:
 	* description
 	* type
 	* cpu_cores
-	* ram_megabytes
-	* disk_gigabytes
+	* ram_mb
+	* disk_gb
 	* selectable
 
 Example: civo size ls -o custom -f "Code: name (type)"`,
@@ -91,8 +91,8 @@ Example: civo size ls -o custom -f "Code: name (type)"`,
 				ow.AppendDataWithLabel("type", "Instance", "Type")
 			}
 			ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(size.CPUCores), "CPU")
-			ow.AppendDataWithLabel("ram_megabytes", strconv.Itoa(size.RAMMegabytes), "RAM")
-			ow.AppendDataWithLabel("disk_gigabytes", strconv.Itoa(size.DiskGigabytes), "SSD")
+			ow.AppendDataWithLabel("ram_mb", strconv.Itoa(size.RAMMegabytes), "RAM")
+			ow.AppendDataWithLabel("disk_gb", strconv.Itoa(size.DiskGigabytes), "SSD")
 			ow.AppendDataWithLabel("selectable", utility.BoolToYesNo(size.Selectable), "Selectable")
 		}
 
