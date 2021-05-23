@@ -18,9 +18,9 @@ var instanceConsoleCmd = &cobra.Command{
 	Long: `Get the web console's URL for a given instance by part of the ID or name.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* URL
-	* Hostname
+	* id
+	* url
+	* hostname
 
 Example: civo instance console ID/NAME`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -53,9 +53,9 @@ Example: civo instance console ID/NAME`,
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
-			ow.AppendData("ID", instance.ID)
-			ow.AppendDataWithLabel("URL", url, "Console URL")
-			ow.AppendData("Hostname", instance.Hostname)
+			ow.AppendDataWithLabel("id", instance.ID, "ID")
+			ow.AppendDataWithLabel("url", url, "Console URL")
+			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON(prettySet)
 			} else {

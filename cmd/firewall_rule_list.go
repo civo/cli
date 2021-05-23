@@ -18,16 +18,13 @@ var firewallRuleListCmd = &cobra.Command{
 	Long: `List all current firewall rules.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* FirewallID
-	* Direction
-	* StartPort
-	* EndPort
-	* Label
-	* Protocol
-	* Cidr
-
-Example: civo firewall rule ls FIREWALL_NAME -o custom -f "ID: Label"`,
+	* id
+	* direction
+	* protocol
+	* start_port
+	* end_port
+	* cidr
+	* label`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -56,17 +53,15 @@ Example: civo firewall rule ls FIREWALL_NAME -o custom -f "ID: Label"`,
 		for _, firewallRule := range firewallRules {
 			ow.StartLine()
 
-			ow.AppendData("ID", firewallRule.ID)
-
-			ow.AppendData("ID", firewallRule.ID)
+			ow.AppendDataWithLabel("id", firewallRule.ID, "ID")
 			// TODO: Check if is necessary this in the table, because you need pass like arg the name or the id of the firewall
 			//ow.AppendDataWithLabel("Firewall", firewall.Name, "Firewall")
-			ow.AppendData("Direction", firewallRule.Direction)
-			ow.AppendData("Protocol", firewallRule.Protocol)
-			ow.AppendDataWithLabel("StartPort", firewallRule.StartPort, "Start Port")
-			ow.AppendDataWithLabel("EndPort", firewallRule.EndPort, "End Port")
-			ow.AppendData("Cidr", strings.Join(firewallRule.Cidr, ", "))
-			ow.AppendData("Label", firewallRule.Label)
+			ow.AppendDataWithLabel("direction", firewallRule.Direction, "Direction")
+			ow.AppendDataWithLabel("protocol", firewallRule.Protocol, "Protocol")
+			ow.AppendDataWithLabel("start_port", firewallRule.StartPort, "Start Port")
+			ow.AppendDataWithLabel("end_port", firewallRule.EndPort, "End Port")
+			ow.AppendDataWithLabel("cidr", strings.Join(firewallRule.Cidr, ", "), "Cidr")
+			ow.AppendDataWithLabel("label", firewallRule.Label, "Label")
 		}
 
 		switch outputFormat {

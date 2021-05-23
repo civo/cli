@@ -46,7 +46,7 @@ var kubernetesRecycleCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": kubernetesFindCluster.ID, "Name": kubernetesFindCluster.Name})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": kubernetesFindCluster.ID, "name": kubernetesFindCluster.Name})
 
 		switch outputFormat {
 		case "json":

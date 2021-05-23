@@ -16,11 +16,11 @@ var sshKeyListCmd = &cobra.Command{
 	Long: `List all current SSH keys.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Name
-	* Fingerprint
+	* id
+	* name
+	* fingerprint
 
-Example: civo ssh ls -o custom -f "ID: Name"`,
+Example: civo ssh ls -o custom -f "id: name"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -38,9 +38,9 @@ Example: civo ssh ls -o custom -f "ID: Name"`,
 		for _, sshkey := range sshKeys {
 			ow.StartLine()
 
-			ow.AppendData("ID", sshkey.ID)
-			ow.AppendData("Name", sshkey.Name)
-			ow.AppendDataWithLabel("Fingerprint", sshkey.Fingerprint, "Finger Print")
+			ow.AppendDataWithLabel("id", sshkey.ID, "ID")
+			ow.AppendDataWithLabel("name", sshkey.Name, "Name")
+			ow.AppendDataWithLabel("fingerprint", sshkey.Fingerprint, "Finger Print")
 		}
 
 		switch outputFormat {

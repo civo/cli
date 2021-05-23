@@ -33,7 +33,7 @@ func init() {
 	instanceCmd.AddCommand(instanceStopCmd)
 	instanceCmd.AddCommand(instanceStartCmd)
 	instanceCmd.AddCommand(instanceUpgradeCmd)
-	instanceCmd.AddCommand(instanceMoveIPCmd)
+	// instanceCmd.AddCommand(instanceMoveIPCmd)
 	instanceCmd.AddCommand(instanceSetFirewallCmd)
 	instanceCmd.AddCommand(instancePublicIPCmd)
 	instanceCmd.AddCommand(instancePasswordCmd)

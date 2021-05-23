@@ -19,31 +19,27 @@ var instanceListCmd = &cobra.Command{
 	Long: `List all current instances.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Hostname
-	* ReverseDNS
-	* Size
-	* CPUCores
-	* RAMMegabytes
-	* DiskGigabytes
-	* Region
-	* NetworkID
-	* PrivateIP
-	* PublicIP
-	* PseudoIP
-	* TemplateID
-	* SnapshotID
-	* InitialUser
-	* SSHKey
-	* Status
-	* Notes
-	* FirewallID
-	* Tags
-	* CivostatsdToken
-	* CivostatsdStats
-	* RescuePassword
-	* Script
-	* CreatedAt`,
+	* id
+	* hostname
+	* region
+	* size
+	* cpu_cores
+	* ram_megabytes
+	* disk_gigabytes
+	* public_ip
+	* private_ip
+	* status
+	* network_id
+	* template_id
+	* snapshot_id
+	* initial_user
+	* ssh_key
+	* notes
+	* firewall_id
+	* tags
+	* script
+	* created_at
+	* reverse_dns`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -66,39 +62,34 @@ If you wish to use a custom format, the available fields are:
 		for _, instance := range instances {
 			ow.StartLine()
 
-			ow.AppendData("ID", instance.ID)
-			ow.AppendData("Hostname", instance.Hostname)
-			ow.AppendData("Region", client.Region)
-			ow.AppendData("Size", instance.Size)
-			ow.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
-			ow.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
-			ow.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
-			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public IP")
-			ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "Private IP")
-			ow.AppendData("Status", utility.ColorStatus(instance.Status))
+			ow.AppendDataWithLabel("id", instance.ID, "ID")
+			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
+			ow.AppendDataWithLabel("region", client.Region, "Region")
+			ow.AppendDataWithLabel("size", instance.Size, "Size")
+			ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
+			ow.AppendDataWithLabel("ram_megabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
+			ow.AppendDataWithLabel("disk_gigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
+			ow.AppendDataWithLabel("public_ip", instance.PublicIP, "Public IP")
+			ow.AppendDataWithLabel("private_ip", instance.PrivateIP, "Private IP")
+			ow.AppendDataWithLabel("status", utility.ColorStatus(instance.Status), "Status")
 
 			if outputFormat == "json" || outputFormat == "custom" {
-				ow.AppendData("Status", instance.Status)
-				ow.AppendDataWithLabel("OpenstackServerID", instance.OpenstackServerID, "Openstack Server ID")
-				ow.AppendData("NetworkID", instance.NetworkID)
-				ow.AppendData("PrivateIP", instance.PrivateIP)
-				ow.AppendData("PublicIP", instance.PublicIP)
-				ow.AppendData("TemplateID", instance.TemplateID)
-				ow.AppendData("SnapshotID", instance.SnapshotID)
-				ow.AppendData("InitialUser", instance.InitialUser)
-				ow.AppendData("SSHKey", instance.SSHKey)
-				ow.AppendData("Notes", instance.Notes)
-				ow.AppendData("FirewallID", instance.FirewallID)
-				ow.AppendData("Tags", strings.Join(instance.Tags, " "))
-				ow.AppendData("CivostatsdToken", instance.CivostatsdToken)
-				ow.AppendData("CivostatsdStats", instance.CivostatsdStats)
-				ow.AppendData("Script", instance.Script)
-				ow.AppendData("CreatedAt", instance.CreatedAt.Format(time.RFC1123))
-
-				ow.AppendData("ReverseDNS", instance.ReverseDNS)
-				ow.AppendData("PrivateIP", instance.PrivateIP)
-				ow.AppendData("PublicIP", instance.PublicIP)
-				ow.AppendData("PseudoIP", instance.PseudoIP)
+				ow.AppendDataWithLabel("network_id", instance.NetworkID, "Network ID")
+				// ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "")
+				// ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "")
+				ow.AppendDataWithLabel("template_id", instance.TemplateID, "Template ID")
+				ow.AppendDataWithLabel("snapshot_id", instance.SnapshotID, "Snapshot ID")
+				ow.AppendDataWithLabel("initial_user", instance.InitialUser, "Initial User")
+				ow.AppendDataWithLabel("ssh_key", instance.SSHKey, "SSH Key")
+				ow.AppendDataWithLabel("notes", instance.Notes, "Notes")
+				ow.AppendDataWithLabel("firewall_id", instance.FirewallID, "Firewall ID")
+				ow.AppendDataWithLabel("tags", strings.Join(instance.Tags, " "), "Tags")
+				// ow.AppendDataWithLabel("CivostatsdToken", instance.CivostatsdToken, "")
+				// ow.AppendDataWithLabel("CivostatsdStats", instance.CivostatsdStats, "")
+				ow.AppendDataWithLabel("script", instance.Script, "Script")
+				ow.AppendDataWithLabel("created_at", instance.CreatedAt.Format(time.RFC1123), "Created At")
+				ow.AppendDataWithLabel("status", instance.Status, "Status")
+				ow.AppendDataWithLabel("reverse_dns", instance.ReverseDNS, "Reverse DNS")
 			}
 		}
 

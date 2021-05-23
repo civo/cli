@@ -18,12 +18,12 @@ var domainRecordListCmd = &cobra.Command{
 	Long: `List all current domain records.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Name
-	* Value
-	* Type
-	* TTL
-	* Priority`,
+	* id
+	* name
+	* value
+	* type
+	* ttl
+	* priority`,
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		if len(args) == 0 {
 			return getAllDomainList(), cobra.ShellCompDirectiveNoFileComp
@@ -53,12 +53,12 @@ If you wish to use a custom format, the available fields are:
 		for _, record := range records {
 			ow.StartLine()
 
-			ow.AppendData("ID", record.ID)
-			ow.AppendData("Name", record.Name)
-			ow.AppendData("Value", record.Value)
-			ow.AppendData("Type", string(record.Type))
-			ow.AppendData("TTL", strconv.Itoa(record.TTL))
-			ow.AppendData("Priority", strconv.Itoa(record.Priority))
+			ow.AppendDataWithLabel("id", record.ID, "ID")
+			ow.AppendDataWithLabel("name", record.Name, "Name")
+			ow.AppendDataWithLabel("value", record.Value, "Value")
+			ow.AppendDataWithLabel("type", string(record.Type), "Type")
+			ow.AppendDataWithLabel("ttl", strconv.Itoa(record.TTL), "TTL")
+			ow.AppendDataWithLabel("priority", strconv.Itoa(record.Priority), "Priority")
 
 		}
 

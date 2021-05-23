@@ -25,8 +25,8 @@ var instanceRemoveCmd = &cobra.Command{
 	Long: `Remove the specified instance by part of the ID or name.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Hostname`,
+	* id
+	* hostname`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -82,8 +82,8 @@ If you wish to use a custom format, the available fields are:
 
 			for _, v := range instanceList {
 				ow.StartLine()
-				ow.AppendData("ID", v.ID)
-				ow.AppendData("Hostname", v.Name)
+				ow.AppendDataWithLabel("id", v.ID, "ID")
+				ow.AppendDataWithLabel("hostname", v.Name, "Hostname")
 			}
 
 			switch outputFormat {

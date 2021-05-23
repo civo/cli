@@ -66,6 +66,19 @@ func NewOutputWriterWithMap(data map[string]string) *OutputWriter {
 	return &ow
 }
 
+// ToJSON is a function to show the output in json format
+func (ow *OutputWriter) ToJSON(v interface{}, pretty bool) {
+	value, _ := json.Marshal(v)
+
+	switch pretty {
+	case true:
+		result, _ := prettyprint(value)
+		fmt.Println(string(result))
+	default:
+		fmt.Println(string(value))
+	}
+}
+
 // StartLine starts a new line of output
 func (ow *OutputWriter) StartLine() {
 	ow.finishExistingLine()
@@ -108,7 +121,9 @@ func (ow *OutputWriter) WriteSingleObjectJSON(pretty bool) {
 	data := map[string]string{}
 
 	for i, k := range ow.Keys {
-		data[k] = ow.Values[0][i]
+		if ow.Values[0][i] != "" {
+			data[k] = ow.Values[0][i]
+		}
 	}
 
 	jsonString, err := json.Marshal(data)
@@ -135,7 +150,9 @@ func (ow *OutputWriter) WriteMultipleObjectsJSON(pretty bool) {
 	for i, row := range ow.Values {
 		dataRow := map[string]string{}
 		for col, k := range ow.Keys {
-			dataRow[k] = row[col]
+			if row[col] != "" {
+				dataRow[k] = row[col]
+			}
 		}
 		data[i] = dataRow
 	}

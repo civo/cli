@@ -17,11 +17,11 @@ var firewallListCmd = &cobra.Command{
 	Long: `List all current firewalls.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Name
-	* RulesCount
-	* InstancesCount
-	* Region
+	* id
+	* name
+	* network
+	* rules_count
+	* instances_count
 
 Example: civo firewall ls -o custom -f "ID: Name"`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -48,11 +48,11 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 
 			ow.StartLine()
 
-			ow.AppendData("ID", firewall.ID)
-			ow.AppendData("Name", firewall.Name)
-			ow.AppendData("Network", network.Label)
-			ow.AppendDataWithLabel("RulesCount", strconv.Itoa(firewall.RulesCount), "Total rules")
-			ow.AppendDataWithLabel("InstancesCount", strconv.Itoa(firewall.InstancesCount), "Total Instances")
+			ow.AppendDataWithLabel("id", firewall.ID, "ID")
+			ow.AppendDataWithLabel("name", firewall.Name, "Name")
+			ow.AppendDataWithLabel("network", network.Label, "Network")
+			ow.AppendDataWithLabel("rules_count", strconv.Itoa(firewall.RulesCount), "Total rules")
+			ow.AppendDataWithLabel("instances_count", strconv.Itoa(firewall.InstancesCount), "Total Instances")
 		}
 
 		switch outputFormat {

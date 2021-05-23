@@ -81,7 +81,7 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 
 			for _, v := range kuberneteNodePoolList {
 				ow.StartLine()
-				ow.AppendData("ID", v.Name)
+				ow.AppendDataWithLabel("id", v.Name, "ID")
 			}
 
 			switch outputFormat {

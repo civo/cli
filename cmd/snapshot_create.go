@@ -51,7 +51,7 @@ var snapshotCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": snapshot.ID, "Name": snapshot.Name})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": snapshot.ID, "name": snapshot.Name})
 
 		switch outputFormat {
 		case "json":

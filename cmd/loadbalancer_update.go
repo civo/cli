@@ -101,7 +101,7 @@ var loadBalancerUpdateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": loadBalancerUpdate.ID, "Hostname": loadBalancerUpdate.Hostname})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": loadBalancerUpdate.ID, "hostname": loadBalancerUpdate.Hostname})
 
 		switch outputFormat {
 		case "json":

@@ -15,8 +15,8 @@ var apikeyListCmd = &cobra.Command{
 	Long: `List all API keys, making clear which is the current default.
 If you wish to use a custom format, the available fields are:
 
-* Name
-* Key
+* name
+* key
 
 Example: civo apikey ls -o custom -f "Name: Key"`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -35,9 +35,9 @@ Example: civo apikey ls -o custom -f "Name: Key"`,
 			if config.Current.Meta.CurrentAPIKey == name {
 				defaultLabel = "<====="
 			}
-			ow.AppendData("Name", name)
+			ow.AppendDataWithLabel("name", name, "Name")
 			// ow.AppendData("Key", apiKey)
-			ow.AppendData("Default", defaultLabel)
+			ow.AppendDataWithLabel("default", defaultLabel, "Default")
 
 		}
 

@@ -21,10 +21,10 @@ var instanceUpgradeCmd = &cobra.Command{
 Run civo sizes for all the size names.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Hostname
-	* OldSize
-	* NewSize`,
+	* id
+	* hostname
+	* old_size
+	* new_size`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -76,10 +76,10 @@ If you wish to use a custom format, the available fields are:
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
-			ow.AppendData("ID", instance.ID)
-			ow.AppendData("Hostname", instance.Hostname)
-			ow.AppendDataWithLabel("OldSize", instance.Size, "Old Size")
-			ow.AppendDataWithLabel("NewSize", args[1], "New Size")
+			ow.AppendDataWithLabel("id", instance.ID, "ID")
+			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
+			ow.AppendDataWithLabel("old_size", instance.Size, "Old Size")
+			ow.AppendDataWithLabel("new_size", args[1], "New Size")
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON(prettySet)
 			} else {

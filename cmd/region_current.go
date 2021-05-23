@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var regionName string
 var regionCurrentCmd = &cobra.Command{
 	Use:     "current [NAME]",
 	Aliases: []string{"use", "default", "set"},
@@ -35,10 +36,20 @@ var regionCurrentCmd = &cobra.Command{
 		for _, v := range regions {
 			if v.Code == args[0] {
 				config.Current.Meta.DefaultRegion = args[0]
+				regionName = v.Name
 				config.SaveConfig()
-				fmt.Printf("The default region was set to (%s) %s\n", v.Name, utility.Green(args[0]))
-				os.Exit(1)
 			}
+		}
+
+		ow := utility.NewOutputWriterWithMap(map[string]string{"region": args[0], "name": regionName})
+
+		switch outputFormat {
+		case "json":
+			ow.WriteSingleObjectJSON(prettySet)
+		case "custom":
+			ow.WriteCustomOutput(outputFields)
+		default:
+			fmt.Printf("The default region was set to (%s) %s\n", regionName, utility.Green(args[0]))
 		}
 
 		fmt.Printf("The region you tried to set %s doesn't exist, please use 'civo region ls' to get the code of a valid region", utility.Red(args[0]))

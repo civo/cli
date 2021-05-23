@@ -21,8 +21,8 @@ var instanceStopCmd = &cobra.Command{
 	Long: `Pull the power from the specified instance by part of the ID or name.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Hostname`,
+	* id
+	* hostname`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -73,8 +73,8 @@ If you wish to use a custom format, the available fields are:
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
-			ow.AppendData("ID", instance.ID)
-			ow.AppendData("Hostname", instance.Hostname)
+			ow.AppendDataWithLabel("id", instance.ID, "ID")
+			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON(prettySet)
 			} else {

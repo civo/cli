@@ -19,13 +19,13 @@ var volumeListCmd = &cobra.Command{
 	Long: `List all available volumes.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Name
-	* InstanceID
-	* SizeGigabytes
-	* MountPoint
-	* Bootable
-	* CreatedAt
+	* id
+	* name
+	* instance_id
+	* size_gigabytes
+	* mount_point
+	* bootable
+	* created_at
 
 Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -50,8 +50,8 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 
 		for _, volume := range volumes {
 			ow.StartLine()
-			ow.AppendData("ID", volume.ID)
-			ow.AppendData("Name", volume.Name)
+			ow.AppendDataWithLabel("id", volume.ID, "ID")
+			ow.AppendDataWithLabel("name", volume.Name, "Name")
 
 			if volume.InstanceID != "" {
 				instance, err := client.FindInstance(volume.InstanceID)
@@ -59,15 +59,15 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 					utility.Error("Finding the instance failed with %s", err)
 					os.Exit(1)
 				}
-				ow.AppendDataWithLabel("InstanceID", instance.Hostname, "Instance")
+				ow.AppendDataWithLabel("instance_id", instance.Hostname, "Instance")
 			} else {
-				ow.AppendDataWithLabel("InstanceID", "-", "Instance")
+				ow.AppendDataWithLabel("instance_id", "-", "Instance")
 			}
 
-			ow.AppendDataWithLabel("SizeGigabytes", fmt.Sprintf("%s GB", strconv.Itoa(volume.SizeGigabytes)), "Size")
-			ow.AppendDataWithLabel("MountPoint", volume.MountPoint, "Mount Point")
-			ow.AppendDataWithLabel("Bootable", strconv.FormatBool(volume.Bootable), "is Bootable?")
-			ow.AppendDataWithLabel("CreatedAt", volume.CreatedAt.Format(time.RFC1123), "Created At")
+			ow.AppendDataWithLabel("size_gigabytes", fmt.Sprintf("%s GB", strconv.Itoa(volume.SizeGigabytes)), "Size")
+			ow.AppendDataWithLabel("mount_point", volume.MountPoint, "Mount Point")
+			ow.AppendDataWithLabel("bootable", strconv.FormatBool(volume.Bootable), "Bootable")
+			ow.AppendDataWithLabel("created_at", volume.CreatedAt.Format(time.RFC1123), "Created At")
 		}
 
 		switch outputFormat {

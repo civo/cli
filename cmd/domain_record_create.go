@@ -66,7 +66,7 @@ var domainRecordCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": domain.ID, "Name": domain.Name})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": domain.ID, "name": domain.Name})
 
 		switch outputFormat {
 		case "json":

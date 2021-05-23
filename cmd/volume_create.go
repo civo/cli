@@ -64,7 +64,7 @@ var volumeCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": volume.ID, "Name": volume.Name})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": volume.ID, "name": volume.Name})
 
 		switch outputFormat {
 		case "json":

@@ -45,20 +45,13 @@ var kubernetesSizeCmd = &cobra.Command{
 		ow := utility.NewOutputWriter()
 		for _, size := range filter {
 			ow.StartLine()
-			ow.AppendData("Name", size.Name)
-			ow.AppendData("Description", size.Description)
-			ow.AppendData("Type", "Kubernetes")
-			ow.AppendData("Description", size.Description)
-			ow.AppendData("CPU", strconv.Itoa(size.CPUCores))
-
-			if outputFormat == "json" || outputFormat == "custom" {
-				ow.AppendData("RAM_MB", strconv.Itoa(size.RAMMegabytes))
-				ow.AppendData("Disk_GB", strconv.Itoa(size.DiskGigabytes))
-			} else {
-				ow.AppendData("RAM (MB)", strconv.Itoa(size.RAMMegabytes))
-				ow.AppendData("Disk (GB)", strconv.Itoa(size.DiskGigabytes))
-			}
-			ow.AppendData("Selectable", utility.BoolToYesNo(size.Selectable))
+			ow.AppendDataWithLabel("name", size.Name, "Name")
+			ow.AppendDataWithLabel("description", size.Description, "Description")
+			ow.AppendDataWithLabel("type", "Kubernetes", "Type")
+			ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(size.CPUCores), "CPU")
+			ow.AppendDataWithLabel("ram_megabytes", strconv.Itoa(size.RAMMegabytes), "RAM")
+			ow.AppendDataWithLabel("disk_gigabytes", strconv.Itoa(size.DiskGigabytes), "SSD")
+			ow.AppendDataWithLabel("selectable", utility.BoolToYesNo(size.Selectable), "Selectable")
 		}
 
 		switch outputFormat {

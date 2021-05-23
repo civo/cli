@@ -21,15 +21,15 @@ var sizeListCmd = &cobra.Command{
 	Long: `List all available sizes for instances or Kubernetes nodes.
 If you wish to use a custom format, the available fields are:
 
-	* Name
-	* NiceName
-	* CPUCores
-	* RAMMegabytes
-	* DiskGigabytes
-	* Description
-	* Selectable
+	* name
+	* description
+	* type
+	* cpu_cores
+	* ram_megabytes
+	* disk_gigabytes
+	* selectable
 
-Example: civo size ls -o custom -f "Code: Name (size)"`,
+Example: civo size ls -o custom -f "Code: name (type)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if regionSet != "" {
@@ -79,29 +79,21 @@ Example: civo size ls -o custom -f "Code: Name (size)"`,
 		for _, size := range sizes {
 
 			ow.StartLine()
-			ow.AppendData("Name", size.Name)
-			ow.AppendData("Description", size.Description)
+			ow.AppendDataWithLabel("name", size.Name, "Name")
+			ow.AppendDataWithLabel("description", size.Description, "Description")
 
 			switch {
 			case strings.Contains(size.Name, "db"):
-				ow.AppendData("Type", "Database")
+				ow.AppendDataWithLabel("type", "Database", "Type")
 			case strings.Contains(size.Name, "k3s"):
-				ow.AppendData("Type", "Kubernetes")
+				ow.AppendDataWithLabel("type", "Kubernetes", "Type")
 			default:
-				ow.AppendData("Type", "Instance")
+				ow.AppendDataWithLabel("type", "Instance", "Type")
 			}
-
-			ow.AppendData("Description", size.Description)
-			ow.AppendData("CPU", strconv.Itoa(size.CPUCores))
-
-			if outputFormat == "json" || outputFormat == "custom" {
-				ow.AppendData("RAM_MB", strconv.Itoa(size.RAMMegabytes))
-				ow.AppendData("Disk_GB", strconv.Itoa(size.DiskGigabytes))
-			} else {
-				ow.AppendData("RAM (MB)", strconv.Itoa(size.RAMMegabytes))
-				ow.AppendData("Disk (GB)", strconv.Itoa(size.DiskGigabytes))
-			}
-			ow.AppendData("Selectable", utility.BoolToYesNo(size.Selectable))
+			ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(size.CPUCores), "CPU")
+			ow.AppendDataWithLabel("ram_megabytes", strconv.Itoa(size.RAMMegabytes), "RAM")
+			ow.AppendDataWithLabel("disk_gigabytes", strconv.Itoa(size.DiskGigabytes), "SSD")
+			ow.AppendDataWithLabel("selectable", utility.BoolToYesNo(size.Selectable), "Selectable")
 		}
 
 		switch outputFormat {

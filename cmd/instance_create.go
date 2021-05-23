@@ -26,28 +26,25 @@ var instanceCreateCmd = &cobra.Command{
 	Long: `You can create an instance with a hostname parameter, as well as any options you provide.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Hostname
-	* ReverseDNS
-	* Size
-	* Region
-	* NetworkID
-	* PrivateIP
-	* PublicIP
-	* PseudoIP
-	* TemplateID
-	* SnapshotID
-	* InitialUser
-	* SSHKey
-	* Status
-	* Notes
-	* FirewallID
-	* Tags
-	* CivostatsdToken
-	* CivostatsdStats
-	* RescuePassword
-	* Script
-	* CreatedAt`,
+	* id
+	* hostname
+	* size
+	* region
+	* public_ip
+	* status
+	* network_id
+	* template_id
+	* snapshot_id
+	* initial_user
+	* ssh_key
+	* notes
+	* firewall_id
+	* tags
+	* script
+	* created_at
+	* reverse_dns
+	* private_ip
+	* public_ip`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -194,29 +191,25 @@ If you wish to use a custom format, the available fields are:
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
-			ow.AppendData("ID", resp.ID)
-			ow.AppendData("Hostname", resp.Hostname)
-			ow.AppendData("Size", resp.Size)
-			ow.AppendData("Region", resp.Region)
-			ow.AppendDataWithLabel("PublicIP", resp.PublicIP, "Public IP")
-			ow.AppendData("Status", resp.Status)
-			ow.AppendDataWithLabel("OpenstackServerID", resp.OpenstackServerID, "Openstack Server ID")
-			ow.AppendData("NetworkID", resp.NetworkID)
-			ow.AppendData("TemplateID", resp.TemplateID)
-			ow.AppendData("SnapshotID", resp.SnapshotID)
-			ow.AppendData("InitialUser", resp.InitialUser)
-			ow.AppendData("SSHKey", resp.SSHKey)
-			ow.AppendData("Notes", resp.Notes)
-			ow.AppendData("FirewallID", resp.FirewallID)
-			ow.AppendData("Tags", strings.Join(resp.Tags, " "))
-			ow.AppendData("CivostatsdToken", resp.CivostatsdToken)
-			ow.AppendData("CivostatsdStats", resp.CivostatsdStats)
-			ow.AppendData("Script", resp.Script)
-			ow.AppendData("CreatedAt", resp.CreatedAt.Format(time.RFC1123))
-			ow.AppendData("ReverseDNS", resp.ReverseDNS)
-			ow.AppendData("PrivateIP", resp.PrivateIP)
-			ow.AppendData("PublicIP", resp.PublicIP)
-			ow.AppendData("PseudoIP", resp.PseudoIP)
+			ow.AppendDataWithLabel("id", resp.ID, "ID")
+			ow.AppendDataWithLabel("hostname", resp.Hostname, "Hostname")
+			ow.AppendDataWithLabel("size", resp.Size, "Size")
+			ow.AppendDataWithLabel("region", resp.Region, "Region")
+			ow.AppendDataWithLabel("public_ip", resp.PublicIP, "Public IP")
+			ow.AppendDataWithLabel("status", resp.Status, "Status")
+			ow.AppendDataWithLabel("network_id", resp.NetworkID, "Network ID")
+			ow.AppendDataWithLabel("template_id", resp.TemplateID, "Template ID")
+			ow.AppendDataWithLabel("snapshot_id", resp.SnapshotID, "Snapshot ID")
+			ow.AppendDataWithLabel("initial_user", resp.InitialUser, "Initial User")
+			ow.AppendDataWithLabel("ssh_key", resp.SSHKey, "SSHKey")
+			ow.AppendDataWithLabel("notes", resp.Notes, "Notes")
+			ow.AppendDataWithLabel("firewall_id", resp.FirewallID, "Firewall ID")
+			ow.AppendDataWithLabel("tags", strings.Join(resp.Tags, " "), "Tags")
+			ow.AppendDataWithLabel("script", resp.Script, "Script")
+			ow.AppendDataWithLabel("created_at", resp.CreatedAt.Format(time.RFC1123), "Created At")
+			ow.AppendDataWithLabel("reverse_dns", resp.ReverseDNS, "Reverse  DNS")
+			ow.AppendDataWithLabel("private_ip", resp.PrivateIP, "Private IP")
+			ow.AppendDataWithLabel("public_ip", resp.PublicIP, "Public  IP")
 
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON(prettySet)

@@ -21,13 +21,15 @@ var domainRecordShowCmd = &cobra.Command{
 	Long: `Show the specified record.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* DomainID
-	* Name
-	* Value
-	* Type
-	* TTL
-	* Priority
+	* id
+	* domain_id
+	* name
+	* value
+	* type
+	* ttl
+	* priority
+	* created_at
+	* updated_at
 
 Example: civo domain record show RECORD_ID -o custom -f "ID: Name"`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -52,35 +54,35 @@ Example: civo domain record show RECORD_ID -o custom -f "ID: Name"`,
 		ow := utility.NewOutputWriter()
 		ow.StartLine()
 
-		ow.AppendData("ID", record.ID)
-		ow.AppendDataWithLabel("DomainID", record.DNSDomainID, "Domain ID")
-		ow.AppendData("Name", record.Name)
-		ow.AppendData("Value", record.Value)
+		ow.AppendDataWithLabel("id", record.ID, "ID")
+		ow.AppendDataWithLabel("domain_id", record.DNSDomainID, "Domain ID")
+		ow.AppendDataWithLabel("name", record.Name, "Name")
+		ow.AppendDataWithLabel("value", record.Value, "Value")
 
 		if record.Type == "a" {
-			ow.AppendData("Type", string(civogo.DNSRecordTypeA))
+			ow.AppendDataWithLabel("type", string(civogo.DNSRecordTypeA), "Type")
 		}
 
 		if record.Type == "cname" {
-			ow.AppendData("Type", string(civogo.DNSRecordTypeCName))
+			ow.AppendDataWithLabel("type", string(civogo.DNSRecordTypeCName), "Type")
 		}
 
 		if record.Type == "mx" {
-			ow.AppendData("Type", string(civogo.DNSRecordTypeMX))
+			ow.AppendDataWithLabel("type", string(civogo.DNSRecordTypeMX), "Type")
 		}
 
 		if record.Type == "txt" {
-			ow.AppendData("Type", string(civogo.DNSRecordTypeTXT))
+			ow.AppendDataWithLabel("type", string(civogo.DNSRecordTypeTXT), "Type")
 		}
 
 		if record.Type == "srv" {
-			ow.AppendData("Type", string(civogo.DNSRecordTypeSRV))
+			ow.AppendDataWithLabel("type", string(civogo.DNSRecordTypeSRV), "Type")
 		}
 
-		ow.AppendData("TTL", strconv.Itoa(record.TTL))
-		ow.AppendData("Priority", strconv.Itoa(record.Priority))
-		ow.AppendDataWithLabel("CreatedAt", record.CreatedAt.Format(time.RFC1123), "Created At")
-		ow.AppendDataWithLabel("UpdatedAt", record.UpdatedAt.Format(time.RFC1123), "Updated At")
+		ow.AppendDataWithLabel("ttl", strconv.Itoa(record.TTL), "TTL")
+		ow.AppendDataWithLabel("priority", strconv.Itoa(record.Priority), "Priority")
+		ow.AppendDataWithLabel("created_at", record.CreatedAt.Format(time.RFC1123), "Created At")
+		ow.AppendDataWithLabel("updated_at", record.UpdatedAt.Format(time.RFC1123), "Updated At")
 
 		switch outputFormat {
 		case "json":

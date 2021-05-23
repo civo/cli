@@ -46,18 +46,18 @@ Example: civo template show CODE -o custom -f "ID: Code (DefaultUsername)"`,
 		ow := utility.NewOutputWriter()
 		ow.StartLine()
 
-		ow.AppendData("ID", template.ID)
-		ow.AppendData("Code", template.Code)
-		ow.AppendData("Name", template.Name)
-		ow.AppendDataWithLabel("AccountID", template.AccountID, "Account ID")
-		ow.AppendDataWithLabel("ImageID", template.ImageID, "Image ID")
-		ow.AppendDataWithLabel("VolumeID", template.VolumeID, "Volume ID")
-		ow.AppendDataWithLabel("ShortDescription", template.ShortDescription, "Short Description")
-		ow.AppendData("Description", template.Description)
-		ow.AppendDataWithLabel("DefaultUsername", template.DefaultUsername, "Default Username")
+		ow.AppendDataWithLabel("id", template.ID, "ID")
+		ow.AppendDataWithLabel("code", template.Code, "Code")
+		ow.AppendDataWithLabel("name", template.Name, "Name")
+		ow.AppendDataWithLabel("accountID", template.AccountID, "Account ID")
+		ow.AppendDataWithLabel("image_id", template.ImageID, "Image ID")
+		ow.AppendDataWithLabel("volume_id", template.VolumeID, "Volume ID")
+		ow.AppendDataWithLabel("short_description", template.ShortDescription, "Short Description")
+		ow.AppendDataWithLabel("description", template.Description, "Description")
+		ow.AppendDataWithLabel("default_username", template.DefaultUsername, "Default Username")
 
 		if outputFormat == "json" || outputFormat == "custom" {
-			ow.AppendData("CloudConfig", template.CloudConfig)
+			ow.AppendDataWithLabel("cloud_config", template.CloudConfig, "CloudConfig")
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON(prettySet)
 			} else {

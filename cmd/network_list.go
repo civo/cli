@@ -16,11 +16,10 @@ var networkListCmd = &cobra.Command{
 	Long: `List all available networks.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Label
-	* Region
-	* CIDR
-	* Default`,
+	* id
+	* label
+	* region
+	* default`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -43,12 +42,10 @@ If you wish to use a custom format, the available fields are:
 
 		for _, network := range networks {
 			ow.StartLine()
-			ow.AppendData("ID", network.ID)
-			ow.AppendData("Label", network.Label)
-			ow.AppendData("Region", client.Region)
-			ow.AppendData("CIDR", network.CIDR)
-			ow.AppendData("Default", strconv.FormatBool(network.Default))
-
+			ow.AppendDataWithLabel("id", network.ID, "ID")
+			ow.AppendDataWithLabel("label", network.Label, "Label")
+			ow.AppendDataWithLabel("region", client.Region, "Region")
+			ow.AppendDataWithLabel("default", strconv.FormatBool(network.Default), "Default")
 		}
 
 		switch outputFormat {

@@ -14,9 +14,10 @@ var regionListCmd = &cobra.Command{
 	Long: `List all available regions, including which is the default.
 If you wish to use a custom format, the available fields are:
 
-	* Code
-	* Name
-	* Default
+	* code
+	* name
+	* country
+	* current
 
 Example: civo region ls -o custom -f "Code: Name (Region)"`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -33,18 +34,12 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 		}
 
 		ow := utility.NewOutputWriter()
-		// 		Type
-		// OutOfCapacity
-		// Country
-		// CountryName
-		// Features
-		// Iaas
-		// Kubernetes
+
 		for _, region := range regions {
 			ow.StartLine()
-			ow.AppendData("Code", region.Code)
-			ow.AppendData("Name", region.Name)
-			ow.AppendData("Country", region.CountryName)
+			ow.AppendDataWithLabel("code", region.Code, "Code")
+			ow.AppendDataWithLabel("name", region.Name, "Name")
+			ow.AppendDataWithLabel("country", region.CountryName, "Country")
 
 			defaultLabel := ""
 			if outputFormat == "json" || outputFormat == "custom" {
@@ -61,7 +56,7 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 				}
 
 			}
-			ow.AppendData("Current", defaultLabel)
+			ow.AppendDataWithLabel("current", defaultLabel, "Current")
 		}
 
 		switch outputFormat {

@@ -18,9 +18,9 @@ var kubernetesListVersionCmd = &cobra.Command{
 	Long: `List all Kubernetes clusters versions.
 If you wish to use a custom format, the available fields are:
 
-	* Version
-	* Type
-	* Default`,
+	* version
+	* type
+	* default`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -43,9 +43,9 @@ If you wish to use a custom format, the available fields are:
 		for _, version := range kubeVersions {
 			ow.StartLine()
 
-			ow.AppendData("Version", version.Version)
-			ow.AppendData("Type", version.Type)
-			ow.AppendData("Default", strconv.FormatBool(version.Default))
+			ow.AppendDataWithLabel("version", version.Version, "Version")
+			ow.AppendDataWithLabel("type", version.Type, "Type")
+			ow.AppendDataWithLabel("default", strconv.FormatBool(version.Default), "Default")
 		}
 
 		switch outputFormat {

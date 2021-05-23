@@ -82,7 +82,7 @@ var templateUpdateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": templateUpdate.ID, "Name": templateUpdate.Name})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": templateUpdate.ID, "name": templateUpdate.Name})
 
 		switch outputFormat {
 		case "json":

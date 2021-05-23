@@ -71,8 +71,8 @@ var domainRemoveCmd = &cobra.Command{
 
 			for _, v := range domainList {
 				ow.StartLine()
-				ow.AppendData("ID", v.ID)
-				ow.AppendData("Domain", v.Name)
+				ow.AppendDataWithLabel("id", v.ID, "ID")
+				ow.AppendDataWithLabel("domain", v.Name, "Domain")
 			}
 
 			switch outputFormat {

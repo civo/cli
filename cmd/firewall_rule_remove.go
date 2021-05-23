@@ -87,8 +87,8 @@ var firewallRuleRemoveCmd = &cobra.Command{
 
 			for _, v := range firewallRuleList {
 				ow.StartLine()
-				ow.AppendData("ID", v.ID)
-				ow.AppendData("Label", v.Name)
+				ow.AppendDataWithLabel("id", v.ID, "ID")
+				ow.AppendDataWithLabel("label", v.Name, "Label")
 			}
 
 			switch outputFormat {

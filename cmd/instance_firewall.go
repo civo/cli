@@ -19,9 +19,9 @@ var instanceSetFirewallCmd = &cobra.Command{
 	Long: `Change an instance's firewall by part of the instance's ID or name and the full firewall ID.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Hostname
-	* FirewallID`,
+	* id
+	* hostname
+	* firewall_id`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -62,9 +62,9 @@ If you wish to use a custom format, the available fields are:
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
-			ow.AppendData("ID", instance.ID)
-			ow.AppendData("Hostname", instance.Hostname)
-			ow.AppendDataWithLabel("FirewallID", firewall.ID, "Firewall ID")
+			ow.AppendDataWithLabel("id", instance.ID, "ID")
+			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
+			ow.AppendDataWithLabel("firewall_id", firewall.ID, "Firewall ID")
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON(prettySet)
 			} else {

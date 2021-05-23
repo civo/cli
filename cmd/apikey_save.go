@@ -40,7 +40,7 @@ var apikeySaveCmd = &cobra.Command{
 			config.SaveConfig()
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"Name": args[0], "Key": args[1]})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"name": args[0], "key": args[1]})
 
 		switch outputFormat {
 		case "json":

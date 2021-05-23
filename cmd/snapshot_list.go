@@ -19,20 +19,22 @@ var snapshotListCmd = &cobra.Command{
 	Long: `List all available snapshot.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* InstanceID
-	* Hostname
-	* Template
-	* Region
-	* Name
-	* Safe
-	* SizeGigabytes
-	* State
-	* Cron
-	* RequestedAt
-	* CompletedAt
+	* id
+	* name
+	* size_gigabytes
+	* hostname
+	* state
+	* cron
+	* schedule
+	* schedule
+	* requested_at
+	* completed_at
+	* instance_id
+	* template
+	* region
+	* safe
 
-Example: civo snapshot ls -o custom -f "ID: Name (Hostname)"`,
+Example: civo snapshot ls -o custom -f "id: name (hostname)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -55,25 +57,25 @@ Example: civo snapshot ls -o custom -f "ID: Name (Hostname)"`,
 
 		for _, snapshot := range snapshots {
 			ow.StartLine()
-			ow.AppendData("ID", snapshot.ID)
-			ow.AppendData("Name", snapshot.Name)
-			ow.AppendDataWithLabel("SizeGigabytes", fmt.Sprintf("%s GB", strconv.Itoa(snapshot.SizeGigabytes)), "Size")
-			ow.AppendData("Hostname", snapshot.Hostname)
-			ow.AppendData("State", snapshot.State)
-			ow.AppendData("Cron", snapshot.Cron)
+			ow.AppendDataWithLabel("id", snapshot.ID, "ID")
+			ow.AppendDataWithLabel("name", snapshot.Name, "Name")
+			ow.AppendDataWithLabel("size_gigabytes", fmt.Sprintf("%s GB", strconv.Itoa(snapshot.SizeGigabytes)), "Size")
+			ow.AppendDataWithLabel("hostname", snapshot.Hostname, "Hostname")
+			ow.AppendDataWithLabel("state", snapshot.State, "State")
+			ow.AppendDataWithLabel("cron", snapshot.Cron, "Cron")
 			if snapshot.Cron != "" {
-				ow.AppendData("Schedule", cronexpr.MustParse(snapshot.Cron).Next(time.Now()).Format(time.RFC1123))
+				ow.AppendDataWithLabel("schedule", cronexpr.MustParse(snapshot.Cron).Next(time.Now()).Format(time.RFC1123), "Schedule")
 			} else {
-				ow.AppendData("Schedule", "One-off")
+				ow.AppendDataWithLabel("schedule", "One-off", "Schedule")
 			}
-			ow.AppendData("RequestedAt", snapshot.RequestedAt.Format(time.RFC1123))
-			ow.AppendData("CompletedAt", snapshot.CompletedAt.Format(time.RFC1123))
+			ow.AppendDataWithLabel("requested_at", snapshot.RequestedAt.Format(time.RFC1123), "Requested At")
+			ow.AppendDataWithLabel("completed_at", snapshot.CompletedAt.Format(time.RFC1123), "Completed At")
 
 			if outputFormat == "json" || outputFormat == "custom" {
-				ow.AppendData("InstanceID", snapshot.InstanceID)
-				ow.AppendData("Template", snapshot.Template)
-				ow.AppendData("Region", snapshot.Region)
-				ow.AppendData("Safe", strconv.Itoa(snapshot.Safe))
+				ow.AppendDataWithLabel("instance_id", snapshot.InstanceID, "InstanceID")
+				ow.AppendDataWithLabel("template", snapshot.Template, "Template")
+				ow.AppendDataWithLabel("region", snapshot.Region, "Region")
+				ow.AppendDataWithLabel("safe", strconv.Itoa(snapshot.Safe), "Safe")
 			}
 
 		}

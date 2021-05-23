@@ -53,7 +53,7 @@ var kubernetesAppAddCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": kubeCluster.ID, "Name": kubeCluster.Name})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": kubeCluster.ID, "name": kubeCluster.Name})
 
 		switch outputFormat {
 		case "json":

@@ -76,8 +76,8 @@ var networkRemoveCmd = &cobra.Command{
 
 			for _, v := range networkList {
 				ow.StartLine()
-				ow.AppendData("ID", v.ID)
-				ow.AppendData("Label", v.Name)
+				ow.AppendDataWithLabel("id", v.ID, "ID")
+				ow.AppendDataWithLabel("label", v.Name, "Name")
 			}
 
 			switch outputFormat {

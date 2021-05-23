@@ -22,7 +22,7 @@ var kubernetesConfigCmd = &cobra.Command{
 	Long: `Show the Kubernetes config for a specified cluster.
 If you wish to use a custom format, the available fields are:
 
-	* KubeConfig`,
+	* kubeconfig`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -73,7 +73,7 @@ If you wish to use a custom format, the available fields are:
 
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"KubeConfig": kube.KubeConfig})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"kubeconfig": kube.KubeConfig})
 
 		switch outputFormat {
 		case "json":

@@ -20,9 +20,10 @@ var instanceTagCmd = &cobra.Command{
 	Long: `Change the tags for an instance with partial ID/name provided.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Hostname
-	* Tags`,
+	* id
+	* hostname
+	* reverse_dns
+	* tags`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -54,10 +55,10 @@ If you wish to use a custom format, the available fields are:
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
-			ow.AppendData("ID", instance.ID)
-			ow.AppendData("Hostname", instance.Hostname)
-			ow.AppendDataWithLabel("ReverseDNS", instance.ReverseDNS, "Reverse DNS")
-			ow.AppendData("Notes", instance.Notes)
+			ow.AppendDataWithLabel("id", instance.ID, "ID")
+			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
+			ow.AppendDataWithLabel("reverse_dns", instance.ReverseDNS, "Reverse DNS")
+			ow.AppendDataWithLabel("notes", instance.Notes, "Notes")
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON(prettySet)
 			} else {

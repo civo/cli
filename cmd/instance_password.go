@@ -45,10 +45,10 @@ If you wish to use a custom format, the available fields are:
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
-			ow.AppendData("ID", instance.ID)
-			ow.AppendData("Hostname", instance.Hostname)
-			ow.AppendData("Password", instance.InitialPassword)
-			ow.AppendData("User", instance.InitialUser)
+			ow.AppendDataWithLabel("ID", instance.ID, "")
+			ow.AppendDataWithLabel("Hostname", instance.Hostname, "")
+			ow.AppendDataWithLabel("Password", instance.InitialPassword, "")
+			ow.AppendDataWithLabel("User", instance.InitialUser, "")
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON(prettySet)
 			} else {

@@ -18,12 +18,12 @@ var kubernetesListCmd = &cobra.Command{
 	Long: `List all Kubernetes clusters.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Name
-	* Region
-	* Nodes
-	* Pools
-	* Status`,
+	* id
+	* name
+	* region
+	* nodes
+	* pools
+	* status`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -47,15 +47,15 @@ If you wish to use a custom format, the available fields are:
 		for _, cluster := range kubernetesClusters.Items {
 			ow.StartLine()
 
-			ow.AppendData("ID", cluster.ID)
-			ow.AppendData("Name", cluster.Name)
-			ow.AppendData("Region", client.Region)
-			ow.AppendData("Nodes", strconv.Itoa(len(cluster.Instances)))
-			ow.AppendData("Pools", strconv.Itoa(len(cluster.Pools)))
-			ow.AppendData("Status", utility.ColorStatus(cluster.Status))
+			ow.AppendDataWithLabel("id", cluster.ID, "ID")
+			ow.AppendDataWithLabel("name", cluster.Name, "Name")
+			ow.AppendDataWithLabel("region", client.Region, "Region")
+			ow.AppendDataWithLabel("nodes", strconv.Itoa(len(cluster.Instances)), "Nodes")
+			ow.AppendDataWithLabel("pools", strconv.Itoa(len(cluster.Pools)), "Pools")
+			ow.AppendDataWithLabel("status", utility.ColorStatus(cluster.Status), "Status")
 
 			if outputFormat == "json" || outputFormat == "custom" {
-				ow.AppendData("Status", cluster.Status)
+				ow.AppendDataWithLabel("status", cluster.Status, "Status")
 			}
 
 		}

@@ -16,8 +16,8 @@ var domainListCmd = &cobra.Command{
 	Long: `List all current domains.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Name
+	* id
+	* name
 
 Example: civo domain ls -o custom -f "ID: Name"`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -37,8 +37,8 @@ Example: civo domain ls -o custom -f "ID: Name"`,
 		for _, domain := range domains {
 			ow.StartLine()
 
-			ow.AppendData("ID", domain.ID)
-			ow.AppendData("Name", domain.Name)
+			ow.AppendDataWithLabel("id", domain.ID, "ID")
+			ow.AppendDataWithLabel("name", domain.Name, "Name")
 		}
 
 		switch outputFormat {

@@ -44,7 +44,7 @@ var templateRemoveCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": template.ID, "Name": template.Name})
+			ow := utility.NewOutputWriterWithMap(map[string]string{"id": template.ID, "name": template.Name})
 
 			switch outputFormat {
 			case "json":

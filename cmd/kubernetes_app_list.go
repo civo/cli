@@ -16,11 +16,11 @@ var kubernetesAppListCmd = &cobra.Command{
 	Long: `List all available Kubernetes clusters applications.
 If you wish to use a custom format, the available fields are:
 
-	* Name
-	* Version
-	* Category
-	* Plans
-	* Dependencies`,
+	* name
+	* version
+	* category
+	* plans
+	* dependencies`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -46,11 +46,11 @@ If you wish to use a custom format, the available fields are:
 				plansApps = append(plansApps, plan.Label)
 			}
 
-			ow.AppendData("Name", kubeApp.Name)
-			ow.AppendData("Version", kubeApp.Version)
-			ow.AppendData("Category", kubeApp.Category)
-			ow.AppendData("Plans", strings.Join(plansApps, ", "))
-			ow.AppendData("Dependencies", strings.Join(kubeApp.Dependencies, ", "))
+			ow.AppendDataWithLabel("name", kubeApp.Name, "Name")
+			ow.AppendDataWithLabel("version", kubeApp.Version, "Version")
+			ow.AppendDataWithLabel("category", kubeApp.Category, "Category")
+			ow.AppendDataWithLabel("plans", strings.Join(plansApps, ", "), "Plans")
+			ow.AppendDataWithLabel("dependencies", strings.Join(kubeApp.Dependencies, ", "), "Dependencies")
 		}
 
 		switch outputFormat {

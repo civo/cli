@@ -33,7 +33,7 @@ var networkCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": network.ID, "Label": network.Label})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": network.ID, "label": network.Label})
 
 		switch outputFormat {
 		case "json":

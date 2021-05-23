@@ -18,18 +18,17 @@ var loadBalancerListCmd = &cobra.Command{
 	Long: `List all load balancers.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Name
-	* Protocol
-	* Port
-	* TLSCertificate
-	* TLSKey
-	* Policy
-	* HealthCheckPath
-	* FailTimeout
-	* MaxConns
-	* IgnoreInvalidBackendTLS
-	* Backends`,
+	* id
+	* name
+	* protocol
+	* port
+	* tls_certificate
+	* tls_key
+	* policy
+	* health_check_path
+	* fail_timeout
+	* max_conns
+	* ignore_invalid_backend_tls`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -47,19 +46,19 @@ If you wish to use a custom format, the available fields are:
 		for _, lb := range lbs {
 			ow.StartLine()
 
-			ow.AppendData("ID", lb.ID)
-			ow.AppendData("Name", lb.Hostname)
-			ow.AppendData("Protocol", lb.Protocol)
-			ow.AppendData("Port", strconv.Itoa(lb.Port))
+			ow.AppendDataWithLabel("id", lb.ID, "ID")
+			ow.AppendDataWithLabel("name", lb.Hostname, "Name")
+			ow.AppendDataWithLabel("protocol", lb.Protocol, "Protocol")
+			ow.AppendDataWithLabel("port", strconv.Itoa(lb.Port), "Port")
 
 			if outputFormat == "json" || outputFormat == "custom" {
-				ow.AppendDataWithLabel("TLSCertificate", lb.TLSCertificate, "TLS Cert")
-				ow.AppendDataWithLabel("TLSKey", lb.TLSKey, "TLS Key")
-				ow.AppendData("Policy", lb.Policy)
-				ow.AppendDataWithLabel("HealthCheckPath", lb.HealthCheckPath, "Health Check Path")
-				ow.AppendDataWithLabel("FailTimeout", strconv.Itoa(lb.FailTimeout), "Fail Timeout")
-				ow.AppendDataWithLabel("MaxConns", strconv.Itoa(lb.MaxConns), "Max. Connections")
-				ow.AppendDataWithLabel("IgnoreInvalidBackendTLS", strconv.FormatBool(lb.IgnoreInvalidBackendTLS), "Ignore Invalid Backend TLS?")
+				ow.AppendDataWithLabel("tls_certificate", lb.TLSCertificate, "TLS Cert")
+				ow.AppendDataWithLabel("tls_key", lb.TLSKey, "TLS Key")
+				ow.AppendDataWithLabel("policy", lb.Policy, "Policy")
+				ow.AppendDataWithLabel("health_check_path", lb.HealthCheckPath, "Health Check Path")
+				ow.AppendDataWithLabel("fail_timeout", strconv.Itoa(lb.FailTimeout), "Fail Timeout")
+				ow.AppendDataWithLabel("max_conns", strconv.Itoa(lb.MaxConns), "Max. Connections")
+				ow.AppendDataWithLabel("ignore_invalid_backend_tls", strconv.FormatBool(lb.IgnoreInvalidBackendTLS), "Ignore Invalid Backend TLS?")
 			}
 
 			var backendList []string

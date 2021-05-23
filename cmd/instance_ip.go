@@ -19,9 +19,9 @@ var instancePublicIPCmd = &cobra.Command{
 	Long: `Show the specified instance's public IP by part of the instance's ID or name.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Hostname
-	* PublicIP
+	* id
+	* hostname
+	* public_ip
 
 This command is deprecated and instead you should use:
 
@@ -49,9 +49,9 @@ civo instance show ID/HOSTNAME -o custom -f "PublicIP"`,
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
-			ow.AppendData("ID", instance.ID)
-			ow.AppendData("Hostname", instance.Hostname)
-			ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "Public ID")
+			ow.AppendDataWithLabel("id", instance.ID, "ID")
+			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
+			ow.AppendDataWithLabel("public_ip", instance.PublicIP, "Public ID")
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON(prettySet)
 			} else {

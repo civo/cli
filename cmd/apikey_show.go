@@ -17,8 +17,8 @@ var apikeyShowCmd = &cobra.Command{
 	Long: `Show default API key.
 If you wish to use a custom format, the available fields are:
 
-* Name
-* Key
+* name
+* key
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		keys := make([]string, 0, len(config.Current.APIKeys))
@@ -34,22 +34,21 @@ If you wish to use a custom format, the available fields are:
 			if len(args) > 0 {
 				if strings.Contains(name, args[0]) {
 					ow.StartLine()
-					ow.AppendData("Name", name)
-					ow.AppendData("Key", apiKey)
+					ow.AppendDataWithLabel("name", name, "Name")
+					ow.AppendDataWithLabel("key", apiKey, "Key")
 				}
 			} else {
 				if config.Current.Meta.CurrentAPIKey == name {
 					ow.StartLine()
-					ow.AppendData("Name", name)
-					ow.AppendData("Key", apiKey)
-					// ow.AppendData("Default", defaultLabel)
+					ow.AppendDataWithLabel("name", name, "Name")
+					ow.AppendDataWithLabel("key", apiKey, "Key")
 				}
 			}
 		}
 
 		switch outputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON(prettySet)
+			ow.WriteSingleObjectJSON(prettySet)
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:

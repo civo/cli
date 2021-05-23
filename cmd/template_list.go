@@ -23,12 +23,10 @@ var templateListCmd = &cobra.Command{
 	Long: `List all available templates.
 If you wish to use a custom format, the available fields are:
 
-	* ID
-	* Code
-	* Name
-	* ShortDescription
-	* Description
-	* DefaultUsername
+	* id
+	* name
+	* version
+	* label
 
 Example: civo template ls -o custom -f "ID: Code (DefaultUsername)"`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -70,10 +68,10 @@ Example: civo template ls -o custom -f "ID: Code (DefaultUsername)"`,
 
 		for _, template := range templateDiskList {
 			ow.StartLine()
-			ow.AppendData("ID", template.ID)
-			ow.AppendData("Name", template.Name)
-			ow.AppendData("Version", template.Version)
-			ow.AppendData("Label", template.Label)
+			ow.AppendDataWithLabel("id", template.ID, "ID")
+			ow.AppendDataWithLabel("name", template.Name, "Name")
+			ow.AppendDataWithLabel("version", template.Version, "Version")
+			ow.AppendDataWithLabel("label", template.Label, "Label")
 		}
 
 		switch outputFormat {

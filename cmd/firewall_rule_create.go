@@ -69,7 +69,7 @@ var firewallRuleCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"ID": rule.ID, "Name": rule.Label})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": rule.ID, "name": rule.Label})
 
 		switch outputFormat {
 		case "json":

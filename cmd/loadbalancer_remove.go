@@ -44,7 +44,7 @@ var loadBalancerRemoveCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			ow := utility.NewOutputWriterWithMap(map[string]string{"ID": lb.ID, "Hostname": lb.Hostname})
+			ow := utility.NewOutputWriterWithMap(map[string]string{"id": lb.ID, "hostname": lb.Hostname})
 
 			switch outputFormat {
 			case "json":
