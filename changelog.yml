@@ -1,3 +1,15 @@
+- semver: 0.7.22
+  date: 2021-05-23T15:26:39.362322-04:00
+  packager: ""
+  changes:
+  - commit: bc005a6295cf4f350618183ed6e214193ff2f61c
+    note: Standardized json outputs
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.21
   date: 2021-05-23T13:48:16.204708-04:00
   packager: ""
