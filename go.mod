@@ -19,7 +19,7 @@ require (
 	github.com/hooklift/assert v0.0.0-20170704181755-9d1defd6d214 // indirect
 	github.com/kierdavis/ansi v0.0.0-20180105022324-90d93b0fcae2
 	github.com/klauspost/pgzip v1.2.4 // indirect
-	github.com/kubemart/kubemart-cli v0.0.28-0.20210506165145-328b358f2bfb
+	github.com/kubemart/kubemart-cli v0.0.28
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/spf13/cobra v1.1.1

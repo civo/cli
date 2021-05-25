@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
@@ -31,31 +30,20 @@ var kubernetesAppAddCmd = &cobra.Command{
 
 		if isKubemart {
 			kubemartutils.DebugPrintf("Entering Kubemart branch\n")
-			kubemartAdd(args)
+			kubemartAdd(cmd, args)
 		} else {
 			legacyAdd(args)
 		}
 	},
 }
 
-func kubemartAdd(args []string) {
+func kubemartAdd(cmd *cobra.Command, args []string) {
 	if kubernetesClusterApp == "" {
 		utility.Error("Please provide --cluster or -c flag")
 		os.Exit(1)
 	}
 
-	appNameWithPlan := args[0]
-	splitted := strings.Split(appNameWithPlan, ":")
-	appName := splitted[0]
-	kubemartutils.DebugPrintf("App name to install: %s\n", appName)
-
-	plan := 0
-	if len(splitted) > 1 {
-		plan = kubemartutils.ExtractPlanIntFromPlanStr(splitted[1])
-	}
-
-	kubemartutils.DebugPrintf("Calling Kubemart PreRunInstall with args appName: %s plan: %d\n", appName, plan)
-	err := kubemartcmd.PreRunInstall(&appName, &plan)
+	processedAppsAndPlanLabels, err := kubemartcmd.PreRunInstall(cmd, args)
 	if err != nil {
 		utility.Error(err.Error())
 		os.Exit(1)
@@ -88,8 +76,8 @@ func kubemartAdd(args []string) {
 		os.Exit(1)
 	}
 
-	kubemartutils.DebugPrintf("Creating Kubemart App CR\n")
-	err = cs.RunInstall(&appName, &plan)
+	kubemartutils.DebugPrintf("Creating Kubemart App CRs\n")
+	err = cs.RunInstall(processedAppsAndPlanLabels)
 	if err != nil {
 		utility.Error(err.Error())
 		os.Exit(1)

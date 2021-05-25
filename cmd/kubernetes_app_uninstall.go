@@ -42,9 +42,6 @@ func kubemartUninstall(args []string) {
 		os.Exit(1)
 	}
 
-	appName := args[0]
-	kubemartutils.DebugPrintf("App name to uninstall: %s\n", &appName)
-
 	kubemartutils.DebugPrintf("Creating Civo API client\n")
 	client, err := config.CivoAPIClient()
 	if regionSet != "" {
@@ -72,8 +69,8 @@ func kubemartUninstall(args []string) {
 		os.Exit(1)
 	}
 
-	kubemartutils.DebugPrintf("Uninstall a Kubemart app\n")
-	err = cs.RunUninstall(&appName)
+	kubemartutils.DebugPrintf("Uninstall Kubemart apps\n")
+	err = cs.RunUninstall(args)
 	if err != nil {
 		utility.Error(err.Error())
 		os.Exit(1)
