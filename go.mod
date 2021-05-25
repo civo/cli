@@ -24,12 +24,9 @@ require (
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/spf13/cobra v1.1.1
 	github.com/tcnksm/go-latest v0.0.0-20170313132115-e3007ae9052e
-	github.com/tg/gosortmap v0.0.0-20190425101757-4b9ddc7c3a61 // indirect
+	github.com/tg/gosortmap v0.0.0-20190425101757-4b9ddc7c3a61
 	github.com/tj/go-update v2.2.4+incompatible
 	github.com/ulikunitz/xz v0.5.7 // indirect
 	k8s.io/apimachinery v0.20.4
 	k8s.io/client-go v0.20.4
 )
-
-// TODO - remove this
-replace github.com/kubemart/kubemart-cli => /Users/zulh/kubemart/kubemart-cli
