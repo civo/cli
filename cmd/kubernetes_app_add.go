@@ -43,6 +43,12 @@ func kubemartAdd(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
+	err := syncKubemartApps()
+	if err != nil {
+		utility.Error(err.Error())
+		os.Exit(1)
+	}
+
 	processedAppsAndPlanLabels, err := kubemartcmd.PreRunInstall(cmd, args)
 	if err != nil {
 		utility.Error(err.Error())

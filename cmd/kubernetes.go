@@ -237,3 +237,17 @@ func isKubemartCluster(clusterIdentifier string) (bool, error) {
 	kubemartutils.DebugPrintf("Kubemart ConfigMap found\n")
 	return true, nil
 }
+
+func syncKubemartApps() error {
+	err := kubemartutils.CloneAppFilesIfNotExist()
+	if err != nil {
+		return err
+	}
+
+	_, err = kubemartutils.UpdateAppsCacheIfStale()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

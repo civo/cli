@@ -43,6 +43,12 @@ If you wish to use a custom format, the available fields are:
 }
 
 func kubemartList() {
+	err := syncKubemartApps()
+	if err != nil {
+		utility.Error(err.Error())
+		os.Exit(1)
+	}
+
 	manifests, err := kubemartcmd.GetAppManifestsMap()
 	if err != nil {
 		utility.Error(err.Error())

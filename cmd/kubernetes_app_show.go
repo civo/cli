@@ -58,6 +58,12 @@ func kubemartShow(args []string) {
 		os.Exit(1)
 	}
 
+	err := syncKubemartApps()
+	if err != nil {
+		utility.Error(err.Error())
+		os.Exit(1)
+	}
+
 	kubemartutils.DebugPrintf("Creating Civo API client\n")
 	client, err := config.CivoAPIClient()
 	if regionSet != "" {
