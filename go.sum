@@ -379,6 +379,8 @@ github.com/kubemart/kubemart-cli v0.0.30 h1:Hoh56xcdSYQ+5TqXN8+aop3AJRIJ4L+yXeMe
 github.com/kubemart/kubemart-cli v0.0.30/go.mod h1:8d9ys9i2PDLCgq9J2Zo6Cr9Bs4u/a0FOgyaeeBDjdSg=
 github.com/kubemart/kubemart-cli v0.0.31 h1:nyFXBe7uSl4ty6EgkLW49axMwpQc3R2xexMIgr/UV8c=
 github.com/kubemart/kubemart-cli v0.0.31/go.mod h1:8d9ys9i2PDLCgq9J2Zo6Cr9Bs4u/a0FOgyaeeBDjdSg=
+github.com/kubemart/kubemart-cli v0.0.32 h1:WAbteE491SDLgJGzW7omIEt9OzbccoWrnj8Q4k2vzlk=
+github.com/kubemart/kubemart-cli v0.0.32/go.mod h1:8d9ys9i2PDLCgq9J2Zo6Cr9Bs4u/a0FOgyaeeBDjdSg=
 github.com/kubemart/kubemart-operator v0.0.53 h1:vq4TEEdE/wHkl0QMFQmhD/dGIHtO9XoMg2BEXEFkkJw=
 github.com/kubemart/kubemart-operator v0.0.53/go.mod h1:SfFnSk7dND0Jy7ZC7njbogvfKW0ZCo5uy6jx6ypaA5g=
 github.com/kyokomi/emoji v2.1.0+incompatible h1:+DYU2RgpI6OHG4oQkM5KlqD3Wd3UPEsX8jamTo1Mp6o=
