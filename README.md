@@ -156,11 +156,13 @@ civo k8s list
 The civo cli have mutiple global options, that you can use, like this:
 
 ```
-	--config string   config file (default is $HOME/.civo.json)
--f, --fields string   output fields for custom format output (use -h to determine fields)
--o, --output string   output format (json/human/custom) (default "human")
-	--region string   Choose the region to connect to, if you use this option it will use it over the default region
--y, --yes             Automatic yes to prompts; assume "yes" as answer to all prompts and run non-interactively
+      --config string   config file (default is $HOME/.civo.json)
+  -f, --fields string   output fields for custom format output (use -h to determine fields)
+  -h, --help            help for civo
+  -o, --output string   output format (json/human/custom) (default "human")
+      --pretty          Print pretty the json output
+      --region string   Choose the region to connect to, if you use this option it will use it over the default region
+  -y, --yes             Automatic yes to prompts; assume "yes" as answer to all prompts and run non-interactivel
 ```
 
 ## API Keys
