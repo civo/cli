@@ -10,6 +10,7 @@ import (
 )
 
 var regionName string
+var validRegion bool
 var regionCurrentCmd = &cobra.Command{
 	Use:     "current [NAME]",
 	Aliases: []string{"use", "default", "set"},
@@ -38,7 +39,13 @@ var regionCurrentCmd = &cobra.Command{
 				config.Current.Meta.DefaultRegion = args[0]
 				regionName = v.Name
 				config.SaveConfig()
+				validRegion = true
 			}
+		}
+
+		if !validRegion {
+			fmt.Printf("The region you tried to set %s doesn't exist, please use 'civo region ls' to get the code of a valid region\n", utility.Red(args[0]))
+			os.Exit(1)
 		}
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"region": args[0], "name": regionName})
@@ -51,8 +58,5 @@ var regionCurrentCmd = &cobra.Command{
 		default:
 			fmt.Printf("The default region was set to (%s) %s\n", regionName, utility.Green(args[0]))
 		}
-
-		fmt.Printf("The region you tried to set %s doesn't exist, please use 'civo region ls' to get the code of a valid region", utility.Red(args[0]))
-		os.Exit(1)
 	},
 }
