@@ -1,4 +1,11 @@
 
+0.7.23
+=============
+2021-06-11
+
+* Fixed error at the moment to set a new region (1d924e09)
+* updated the README.md (3c4f01a4)
+
 0.7.22
 =============
 2021-05-23

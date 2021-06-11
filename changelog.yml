@@ -1,3 +1,23 @@
+- semver: 0.7.23
+  date: 2021-06-11T23:23:12.870563+01:00
+  packager: ""
+  changes:
+  - commit: 1d924e094995b232a944586e1e27367629e4ffbf
+    note: Fixed error at the moment to set a new region
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
+  - commit: 3c4f01a4a846c50fab6b0a7f79403f1113d9cc2a
+    note: updated the README.md
+    author:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro JNM
+      email: alejandrojnm@gmail.com
 - semver: 0.7.22
   date: 2021-05-23T15:26:39.362322-04:00
   packager: ""
