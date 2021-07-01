@@ -1,4 +1,11 @@
 
+0.7.24
+=============
+2021-07-01
+
+* Merge branch 'master' of https://github.com/civo/cli (d96aa357)
+* Fixed error in the network rm command (117ebe6c)
+
 0.7.23
 =============
 2021-06-11
