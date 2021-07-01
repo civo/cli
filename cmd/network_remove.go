@@ -34,6 +34,7 @@ var networkRemoveCmd = &cobra.Command{
 
 		if len(args) == 1 {
 			network, err := client.FindNetwork(args[0])
+
 			if err != nil {
 				if errors.Is(err, civogo.ZeroMatchesError) {
 					utility.Error("sorry there is no %s network in your account", utility.Red(args[0]))
@@ -43,11 +44,23 @@ var networkRemoveCmd = &cobra.Command{
 					utility.Error("sorry we found more than one network with that name in your account")
 					os.Exit(1)
 				}
-				networkList = append(networkList, utility.ObjecteList{ID: network.ID, Name: network.Label})
 			}
+
+			networkList = append(networkList, utility.ObjecteList{ID: network.ID, Name: network.Label})
+
 		} else {
 			for _, v := range args {
 				network, err := client.FindNetwork(v)
+				if err != nil {
+					if errors.Is(err, civogo.ZeroMatchesError) {
+						utility.Error("sorry there is no %s network in your account", utility.Red(args[0]))
+						os.Exit(1)
+					}
+					if errors.Is(err, civogo.MultipleMatchesError) {
+						utility.Error("sorry we found more than one network with that name in your account")
+						os.Exit(1)
+					}
+				}
 				if err == nil {
 					networkList = append(networkList, utility.ObjecteList{ID: network.ID, Name: network.Label})
 				}
