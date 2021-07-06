@@ -4,6 +4,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -30,10 +31,20 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		kubeApps, err := client.ListKubernetesMarketplaceApplications()
-		if err != nil {
-			utility.Error("%s", err)
-			os.Exit(1)
+		// Return Kubemart by default unless `--legacy` flag was set
+		var kubeApps []civogo.KubernetesMarketplaceApplication
+		if IsLegacy {
+			kubeApps, err = client.ListKubernetesMarketplaceApplications()
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+		} else {
+			kubeApps, err = client.ListKubernetesKubemartMarketplaceApplications()
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
 		}
 
 		ow := utility.NewOutputWriter()
