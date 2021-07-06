@@ -33,7 +33,7 @@ If you wish to use a custom format, the available fields are:
 
 		// Return Kubemart by default unless `--legacy` flag was set
 		var kubeApps []civogo.KubernetesMarketplaceApplication
-		if IsLegacy {
+		if isLegacy {
 			kubeApps, err = client.ListKubernetesMarketplaceApplications()
 			if err != nil {
 				utility.Error("%s", err)

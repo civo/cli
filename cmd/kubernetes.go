@@ -10,8 +10,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// IsLegacy is help us to scope legacy vs Kubemart resources
-var IsLegacy bool
+var isLegacy bool
+var kubernetesClusterApp string
 
 var kubernetesCmd = &cobra.Command{
 	Use:     "kubernetes",
@@ -98,11 +98,15 @@ func init() {
 	// Kubernetes Applications
 	kubernetesCmd.AddCommand(kubernetesApplicationsCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppListCmd)
-	kubernetesAppListCmd.Flags().BoolVar(&IsLegacy, "legacy", false, "List all legacy Kubernetes clusters applications")
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppAddCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppShowCmd)
+	kubernetesApplicationsCmd.AddCommand(kubernetesAppInstalled)
 
 	kubernetesAppAddCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to install the app.")
+	kubernetesAppAddCmd.MarkFlagRequired("cluster")
+	kubernetesAppListCmd.Flags().BoolVar(&isLegacy, "legacy", false, "List all legacy Kubernetes clusters applications")
+	kubernetesAppInstalled.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to install the app.")
+	kubernetesAppInstalled.MarkFlagRequired("cluster")
 
 	// Kubernetes NodePool
 	kubernetesCmd.AddCommand(kubernetesNodePoolCmd)

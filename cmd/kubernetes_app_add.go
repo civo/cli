@@ -10,8 +10,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var kubernetesClusterApp string
-
 var kubernetesAppAddCmd = &cobra.Command{
 	Use:     "add",
 	Example: "civo kubernetes application add NAME:PLAN --cluster CLUSTER_NAME",
