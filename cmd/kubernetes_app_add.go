@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
@@ -10,12 +11,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var appsAddCmdExample = []string{
+	"civo kubernetes application add NAME:PLAN --cluster CLUSTER_NAME",
+	"civo kubernetes application add NAME1:PLAN,NAME2:PLAN --cluster CLUSTER_NAME",
+}
+
 var kubernetesAppAddCmd = &cobra.Command{
 	Use:     "add",
-	Example: "civo kubernetes application add NAME:PLAN --cluster CLUSTER_NAME",
 	Aliases: []string{"install"},
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Add the marketplace application to a Kubernetes cluster",
+	Example: strings.Join(appsAddCmdExample, "\n"),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 

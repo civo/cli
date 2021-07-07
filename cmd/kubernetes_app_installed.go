@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var kubernetesAppInstalled = &cobra.Command{
+var kubernetesAppInstalledCmd = &cobra.Command{
 	Use:     "installed",
 	Short:   "List installed Kubernetes applications in cluster",
 	Example: "civo kubernetes application installed --cluster CLUSTER_NAME",
@@ -17,6 +17,9 @@ var kubernetesAppInstalled = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
+		if regionSet != "" {
+			client.Region = regionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
@@ -36,7 +39,7 @@ var kubernetesAppInstalled = &cobra.Command{
 			ow.AppendDataWithLabel("name", kubeApp.Name, "Name")
 			ow.AppendDataWithLabel("version", kubeApp.Version, "Version")
 			ow.AppendDataWithLabel("category", kubeApp.Category, "Category")
-			ow.AppendDataWithLabel("plans", kubeApp.Plan, "Plans")
+			ow.AppendDataWithLabel("plan", kubeApp.Plan, "Plan")
 			ow.AppendDataWithLabel("dependencies", strings.Join(kubeApp.Dependencies, ", "), "Dependencies")
 		}
 

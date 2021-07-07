@@ -100,13 +100,19 @@ func init() {
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppListCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppAddCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppShowCmd)
-	kubernetesApplicationsCmd.AddCommand(kubernetesAppInstalled)
+	kubernetesApplicationsCmd.AddCommand(kubernetesAppInstalledCmd)
+	kubernetesApplicationsCmd.AddCommand(kubernetesAppUpdateCmd)
+	kubernetesApplicationsCmd.AddCommand(kubernetesAppUninstallCmd)
 
-	kubernetesAppAddCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to install the app.")
+	kubernetesAppAddCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
 	kubernetesAppAddCmd.MarkFlagRequired("cluster")
 	kubernetesAppListCmd.Flags().BoolVar(&isLegacy, "legacy", false, "List all legacy Kubernetes clusters applications")
-	kubernetesAppInstalled.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to install the app.")
-	kubernetesAppInstalled.MarkFlagRequired("cluster")
+	kubernetesAppInstalledCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
+	kubernetesAppInstalledCmd.MarkFlagRequired("cluster")
+	kubernetesAppUpdateCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
+	kubernetesAppUpdateCmd.MarkFlagRequired("cluster")
+	kubernetesAppUninstallCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster")
+	kubernetesAppUninstallCmd.MarkFlagRequired("cluster")
 
 	// Kubernetes NodePool
 	kubernetesCmd.AddCommand(kubernetesNodePoolCmd)
