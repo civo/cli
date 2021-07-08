@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
@@ -31,6 +32,7 @@ var apikeySaveCmd = &cobra.Command{
 				utility.Error("Error reading name", err)
 				os.Exit(1)
 			}
+			name = strings.TrimSuffix(name, "\n")
 			fmt.Printf("Enter the API key: ")
 			apikeyBytes, err := terminal.ReadPassword(0)
 			if err != nil {
