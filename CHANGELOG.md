@@ -1,3 +1,8 @@
+0.7.25
+============
+2021-07-08
+* Add support to save API key from standard input(0683ed946c)
+
 
 0.7.24
 =============
