@@ -1,13 +1,10 @@
+
 0.7.26
-============
-2021-07-08
-* Fix new line addition in API key name(d3533c97206780d)
+=============
+2021-07-09
 
-0.7.25
-============
-2021-07-08
-* Add support to save API key from standard input(0683ed946c)
-
+* Merge pull request #103 from civo/Fix-apikey-newline (3489c95a)
+* Merge pull request #102 from civo/apikey-stdin (7da655a3)
 
 0.7.24
 =============

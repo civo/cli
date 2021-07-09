@@ -1,3 +1,29 @@
+- semver: 0.7.26
+  date: 2021-07-09T13:11:22.495641+01:00
+  packager: ""
+  changes:
+  - commit: 3489c95ad7700863c47fa7f0ce04141cdb8da0c5
+    note: |-
+      Merge pull request #103 from civo/Fix-apikey-newline
+
+      Fix addition of  new line in API key name
+    author:
+      name: Harsh Thakur
+      email: harshthakur9030@gmail.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
+  - commit: 7da655a3652e1ad944ec1559b6d896656582aa53
+    note: |-
+      Merge pull request #102 from civo/apikey-stdin
+
+      Add api key through stdin
+    author:
+      name: Harsh Thakur
+      email: harshthakur9030@gmail.com
+    committer:
+      name: GitHub
+      email: noreply@github.com
 - semver: 0.7.24
   date: 2021-07-01T19:20:41.502313+01:00
   packager: ""
