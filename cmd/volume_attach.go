@@ -33,13 +33,13 @@ var volumeAttachCmd = &cobra.Command{
 
 		volume, err := client.FindVolume(args[0])
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("Volume %s", err)
 			os.Exit(1)
 		}
 
 		instance, err := client.FindInstance(args[1])
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("Instance %s", err)
 			os.Exit(1)
 		}
 

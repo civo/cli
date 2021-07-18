@@ -55,7 +55,7 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 			nodePool := []civogo.KubernetesClusterPoolConfig{}
 			kubernetesFindCluster, err := client.FindKubernetesCluster(args[0])
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Kubernetes %s", err)
 				os.Exit(1)
 			}
 

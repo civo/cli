@@ -77,7 +77,12 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		if len(args) > 0 {
-			clusterName = args[0]
+			if utility.CheckNameSize(hostnameCreate) {
+				clusterName = args[0]
+			} else {
+				utility.Warning("the cluster name cannot be longer than 63 characters")
+				os.Exit(1)
+			}
 		} else {
 			clusterName = utility.RandomName()
 		}
@@ -85,7 +90,7 @@ var kubernetesCreateCmd = &cobra.Command{
 		if networkID == "default" {
 			network, err := client.GetDefaultNetwork()
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
 
@@ -94,7 +99,7 @@ var kubernetesCreateCmd = &cobra.Command{
 		} else {
 			network, err := client.FindNetwork(networkID)
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
 
@@ -183,7 +188,7 @@ var kubernetesCreateCmd = &cobra.Command{
 			for stillCreating {
 				kubernetesCheck, err := client.FindKubernetesCluster(kubernetesCluster.ID)
 				if err != nil {
-					utility.Error("%s", err)
+					utility.Error("Kubernetes %s", err)
 					os.Exit(1)
 				}
 				if kubernetesCheck.Ready {
@@ -200,7 +205,7 @@ var kubernetesCreateCmd = &cobra.Command{
 		if saveConfigKubernetes {
 			kube, err := client.FindKubernetesCluster(kubernetesCluster.ID)
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Kubernetes %s", err)
 				os.Exit(1)
 			}
 

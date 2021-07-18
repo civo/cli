@@ -34,13 +34,13 @@ var firewallCreateCmd = &cobra.Command{
 		if firewallnetwork == "default" {
 			defaultNetwork, err = client.GetDefaultNetwork()
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
 		} else {
 			defaultNetwork, err = client.FindNetwork(firewallnetwork)
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
 		}

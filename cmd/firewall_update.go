@@ -30,13 +30,13 @@ var firewallUpdateCmd = &cobra.Command{
 
 		defautlNetwork, err := client.GetDefaultNetwork()
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("Network %s", err)
 			os.Exit(1)
 		}
 
 		firewall, err := client.FindFirewall(args[0])
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("Firewall %s", err)
 			os.Exit(1)
 		}
 

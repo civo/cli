@@ -37,7 +37,7 @@ Example: civo instance console ID/NAME`,
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("Instance %s", err)
 			os.Exit(1)
 		}
 

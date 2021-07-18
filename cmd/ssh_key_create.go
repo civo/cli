@@ -40,7 +40,7 @@ var sshKeyCreateCmd = &cobra.Command{
 
 		sshKey, err := client.FindSSHKey(args[0])
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("SSHKey %s", err)
 			os.Exit(1)
 		}
 

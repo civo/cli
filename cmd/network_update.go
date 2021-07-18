@@ -29,7 +29,7 @@ var networkUpdateCmd = &cobra.Command{
 
 		oldNetwork, err := client.FindNetwork(args[0])
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("Network %s", err)
 			os.Exit(1)
 		}
 

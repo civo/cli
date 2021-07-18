@@ -75,7 +75,13 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if hostnameCreate != "" {
-			config.Hostname = hostnameCreate
+			if utility.CheckNameSize(hostnameCreate) {
+				config.Hostname = hostnameCreate
+			} else {
+				utility.Warning("the hostname cannot be longer than 63 characters")
+				os.Exit(1)
+			}
+
 		}
 
 		if region != "" {
@@ -91,14 +97,14 @@ If you wish to use a custom format, the available fields are:
 			if client.Region == "SVG1" {
 				findTemplate, err := client.FindTemplate(template)
 				if err != nil {
-					utility.Error("%s", err)
+					utility.Error("Template %s", err)
 					os.Exit(1)
 				}
 				templateID = findTemplate.ID
 			} else {
 				findTemplate, err := client.FindDiskImage(template)
 				if err != nil {
-					utility.Error("%s", err)
+					utility.Error("DiskImage %s", err)
 					os.Exit(1)
 				}
 				templateID = findTemplate.ID
@@ -122,7 +128,7 @@ If you wish to use a custom format, the available fields are:
 		if sshkey != "" {
 			sshKey, err := client.FindSSHKey(sshkey)
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("SSHKey %s", err)
 				os.Exit(1)
 			}
 			config.SSHKeyID = sshKey.ID
@@ -131,7 +137,7 @@ If you wish to use a custom format, the available fields are:
 		if network != "" {
 			net, err := client.FindNetwork(network)
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
 			config.NetworkID = net.ID
@@ -177,7 +183,7 @@ If you wish to use a custom format, the available fields are:
 			// like PublicIP
 			instance, err = client.FindInstance(resp.ID)
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Instance %s", err)
 				os.Exit(1)
 			}
 		}

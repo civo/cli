@@ -42,7 +42,7 @@ var volumeCreateCmd = &cobra.Command{
 		if networkVolumeID == "default" {
 			network, err := client.GetDefaultNetwork()
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
 
@@ -51,7 +51,7 @@ var volumeCreateCmd = &cobra.Command{
 		} else {
 			network, err := client.FindNetwork(networkVolumeID)
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
 

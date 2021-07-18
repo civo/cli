@@ -68,7 +68,7 @@ var loadBalancerCreateCmd = &cobra.Command{
 				data := utility.GetStringMap(backend)
 				instance, err := client.FindInstance(data["instance"])
 				if err != nil {
-					utility.Error("%s", err)
+					utility.Error("Instance %s", err)
 					os.Exit(1)
 				}
 

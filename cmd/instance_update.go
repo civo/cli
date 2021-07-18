@@ -39,7 +39,7 @@ If you wish to use a custom format, the available fields are:
 
 		instance, err := client.FindInstance(args[0])
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("Instance %s", err)
 			os.Exit(1)
 		}
 

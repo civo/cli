@@ -32,7 +32,7 @@ var kubernetesAppAddCmd = &cobra.Command{
 
 		kubernetesFindCluster, err := client.FindKubernetesCluster(kubernetesClusterApp)
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("Kubernetes %s", err)
 			os.Exit(1)
 		}
 

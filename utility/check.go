@@ -143,3 +143,8 @@ func EnsureCurrentRegion() {
 		os.Exit(1)
 	}
 }
+
+// CheckNameSize is a function to check is the name is valid
+func CheckNameSize(name string) bool {
+	return len(name) > 63
+}
