@@ -86,6 +86,7 @@ func init() {
 	kubernetesCreateCmd.Flags().BoolVarP(&saveConfigKubernetes, "save", "", false, "save the config")
 	kubernetesCreateCmd.Flags().BoolVarP(&mergeConfigKubernetes, "merge", "m", false, "merge the config with existing kubeconfig if it already exists.")
 	kubernetesCreateCmd.Flags().BoolVarP(&switchConfigKubernetes, "switch", "", false, "switch context to newly-created cluster")
+	kubernetesCreateCmd.Flags().StringVarP(&kubemartEmail, "email", "e", "", "email to receive certs-related emails and as default login email for certain applications")
 
 	kubernetesRenameCmd.Flags().StringVarP(&kubernetesNewName, "name", "n", "", "the new name for the cluster.")
 

@@ -16,7 +16,7 @@ import (
 
 var numTargetNodes int
 var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes bool
-var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications, networkID string
+var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications, networkID, kubemartEmail string
 var kubernetesCluster *civogo.KubernetesCluster
 
 var kubernetesCreateCmd = &cobra.Command{
@@ -106,6 +106,7 @@ var kubernetesCreateCmd = &cobra.Command{
 			NumTargetNodes:  numTargetNodes,
 			TargetNodesSize: targetNodesSize,
 			NetworkID:       networkID,
+			KubemartEmail:   kubemartEmail,
 		}
 
 		if kubernetesVersion != "latest" {
