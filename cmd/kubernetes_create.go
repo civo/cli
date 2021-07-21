@@ -77,12 +77,13 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		if len(args) > 0 {
-			if !utility.CheckNameSize(hostnameCreate) {
-				clusterName = args[0]
-			} else {
+
+			if utility.ValidNameLength(args[0]) {
 				utility.Warning("the cluster name cannot be longer than 63 characters")
 				os.Exit(1)
 			}
+			clusterName = args[0]
+
 		} else {
 			clusterName = utility.RandomName()
 		}

@@ -75,13 +75,11 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if hostnameCreate != "" {
-			if utility.CheckNameSize(hostnameCreate) {
-				config.Hostname = hostnameCreate
-			} else {
+			if utility.ValidNameLength(hostnameCreate) {
 				utility.Warning("the hostname cannot be longer than 63 characters")
 				os.Exit(1)
 			}
-
+			config.Hostname = hostnameCreate
 		}
 
 		if region != "" {

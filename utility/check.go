@@ -144,7 +144,7 @@ func EnsureCurrentRegion() {
 	}
 }
 
-// CheckNameSize is a function to check is the name is valid
-func CheckNameSize(name string) bool {
+// ValidNameLength is a function to check is the name is valid
+func ValidNameLength(name string) bool {
 	return len(name) > 63
 }
