@@ -99,6 +99,7 @@ func init() {
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppShowCmd)
 
 	kubernetesAppAddCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to install the app.")
+	kubernetesAppAddCmd.MarkFlagRequired("cluster")
 
 	// Kubernetes NodePool
 	kubernetesCmd.AddCommand(kubernetesNodePoolCmd)
