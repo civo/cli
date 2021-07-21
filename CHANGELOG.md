@@ -1,4 +1,10 @@
 
+0.7.29
+=============
+2021-07-21
+
+* Fixed error in the creation of the cluster (dc4d01b3)
+
 0.7.28
 =============
 2021-07-21

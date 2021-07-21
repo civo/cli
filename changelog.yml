@@ -1,3 +1,15 @@
+- semver: 0.7.29
+  date: 2021-07-21T18:09:35.467852+01:00
+  packager: ""
+  changes:
+  - commit: dc4d01b36b038e13c9c468ec25c33c97aa4a6896
+    note: Fixed error in the creation of the cluster
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
 - semver: 0.7.28
   date: 2021-07-21T10:58:10.89241+01:00
   packager: ""
