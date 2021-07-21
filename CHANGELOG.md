@@ -1,4 +1,11 @@
 
+0.7.28
+=============
+2021-07-21
+
+* Added node as required flag in the scaling cmd (681149f7)
+* Fixed error in the cmd add app to the cluster (8a37fada)
+
 0.7.27
 =============
 2021-07-18

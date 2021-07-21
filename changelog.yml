@@ -1,3 +1,23 @@
+- semver: 0.7.28
+  date: 2021-07-21T10:58:10.89241+01:00
+  packager: ""
+  changes:
+  - commit: 681149f72aa76cddb2aea6c18668ce030a0af882
+    note: Added node as required flag in the scaling cmd
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
+  - commit: 8a37fada4a1754d5a8abb8b8400ff7aaa6da61d4
+    note: Fixed error in the cmd add app to the cluster
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
 - semver: 0.7.27
   date: 2021-07-18T09:39:40.559923+01:00
   packager: ""
