@@ -1,4 +1,10 @@
 
+0.7.30
+=============
+2021-07-21
+
+* Fix abug in the kubernetes create cmd, modify the name of the utils for check the length of the name (2d4641bf)
+
 0.7.29
 =============
 2021-07-21

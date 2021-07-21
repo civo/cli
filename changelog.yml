@@ -1,3 +1,15 @@
+- semver: 0.7.30
+  date: 2021-07-21T19:27:19.123696+01:00
+  packager: ""
+  changes:
+  - commit: 2d4641bf6c85cb54d8139c2714c181e4fb6b5f5b
+    note: Fix abug in the kubernetes create cmd, modify the name of the utils for check the length of the name
+    author:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
+    committer:
+      name: Alejandro J. Nuñez Madrazo
+      email: alejandrojnm@gmail.com
 - semver: 0.7.29
   date: 2021-07-21T18:09:35.467852+01:00
   packager: ""
