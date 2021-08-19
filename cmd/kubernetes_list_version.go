@@ -41,7 +41,7 @@ If you wish to use a custom format, the available fields are:
 
 		ow := utility.NewOutputWriter()
 		for _, version := range kubeVersions {
-			if version.Type != "stable" {
+			if version.Type == "deprecated" {
 				continue
 			}
 
