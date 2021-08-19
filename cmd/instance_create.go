@@ -86,9 +86,25 @@ If you wish to use a custom format, the available fields are:
 			config.Region = region
 		}
 
-		if size != "" {
-			config.Size = size
+		sizes, err := client.ListInstanceSizes()
+		if err != nil {
+			utility.Error("Unable to list instance sizes %s", err)
+			os.Exit(1)
 		}
+
+		sizeIsValid := false
+		for _, s := range sizes {
+			if size == s.Name {
+				sizeIsValid = true
+				break
+			}
+		}
+
+		if !sizeIsValid {
+			utility.Error("The provided size is not valid")
+			os.Exit(1)
+		}
+		config.Size = size
 
 		if template != "" {
 			templateID := ""

@@ -45,7 +45,8 @@ func init() {
 
 	instanceCreateCmd.Flags().BoolVarP(&wait, "wait", "w", false, "wait until the instance's is ready")
 	instanceCreateCmd.Flags().StringVarP(&hostnameCreate, "hostname", "s", "", "the instance's hostname")
-	instanceCreateCmd.Flags().StringVarP(&size, "size", "i", "", "the instance's size")
+	instanceCreateCmd.Flags().StringVarP(&size, "size", "i", "", "the instance's size (from 'civo instance size' command)")
+	instanceCreateCmd.MarkFlagRequired("size")
 	instanceCreateCmd.Flags().StringVarP(&template, "template", "t", "", "the instance's template")
 	instanceCreateCmd.Flags().StringVarP(&snapshot, "snapshot", "n", "", "the instance's snapshot")
 	instanceCreateCmd.Flags().StringVarP(&publicip, "publicip", "p", "create", "This should be either none, create or `move_ip_from:intances_id` by default is create")
