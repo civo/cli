@@ -106,26 +106,23 @@ If you wish to use a custom format, the available fields are:
 		}
 		config.Size = size
 
-		if template != "" {
-			templateID := ""
-			if client.Region == "SVG1" {
-				findTemplate, err := client.FindTemplate(template)
-				if err != nil {
-					utility.Error("Template %s", err)
-					os.Exit(1)
-				}
-				templateID = findTemplate.ID
-			} else {
-				findTemplate, err := client.FindDiskImage(template)
-				if err != nil {
-					utility.Error("DiskImage %s", err)
-					os.Exit(1)
-				}
-				templateID = findTemplate.ID
+		templateID := ""
+		if client.Region == "SVG1" {
+			findTemplate, err := client.FindTemplate(template)
+			if err != nil {
+				utility.Error("Template %s", err)
+				os.Exit(1)
 			}
-
-			config.TemplateID = templateID
+			templateID = findTemplate.ID
+		} else {
+			findTemplate, err := client.FindDiskImage(template)
+			if err != nil {
+				utility.Error("DiskImage %s", err)
+				os.Exit(1)
+			}
+			templateID = findTemplate.ID
 		}
+		config.TemplateID = templateID
 
 		if snapshot != "" {
 			config.SnapshotID = snapshot
