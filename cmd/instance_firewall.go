@@ -39,19 +39,39 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		instance, err := client.FindInstance(args[0])
+		instanceArg := args[0]
+		firewallArg := args[1]
+
+		instance, err := client.FindInstance(instanceArg)
 		if err != nil {
 			utility.Error("Instance %s", err)
 			os.Exit(1)
 		}
 
-		firewall, err := client.FindFirewall(args[1])
+		firewall, err := client.FindFirewall(firewallArg)
 		if err != nil {
 			utility.Error("Firewall %s", err)
 			os.Exit(1)
 		}
 
-		_, err = client.SetInstanceFirewall(instance.ID, args[1])
+		instanceNetwork, err := client.FindNetwork(instance.NetworkID)
+		if err != nil {
+			utility.Error("Unable to find instance's network - %s", err)
+			os.Exit(1)
+		}
+
+		firewallNetwork, err := client.FindNetwork(firewall.NetworkID)
+		if err != nil {
+			utility.Error("Unable to find firewall's network - %s", err)
+			os.Exit(1)
+		}
+
+		if instanceNetwork.ID != firewallNetwork.ID {
+			utility.Error("%q firewall is located in %q network but %q instance is located in %q network. Please try again with a firewall from %q network.", firewallArg, firewallNetwork.Label, instanceArg, instanceNetwork.Label, instanceNetwork.Label)
+			os.Exit(1)
+		}
+
+		_, err = client.SetInstanceFirewall(instance.ID, firewall.ID)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
