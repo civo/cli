@@ -62,7 +62,7 @@ var volumeDetachCmd = &cobra.Command{
 					utility.Error("%s", err)
 					os.Exit(1)
 				}
-				if volumeCheck.MountPoint == "" {
+				if volumeCheck.Status == "available" {
 					stillDetaching = false
 					s.Stop()
 				} else {

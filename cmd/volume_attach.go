@@ -68,7 +68,7 @@ var volumeAttachCmd = &cobra.Command{
 					utility.Error("Finding the volume failed with %s", err)
 					os.Exit(1)
 				}
-				if volumeCheck.MountPoint != "" {
+				if volumeCheck.Status == "attached" {
 					stillAttaching = false
 					s.Stop()
 				} else {
