@@ -20,11 +20,11 @@ var volumeCmd = &cobra.Command{
 }
 
 func init() {
-	// rootCmd.AddCommand(volumeCmd)
-	volumeCmd.AddCommand(volumeListCmd)
+	rootCmd.AddCommand(volumeCmd)
 	volumeCmd.AddCommand(volumeCreateCmd)
-	volumeCmd.AddCommand(volumeResizeCmd)
+	volumeCmd.AddCommand(volumeListCmd)
 	volumeCmd.AddCommand(volumeRemoveCmd)
+	// volumeCmd.AddCommand(volumeResizeCmd)
 	volumeCmd.AddCommand(volumeAttachCmd)
 	volumeCmd.AddCommand(volumeDetachCmd)
 
