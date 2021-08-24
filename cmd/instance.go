@@ -54,6 +54,7 @@ func init() {
 	instanceCreateCmd.Flags().StringVarP(&initialuser, "initialuser", "u", "", "the instance's initial user")
 	instanceCreateCmd.Flags().StringVarP(&sshkey, "sshkey", "k", "", "the instance's ssh key you can use the Name or the ID")
 	instanceCreateCmd.Flags().StringVarP(&network, "network", "r", "", "the instance's network you can use the Name or the ID")
+	instanceCreateCmd.Flags().StringVarP(&firewall, "firewall", "l", "", "the instance's firewall you can use the Name or the ID")
 	instanceCreateCmd.Flags().StringVarP(&tags, "tags", "g", "", "the instance's tags")
 	instanceCreateCmd.Flags().StringVarP(&tags, "region", "e", "", "the region code identifier to have your instance built in")
 

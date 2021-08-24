@@ -16,7 +16,7 @@ import (
 )
 
 var wait bool
-var hostnameCreate, size, template, snapshot, publicip, initialuser, sshkey, tags, network string
+var hostnameCreate, size, template, snapshot, publicip, initialuser, sshkey, tags, network, firewall string
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -145,13 +145,40 @@ If you wish to use a custom format, the available fields are:
 			config.SSHKeyID = sshKey.ID
 		}
 
+		var net = &civogo.Network{}
 		if network != "" {
-			net, err := client.FindNetwork(network)
+			net, err = client.FindNetwork(network)
 			if err != nil {
 				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
 			config.NetworkID = net.ID
+
+			if !net.Default && firewall == "" {
+				utility.Error("Firewall is required when launching instance in non-default network. See '--firewall' flag.")
+				os.Exit(1)
+			}
+		} else {
+			net, err = client.GetDefaultNetwork()
+			if err != nil {
+				utility.Error("Unable to retrieve default network - %s", err)
+				os.Exit(1)
+			}
+		}
+
+		if firewall != "" {
+			fw, err := client.FindFirewall(firewall)
+			if err != nil {
+				utility.Error("Unable to find firewall %s", err)
+				os.Exit(1)
+			}
+
+			if net.ID != fw.NetworkID {
+				utility.Error("%q firewall does not exist in %q network. Please try again.", firewall, net.Label)
+				os.Exit(1)
+			}
+
+			config.FirewallID = fw.ID
 		}
 
 		if tags != "" {
