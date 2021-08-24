@@ -21,8 +21,8 @@ If you wish to use a custom format, the available fields are:
 	* id
 	* name
 	* network_id
-	* instance_id
 	* cluster_id
+	* instance_id
 	* size_gigabytes
 	* mount_point
 	* status
@@ -64,7 +64,20 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 				ow.AppendDataWithLabel("network_id", "", "Network")
 			}
 
-			if volume.InstanceID != "" {
+			isClusterVolume := false
+			if volume.ClusterID != "" {
+				cluster, err := client.FindKubernetesCluster(volume.ClusterID)
+				if err != nil {
+					utility.Error("Finding the cluster failed with %s", err)
+					os.Exit(1)
+				}
+				isClusterVolume = true
+				ow.AppendDataWithLabel("cluster_id", cluster.Name, "Cluster")
+			} else {
+				ow.AppendDataWithLabel("cluster_id", "", "Cluster")
+			}
+
+			if volume.InstanceID != "" && !isClusterVolume {
 				instance, err := client.FindInstance(volume.InstanceID)
 				if err != nil {
 					utility.Error("Finding the instance failed with %s", err)
@@ -73,17 +86,6 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 				ow.AppendDataWithLabel("instance_id", instance.Hostname, "Instance")
 			} else {
 				ow.AppendDataWithLabel("instance_id", "", "Instance")
-			}
-
-			if volume.ClusterID != "" {
-				cluster, err := client.FindKubernetesCluster(volume.ClusterID)
-				if err != nil {
-					utility.Error("Finding the cluster failed with %s", err)
-					os.Exit(1)
-				}
-				ow.AppendDataWithLabel("cluster_id", cluster.Name, "Cluster")
-			} else {
-				ow.AppendDataWithLabel("cluster_id", "", "Cluster")
 			}
 
 			ow.AppendDataWithLabel("size_gigabytes", fmt.Sprintf("%s GB", strconv.Itoa(volume.SizeGigabytes)), "Size")
