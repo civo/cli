@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
@@ -11,10 +12,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var volumeRemoveCmdExamples = []string{
+	"civo volume rm VOLUME_NAME",
+	"civo volume rm VOLUME_ID",
+}
+
 var volumeRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
-	Example: "civo volume rm VOLUME_NAME",
+	Example: strings.Join(volumeRemoveCmdExamples, "\n"),
 	Short:   "Remove a volume",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
