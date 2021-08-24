@@ -28,9 +28,8 @@ func init() {
 	volumeCmd.AddCommand(volumeAttachCmd)
 	volumeCmd.AddCommand(volumeDetachCmd)
 
-	volumeCreateCmd.Flags().BoolVarP(&bootableVolume, "bootable", "b", false, "Mark the volume as bootable")
 	volumeCreateCmd.Flags().IntVarP(&createSizeGB, "size-gb", "s", 0, "The new size in GB (required)")
-	volumeCreateCmd.Flags().StringVarP(&networkVolumeID, "network", "t", "default", "The network where the volume will be created")
+	volumeCreateCmd.Flags().StringVarP(&networkVolumeID, "network", "t", "default", "The network name/ID where the volume will be created")
 	volumeCreateCmd.MarkFlagRequired("size-gb")
 
 	volumeResizeCmd.Flags().IntVarP(&newSizeGB, "size-gb", "s", 0, "The new size in GB (required)")

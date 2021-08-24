@@ -10,7 +10,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var bootableVolume bool
 var createSizeGB int
 var networkVolumeID string
 
@@ -35,7 +34,6 @@ var volumeCreateCmd = &cobra.Command{
 		volumeConfig := &civogo.VolumeConfig{
 			Name:          args[0],
 			SizeGigabytes: createSizeGB,
-			Bootable:      bootableVolume,
 			Region:        client.Region,
 		}
 
