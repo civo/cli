@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -13,10 +14,15 @@ import (
 
 var waitVolumeAttach bool
 
+var volumeAttachCmdExamples = []string{
+	"civo volume attach VOLUME_NAME INSTANCE_HOSTNAME",
+	"civo volume attach VOLUME_ID INSTANCE_ID",
+}
+
 var volumeAttachCmd = &cobra.Command{
 	Use:     "attach",
 	Aliases: []string{"connect", "link"},
-	Example: "civo volume attach VOLUME_NAME INSTANCE_HOSTNAME",
+	Example: strings.Join(volumeAttachCmdExamples, "\n"),
 	Short:   "Attach a volume to an instance",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
