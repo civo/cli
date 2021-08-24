@@ -148,3 +148,7 @@ func EnsureCurrentRegion() {
 func ValidNameLength(name string) bool {
 	return len(name) > 63
 }
+
+func CanManageVolume(volume *civogo.Volume) bool {
+	return volume.ClusterID == ""
+}
