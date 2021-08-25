@@ -42,12 +42,25 @@ var kubernetesNodePoolScaleCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		nodePoolID := args[1]
+		nodePoolFound := false
+		for _, pool := range kubernetesFindCluster.Pools {
+			if pool.ID == nodePoolID {
+				nodePoolFound = true
+			}
+		}
+
+		if !nodePoolFound {
+			utility.Error("Unable to find %q node pool inside %q cluster", nodePoolID, kubernetesFindCluster.Name)
+			os.Exit(1)
+		}
+
 		nodePool := []civogo.KubernetesClusterPoolConfig{}
 		for _, v := range kubernetesFindCluster.Pools {
 			nodePool = append(nodePool, civogo.KubernetesClusterPoolConfig{ID: v.ID, Count: v.Count, Size: v.Size})
 		}
 
-		nodePool = utility.UpdateNodePool(nodePool, args[1], numTargetNodesPoolScale)
+		nodePool = utility.UpdateNodePool(nodePool, nodePoolID, numTargetNodesPoolScale)
 
 		configKubernetes := &civogo.KubernetesClusterConfig{
 			Pools: nodePool,
@@ -59,7 +72,7 @@ var kubernetesNodePoolScaleCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"id": kubernetesCluster.ID, "name": kubernetesCluster.Name, "pool_id": args[1]})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": kubernetesCluster.ID, "name": kubernetesCluster.Name, "pool_id": nodePoolID})
 
 		switch outputFormat {
 		case "json":
@@ -67,7 +80,7 @@ var kubernetesNodePoolScaleCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The pool (%s) was scaled to (%s) in the cluster (%s)\n", utility.Green(args[1]), utility.Green(strconv.Itoa(numTargetNodesPoolScale)), utility.Green(kubernetesCluster.Name))
+			fmt.Printf("The pool (%s) was scaled to (%s) in the cluster (%s)\n", utility.Green(nodePoolID), utility.Green(strconv.Itoa(numTargetNodesPoolScale)), utility.Green(kubernetesCluster.Name))
 		}
 	},
 }
