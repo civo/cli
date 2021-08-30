@@ -10,6 +10,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var defaultK8sClusterFirewallRules = "80,443,6443"
+
 var kubernetesCmd = &cobra.Command{
 	Use:     "kubernetes",
 	Aliases: []string{"k3s", "k8s", "kube"},
@@ -83,6 +85,8 @@ func init() {
 	kubernetesCreateCmd.Flags().BoolVarP(&saveConfigKubernetes, "save", "", false, "save the config")
 	kubernetesCreateCmd.Flags().BoolVarP(&mergeConfigKubernetes, "merge", "m", false, "merge the config with existing kubeconfig if it already exists.")
 	kubernetesCreateCmd.Flags().BoolVarP(&switchConfigKubernetes, "switch", "", false, "switch context to newly-created cluster")
+	kubernetesCreateCmd.Flags().StringVarP(&existingFirewall, "existing-firewall", "e", "", "optional, ID of existing firewall to use")
+	kubernetesCreateCmd.Flags().StringVarP(&createFirewall, "create-firewall", "c", defaultK8sClusterFirewallRules, "optional, comma-separated list of ports to open (leave blank for default or you can use \"all\")")
 
 	kubernetesRenameCmd.Flags().StringVarP(&kubernetesNewName, "name", "n", "", "the new name for the cluster.")
 
@@ -111,7 +115,6 @@ func init() {
 	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolScaleCmd)
 	kubernetesNodePoolScaleCmd.Flags().IntVarP(&numTargetNodesPoolScale, "nodes", "n", 3, "the number of nodes to scale for the pool.")
 	kubernetesNodePoolScaleCmd.MarkFlagRequired("nodes")
-
 
 }
 

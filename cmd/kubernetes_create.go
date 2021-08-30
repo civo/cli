@@ -16,7 +16,7 @@ import (
 
 var numTargetNodes int
 var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes bool
-var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications, networkID string
+var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications, networkID, existingFirewall, createFirewall string
 var kubernetesCluster *civogo.KubernetesCluster
 
 var kubernetesCreateCmd = &cobra.Command{
@@ -88,30 +88,51 @@ var kubernetesCreateCmd = &cobra.Command{
 			clusterName = utility.RandomName()
 		}
 
+		var network = &civogo.Network{}
 		if networkID == "default" {
-			network, err := client.GetDefaultNetwork()
+			network, err = client.GetDefaultNetwork()
 			if err != nil {
 				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
-
-			networkID = network.ID
-
 		} else {
-			network, err := client.FindNetwork(networkID)
+			network, err = client.FindNetwork(networkID)
 			if err != nil {
 				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
-
-			networkID = network.ID
 		}
 
 		configKubernetes := &civogo.KubernetesClusterConfig{
 			Name:            clusterName,
 			NumTargetNodes:  numTargetNodes,
 			TargetNodesSize: targetNodesSize,
-			NetworkID:       networkID,
+			NetworkID:       network.ID,
+		}
+
+		if existingFirewall != "" {
+			if createFirewall != defaultK8sClusterFirewallRules {
+				utility.Error("You can't use --create-firewall together with --existing-firewall flag")
+				os.Exit(1)
+			}
+
+			ef, err := client.FindFirewall(existingFirewall)
+			if err != nil {
+				utility.Error("Unable to find existing %q firewall - %s", existingFirewall, err)
+				os.Exit(1)
+			}
+
+			if ef.NetworkID != network.ID {
+				utility.Error("Unable to find firewall %q in %q network", ef.ID, network.Label)
+				os.Exit(1)
+			}
+
+			configKubernetes.InstanceFirewall = ef.ID
+			createFirewall = ""
+		}
+
+		if createFirewall != "" {
+			configKubernetes.FirewallRule = createFirewall
 		}
 
 		if kubernetesVersion != "latest" {
@@ -156,6 +177,8 @@ var kubernetesCreateCmd = &cobra.Command{
 			}
 			configKubernetes.Applications = installApplications
 		}
+
+		fmt.Printf("Config: %+v\n", configKubernetes)
 
 		if !mergeConfigKubernetes && saveConfigKubernetes {
 			if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) {
