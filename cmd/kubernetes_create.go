@@ -110,15 +110,21 @@ var kubernetesCreateCmd = &cobra.Command{
 			NetworkID:       network.ID,
 		}
 
+		if createFirewall == "" {
+			configKubernetes.FirewallRule = "80,443,6443"
+		} else {
+			configKubernetes.FirewallRule = createFirewall
+		}
+
 		if existingFirewall != "" {
-			if createFirewall != defaultK8sClusterFirewallRules {
+			if createFirewall != "" {
 				utility.Error("You can't use --create-firewall together with --existing-firewall flag")
 				os.Exit(1)
 			}
 
 			ef, err := client.FindFirewall(existingFirewall)
 			if err != nil {
-				utility.Error("Unable to find existing %q firewall - %s", existingFirewall, err)
+				utility.Error("Unable to find %q firewall - %s", existingFirewall, err)
 				os.Exit(1)
 			}
 
@@ -128,11 +134,7 @@ var kubernetesCreateCmd = &cobra.Command{
 			}
 
 			configKubernetes.InstanceFirewall = ef.ID
-			createFirewall = ""
-		}
-
-		if createFirewall != "" {
-			configKubernetes.FirewallRule = createFirewall
+			configKubernetes.FirewallRule = ""
 		}
 
 		if kubernetesVersion != "latest" {
