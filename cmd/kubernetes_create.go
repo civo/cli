@@ -19,10 +19,27 @@ var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKub
 var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications, networkID, existingFirewall, createFirewall string
 var kubernetesCluster *civogo.KubernetesCluster
 
+var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
+
+Notes:
+* The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
+* The '--create-firewall' flag can accept:
+    * an optional end port using 'start_port-end_port' format (e.g. 8000-8100)
+    * an optional CIDR notation (e.g. 0.0.0.0/0)
+* When no CIDR notation is provided, the port will get 0.0.0.0/0 as default CIDR notation
+* When a CIDR notation is provided without slash notation, it will default to /32
+* So the following would all be valid:
+    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4
+    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4,8081:8.8.8.8/32,8082:1.1.1.1/24,5000-5500:1.2.3.4,6000-6500:4.4.4.4/24
+* When '--create-firewall' flag is blank, your cluster will be created with the following rules:
+    * 80:0.0.0.0/0,443:0.0.0.0/0,6443:0.0.0.0/0
+* To open all ports for public access, "all" can be provided to '--create-firewall' flag (not recommended)
+`
+
 var kubernetesCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
-	Example: "civo kubernetes create CLUSTER_NAME [flags]",
+	Example: kubernetesCreateCmdExample,
 	Short:   "Create a new Kubernetes cluster",
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -179,8 +196,6 @@ var kubernetesCreateCmd = &cobra.Command{
 			}
 			configKubernetes.Applications = installApplications
 		}
-
-		fmt.Printf("Config: %+v\n", configKubernetes)
 
 		if !mergeConfigKubernetes && saveConfigKubernetes {
 			if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) {
