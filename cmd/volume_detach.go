@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -13,10 +14,15 @@ import (
 
 var waitVolumeDetach bool
 
+var volumeDetachCmdExamples = []string{
+	"civo volume detach VOLUME_NAME",
+	"civo volume detach VOLUME_ID",
+}
+
 var volumeDetachCmd = &cobra.Command{
 	Use:     "detach",
 	Aliases: []string{"disconnect", "unlink"},
-	Example: "civo volume detach VOLUME_NAME",
+	Example: strings.Join(volumeDetachCmdExamples, "\n"),
 	Short:   "Detach a volume from an instance",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -34,6 +40,17 @@ var volumeDetachCmd = &cobra.Command{
 		volume, err := client.FindVolume(args[0])
 		if err != nil {
 			utility.Error("Volume %s", err)
+			os.Exit(1)
+		}
+
+		if !utility.CanManageVolume(volume) {
+			cluster, err := client.FindKubernetesCluster(volume.ClusterID)
+			if err != nil {
+				utility.Error("Unable to find cluster - %s", err)
+				os.Exit(1)
+			}
+
+			utility.Error("Unable to %s this volume because it's being managed by your %q Kubernetes cluster", cmd.Name(), cluster.Name)
 			os.Exit(1)
 		}
 
@@ -56,7 +73,7 @@ var volumeDetachCmd = &cobra.Command{
 					utility.Error("%s", err)
 					os.Exit(1)
 				}
-				if volumeCheck.MountPoint == "" {
+				if volumeCheck.Status == "available" {
 					stillDetaching = false
 					s.Stop()
 				} else {

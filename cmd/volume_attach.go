@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -13,10 +14,15 @@ import (
 
 var waitVolumeAttach bool
 
+var volumeAttachCmdExamples = []string{
+	"civo volume attach VOLUME_NAME INSTANCE_HOSTNAME",
+	"civo volume attach VOLUME_ID INSTANCE_ID",
+}
+
 var volumeAttachCmd = &cobra.Command{
 	Use:     "attach",
 	Aliases: []string{"connect", "link"},
-	Example: "civo volume attach VOLUME_NAME INSTANCE_HOSTNAME",
+	Example: strings.Join(volumeAttachCmdExamples, "\n"),
 	Short:   "Attach a volume to an instance",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -34,6 +40,17 @@ var volumeAttachCmd = &cobra.Command{
 		volume, err := client.FindVolume(args[0])
 		if err != nil {
 			utility.Error("Volume %s", err)
+			os.Exit(1)
+		}
+
+		if !utility.CanManageVolume(volume) {
+			cluster, err := client.FindKubernetesCluster(volume.ClusterID)
+			if err != nil {
+				utility.Error("Unable to find cluster - %s", err)
+				os.Exit(1)
+			}
+
+			utility.Error("Unable to %s this volume because it's being managed by your %q Kubernetes cluster", cmd.Name(), cluster.Name)
 			os.Exit(1)
 		}
 
@@ -62,7 +79,7 @@ var volumeAttachCmd = &cobra.Command{
 					utility.Error("Finding the volume failed with %s", err)
 					os.Exit(1)
 				}
-				if volumeCheck.MountPoint != "" {
+				if volumeCheck.Status == "attached" {
 					stillAttaching = false
 					s.Stop()
 				} else {

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -21,11 +20,12 @@ If you wish to use a custom format, the available fields are:
 
 	* id
 	* name
+	* network_id
+	* cluster_id
 	* instance_id
 	* size_gigabytes
 	* mount_point
-	* bootable
-	* created_at
+	* status
 
 Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -53,7 +53,31 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 			ow.AppendDataWithLabel("id", volume.ID, "ID")
 			ow.AppendDataWithLabel("name", volume.Name, "Name")
 
-			if volume.InstanceID != "" {
+			if volume.NetworkID != "" {
+				network, err := client.FindNetwork(volume.NetworkID)
+				if err != nil {
+					utility.Error("Finding the network failed with %s", err)
+					os.Exit(1)
+				}
+				ow.AppendDataWithLabel("network_id", network.Label, "Network")
+			} else {
+				ow.AppendDataWithLabel("network_id", "", "Network")
+			}
+
+			isClusterVolume := false
+			if volume.ClusterID != "" {
+				cluster, err := client.FindKubernetesCluster(volume.ClusterID)
+				if err != nil {
+					utility.Error("Finding the cluster failed with %s", err)
+					os.Exit(1)
+				}
+				isClusterVolume = true
+				ow.AppendDataWithLabel("cluster_id", cluster.Name, "Cluster")
+			} else {
+				ow.AppendDataWithLabel("cluster_id", "", "Cluster")
+			}
+
+			if volume.InstanceID != "" && !isClusterVolume {
 				instance, err := client.FindInstance(volume.InstanceID)
 				if err != nil {
 					utility.Error("Finding the instance failed with %s", err)
@@ -61,13 +85,12 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 				}
 				ow.AppendDataWithLabel("instance_id", instance.Hostname, "Instance")
 			} else {
-				ow.AppendDataWithLabel("instance_id", "-", "Instance")
+				ow.AppendDataWithLabel("instance_id", "", "Instance")
 			}
 
 			ow.AppendDataWithLabel("size_gigabytes", fmt.Sprintf("%s GB", strconv.Itoa(volume.SizeGigabytes)), "Size")
 			ow.AppendDataWithLabel("mount_point", volume.MountPoint, "Mount Point")
-			ow.AppendDataWithLabel("bootable", strconv.FormatBool(volume.Bootable), "Bootable")
-			ow.AppendDataWithLabel("created_at", volume.CreatedAt.Format(time.RFC1123), "Created At")
+			ow.AppendDataWithLabel("status", volume.Status, "Status")
 		}
 
 		switch outputFormat {
