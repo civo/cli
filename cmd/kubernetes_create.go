@@ -16,13 +16,30 @@ import (
 
 var numTargetNodes int
 var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes bool
-var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications, networkID string
+var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications, networkID, existingFirewall, createFirewall string
 var kubernetesCluster *civogo.KubernetesCluster
+
+var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
+
+Notes:
+* The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
+* The '--create-firewall' flag can accept:
+    * an optional end port using 'start_port-end_port' format (e.g. 8000-8100)
+    * an optional CIDR notation (e.g. 0.0.0.0/0)
+* When no CIDR notation is provided, the port will get 0.0.0.0/0 as default CIDR notation
+* When a CIDR notation is provided without slash notation, it will default to /32
+* So the following would all be valid:
+    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4
+    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4,8081:8.8.8.8/32,8082:1.1.1.1/24,5000-5500:1.2.3.4,6000-6500:4.4.4.4/24
+* When '--create-firewall' flag is blank, your cluster will be created with the following rules:
+    * 80:0.0.0.0/0,443:0.0.0.0/0,6443:0.0.0.0/0
+* To open all ports for public access, "all" can be provided to '--create-firewall' flag (not recommended)
+`
 
 var kubernetesCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
-	Example: "civo kubernetes create CLUSTER_NAME [flags]",
+	Example: kubernetesCreateCmdExample,
 	Short:   "Create a new Kubernetes cluster",
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -88,30 +105,53 @@ var kubernetesCreateCmd = &cobra.Command{
 			clusterName = utility.RandomName()
 		}
 
+		var network = &civogo.Network{}
 		if networkID == "default" {
-			network, err := client.GetDefaultNetwork()
+			network, err = client.GetDefaultNetwork()
 			if err != nil {
 				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
-
-			networkID = network.ID
-
 		} else {
-			network, err := client.FindNetwork(networkID)
+			network, err = client.FindNetwork(networkID)
 			if err != nil {
 				utility.Error("Network %s", err)
 				os.Exit(1)
 			}
-
-			networkID = network.ID
 		}
 
 		configKubernetes := &civogo.KubernetesClusterConfig{
 			Name:            clusterName,
 			NumTargetNodes:  numTargetNodes,
 			TargetNodesSize: targetNodesSize,
-			NetworkID:       networkID,
+			NetworkID:       network.ID,
+		}
+
+		if createFirewall == "" {
+			configKubernetes.FirewallRule = "80,443,6443"
+		} else {
+			configKubernetes.FirewallRule = createFirewall
+		}
+
+		if existingFirewall != "" {
+			if createFirewall != "" {
+				utility.Error("You can't use --create-firewall together with --existing-firewall flag")
+				os.Exit(1)
+			}
+
+			ef, err := client.FindFirewall(existingFirewall)
+			if err != nil {
+				utility.Error("Unable to find %q firewall - %s", existingFirewall, err)
+				os.Exit(1)
+			}
+
+			if ef.NetworkID != network.ID {
+				utility.Error("Unable to find firewall %q in %q network", ef.ID, network.Label)
+				os.Exit(1)
+			}
+
+			configKubernetes.InstanceFirewall = ef.ID
+			configKubernetes.FirewallRule = ""
 		}
 
 		if kubernetesVersion != "latest" {
