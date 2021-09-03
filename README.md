@@ -227,7 +227,7 @@ Options:
   -s, --hostname string      the instance's hostname
   -u, --initialuser string   the instance's initial user
   -r, --network string       the instance's network you can use the Name or the ID
-  -p, --publicip string      the instance's public ip
+  -p, --publicip string      this should be either "none" or "create" (default "create")
   -e, --region string        the region code identifier to have your instance built in
   -i, --size string          the instance's size
   -n, --snapshot string      the instance's snapshot
@@ -311,15 +311,6 @@ You can list all instances associated with a particular API key by running `civo
 #### Listing Instances sizes
 
 You can list all instances sizes by running `civo instance size`.
-
-#### Moving a Public IP Between Instances
-
-Given two instances, one with a public IP and one without, you can move the public IP by `civo instance move-ip instance ip_address`:
-
-```sh
-$ civo instance move_ip cli-private-ip-demo.test 123.234.123.255`
- Moved public IP 123.234.123.255 to instance cli-private-ip-demo.test
-```
 
 #### Rebooting/Restarting Instances
 

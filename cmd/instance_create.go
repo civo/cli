@@ -253,7 +253,6 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("created_at", resp.CreatedAt.Format(time.RFC1123), "Created At")
 			ow.AppendDataWithLabel("reverse_dns", resp.ReverseDNS, "Reverse  DNS")
 			ow.AppendDataWithLabel("private_ip", resp.PrivateIP, "Private IP")
-			ow.AppendDataWithLabel("public_ip", resp.PublicIP, "Public  IP")
 
 			if outputFormat == "json" {
 				ow.WriteSingleObjectJSON(prettySet)
