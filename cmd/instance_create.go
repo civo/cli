@@ -16,7 +16,7 @@ import (
 )
 
 var wait bool
-var hostnameCreate, size, template, snapshot, publicip, initialuser, sshkey, tags, network, firewall string
+var hostnameCreate, size, diskimage, snapshot, publicip, initialuser, sshkey, tags, network, firewall string
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -33,7 +33,7 @@ If you wish to use a custom format, the available fields are:
 	* public_ip
 	* status
 	* network_id
-	* template_id
+	* diskimage_id
 	* snapshot_id
 	* initial_user
 	* ssh_key
@@ -106,23 +106,12 @@ If you wish to use a custom format, the available fields are:
 		}
 		config.Size = size
 
-		templateID := ""
-		if client.Region == "SVG1" {
-			findTemplate, err := client.FindTemplate(template)
-			if err != nil {
-				utility.Error("Template %s", err)
-				os.Exit(1)
-			}
-			templateID = findTemplate.ID
-		} else {
-			findTemplate, err := client.FindDiskImage(template)
-			if err != nil {
-				utility.Error("DiskImage %s", err)
-				os.Exit(1)
-			}
-			templateID = findTemplate.ID
+		diskImage, err := client.FindDiskImage(diskimage)
+		if err != nil {
+			utility.Error("DiskImage %s", err)
+			os.Exit(1)
 		}
-		config.TemplateID = templateID
+		config.TemplateID = diskImage.ID
 
 		if snapshot != "" {
 			config.SnapshotID = snapshot
@@ -242,7 +231,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("public_ip", resp.PublicIP, "Public IP")
 			ow.AppendDataWithLabel("status", resp.Status, "Status")
 			ow.AppendDataWithLabel("network_id", resp.NetworkID, "Network ID")
-			ow.AppendDataWithLabel("template_id", resp.TemplateID, "Template ID")
+			ow.AppendDataWithLabel("diskimage_id", resp.SourceID, "Disk image ID")
 			ow.AppendDataWithLabel("snapshot_id", resp.SnapshotID, "Snapshot ID")
 			ow.AppendDataWithLabel("initial_user", resp.InitialUser, "Initial User")
 			ow.AppendDataWithLabel("ssh_key", resp.SSHKey, "SSHKey")

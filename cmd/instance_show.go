@@ -30,7 +30,7 @@ If you wish to use a custom format, the available fields are:
 	* disk_gb
 	* region
 	* network_id
-	* template_id
+	* diskimage_id
 	* snapshot_id
 	* initial_user
 	* initial_password
@@ -73,7 +73,7 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("disk_gb", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
 		ow.AppendDataWithLabel("region", client.Region, "Region")
 		ow.AppendDataWithLabel("network_id", instance.NetworkID, "Network ID")
-		ow.AppendDataWithLabel("template_id", instance.TemplateID, "Template ID")
+		ow.AppendDataWithLabel("diskimage_id", instance.SourceID, "Disk image ID")
 		ow.AppendDataWithLabel("snapshot_id", instance.SnapshotID, "Snapshot ID")
 		ow.AppendDataWithLabel("initial_user", instance.InitialUser, "Initial User")
 		ow.AppendDataWithLabel("initial_password", instance.InitialUser, "Initial Password")
