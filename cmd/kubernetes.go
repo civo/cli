@@ -58,7 +58,7 @@ func init() {
 	kubernetesCmd.AddCommand(kubernetesConfigCmd)
 	kubernetesCmd.AddCommand(kubernetesCreateCmd)
 	kubernetesCmd.AddCommand(kubernetesRenameCmd)
-	kubernetesCmd.AddCommand(kubernetesUpgradeCmd)
+	// kubernetesCmd.AddCommand(kubernetesUpgradeCmd)
 	kubernetesCmd.AddCommand(kubernetesRemoveCmd)
 	kubernetesCmd.AddCommand(kubernetesRecycleCmd)
 
