@@ -31,7 +31,6 @@ If you wish to use a custom format, the available fields are:
 	* region
 	* network_id
 	* diskimage_id
-	* snapshot_id
 	* initial_user
 	* initial_password
 	* ssh_key
@@ -74,7 +73,6 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("region", client.Region, "Region")
 		ow.AppendDataWithLabel("network_id", instance.NetworkID, "Network ID")
 		ow.AppendDataWithLabel("diskimage_id", instance.SourceID, "Disk image ID")
-		ow.AppendDataWithLabel("snapshot_id", instance.SnapshotID, "Snapshot ID")
 		ow.AppendDataWithLabel("initial_user", instance.InitialUser, "Initial User")
 		ow.AppendDataWithLabel("initial_password", instance.InitialUser, "Initial Password")
 		ow.AppendDataWithLabel("ssh_key", instance.SSHKey, "SSH Key")

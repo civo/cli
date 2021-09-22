@@ -31,7 +31,6 @@ If you wish to use a custom format, the available fields are:
 	* status
 	* network_id
 	* diskimage_id
-	* snapshot_id
 	* initial_user
 	* ssh_key
 	* notes
@@ -78,7 +77,6 @@ If you wish to use a custom format, the available fields are:
 				// ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "")
 				// ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "")
 				ow.AppendDataWithLabel("diskimage_id", instance.SourceID, "Disk image ID")
-				ow.AppendDataWithLabel("snapshot_id", instance.SnapshotID, "Snapshot ID")
 				ow.AppendDataWithLabel("initial_user", instance.InitialUser, "Initial User")
 				ow.AppendDataWithLabel("ssh_key", instance.SSHKey, "SSH Key")
 				ow.AppendDataWithLabel("notes", instance.Notes, "Notes")

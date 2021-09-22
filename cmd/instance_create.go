@@ -16,7 +16,7 @@ import (
 )
 
 var wait bool
-var hostnameCreate, size, diskimage, snapshot, publicip, initialuser, sshkey, tags, network, firewall string
+var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, firewall string
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -34,7 +34,6 @@ If you wish to use a custom format, the available fields are:
 	* status
 	* network_id
 	* diskimage_id
-	* snapshot_id
 	* initial_user
 	* ssh_key
 	* notes
@@ -113,9 +112,6 @@ If you wish to use a custom format, the available fields are:
 		}
 		config.TemplateID = diskImage.ID
 
-		if snapshot != "" {
-			config.SnapshotID = snapshot
-		}
 
 		if publicip != "" {
 			config.PublicIPRequired = publicip
@@ -232,7 +228,6 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("status", resp.Status, "Status")
 			ow.AppendDataWithLabel("network_id", resp.NetworkID, "Network ID")
 			ow.AppendDataWithLabel("diskimage_id", resp.SourceID, "Disk image ID")
-			ow.AppendDataWithLabel("snapshot_id", resp.SnapshotID, "Snapshot ID")
 			ow.AppendDataWithLabel("initial_user", resp.InitialUser, "Initial User")
 			ow.AppendDataWithLabel("ssh_key", resp.SSHKey, "SSHKey")
 			ow.AppendDataWithLabel("notes", resp.Notes, "Notes")
