@@ -464,28 +464,30 @@ You can leave out either the ``--name`` or `--notes` switch if you only want to 
 
 #### Upgrading (Resizing) an Instance
 
-Provided you have room in your Civo quota, you can upgrade any instance up in size. You can upgrade an instance by using `civo instance upgrade instanceID/hostname new_size` where `new_size` is from the list of sizes at `civo sizes`:
+Provided you have room in your Civo quota, you can upgrade any instance up in size. You can upgrade an instance by using `civo instance upgrade instanceID/hostname new_size` where `new_size` is from the list of sizes at `civo sizes ls`:
 
 ```sh
-$ civo instance upgrade api-demo-renamed.test g2.medium
- Resizing api-demo-renamed.test to g2.medium. Use 'civo instance show api-demo-renamed.test' to see the current status.
+$ civo instance upgrade api-demo-renamed.test g3.medium
+ The instance api-demo-renamed.test (9579d478-a09e-4196-a08c-f52545a90fea) is being upgraded to g3.medium
 
 $ civo instance show api-demo-renamed.test
-                ID : 715f95d1-3cee-4a3c-8759-f9b49eec34c4
-          Hostname : api-demo-renamed.test
-              Tags : ubuntu, demo, web
-              Size : Medium - 4GB RAM, 2 CPU Cores, 50GB SSD Disk
-            Status : ACTIVE
-        Private IP : 10.250.199.4
-         Public IP : 172.31.2.164 => 91.211.152.100
-           Network : Default (10.250.199.0/24)
-          Firewall :  (rules: )
-            Region : lon1
-      Initial User : api-demouser
-  Initial Password : [randomly-assigned-password-here]
-      OpenStack ID : 7c89f7de-2b29-4178-a2e5-55bdaa5c4c21
-       Template ID : 811a8dfb-8202-49ad-b1ef-1e6320b20497
-       Snapshot ID :
+          Status : ACTIVE
+            Size : g3.medium
+       Cpu Cores : 2
+             Ram : 4096
+        SSD disk : 50
+          Region : LON1
+      Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
+   Disk image ID : ubuntu-bionic
+     Snapshot ID : 
+    Initial User : demo-user
+Initial Password : demo-user
+         SSH Key : 
+     Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
+            Tags : ubuntu, demo
+      Created At : Mon, 01 Jan 0001 00:00:00 UTC
+      Private IP : 192.168.1.9
+       Public IP : 74.220.17.71
 
 ----------------------------- NOTES -----------------------------
 
@@ -504,10 +506,6 @@ You can manage Kubernetes clusters on Civo using the Kubernetes subcommands.
 
 To see your created clusters, call `civo kubernetes list`:
 
-#### Listing kubernetes sizes
-
-You can list all kubernetes sizes by running `civo kubernetes size`.
-
 ```sh
 $ civo kubernetes list
 +--------------------------------------+----------------+--------+-------+-------+--------+
@@ -516,6 +514,24 @@ $ civo kubernetes list
 | 5604340f-caa3-4ac1-adb7-40c863fe5639 | falling-sunset | NYC1   |     2 |     1 | ACTIVE |
 +--------------------------------------+----------------+--------+-------+-------+--------+
 ```
+#### Listing kubernetes sizes
+
+You can list all kubernetes sizes by running `civo kubernetes size`.
+
+```sh
+$ civo kubernetes size
++----------------+-------------+------------+-----+-------+-----+------------+
+| Name           | Description | Type       | CPU | RAM   | SSD | Selectable |
++----------------+-------------+------------+-----+-------+-----+------------+
+| g3.k3s.xsmall  | Extra Small | Kubernetes |   1 |  1024 |  15 | Yes        |
+| g3.k3s.small   | Small       | Kubernetes |   1 |  2048 |  15 | Yes        |
+| g3.k3s.medium  | Medium      | Kubernetes |   2 |  4096 |  15 | Yes        |
+| g3.k3s.large   | Large       | Kubernetes |   4 |  8192 |  15 | Yes        |
+| g3.k3s.xlarge  | Extra Large | Kubernetes |   6 | 16384 |  15 | Yes        |
+| g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 | 32768 |  15 | Yes        |
++----------------+-------------+------------+-----+-------+-----+------------+
+
+```
 
 #### Create a cluster
 
@@ -523,6 +539,8 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
 
 ```bash
   -a, --applications string          optional, use names shown by running 'civo kubernetes applications ls'
+  -c, --create-firewall string       optional, comma-separated list of ports to open - leave blank for default (80,443,6443) or you can use "all"
+  -e, --existing-firewall string     optional, ID of existing firewall to use
   -h, --help                         help for create
   -m, --merge                        merge the config with existing kubeconfig if it already exists.
   -t, --network string               the name of the network to use in the creation (default "default")
@@ -534,6 +552,21 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
   -v, --version string               the k3s version to use on the cluster. Defaults to the latest. (default "latest")
   -w, --wait                         a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE
 ```
+
+*Note* 
+* The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
+* The '--create-firewall' flag can accept:
+    * an optional end port using 'start_port-end_port' format (e.g. 8000-8100)
+    * an optional CIDR notation (e.g. 0.0.0.0/0)
+* When no CIDR notation is provided, the port will get 0.0.0.0/0 as default CIDR notation
+* When a CIDR notation is provided without slash notation, it will default to /32
+* So the following would all be valid:
+    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4
+    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4,8081:8.8.8.8/32,8082:1.1.1.1/24,5000-5500:1.2.3.4,6000-6500:4.4.4.4/24
+* When '--create-firewall' flag is blank, your cluster will be created with the following rules:
+    * 80:0.0.0.0/0,443:0.0.0.0/0,6443:0.0.0.0/0
+* To open all ports for public access, "all" can be provided to '--create-firewall' flag (not recommended)
+
 
 ```sh
 $ civo kubernetes create my-first-cluster
@@ -547,11 +580,12 @@ if `--node` and `--size` are not expecified, the default values will be used.
 
 ```sh
 civo kubernetes node-pool create my-first-cluster
+The pool (8064c7) was added to the cluster (my-first-cluster)
 ```
 
 #### Scaling pools in the cluster
 
-You can scale a pool in your cluster, while the cluster is running. It takes the name of the cluster (or the ID), the pool ID, and `--nodes` which is the new number of nodes in the pool
+You can scale a pool in your cluster, while the cluster is running. It takes the name of the cluster (or the ID), the pool ID, and `--nodes` which is the new number of nodes in the pool. You can get the pool ID details form `civo k3s show my-first-cluster`
 
 ```sh
 civo kubernetes node-pool scale my-first-cluster pool-id --nodes 5
@@ -570,8 +604,8 @@ civo kubernetes node-pool delete my-first-cluster pool-id
 If you need to recycle a particular node in your cluster for any reason, you can use the `recycle` command. This requires the name or ID of the cluster, and the name of the node you wish to recycle preceded by `--node=`:
 
 ```sh
-$ civo k8s recycle my-first-cluster --node=kube-node-e9ca
-The node (kube-node-e9ca) was recycled
+$ civo k8s recycle my-first-cluster --node=k3s-my-first-cluster-5ae1561e-node-pool-a56f
+The node (k3s-my-first-cluster-5ae1561e-node-pool-a56f) was recycled
 ```
 
 *Note:* When a node is recycled, it is fully deleted. The recycle command does not [drain](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/) a node, it simply deletes it before building a new node and attaching it to a cluster. It is intended for scenarios where the node itself develops an issue and must be replaced with a new one.
