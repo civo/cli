@@ -1249,14 +1249,14 @@ You can create a new volume by calling `civo volume create NAME SIZE(GB)`:
 
 ```text
 Options:
--b, --bootable      Mark the volume as bootable
--h, --help          help for create
--s, --size-gb int   The new size in GB (required)
+  -h, --help             help for create
+  -t, --network string   The network name/ID where the volume will be created (default "default")
+  -s, --size-gb int      The new size in GB (required)
 ```
 
 ```sh
 $ civo volume create CLI-demo-volume -s 25
-Created a new 25GB volume called CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e
+Created a volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12
 ```
 
 #### Attaching a Volume to an Instance
@@ -1264,8 +1264,8 @@ Created a new 25GB volume called CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8
 Mounting (Attaching) a volume onto an instance will allow that instance to use the volume as a drive:
 
 ```sh
-$ civo volume attach 9b232ffa-7e05-45a4-85d8-d3643e68952e 715f95d1-3cee-4a3c-8759-f9b49eec34c4
-Attached volume CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e to api-demo.test
+$ civo volume attach CLI-demo-volume api-demo.test
+The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 was attached to the instance api-demo.test
 ```
 
 If this is a newly-created volume, you would need to partition, format and mount the volume. For more information, [see the Learn guide here](https://www.civo.com/learn/configuring-block-storage-on-civo).
@@ -1276,21 +1276,21 @@ Note: You can only attach a volume to one instance at a time.
 If you want to detach a volume to move it to another instance, or are just finished with it, you can detach it once it's been [unmounted](https://www.civo.com/learn/configuring-block-storage-on-civo) using `civo volume detach volume_id`:
 
 ```sh
-$ civo volume detach 9b232ffa-7e05-45a4-85d8-d3643e68952e
-Detached volume CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e
+$ civo volume detach CLI-demo-volume
+The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 was detached
 ```
 
 #### Listing Volumes
 
 You can get an overall view of your volumes, their sizes and status by using `civo volume list`.
 
-#### Resizing Volumes
-
-An un-attached volume can be resized if you need extra space. This is done by calling `civo volume resize volume_id -s new_size` where `new-size` is in gigabytes:
-
 ```sh
-$ civo volume resize 9b232ffa-7e05-45a4-85d8-d3643e68952e -s 30
-Resized volume CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e to be 30GB
+$ civo volume ls
++--------------------------------------+------------------------------------------+---------+----------+----------+-------+-------------+-----------+
+| ID                                   | Name                                     | Network | Cluster  | Instance | Size  | Mount Point | Status    |
++--------------------------------------+------------------------------------------+---------+----------+----------+-------+-------------+-----------+
+| 59076ec8-edba-4071-80d0-e9cfcce37b12 | CLI-demo-volume                          | Default |          |          | 25 GB |             | available |
++--------------------------------------+------------------------------------------+---------+----------+----------+-------+-------------+-----------+
 ```
 
 #### Deleting Volumes
@@ -1298,9 +1298,9 @@ Resized volume CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e to b
 To free up quota and therefore the amount to be billed to your account, you can delete a volume through `civo volume delete volume_id`. This deletion is immediate:
 
 ```sh
-$ civo volume delete 9b232ffa-7e05-45a4-85d8-d3643e68952e
-Removed volume CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e (was 30GB)
-$ civo volume list
+$ civo volume delete CLI-demo-volume
+The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 was deleted
+
 ```
 
 
@@ -1311,11 +1311,13 @@ As Civo grows, more regions for your instances will become available. You can ru
 
 You can run `civo region ls` to get the list of all region
 ```sh
+civo region ls
 +------+-------------+----------------+---------+
 | Code | Name        | Country        | Current |
 +------+-------------+----------------+---------+
-| NYC1 | New York 1  | United States  | <=====  |
-| SVG1 | Stevenage 1 | United Kingdom |         |
+| FRA1 | Frankfurt 1 | Germany        |         |
+| LON1 | London 1    | United Kingdom | <=====  |
+| NYC1 | New York 1  | United States  |         |
 +------+-------------+----------------+---------+
 ```
 
