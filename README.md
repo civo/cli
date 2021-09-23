@@ -22,9 +22,8 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 - [Load Balancers](#load-balancers)
 - [Quota](#quota)
 - [Sizes](#sizes)
-- [Snapshots](#snapshots)
 - [SSH Keys](#ssh-keys)
-- [Templates](#templates)
+- [DiskImages](#templates)
 - [Volumes](#volumes)
 - [Region](#region)
 - [Enabling shell autocompletion](#enabling-shell-autocompletion)
@@ -864,7 +863,7 @@ To create a new Firewall, use `civo firewall create new_firewall_name`:
 
 ```sh
 $ civo firewall create civocli_demo
- Created firewall civocli_demo
+Created a firewall called civocli_demo with ID ab2a25d7-edd4-4ecd-95c4-58cb6bc402de
 ```
 
 You will then be able to **configure rules** that allow connections to and from your instance by adding a new rule using `civo firewall rule create firewall_id` with the required and your choice of optional parameters, listed here and used in an example below:
@@ -952,6 +951,19 @@ $ civo network create cli-demo
 Create a private network called cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa290e1
 ```
 
+#### Listing Networks
+To list all the networks you can run `civo network ls`
+```sh
+$ civo network ls
++--------------------------------------+----------+--------+---------+
+| ID                                   | Label    | Region | Default |
++--------------------------------------+----------+--------+---------+
+| 28244c7d-b1b9-48cf-9727-aebb3493aaac | Default  | LON1   | true    |
+| fa21edfa-c089-421c-8008-0c0c7784386a | test     | LON1   | false   |
+| 35ec87e7-fbd2-4ee8-849a-f88d7363e23f | cli-demo | LON1   | false   |
++--------------------------------------+----------+--------+---------+
+```
+
 #### Removing Networks
 
 Removal of a network, provided you do not need it and your applications do not depend on routing through it, is simple - you call `civo network remove network_ID`:
@@ -961,59 +973,6 @@ $ civo network remove 74b69006-ea59-46a0-96c4-63f5bfa290e1
 Removed the network cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa290e1
 ```
 
-## Load Balancers
-
-#### Introduction
-
-Civo supports load balancing for your instances, allowing you to spread web traffic between them to maximize availability. You can view details about load balancers you may have running, create new ones, update information and even remove them from the command line.
-
-#### Viewing Load Balancers
-
-You can list currently-active load balancers by calling `civo loadbalancer list`. This will draw a table detailing the unique ID, hostname, protocol, port, TLS certificate information, backend check path and connection information.
-
-#### Creating Load Balancers
-
-Create a new load balancer by calling `civo loadbalancer create` as well as any options you provide. The options are:
-
-```text
-Options:
--b, --backends stringArray         Specify a backend instance to associate with the load balancer. Takes instance_id, protocol and port in the format --backend=instance:instance-id|instance-name,protocol:http,port:80
--t, --fail_timeout int             Timeout in seconds to consider a backend to have failed. Defaults to 30 (default 30)
--l, --health_check_path string     URL to check for a valid (2xx/3xx) HTTP status on the backends. Defaults to /
--h, --help                         help for create
--e, --hostname string              If not supplied, will be in format loadbalancer-uuid.civo.com
--i, --ignore_invalid_backend_tls   Should self-signed/invalid certificates be ignored from backend servers? Defaults to true (default true)
--x, --max_connections int          Maximum concurrent connections to each backend. Defaults to 10 (default 10)
--m, --max_request_size int         Maximum request content size, in MB. Defaults to 20 (default 20)
-    --policy string                <least_conn | random | round_robin | ip_hash> - Balancing policy to choose backends
--r, --port int                     Listening port. Defaults to 80 to match default http protocol (default 80)
--p, --protocol string              Either http or https. If you specify https then you must also provide the next two fields
--c, --tls_certificate string       TLS certificate in Base64-encoded PEM. Required if --protocol is https
--k, --tls_key string               TLS certificate in Base64-encoded PEM. Required if --protocol is https
-```
-
-```sh
-$ civo loadbalancer create
-Created a new Load Balancer with hostname loadbalancer-01da06bc-40ef-4d4c-bb68-d0765d288b54.civo.com
-```
-
-#### Updating Load Balancers
-
-Updating an existing load balancer takes the same options as creation, with the syntax being `civo loadbalancer update ID [options]`. For example, we can update the hostname of the load balancer created above using `--hostname`:
-
-```sh
-$ civo loadbalancer update 01da06bc-40ef-4d4c-bb68-d0765d288b54 --hostname="civo-demo-loadbalancer.civo.com"
-Updated Load Balancer
-```
-
-#### Removing Load Balancers
-
-Removing a load balancer is done through calling `civo loadbalancer remove loadbalancer_id`. Please note that this change is immediate:
-
-```sh
-$ civo loadbalancer remove 01da06bc-40ef-4d4c-bb68-d0765d288b54
-Removed the load balancer civo-demo-loadbalancer.civo.com with ID 01da06bc-40ef-4d4c-bb68-d0765d288b54
-```
 
 ## Quota
 
