@@ -224,62 +224,102 @@ You can create an instance by running `civo instance create` with a hostname par
 
 ```sh
 Options:
+  -t, --diskimage string     the instance's disk image (from 'civo diskimage ls' command)
+  -l, --firewall string      the instance's firewall you can use the Name or the ID
+  -h, --help                 help for create
   -s, --hostname string      the instance's hostname
   -u, --initialuser string   the instance's initial user
   -r, --network string       the instance's network you can use the Name or the ID
-  -p, --publicip string      this should be either "none" or "create" (default "create")
-  -e, --region string        the region code identifier to have your instance built in
-  -i, --size string          the instance's size
-  -n, --snapshot string      the instance's snapshot
+  -p, --publicip string      This should be either "none" or "create" (default "create")
+  -i, --size string          the instance's size (from 'civo instance size' command)
   -k, --sshkey string        the instance's ssh key you can use the Name or the ID
   -g, --tags string          the instance's tags
-  -t, --template string      the instance's template
   -w, --wait                 wait until the instance's is ready
+
 ```
 
 Example usage:
 
 ```sh
-$ civo instance create --hostname=api-demo.test --size g2.small --template=811a8dfb-8202-49ad-b1ef-1e6320b20497 --initialuser=demo-user
- Created instance api-demo.test
+$ civo instance create --hostname=api-demo.test --size g3.small  --diskimage=12745392-15c7-4140-925d-441fe7ae57fd --initialuser=demo-user
+  The instance api-demo.test has been created
 
 $ civo instance show api-demo.test
-                 ID : c31e3262-b3f4-467a-b4d2-7980e02d181f
-           Hostname : api-demo.test
-Openstack Server ID : 986529e8-4063-4576-8952-1cbcd5743e44
-             Status : ACTIVE
-               Size : g2.small
-             Region : lon1
-         Network ID : cc3aceb1-66a8-4060-ae35-36e862ba4f82
-        Template ID : fffbe2e5-0dd8-476b-b480-cb7c9fccbe39
-        Snapshot ID :
-       Initial User : demo-user
-            SSH Key : bcdd0589-7543-459a-8452-b5fe2252c170
-        Firewall ID : default
-               Tags :
-         Created At : Thu, 18 Jun 2020 03:35:24 +0100
-         Private IP : 10.173.156.59
-          Public IP : 172.31.6.7 => 185.136.234.101
+              ID : 112f2407-fb89-443e-bd0e-5ddabc4682c6
+        Hostname : api-demo.test
+          Status : ACTIVE
+            Size : g3.small
+       Cpu Cores : 1
+             Ram : 2048
+        SSD disk : 25
+          Region : LON1
+      Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
+   Disk image ID : ubuntu-bionic
+     Snapshot ID : 
+    Initial User : demo-user
+Initial Password : demo-user
+         SSH Key : 
+     Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
+            Tags : 
+      Created At : Mon, 01 Jan 0001 00:00:00 UTC
+      Private IP : 192.168.1.7
+       Public IP : 74.220.21.246
 
 ----------------------------- NOTES -----------------------------
 ```
 
 You will be able to see the instance's details by running `civo instance show api-demo.test` as above.
 
+#### Disk images and instance sizes
+You can view the Disk images by running `civo diskimage ls`
+```sh
+$ civo disk image ls 
++--------------------------------------+---------------+---------+-----------+--------------+
+| ID                                   | Name          | Version | State     | Distribution |
++--------------------------------------+---------------+---------+-----------+--------------+
+| 4921b107-964f-417c-bf63-c92fcf41ccbd | centos-7      |       7 | available | centos       |
+| a4204155-a876-43fa-b4d6-ea2af8774560 | debian-10     |      10 | available | debian       |
+| 9b661c46-ac4f-46e1-9f3d-aaacde9b4fec | debian-9      |       9 | available | debian       |
+| 12745392-15c7-4140-925d-441fe7ae57fd | ubuntu-bionic |   18.04 | available | ubuntu       |
+| d927ad2f-5073-4ed6-b2eb-b8e61aef29a8 | ubuntu-focal  |   20.04 | available | ubuntu       |
++--------------------------------------+---------------+---------+-----------+--------------+
+```
+You can view the instance sizes list by runing `civo size ls`
+
+```sh
+$ civo size ls 
++----------------+-------------+------------+-----+-------+-----+------------+
+| Name           | Description | Type       | CPU | RAM   | SSD | Selectable |
++----------------+-------------+------------+-----+-------+-----+------------+
+| g3.xsmall      | Extra Small | Instance   |   1 |  1024 |  25 | Yes        |
+| g3.small       | Small       | Instance   |   1 |  2048 |  25 | Yes        |
+| g3.medium      | Medium      | Instance   |   2 |  4096 |  50 | Yes        |
+| g3.large       | Large       | Instance   |   4 |  8192 | 100 | Yes        |
+| g3.xlarge      | Extra Large | Instance   |   6 | 16384 | 150 | Yes        |
+| g3.2xlarge     | 2X Large    | Instance   |   8 | 32768 | 200 | Yes        |
+| g3.k3s.xsmall  | Extra Small | Kubernetes |   1 |  1024 |  15 | Yes        |
+| g3.k3s.small   | Small       | Kubernetes |   1 |  2048 |  15 | Yes        |
+| g3.k3s.medium  | Medium      | Kubernetes |   2 |  4096 |  15 | Yes        |
+| g3.k3s.large   | Large       | Kubernetes |   4 |  8192 |  15 | Yes        |
+| g3.k3s.xlarge  | Extra Large | Kubernetes |   6 | 16384 |  15 | Yes        |
+| g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 | 32768 |  15 | Yes        |
++----------------+-------------+------------+-----+-------+-----+------------+
+
+````
 #### Viewing the Default User Password For an Instance
 
 You can view the default user's password for an instance by running `civo instance password ID/hostname`
 
 ```sh
 $ civo instance password api-demo.test
-The password for user civo on api-demo.test is 5OaGxNhaN11pLeWB
+The instance api-demo.test (112f2407-fb89-443e-bd0e-5ddabc4682c6) has the password BrbXNW2RUYLe (and user demo-user)
 ```
 
 You can also run this command with the option `-o` and `-f` to get only the password output, useful for scripting situations:
 
 ```sh
 $ civo instance password api-demo.test -o custom -f Password
-5OaGxNhaN11pLeWB
+BrbXNW2RUYLe
 ```
 
 #### Viewing Instance Public IP Address
@@ -287,21 +327,32 @@ $ civo instance password api-demo.test -o custom -f Password
 If an instance has a public IP address configured, you can display it using `civo instance public-ip ID/hostname`:
 
 ```sh
-$ civo instance public-ip api-demo.test -o custom -f PublicIP
-91.211.152.100
+$ civo instance public-ip api-demo.test -o custom -f public_ip
+74.220.21.246
 ```
 
 The above example uses `-o` and `-f` to display only the IP address in the output.
 
+
 #### Setting Firewalls
 
-Instances can make use of separately-configured firewalls. By default, an instance is created with no firewall rules set, so you will need to configure some rules (see [Firewalls](#firewalls) for more information).
-
-To associate a firewall with an instance, use the command `civo instance firewall ID/hostname firewall_id`. For example:
+Instances can make use of separately-configured firewalls. By default, an instance is created with default all port open firewall rules set. If you want to secure your instances more, so you will need to configure some rules (see [Firewalls](#firewalls) for more information). Once you have configured the rules you can check it by running `civo firewall ls`
 
 ```sh
-$ civo instance firewall api-demo.test firewall_1
-Set api-demo.test to use firewall firewall_1
+$ civo firewall ls
++--------------------------------------+------------------------------------+---------+-------------+-----------------+
+| ID                                   | Name                               | Network | Total rules | Total Instances |
++--------------------------------------+------------------------------------+---------+-------------+-----------------+
+| c9e14ae8-b8eb-4bae-a687-9da4637233da | Default (all open)                 | Default |           3 |               0 |
+| f79db64d-41f0-4be0-ae80-ce4499164319 | Kubernetes cluster: Demo           | Default |           2 |               0 |
++--------------------------------------+------------------------------------+---------+-------------+-----------------+
+```
+
+You can take the firewall ID and use it to associate a firewall with an instance, use the command `civo instance firewall ID/hostname firewall_id`. For example:
+
+```sh
+$ civo instance firewall api-demo.test f79db64d-41f0-4be0-ae80-ce4499164319
+Set the firewall for the instance api-demo.test (112f2407-fb89-443e-bd0e-5ddabc4682c6) to Kubernetes cluster: Demo (f79db64d-41f0-4be0-ae80-ce4499164319)
 ```
 
 #### Listing Instances
@@ -321,7 +372,7 @@ $ civo instance reboot api-demo.test
  Rebooting api-demo.test. Use 'civo instance show api-demo.test' to see the current status.
 ```
 
-If you prefer a soft reboot, you can run `civo instance soft-reboot instanceID/hostname` instead.
+If you prefer a hard reboot, you can run `civo instance hard-reboot instanceID/hostname` instead.
 
 #### Removing Instances
 
@@ -330,7 +381,7 @@ Usage: `civo instance remove instanceID/hostname`. For example:
 
 ```sh
 $ civo instance remove api-demo.test
- Removing instance api-demo.test
+The instance (api-demo.test) has been deleted
 ```
 
 #### Stopping (Shutting Down) and Starting Instances
@@ -354,23 +405,28 @@ $ civo instance start api-demo.test
 Tags can be useful in distinguishing and managing your instances. You can retag an instance using `civo instance tags instanceID/hostname 'tag1 tag2 tag3...'` as follows:
 
 ```sh
-$ civo instance tags api-demo.test 'ubuntu demo web'
- Updated tags on api-demo.test. Use 'civo instance show api-demo.test' to see the current tags.'
+$ civo instance tags api-demo.test 'ubuntu demo'
+ The instance api-demo.test (b5f82fa7-b8e4-44aa-9dda-df02dab71d6c) has been tagged with ubuntu demo. Use 'civo instance show api-demo.test' to see the current tags.'
 $ civo instance show api-demo.test
-                ID : 715f95d1-3cee-4a3c-8759-f9b49eec34c4
-          Hostname : api-demo.test
-              Tags : ubuntu, demo, web
-              Size : Small - 2GB RAM, 1 CPU Core, 25GB SSD Disk
-            Status : ACTIVE
-        Private IP : 10.250.199.4
-         Public IP : 172.31.2.164 => 91.211.152.100
-           Network : Default (10.250.199.0/24)
-          Firewall :  (rules: )
-            Region : lon1
-      Initial User : api-demouser
-      OpenStack ID : 7c89f7de-2b29-4178-a2e5-55bdaa5c4c21
-       Template ID : 811a8dfb-8202-49ad-b1ef-1e6320b20497
-       Snapshot ID :
+              ID : b5f82fa7-b8e4-44aa-9dda-df02dab71d6c
+        Hostname : api-demo.test
+          Status : SHUTOFF
+            Size : g3.small
+       Cpu Cores : 1
+             Ram : 2048
+        SSD disk : 25
+          Region : LON1
+      Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
+   Disk image ID : ubuntu-bionic
+     Snapshot ID : 
+    Initial User : demo-user
+Initial Password : demo-user
+         SSH Key : 
+     Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
+            Tags : ubuntu demo
+      Created At : Mon, 01 Jan 0001 00:00:00 UTC
+      Private IP : 192.168.1.7
+       Public IP : 74.220.16.23
 
 ----------------------------- NOTES -----------------------------
 ```
@@ -380,9 +436,9 @@ $ civo instance show api-demo.test
 In case you need to rename an instance or add notes, you can do so with the `instance update` command as follows:
 
 ```sh
-$ civo instance update api-demo.test --name api-demo-renamed.test --notes 'Hello, world!'
- Instance 715f95d1-3cee-4a3c-8759-f9b49eec34c4 now named api-demo-renamed.test
- Instance 715f95d1-3cee-4a3c-8759-f9b49eec34c4 notes are now: Hello, world!
+$ civo instance update api-demo.test --hostname api-demo-renamed.test --notes 'Hello, world!'
+The instance api-demo-renamed.test (b5f82fa7-b8e4-44aa-9dda-df02dab71d6c) has been updated
+
 $ civo instance show api-demo-renamed.test
                 ID : 715f95d1-3cee-4a3c-8759-f9b49eec34c4
           Hostname : api-demo-renamed.test
