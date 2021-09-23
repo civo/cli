@@ -1082,52 +1082,6 @@ $ civo sizes list --filter kubernetes
 | g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 |    32768 |        10 | Yes        |
 +----------------+-------------+------------+-----+----------+-----------+------------+
 ```
-## Snapshots
-
-#### Introduction
-
-Snapshots are a clever way to back up your instances. A snapshot is an exact copy of the instance's virtual hard drive at the moment of creation. At any point, you can restore an instance to the state it was at snapshot creation, or use snapshots to build new instances that are configured exactly the same as other servers you host.
-
-As snapshot storage is chargeable (see [
-Quota](#quota)), at any time these can be deleted by you. They can also be scheduled rather than immediately created, and if desired repeated at the same schedule each week (although the repeated snapshot will overwrite itself each week, not keep multiple weekly snapshots).
-
-#### Creating Snapshots
-
-You can create a snapshot from an existing instance on the command line by using `civo snapshot create snapshot_name instance_id`
-For a one-off snapshot that's all you will need:
-
-```sh
-$ civo snapshot create CLI-demo-snapshot 715f95d1-3cee-4a3c-8759-f9b49eec34c4
-Created snapshot CLI-demo-snapshot with ID d6d7704b-3402-44d0-aeb1-09875f71d168
-```
-
-For scheduled snapshots, include the `-c '0 * * * *'` switch, where the `'0 * * * *'` string is in `cron` format.
-
-Creating snapshots is not instant, and will take a while depending on the size of the instance being backed up. You will be able to monitor the status of your snapshot by listing your snapshots as described below.
-
-#### Listing Snapshots
-
-You can view all your currently-stored snapshots and a bit of information about them by running `civo snapshot list`:
-
-```sh
-$ civo snapshot list
-+--------------------------------------+-------------------+------+---------------------+---------+------------+-------------------------------+-------------------------------+-------------------------------+
-| ID                                   | Name              | Size | Hostname            | State   | Cron       | Schedule                      | RequestedAt                   | CompletedAt                   |
-+--------------------------------------+-------------------+------+---------------------+---------+------------+-------------------------------+-------------------------------+-------------------------------+
-| d593263e-2433-4c82-aad3-81c2d6ddaa09 | CLI-demo-snapshot | 0 GB | www1                | pending | 55 0 * * * | Thu, 18 Jun 2020 00:55:00 CDT | Mon, 01 Jan 0001 00:00:00 UTC | Mon, 01 Jan 0001 00:00:00 UTC |
-+--------------------------------------+-------------------+------+---------------------+---------+------------+-------------------------------+-------------------------------+-------------------------------+
-```
-
-#### Removing Snapshots
-
-Snapshots that are not associated with an instance can be removed using `civo snapshot remove snapshot_id` as follows:
-
-```sh
-$ civo snapshot remove d6d7704b-3402-44d0-aeb1-09875f71d168
-Removed snapshot CLI-demo-snapshot with ID d6d7704b-3402-44d0-aeb1-09875f71d168
-```
-
-If an instance was created from a snapshot, you will not be able to remove the snapshot itself.
 
 ## SSH Keys
 
@@ -1145,7 +1099,7 @@ You will need the path to your public SSH Key to upload a new key to Civo. The u
 You will be able to list the SSH keys known for the current account holder by invoking `civo ssh list`:
 
 ```sh
-$ civo sshkeys
+$ civo sshkeys ls
 +--------------------------------------+------------------+----------------------------------------------------+
 | ID                                   | Name             | Fingerprint                                        |
 +--------------------------------------+------------------+----------------------------------------------------+
@@ -1161,79 +1115,28 @@ $ civo ssh remove 531d0998-4152-410a-af20-0cccb1c7c73b
 Removed SSH key cli-demo with ID 531d0998-4152-410a-af20-0cccb1c7c73b
 ```
 
-## Templates
+## Disk Image
 
 #### Introduction
 
-Civo instances are built from a template that specifies a disk image. Templates can contain the bare-bones OS install such as Ubuntu or Debian, or custom pre-configured operating systems that you can create yourself from a bootable volume. This allows you to speedily deploy pre-configured instances.
-
-#### Listing Available Template Images
-
-A simple list of available templates, both globally-defined ones and user-configured account-specific templates, can be seen by running `civo template list`:
-
-```sh
-$ civo template list
-+--------------------------------------+----------------+----------------+--------------------------------------+----------------------------------------------------+-------------+------------------+
-| ID                                   | Code           | Name           | Image ID                             | Short Description                                  | Description | Default Username |
-+--------------------------------------+----------------+----------------+--------------------------------------+----------------------------------------------------+-------------+------------------+
-| 458ae900-30e0-4ade-bd68-d137d57d4e47 | centos-7       | CentOS 7       | e17ec38a-1e77-4c45-bef3-569567c9b169 | CentOS 7 - aiming to be compatible with RHEL 7     |             | centos           |
-| 033c35a0-a8c3-4518-8114-d156a4d4c512 | debian-stretch | Debian Stretch | 2ffff07e-6953-4864-8ce9-1f754d70de31 | Debian v9 (Stretch), current stable Debian release |             | admin            |
-| b0d30599-898a-4072-86a1-6ed2965320d9 | ubuntu-16.04   | Ubuntu 16.04   | 8b4d81e0-6283-4ea3-bbc4-478df568024e | Ubuntu 16.04                                       |             | ubuntu           |
-| 811a8dfb-8202-49ad-b1ef-1e6320b20497 | ubuntu-18.04   | Ubuntu 18.04   | e4838e89-f086-41a1-86b2-60bc4b0a259e | Ubuntu 18.04                                       |             | ubuntu           |
-| fffbe2e5-0dd8-476b-b480-cb7c9fccbe39 | debian-buster  | Debian Buster  | 38686161-ba25-4899-ac0a-54eaf35239c0 | Debian v10 (Buster), latest stable Debian release  |             | admin            |
-+--------------------------------------+----------------+----------------+--------------------------------------+----------------------------------------------------+-------------+------------------+
-```
-
-#### Viewing Details of a Template
-
-Detailed information about a template can be obtained via the CLI using `civo template show template_ID`.
+Civo instances are built from a disk image. Currently there centos, debian and ubuntu are supported.In order to create an instance the diskimage ID is needed that can be found by running `civo diskimage ls`
 
 
-#### Creating a Template
-
-You can convert a **bootable** Volume (virtual disk) of an instance, or alternatively use an existing image ID, to create a template. The options for the `civo template create` command are:
-
-```text
-Options:
--i, --cloudconfig string         The path of the cloud config
--c, --code string                The code name of the template, this can't change after creation
--u, --default-username string    The default username of the template
--d, --description string         Add a description
--h, --help                       help for create
--m, --image-id string            The image id for the template
--n, --name string                The name of the template
--s, --short-description string   Add a short description
--v, --volume-id string           The volume id for the template
-```
+#### Listing Available Disk Images
 
 ```sh
-$ civo template create -n="cli-demo" -v=1427e49f-d159-4421-b6cc-34c43775764b --description="This is a demo template made from a CoreOS image" --short-description="CoreOS CLI demo"
-	Created template cli-demo
+$ civo diskimage ls
++--------------------------------------+---------------+---------+-----------+--------------+
+| ID                                   | Name          | Version | State     | Distribution |
++--------------------------------------+---------------+---------+-----------+--------------+
+| 4921b107-964f-417c-bf63-c92fcf41ccbd | centos-7      |       7 | available | centos       |
+| a4204155-a876-43fa-b4d6-ea2af8774560 | debian-10     |      10 | available | debian       |
+| 9b661c46-ac4f-46e1-9f3d-aaacde9b4fec | debian-9      |       9 | available | debian       |
+| 12745392-15c7-4140-925d-441fe7ae57fd | ubuntu-bionic |   18.04 | available | ubuntu       |
+| d927ad2f-5073-4ed6-b2eb-b8e61aef29a8 | ubuntu-focal  |   20.04 | available | ubuntu       |
++--------------------------------------+---------------+---------+-----------+--------------+
 ```
 
-#### Updating Template Information
-
-Once you have  created a custom template, you can update information that allows for the easy identification and management of the template. Usage is `civo template update template_id [options]`:
-
-```text
-Options:
--i, --cloudconfig string         The cloud config
--u, --default-username string    The default username of the template
--d, --description string         Add a description
--h, --help                       help for update
--n, --name string                The name of the template
--s, --short-description string   Add a short description
-```
-
-#### Removing a Template
-
-Removing an account-specific template is done using the `template remove template_id` command:
-
-```sh
-$ civo template remove 1427e22f-d149-4421-b6ab-34c43754224c
-```
-
-Please note that template removal is immediate! Use with caution.
 
 ## Volumes
 
