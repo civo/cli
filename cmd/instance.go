@@ -29,7 +29,7 @@ func init() {
 	instanceCmd.AddCommand(instanceRemoveCmd)
 	instanceCmd.AddCommand(instanceRebootCmd)
 	instanceCmd.AddCommand(instanceSoftRebootCmd)
-	instanceCmd.AddCommand(instanceConsoleCmd)
+	// instanceCmd.AddCommand(instanceConsoleCmd)
 	instanceCmd.AddCommand(instanceStopCmd)
 	instanceCmd.AddCommand(instanceStartCmd)
 	instanceCmd.AddCommand(instanceUpgradeCmd)
