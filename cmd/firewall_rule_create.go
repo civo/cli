@@ -52,8 +52,11 @@ var firewallRuleCreateCmd = &cobra.Command{
 		// from (inbound or outbound) then we will generate an error
 		if direction == "ingress" {
 			newRuleConfig.Direction = direction
+		} else if direction == "" {
+			utility.Error("'--direction' flag can't be empty")
+			os.Exit(1)
 		} else {
-			utility.Error("Sorry but the direccion of the rule must be ingress, not %s", direction)
+			utility.Error("'--direction' flag only support 'ingress' as of now, not '%s'", direction)
 			os.Exit(1)
 		}
 
