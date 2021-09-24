@@ -13,8 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var protocol, startPort, endPort, direction, label string
-var cidr []string
+var protocol, startPort, endPort, direction, label, cidr string
 
 var firewallRuleCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -44,7 +43,7 @@ var firewallRuleCreateCmd = &cobra.Command{
 			FirewallID: firewall.ID,
 			Protocol:   protocol,
 			StartPort:  startPort,
-			Cidr:       cidr,
+			Cidr:       strings.Split(cidr, ","),
 			Label:      label,
 		}
 
@@ -80,10 +79,18 @@ var firewallRuleCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			if newRuleConfig.EndPort == newRuleConfig.StartPort {
-				fmt.Printf("Created a firewall rule called %s allowing access to port %s from %s with ID %s\n", utility.Green(rule.Label), utility.Green(newRuleConfig.StartPort), utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+			if rule.Label == "" {
+				if newRuleConfig.EndPort == newRuleConfig.StartPort {
+					fmt.Printf("Created a firewall rule allowing access to port %s from %s with ID %s\n", utility.Green(newRuleConfig.StartPort), utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+				} else {
+					fmt.Printf("Created a firewall rule allowing access to ports %s-%s from %s with ID %s\n", utility.Green(newRuleConfig.StartPort), utility.Green(newRuleConfig.EndPort), utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+				}
 			} else {
-				fmt.Printf("Created a firewall rule called %s allowing access to ports %s-%s from %s with ID %s\n", utility.Green(rule.Label), utility.Green(newRuleConfig.StartPort), utility.Green(newRuleConfig.EndPort), utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+				if newRuleConfig.EndPort == newRuleConfig.StartPort {
+					fmt.Printf("Created a firewall rule called %s allowing access to port %s from %s with ID %s\n", utility.Green(rule.Label), utility.Green(newRuleConfig.StartPort), utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+				} else {
+					fmt.Printf("Created a firewall rule called %s allowing access to ports %s-%s from %s with ID %s\n", utility.Green(rule.Label), utility.Green(newRuleConfig.StartPort), utility.Green(newRuleConfig.EndPort), utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+				}
 			}
 		}
 	},
