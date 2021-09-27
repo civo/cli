@@ -53,7 +53,7 @@ var kubernetesRenameCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The kubernetes cluster was rename to %s with ID %s\n", utility.Green(kubernetesCluster.Name), utility.Green(kubernetesCluster.ID))
+			fmt.Printf("The kubernetes cluster with ID %s was renamed to %s\n", utility.Green(kubernetesCluster.ID), utility.Green(kubernetesCluster.Name))
 		}
 	},
 }
