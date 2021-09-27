@@ -17,7 +17,7 @@ var apikeyCurrentCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		index, err := apiKeyFind(args[0])
 		if err != nil {
-			utility.Error("Unable find the api key %s", err.Error())
+			utility.Error("Unable find the API key %s", err.Error())
 			os.Exit(1)
 		}
 
