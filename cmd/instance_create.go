@@ -229,7 +229,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("network_id", resp.NetworkID, "Network ID")
 			ow.AppendDataWithLabel("diskimage_id", resp.SourceID, "Disk image ID")
 			ow.AppendDataWithLabel("initial_user", resp.InitialUser, "Initial User")
-			ow.AppendDataWithLabel("ssh_key", resp.SSHKey, "SSHKey")
+			ow.AppendDataWithLabel("ssh_key", resp.SSHKey, "SSH Key")
 			ow.AppendDataWithLabel("notes", resp.Notes, "Notes")
 			ow.AppendDataWithLabel("firewall_id", resp.FirewallID, "Firewall ID")
 			ow.AppendDataWithLabel("tags", strings.Join(resp.Tags, " "), "Tags")

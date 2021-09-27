@@ -757,7 +757,7 @@ You can remove a particular DNS record from a domain you own by requesting `civo
 
 ```sh
 $ civo domain record remove 4e181dde-bde8-4744-8984-067f957a7d59
-The domain record called www with ID 4e181dde-bde8-4744-8984-067f957a7d59 was delete
+The domain record called www with ID 4e181dde-bde8-4744-8984-067f957a7d59 was deleted
 ```
 
 ## Firewalls
@@ -791,6 +791,7 @@ Options:
 ```
 
 Example usage:
+
 ```sh
 $ civo firewall rule create civocli_demo --startport=22 --direction=ingress --label='SSH access for CLI demo'
  New rule SSH access for CLI demo created
