@@ -23,7 +23,7 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 - [Quota](#quota)
 - [Sizes](#sizes)
 - [SSH Keys](#ssh-keys)
-- [DiskImages](#templates)
+- [DiskImages](#disk-image)
 - [Volumes](#volumes)
 - [Region](#region)
 - [Enabling shell autocompletion](#enabling-shell-autocompletion)
@@ -439,20 +439,25 @@ $ civo instance update api-demo.test --hostname api-demo-renamed.test --notes 'H
 The instance api-demo-renamed.test (b5f82fa7-b8e4-44aa-9dda-df02dab71d6c) has been updated
 
 $ civo instance show api-demo-renamed.test
-                ID : 715f95d1-3cee-4a3c-8759-f9b49eec34c4
-          Hostname : api-demo-renamed.test
-              Tags : ubuntu, demo, web
-              Size : Small - 2GB RAM, 1 CPU Core, 25GB SSD Disk
-            Status : ACTIVE
-        Private IP : 10.250.199.4
-         Public IP : 172.31.2.164 => 91.211.152.100
-           Network : Default (10.250.199.0/24)
-          Firewall :  (rules: )
-            Region : lon1
-      Initial User : api-demouser
-      OpenStack ID : 7c89f7de-2b29-4178-a2e5-55bdaa5c4c21
-       Template ID : 811a8dfb-8202-49ad-b1ef-1e6320b20497
-       Snapshot ID :
+              ID : 715f95d1-3cee-4a3c-8759-f9b49eec34c4
+        Hostname : api-demo-renamed.test
+          Status : ACTIVE
+            Size : g3.small
+       Cpu Cores : 1
+             Ram : 2048
+        SSD disk : 25
+          Region : LON1
+      Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
+   Disk image ID : ubuntu-bionic
+     Snapshot ID : 
+    Initial User : demo-user
+Initial Password : demo-user
+         SSH Key : 
+     Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
+            Tags : 
+      Created At : Mon, 01 Jan 0001 00:00:00 UTC
+      Private IP : 192.168.1.7
+       Public IP : 74.220.21.246
 
 ----------------------------- NOTES -----------------------------
 
