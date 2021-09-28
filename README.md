@@ -22,9 +22,8 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 - [Load Balancers](#load-balancers)
 - [Quota](#quota)
 - [Sizes](#sizes)
-- [Snapshots](#snapshots)
 - [SSH Keys](#ssh-keys)
-- [Templates](#templates)
+- [DiskImages](#templates)
 - [Volumes](#volumes)
 - [Region](#region)
 - [Enabling shell autocompletion](#enabling-shell-autocompletion)
@@ -224,62 +223,102 @@ You can create an instance by running `civo instance create` with a hostname par
 
 ```sh
 Options:
+  -t, --diskimage string     the instance's disk image (from 'civo diskimage ls' command)
+  -l, --firewall string      the instance's firewall you can use the Name or the ID
+  -h, --help                 help for create
   -s, --hostname string      the instance's hostname
   -u, --initialuser string   the instance's initial user
   -r, --network string       the instance's network you can use the Name or the ID
-  -p, --publicip string      this should be either "none" or "create" (default "create")
-  -e, --region string        the region code identifier to have your instance built in
-  -i, --size string          the instance's size
-  -n, --snapshot string      the instance's snapshot
+  -p, --publicip string      This should be either "none" or "create" (default "create")
+  -i, --size string          the instance's size (from 'civo instance size' command)
   -k, --sshkey string        the instance's ssh key you can use the Name or the ID
   -g, --tags string          the instance's tags
-  -t, --template string      the instance's template
   -w, --wait                 wait until the instance's is ready
+
 ```
 
 Example usage:
 
 ```sh
-$ civo instance create --hostname=api-demo.test --size g2.small --template=811a8dfb-8202-49ad-b1ef-1e6320b20497 --initialuser=demo-user
- Created instance api-demo.test
+$ civo instance create --hostname=api-demo.test --size g3.small  --diskimage=12745392-15c7-4140-925d-441fe7ae57fd --initialuser=demo-user
+  The instance api-demo.test has been created
 
 $ civo instance show api-demo.test
-                 ID : c31e3262-b3f4-467a-b4d2-7980e02d181f
-           Hostname : api-demo.test
-Openstack Server ID : 986529e8-4063-4576-8952-1cbcd5743e44
-             Status : ACTIVE
-               Size : g2.small
-             Region : lon1
-         Network ID : cc3aceb1-66a8-4060-ae35-36e862ba4f82
-        Template ID : fffbe2e5-0dd8-476b-b480-cb7c9fccbe39
-        Snapshot ID :
-       Initial User : demo-user
-            SSH Key : bcdd0589-7543-459a-8452-b5fe2252c170
-        Firewall ID : default
-               Tags :
-         Created At : Thu, 18 Jun 2020 03:35:24 +0100
-         Private IP : 10.173.156.59
-          Public IP : 172.31.6.7 => 185.136.234.101
+              ID : 112f2407-fb89-443e-bd0e-5ddabc4682c6
+        Hostname : api-demo.test
+          Status : ACTIVE
+            Size : g3.small
+       Cpu Cores : 1
+             Ram : 2048
+        SSD disk : 25
+          Region : LON1
+      Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
+   Disk image ID : ubuntu-bionic
+     Snapshot ID : 
+    Initial User : demo-user
+Initial Password : demo-user
+         SSH Key : 
+     Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
+            Tags : 
+      Created At : Mon, 01 Jan 0001 00:00:00 UTC
+      Private IP : 192.168.1.7
+       Public IP : 74.220.21.246
 
 ----------------------------- NOTES -----------------------------
 ```
 
 You will be able to see the instance's details by running `civo instance show api-demo.test` as above.
 
+#### Disk images and instance sizes
+You can view the Disk images by running `civo diskimage ls`
+```sh
+$ civo disk image ls 
++--------------------------------------+---------------+---------+-----------+--------------+
+| ID                                   | Name          | Version | State     | Distribution |
++--------------------------------------+---------------+---------+-----------+--------------+
+| 4921b107-964f-417c-bf63-c92fcf41ccbd | centos-7      |       7 | available | centos       |
+| a4204155-a876-43fa-b4d6-ea2af8774560 | debian-10     |      10 | available | debian       |
+| 9b661c46-ac4f-46e1-9f3d-aaacde9b4fec | debian-9      |       9 | available | debian       |
+| 12745392-15c7-4140-925d-441fe7ae57fd | ubuntu-bionic |   18.04 | available | ubuntu       |
+| d927ad2f-5073-4ed6-b2eb-b8e61aef29a8 | ubuntu-focal  |   20.04 | available | ubuntu       |
++--------------------------------------+---------------+---------+-----------+--------------+
+```
+You can view the instance sizes list by runing `civo size ls`
+
+```sh
+$ civo size ls 
++----------------+-------------+------------+-----+-------+-----+------------+
+| Name           | Description | Type       | CPU | RAM   | SSD | Selectable |
++----------------+-------------+------------+-----+-------+-----+------------+
+| g3.xsmall      | Extra Small | Instance   |   1 |  1024 |  25 | Yes        |
+| g3.small       | Small       | Instance   |   1 |  2048 |  25 | Yes        |
+| g3.medium      | Medium      | Instance   |   2 |  4096 |  50 | Yes        |
+| g3.large       | Large       | Instance   |   4 |  8192 | 100 | Yes        |
+| g3.xlarge      | Extra Large | Instance   |   6 | 16384 | 150 | Yes        |
+| g3.2xlarge     | 2X Large    | Instance   |   8 | 32768 | 200 | Yes        |
+| g3.k3s.xsmall  | Extra Small | Kubernetes |   1 |  1024 |  15 | Yes        |
+| g3.k3s.small   | Small       | Kubernetes |   1 |  2048 |  15 | Yes        |
+| g3.k3s.medium  | Medium      | Kubernetes |   2 |  4096 |  15 | Yes        |
+| g3.k3s.large   | Large       | Kubernetes |   4 |  8192 |  15 | Yes        |
+| g3.k3s.xlarge  | Extra Large | Kubernetes |   6 | 16384 |  15 | Yes        |
+| g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 | 32768 |  15 | Yes        |
++----------------+-------------+------------+-----+-------+-----+------------+
+
+````
 #### Viewing the Default User Password For an Instance
 
 You can view the default user's password for an instance by running `civo instance password ID/hostname`
 
 ```sh
 $ civo instance password api-demo.test
-The password for user civo on api-demo.test is 5OaGxNhaN11pLeWB
+The instance api-demo.test (112f2407-fb89-443e-bd0e-5ddabc4682c6) has the password BrbXNW2RUYLe (and user demo-user)
 ```
 
 You can also run this command with the option `-o` and `-f` to get only the password output, useful for scripting situations:
 
 ```sh
 $ civo instance password api-demo.test -o custom -f Password
-5OaGxNhaN11pLeWB
+BrbXNW2RUYLe
 ```
 
 #### Viewing Instance Public IP Address
@@ -287,21 +326,32 @@ $ civo instance password api-demo.test -o custom -f Password
 If an instance has a public IP address configured, you can display it using `civo instance public-ip ID/hostname`:
 
 ```sh
-$ civo instance public-ip api-demo.test -o custom -f PublicIP
-91.211.152.100
+$ civo instance public-ip api-demo.test -o custom -f public_ip
+74.220.21.246
 ```
 
 The above example uses `-o` and `-f` to display only the IP address in the output.
 
+
 #### Setting Firewalls
 
-Instances can make use of separately-configured firewalls. By default, an instance is created with no firewall rules set, so you will need to configure some rules (see [Firewalls](#firewalls) for more information).
-
-To associate a firewall with an instance, use the command `civo instance firewall ID/hostname firewall_id`. For example:
+Instances can make use of separately-configured firewalls. By default, an instance is created with default all port open firewall rules set. If you want to secure your instances more, so you will need to configure some rules (see [Firewalls](#firewalls) for more information). Once you have configured the rules you can check it by running `civo firewall ls`
 
 ```sh
-$ civo instance firewall api-demo.test firewall_1
-Set api-demo.test to use firewall firewall_1
+$ civo firewall ls
++--------------------------------------+------------------------------------+---------+-------------+-----------------+
+| ID                                   | Name                               | Network | Total rules | Total Instances |
++--------------------------------------+------------------------------------+---------+-------------+-----------------+
+| c9e14ae8-b8eb-4bae-a687-9da4637233da | Default (all open)                 | Default |           3 |               0 |
+| f79db64d-41f0-4be0-ae80-ce4499164319 | Kubernetes cluster: Demo           | Default |           2 |               0 |
++--------------------------------------+------------------------------------+---------+-------------+-----------------+
+```
+
+You can take the firewall ID and use it to associate a firewall with an instance, use the command `civo instance firewall ID/hostname firewall_id`. For example:
+
+```sh
+$ civo instance firewall api-demo.test f79db64d-41f0-4be0-ae80-ce4499164319
+Set the firewall for the instance api-demo.test (112f2407-fb89-443e-bd0e-5ddabc4682c6) to Kubernetes cluster: Demo (f79db64d-41f0-4be0-ae80-ce4499164319)
 ```
 
 #### Listing Instances
@@ -321,7 +371,7 @@ $ civo instance reboot api-demo.test
  Rebooting api-demo.test. Use 'civo instance show api-demo.test' to see the current status.
 ```
 
-If you prefer a soft reboot, you can run `civo instance soft-reboot instanceID/hostname` instead.
+If you prefer a hard reboot, you can run `civo instance hard-reboot instanceID/hostname` instead.
 
 #### Removing Instances
 
@@ -330,7 +380,7 @@ Usage: `civo instance remove instanceID/hostname`. For example:
 
 ```sh
 $ civo instance remove api-demo.test
- Removing instance api-demo.test
+The instance (api-demo.test) has been deleted
 ```
 
 #### Stopping (Shutting Down) and Starting Instances
@@ -354,23 +404,28 @@ $ civo instance start api-demo.test
 Tags can be useful in distinguishing and managing your instances. You can retag an instance using `civo instance tags instanceID/hostname 'tag1 tag2 tag3...'` as follows:
 
 ```sh
-$ civo instance tags api-demo.test 'ubuntu demo web'
- Updated tags on api-demo.test. Use 'civo instance show api-demo.test' to see the current tags.'
+$ civo instance tags api-demo.test 'ubuntu demo'
+ The instance api-demo.test (b5f82fa7-b8e4-44aa-9dda-df02dab71d6c) has been tagged with ubuntu demo. Use 'civo instance show api-demo.test' to see the current tags.'
 $ civo instance show api-demo.test
-                ID : 715f95d1-3cee-4a3c-8759-f9b49eec34c4
-          Hostname : api-demo.test
-              Tags : ubuntu, demo, web
-              Size : Small - 2GB RAM, 1 CPU Core, 25GB SSD Disk
-            Status : ACTIVE
-        Private IP : 10.250.199.4
-         Public IP : 172.31.2.164 => 91.211.152.100
-           Network : Default (10.250.199.0/24)
-          Firewall :  (rules: )
-            Region : lon1
-      Initial User : api-demouser
-      OpenStack ID : 7c89f7de-2b29-4178-a2e5-55bdaa5c4c21
-       Template ID : 811a8dfb-8202-49ad-b1ef-1e6320b20497
-       Snapshot ID :
+              ID : b5f82fa7-b8e4-44aa-9dda-df02dab71d6c
+        Hostname : api-demo.test
+          Status : SHUTOFF
+            Size : g3.small
+       Cpu Cores : 1
+             Ram : 2048
+        SSD disk : 25
+          Region : LON1
+      Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
+   Disk image ID : ubuntu-bionic
+     Snapshot ID : 
+    Initial User : demo-user
+Initial Password : demo-user
+         SSH Key : 
+     Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
+            Tags : ubuntu demo
+      Created At : Mon, 01 Jan 0001 00:00:00 UTC
+      Private IP : 192.168.1.7
+       Public IP : 74.220.16.23
 
 ----------------------------- NOTES -----------------------------
 ```
@@ -380,9 +435,9 @@ $ civo instance show api-demo.test
 In case you need to rename an instance or add notes, you can do so with the `instance update` command as follows:
 
 ```sh
-$ civo instance update api-demo.test --name api-demo-renamed.test --notes 'Hello, world!'
- Instance 715f95d1-3cee-4a3c-8759-f9b49eec34c4 now named api-demo-renamed.test
- Instance 715f95d1-3cee-4a3c-8759-f9b49eec34c4 notes are now: Hello, world!
+$ civo instance update api-demo.test --hostname api-demo-renamed.test --notes 'Hello, world!'
+The instance api-demo-renamed.test (b5f82fa7-b8e4-44aa-9dda-df02dab71d6c) has been updated
+
 $ civo instance show api-demo-renamed.test
                 ID : 715f95d1-3cee-4a3c-8759-f9b49eec34c4
           Hostname : api-demo-renamed.test
@@ -408,28 +463,30 @@ You can leave out either the ``--name`` or `--notes` switch if you only want to 
 
 #### Upgrading (Resizing) an Instance
 
-Provided you have room in your Civo quota, you can upgrade any instance up in size. You can upgrade an instance by using `civo instance upgrade instanceID/hostname new_size` where `new_size` is from the list of sizes at `civo sizes`:
+Provided you have room in your Civo quota, you can upgrade any instance up in size. You can upgrade an instance by using `civo instance upgrade instanceID/hostname new_size` where `new_size` is from the list of sizes at `civo sizes ls`:
 
 ```sh
-$ civo instance upgrade api-demo-renamed.test g2.medium
- Resizing api-demo-renamed.test to g2.medium. Use 'civo instance show api-demo-renamed.test' to see the current status.
+$ civo instance upgrade api-demo-renamed.test g3.medium
+ The instance api-demo-renamed.test (9579d478-a09e-4196-a08c-f52545a90fea) is being upgraded to g3.medium
 
 $ civo instance show api-demo-renamed.test
-                ID : 715f95d1-3cee-4a3c-8759-f9b49eec34c4
-          Hostname : api-demo-renamed.test
-              Tags : ubuntu, demo, web
-              Size : Medium - 4GB RAM, 2 CPU Cores, 50GB SSD Disk
-            Status : ACTIVE
-        Private IP : 10.250.199.4
-         Public IP : 172.31.2.164 => 91.211.152.100
-           Network : Default (10.250.199.0/24)
-          Firewall :  (rules: )
-            Region : lon1
-      Initial User : api-demouser
-  Initial Password : [randomly-assigned-password-here]
-      OpenStack ID : 7c89f7de-2b29-4178-a2e5-55bdaa5c4c21
-       Template ID : 811a8dfb-8202-49ad-b1ef-1e6320b20497
-       Snapshot ID :
+          Status : ACTIVE
+            Size : g3.medium
+       Cpu Cores : 2
+             Ram : 4096
+        SSD disk : 50
+          Region : LON1
+      Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
+   Disk image ID : ubuntu-bionic
+     Snapshot ID : 
+    Initial User : demo-user
+Initial Password : demo-user
+         SSH Key : 
+     Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
+            Tags : ubuntu, demo
+      Created At : Mon, 01 Jan 0001 00:00:00 UTC
+      Private IP : 192.168.1.9
+       Public IP : 74.220.17.71
 
 ----------------------------- NOTES -----------------------------
 
@@ -448,10 +505,6 @@ You can manage Kubernetes clusters on Civo using the Kubernetes subcommands.
 
 To see your created clusters, call `civo kubernetes list`:
 
-#### Listing kubernetes sizes
-
-You can list all kubernetes sizes by running `civo kubernetes size`.
-
 ```sh
 $ civo kubernetes list
 +--------------------------------------+----------------+--------+-------+-------+--------+
@@ -460,6 +513,24 @@ $ civo kubernetes list
 | 5604340f-caa3-4ac1-adb7-40c863fe5639 | falling-sunset | NYC1   |     2 |     1 | ACTIVE |
 +--------------------------------------+----------------+--------+-------+-------+--------+
 ```
+#### Listing kubernetes sizes
+
+You can list all kubernetes sizes by running `civo kubernetes size`.
+
+```sh
+$ civo kubernetes size
++----------------+-------------+------------+-----+-------+-----+------------+
+| Name           | Description | Type       | CPU | RAM   | SSD | Selectable |
++----------------+-------------+------------+-----+-------+-----+------------+
+| g3.k3s.xsmall  | Extra Small | Kubernetes |   1 |  1024 |  15 | Yes        |
+| g3.k3s.small   | Small       | Kubernetes |   1 |  2048 |  15 | Yes        |
+| g3.k3s.medium  | Medium      | Kubernetes |   2 |  4096 |  15 | Yes        |
+| g3.k3s.large   | Large       | Kubernetes |   4 |  8192 |  15 | Yes        |
+| g3.k3s.xlarge  | Extra Large | Kubernetes |   6 | 16384 |  15 | Yes        |
+| g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 | 32768 |  15 | Yes        |
++----------------+-------------+------------+-----+-------+-----+------------+
+
+```
 
 #### Create a cluster
 
@@ -467,6 +538,8 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
 
 ```bash
   -a, --applications string          optional, use names shown by running 'civo kubernetes applications ls'
+  -c, --create-firewall string       optional, comma-separated list of ports to open - leave blank for default (80,443,6443) or you can use "all"
+  -e, --existing-firewall string     optional, ID of existing firewall to use
   -h, --help                         help for create
   -m, --merge                        merge the config with existing kubeconfig if it already exists.
   -t, --network string               the name of the network to use in the creation (default "default")
@@ -478,6 +551,21 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
   -v, --version string               the k3s version to use on the cluster. Defaults to the latest. (default "latest")
   -w, --wait                         a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE
 ```
+
+*Note* 
+* The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
+* The '--create-firewall' flag can accept:
+    * an optional end port using 'start_port-end_port' format (e.g. 8000-8100)
+    * an optional CIDR notation (e.g. 0.0.0.0/0)
+* When no CIDR notation is provided, the port will get 0.0.0.0/0 as default CIDR notation
+* When a CIDR notation is provided without slash notation, it will default to /32
+* So the following would all be valid:
+    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4
+    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4,8081:8.8.8.8/32,8082:1.1.1.1/24,5000-5500:1.2.3.4,6000-6500:4.4.4.4/24
+* When '--create-firewall' flag is blank, your cluster will be created with the following rules:
+    * 80:0.0.0.0/0,443:0.0.0.0/0,6443:0.0.0.0/0
+* To open all ports for public access, "all" can be provided to '--create-firewall' flag (not recommended)
+
 
 ```sh
 $ civo kubernetes create my-first-cluster
@@ -491,11 +579,12 @@ if `--node` and `--size` are not expecified, the default values will be used.
 
 ```sh
 civo kubernetes node-pool create my-first-cluster
+The pool (8064c7) was added to the cluster (my-first-cluster)
 ```
 
 #### Scaling pools in the cluster
 
-You can scale a pool in your cluster, while the cluster is running. It takes the name of the cluster (or the ID), the pool ID, and `--nodes` which is the new number of nodes in the pool
+You can scale a pool in your cluster, while the cluster is running. It takes the name of the cluster (or the ID), the pool ID, and `--nodes` which is the new number of nodes in the pool. You can get the pool ID details form `civo k3s show my-first-cluster`
 
 ```sh
 civo kubernetes node-pool scale my-first-cluster pool-id --nodes 5
@@ -514,8 +603,8 @@ civo kubernetes node-pool delete my-first-cluster pool-id
 If you need to recycle a particular node in your cluster for any reason, you can use the `recycle` command. This requires the name or ID of the cluster, and the name of the node you wish to recycle preceded by `--node=`:
 
 ```sh
-$ civo k8s recycle my-first-cluster --node=kube-node-e9ca
-The node (kube-node-e9ca) was recycled
+$ civo k8s recycle my-first-cluster --node=k3s-my-first-cluster-5ae1561e-node-pool-a56f
+The node (k3s-my-first-cluster-5ae1561e-node-pool-a56f) was recycled
 ```
 
 *Note:* When a node is recycled, it is fully deleted. The recycle command does not [drain](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/) a node, it simply deletes it before building a new node and attaching it to a cluster. It is intended for scenarios where the node itself develops an issue and must be replaced with a new one.
@@ -774,7 +863,7 @@ To create a new Firewall, use `civo firewall create new_firewall_name`:
 
 ```sh
 $ civo firewall create civocli_demo
- Created firewall civocli_demo
+Created a firewall called civocli_demo with ID ab2a25d7-edd4-4ecd-95c4-58cb6bc402de
 ```
 
 You will then be able to **configure rules** that allow connections to and from your instance by adding a new rule using `civo firewall rule create firewall_id` with the required and your choice of optional parameters, listed here and used in an example below:
@@ -863,6 +952,19 @@ $ civo network create cli-demo
 Create a private network called cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa290e1
 ```
 
+#### Listing Networks
+To list all the networks you can run `civo network ls`
+```sh
+$ civo network ls
++--------------------------------------+----------+--------+---------+
+| ID                                   | Label    | Region | Default |
++--------------------------------------+----------+--------+---------+
+| 28244c7d-b1b9-48cf-9727-aebb3493aaac | Default  | LON1   | true    |
+| fa21edfa-c089-421c-8008-0c0c7784386a | test     | LON1   | false   |
+| 35ec87e7-fbd2-4ee8-849a-f88d7363e23f | cli-demo | LON1   | false   |
++--------------------------------------+----------+--------+---------+
+```
+
 #### Removing Networks
 
 Removal of a network, provided you do not need it and your applications do not depend on routing through it, is simple - you call `civo network remove network_ID`:
@@ -872,59 +974,6 @@ $ civo network remove 74b69006-ea59-46a0-96c4-63f5bfa290e1
 Removed the network cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa290e1
 ```
 
-## Load Balancers
-
-#### Introduction
-
-Civo supports load balancing for your instances, allowing you to spread web traffic between them to maximize availability. You can view details about load balancers you may have running, create new ones, update information and even remove them from the command line.
-
-#### Viewing Load Balancers
-
-You can list currently-active load balancers by calling `civo loadbalancer list`. This will draw a table detailing the unique ID, hostname, protocol, port, TLS certificate information, backend check path and connection information.
-
-#### Creating Load Balancers
-
-Create a new load balancer by calling `civo loadbalancer create` as well as any options you provide. The options are:
-
-```text
-Options:
--b, --backends stringArray         Specify a backend instance to associate with the load balancer. Takes instance_id, protocol and port in the format --backend=instance:instance-id|instance-name,protocol:http,port:80
--t, --fail_timeout int             Timeout in seconds to consider a backend to have failed. Defaults to 30 (default 30)
--l, --health_check_path string     URL to check for a valid (2xx/3xx) HTTP status on the backends. Defaults to /
--h, --help                         help for create
--e, --hostname string              If not supplied, will be in format loadbalancer-uuid.civo.com
--i, --ignore_invalid_backend_tls   Should self-signed/invalid certificates be ignored from backend servers? Defaults to true (default true)
--x, --max_connections int          Maximum concurrent connections to each backend. Defaults to 10 (default 10)
--m, --max_request_size int         Maximum request content size, in MB. Defaults to 20 (default 20)
-    --policy string                <least_conn | random | round_robin | ip_hash> - Balancing policy to choose backends
--r, --port int                     Listening port. Defaults to 80 to match default http protocol (default 80)
--p, --protocol string              Either http or https. If you specify https then you must also provide the next two fields
--c, --tls_certificate string       TLS certificate in Base64-encoded PEM. Required if --protocol is https
--k, --tls_key string               TLS certificate in Base64-encoded PEM. Required if --protocol is https
-```
-
-```sh
-$ civo loadbalancer create
-Created a new Load Balancer with hostname loadbalancer-01da06bc-40ef-4d4c-bb68-d0765d288b54.civo.com
-```
-
-#### Updating Load Balancers
-
-Updating an existing load balancer takes the same options as creation, with the syntax being `civo loadbalancer update ID [options]`. For example, we can update the hostname of the load balancer created above using `--hostname`:
-
-```sh
-$ civo loadbalancer update 01da06bc-40ef-4d4c-bb68-d0765d288b54 --hostname="civo-demo-loadbalancer.civo.com"
-Updated Load Balancer
-```
-
-#### Removing Load Balancers
-
-Removing a load balancer is done through calling `civo loadbalancer remove loadbalancer_id`. Please note that this change is immediate:
-
-```sh
-$ civo loadbalancer remove 01da06bc-40ef-4d4c-bb68-d0765d288b54
-Removed the load balancer civo-demo-loadbalancer.civo.com with ID 01da06bc-40ef-4d4c-bb68-d0765d288b54
-```
 
 ## Quota
 
@@ -993,52 +1042,6 @@ $ civo sizes list --filter kubernetes
 | g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 |    32768 |        10 | Yes        |
 +----------------+-------------+------------+-----+----------+-----------+------------+
 ```
-## Snapshots
-
-#### Introduction
-
-Snapshots are a clever way to back up your instances. A snapshot is an exact copy of the instance's virtual hard drive at the moment of creation. At any point, you can restore an instance to the state it was at snapshot creation, or use snapshots to build new instances that are configured exactly the same as other servers you host.
-
-As snapshot storage is chargeable (see [
-Quota](#quota)), at any time these can be deleted by you. They can also be scheduled rather than immediately created, and if desired repeated at the same schedule each week (although the repeated snapshot will overwrite itself each week, not keep multiple weekly snapshots).
-
-#### Creating Snapshots
-
-You can create a snapshot from an existing instance on the command line by using `civo snapshot create snapshot_name instance_id`
-For a one-off snapshot that's all you will need:
-
-```sh
-$ civo snapshot create CLI-demo-snapshot 715f95d1-3cee-4a3c-8759-f9b49eec34c4
-Created snapshot CLI-demo-snapshot with ID d6d7704b-3402-44d0-aeb1-09875f71d168
-```
-
-For scheduled snapshots, include the `-c '0 * * * *'` switch, where the `'0 * * * *'` string is in `cron` format.
-
-Creating snapshots is not instant, and will take a while depending on the size of the instance being backed up. You will be able to monitor the status of your snapshot by listing your snapshots as described below.
-
-#### Listing Snapshots
-
-You can view all your currently-stored snapshots and a bit of information about them by running `civo snapshot list`:
-
-```sh
-$ civo snapshot list
-+--------------------------------------+-------------------+------+---------------------+---------+------------+-------------------------------+-------------------------------+-------------------------------+
-| ID                                   | Name              | Size | Hostname            | State   | Cron       | Schedule                      | RequestedAt                   | CompletedAt                   |
-+--------------------------------------+-------------------+------+---------------------+---------+------------+-------------------------------+-------------------------------+-------------------------------+
-| d593263e-2433-4c82-aad3-81c2d6ddaa09 | CLI-demo-snapshot | 0 GB | www1                | pending | 55 0 * * * | Thu, 18 Jun 2020 00:55:00 CDT | Mon, 01 Jan 0001 00:00:00 UTC | Mon, 01 Jan 0001 00:00:00 UTC |
-+--------------------------------------+-------------------+------+---------------------+---------+------------+-------------------------------+-------------------------------+-------------------------------+
-```
-
-#### Removing Snapshots
-
-Snapshots that are not associated with an instance can be removed using `civo snapshot remove snapshot_id` as follows:
-
-```sh
-$ civo snapshot remove d6d7704b-3402-44d0-aeb1-09875f71d168
-Removed snapshot CLI-demo-snapshot with ID d6d7704b-3402-44d0-aeb1-09875f71d168
-```
-
-If an instance was created from a snapshot, you will not be able to remove the snapshot itself.
 
 ## SSH Keys
 
@@ -1056,7 +1059,7 @@ You will need the path to your public SSH Key to upload a new key to Civo. The u
 You will be able to list the SSH keys known for the current account holder by invoking `civo ssh list`:
 
 ```sh
-$ civo sshkeys
+$ civo sshkeys ls
 +--------------------------------------+------------------+----------------------------------------------------+
 | ID                                   | Name             | Fingerprint                                        |
 +--------------------------------------+------------------+----------------------------------------------------+
@@ -1072,79 +1075,28 @@ $ civo ssh remove 531d0998-4152-410a-af20-0cccb1c7c73b
 Removed SSH key cli-demo with ID 531d0998-4152-410a-af20-0cccb1c7c73b
 ```
 
-## Templates
+## Disk Image
 
 #### Introduction
 
-Civo instances are built from a template that specifies a disk image. Templates can contain the bare-bones OS install such as Ubuntu or Debian, or custom pre-configured operating systems that you can create yourself from a bootable volume. This allows you to speedily deploy pre-configured instances.
-
-#### Listing Available Template Images
-
-A simple list of available templates, both globally-defined ones and user-configured account-specific templates, can be seen by running `civo template list`:
-
-```sh
-$ civo template list
-+--------------------------------------+----------------+----------------+--------------------------------------+----------------------------------------------------+-------------+------------------+
-| ID                                   | Code           | Name           | Image ID                             | Short Description                                  | Description | Default Username |
-+--------------------------------------+----------------+----------------+--------------------------------------+----------------------------------------------------+-------------+------------------+
-| 458ae900-30e0-4ade-bd68-d137d57d4e47 | centos-7       | CentOS 7       | e17ec38a-1e77-4c45-bef3-569567c9b169 | CentOS 7 - aiming to be compatible with RHEL 7     |             | centos           |
-| 033c35a0-a8c3-4518-8114-d156a4d4c512 | debian-stretch | Debian Stretch | 2ffff07e-6953-4864-8ce9-1f754d70de31 | Debian v9 (Stretch), current stable Debian release |             | admin            |
-| b0d30599-898a-4072-86a1-6ed2965320d9 | ubuntu-16.04   | Ubuntu 16.04   | 8b4d81e0-6283-4ea3-bbc4-478df568024e | Ubuntu 16.04                                       |             | ubuntu           |
-| 811a8dfb-8202-49ad-b1ef-1e6320b20497 | ubuntu-18.04   | Ubuntu 18.04   | e4838e89-f086-41a1-86b2-60bc4b0a259e | Ubuntu 18.04                                       |             | ubuntu           |
-| fffbe2e5-0dd8-476b-b480-cb7c9fccbe39 | debian-buster  | Debian Buster  | 38686161-ba25-4899-ac0a-54eaf35239c0 | Debian v10 (Buster), latest stable Debian release  |             | admin            |
-+--------------------------------------+----------------+----------------+--------------------------------------+----------------------------------------------------+-------------+------------------+
-```
-
-#### Viewing Details of a Template
-
-Detailed information about a template can be obtained via the CLI using `civo template show template_ID`.
+Civo instances are built from a disk image. Currently there centos, debian and ubuntu are supported.In order to create an instance the diskimage ID is needed that can be found by running `civo diskimage ls`
 
 
-#### Creating a Template
-
-You can convert a **bootable** Volume (virtual disk) of an instance, or alternatively use an existing image ID, to create a template. The options for the `civo template create` command are:
-
-```text
-Options:
--i, --cloudconfig string         The path of the cloud config
--c, --code string                The code name of the template, this can't change after creation
--u, --default-username string    The default username of the template
--d, --description string         Add a description
--h, --help                       help for create
--m, --image-id string            The image id for the template
--n, --name string                The name of the template
--s, --short-description string   Add a short description
--v, --volume-id string           The volume id for the template
-```
+#### Listing Available Disk Images
 
 ```sh
-$ civo template create -n="cli-demo" -v=1427e49f-d159-4421-b6cc-34c43775764b --description="This is a demo template made from a CoreOS image" --short-description="CoreOS CLI demo"
-	Created template cli-demo
+$ civo diskimage ls
++--------------------------------------+---------------+---------+-----------+--------------+
+| ID                                   | Name          | Version | State     | Distribution |
++--------------------------------------+---------------+---------+-----------+--------------+
+| 4921b107-964f-417c-bf63-c92fcf41ccbd | centos-7      |       7 | available | centos       |
+| a4204155-a876-43fa-b4d6-ea2af8774560 | debian-10     |      10 | available | debian       |
+| 9b661c46-ac4f-46e1-9f3d-aaacde9b4fec | debian-9      |       9 | available | debian       |
+| 12745392-15c7-4140-925d-441fe7ae57fd | ubuntu-bionic |   18.04 | available | ubuntu       |
+| d927ad2f-5073-4ed6-b2eb-b8e61aef29a8 | ubuntu-focal  |   20.04 | available | ubuntu       |
++--------------------------------------+---------------+---------+-----------+--------------+
 ```
 
-#### Updating Template Information
-
-Once you have  created a custom template, you can update information that allows for the easy identification and management of the template. Usage is `civo template update template_id [options]`:
-
-```text
-Options:
--i, --cloudconfig string         The cloud config
--u, --default-username string    The default username of the template
--d, --description string         Add a description
--h, --help                       help for update
--n, --name string                The name of the template
--s, --short-description string   Add a short description
-```
-
-#### Removing a Template
-
-Removing an account-specific template is done using the `template remove template_id` command:
-
-```sh
-$ civo template remove 1427e22f-d149-4421-b6ab-34c43754224c
-```
-
-Please note that template removal is immediate! Use with caution.
 
 ## Volumes
 
@@ -1160,14 +1112,14 @@ You can create a new volume by calling `civo volume create NAME SIZE(GB)`:
 
 ```text
 Options:
--b, --bootable      Mark the volume as bootable
--h, --help          help for create
--s, --size-gb int   The new size in GB (required)
+  -h, --help             help for create
+  -t, --network string   The network name/ID where the volume will be created (default "default")
+  -s, --size-gb int      The new size in GB (required)
 ```
 
 ```sh
 $ civo volume create CLI-demo-volume -s 25
-Created a new 25GB volume called CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e
+Created a volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12
 ```
 
 #### Attaching a Volume to an Instance
@@ -1175,8 +1127,8 @@ Created a new 25GB volume called CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8
 Mounting (Attaching) a volume onto an instance will allow that instance to use the volume as a drive:
 
 ```sh
-$ civo volume attach 9b232ffa-7e05-45a4-85d8-d3643e68952e 715f95d1-3cee-4a3c-8759-f9b49eec34c4
-Attached volume CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e to api-demo.test
+$ civo volume attach CLI-demo-volume api-demo.test
+The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 was attached to the instance api-demo.test
 ```
 
 If this is a newly-created volume, you would need to partition, format and mount the volume. For more information, [see the Learn guide here](https://www.civo.com/learn/configuring-block-storage-on-civo).
@@ -1187,21 +1139,21 @@ Note: You can only attach a volume to one instance at a time.
 If you want to detach a volume to move it to another instance, or are just finished with it, you can detach it once it's been [unmounted](https://www.civo.com/learn/configuring-block-storage-on-civo) using `civo volume detach volume_id`:
 
 ```sh
-$ civo volume detach 9b232ffa-7e05-45a4-85d8-d3643e68952e
-Detached volume CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e
+$ civo volume detach CLI-demo-volume
+The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 was detached
 ```
 
 #### Listing Volumes
 
 You can get an overall view of your volumes, their sizes and status by using `civo volume list`.
 
-#### Resizing Volumes
-
-An un-attached volume can be resized if you need extra space. This is done by calling `civo volume resize volume_id -s new_size` where `new-size` is in gigabytes:
-
 ```sh
-$ civo volume resize 9b232ffa-7e05-45a4-85d8-d3643e68952e -s 30
-Resized volume CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e to be 30GB
+$ civo volume ls
++--------------------------------------+------------------------------------------+---------+----------+----------+-------+-------------+-----------+
+| ID                                   | Name                                     | Network | Cluster  | Instance | Size  | Mount Point | Status    |
++--------------------------------------+------------------------------------------+---------+----------+----------+-------+-------------+-----------+
+| 59076ec8-edba-4071-80d0-e9cfcce37b12 | CLI-demo-volume                          | Default |          |          | 25 GB |             | available |
++--------------------------------------+------------------------------------------+---------+----------+----------+-------+-------------+-----------+
 ```
 
 #### Deleting Volumes
@@ -1209,9 +1161,9 @@ Resized volume CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e to b
 To free up quota and therefore the amount to be billed to your account, you can delete a volume through `civo volume delete volume_id`. This deletion is immediate:
 
 ```sh
-$ civo volume delete 9b232ffa-7e05-45a4-85d8-d3643e68952e
-Removed volume CLI-demo-volume with ID 9b232ffa-7e05-45a4-85d8-d3643e68952e (was 30GB)
-$ civo volume list
+$ civo volume delete CLI-demo-volume
+The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 was deleted
+
 ```
 
 
@@ -1222,11 +1174,13 @@ As Civo grows, more regions for your instances will become available. You can ru
 
 You can run `civo region ls` to get the list of all region
 ```sh
+civo region ls
 +------+-------------+----------------+---------+
 | Code | Name        | Country        | Current |
 +------+-------------+----------------+---------+
-| NYC1 | New York 1  | United States  | <=====  |
-| SVG1 | Stevenage 1 | United Kingdom |         |
+| FRA1 | Frankfurt 1 | Germany        |         |
+| LON1 | London 1    | United Kingdom | <=====  |
+| NYC1 | New York 1  | United States  |         |
 +------+-------------+----------------+---------+
 ```
 
