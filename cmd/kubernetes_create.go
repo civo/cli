@@ -29,11 +29,12 @@ Notes:
 * When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
 * When a CIDR notation is provided without slash and number segment, it will default to /32
 * Within a rule, you can use comma separator for multiple ports to have same CIDR notation
+* To separate between rules, you can use semicolon symbol and wrap everything in double quotes (see below)
 * So the following would all be valid:
-    * 80,443,6443:0.0.0.0/0;8080:1.2.3.4 (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
-    * 80,443,6443;6000-6500:4.4.4.4/24 (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
+    * "80,443,6443:0.0.0.0/0;8080:1.2.3.4" (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
+    * "80,443,6443;6000-6500:4.4.4.4/24" (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
 * When '--create-firewall' flag is blank, your cluster will be created with the following rules:
-    * 80,443,6443:0.0.0.0/0 (open 80,443,6443 to public)
+    * "80;443;6443" (open 80,443,6443 to public)
 * To open all ports for public access, "all" can be provided to '--create-firewall' flag (not recommended)
 `
 
@@ -197,8 +198,6 @@ var kubernetesCreateCmd = &cobra.Command{
 			}
 			configKubernetes.Applications = installApplications
 		}
-
-		// fmt.Printf("DEBUG: %+v\n", configKubernetes)
 
 		if !mergeConfigKubernetes && saveConfigKubernetes {
 			if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) {
