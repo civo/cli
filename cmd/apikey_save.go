@@ -13,6 +13,8 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 )
 
+var loadApiKeyFromEnv bool
+
 var apikeySaveCmd = &cobra.Command{
 	Use:     "save",
 	Aliases: []string{"add", "store", "create", "new"},
@@ -23,7 +25,8 @@ var apikeySaveCmd = &cobra.Command{
 
 		var name, apiKey string
 		var err error
-		if len(args) == 0 {
+
+		if len(args) == 0 && !loadApiKeyFromEnv {
 			reader := bufio.NewReader(os.Stdin)
 			fmt.Printf("Enter a nice name for this account/API Key: ")
 
@@ -40,9 +43,30 @@ var apikeySaveCmd = &cobra.Command{
 				os.Exit(1)
 			}
 			apiKey = string(apikeyBytes)
-		} else if len(args) == 2 {
+		}
+
+		if len(args) == 2 && !loadApiKeyFromEnv {
 			name = args[0]
 			apiKey = args[1]
+		}
+
+		if loadApiKeyFromEnv {
+			nameEnvRef := "CIVO_API_KEY_NAME"
+			nameEnv, present := os.LookupEnv(nameEnvRef)
+			if !present || nameEnv == "" {
+				utility.Error("%q environment variable is missing", nameEnvRef)
+				os.Exit(1)
+			}
+
+			apiKeyEnvRef := "CIVO_API_KEY"
+			apiKeyEnv, present := os.LookupEnv(apiKeyEnvRef)
+			if !present || apiKeyEnv == "" {
+				utility.Error("%q environment variable is missing", apiKeyEnvRef)
+				os.Exit(1)
+			}
+
+			name = nameEnv
+			apiKey = apiKeyEnv
 		}
 
 		config.Current.APIKeys[name] = apiKey
@@ -75,7 +99,7 @@ var apikeySaveCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("\nSaved the API Key %s ", utility.Green(name))
+			fmt.Printf("Saved the API Key %s\n", utility.Green(name))
 		}
 
 	},
