@@ -13,7 +13,7 @@ import (
 
 var instanceUpgradeCmd = &cobra.Command{
 	Use:     "upgrade",
-	Example: "civo instance upgrade ID/HOSTNAME g2.xlarge",
+	Example: "civo instance upgrade ID/HOSTNAME g3.xlarge",
 	Args:    cobra.MinimumNArgs(2),
 	Aliases: []string{"resize"},
 	Short:   "Upgrade an instance",
