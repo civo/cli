@@ -13,6 +13,25 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 )
 
+var apikeySaveCmdExample = `* Interactive way:
+    civo apikey save
+
+* Non-interactive way:
+    civo apikey save NAME APIKEY
+
+* Load from environment variables way:
+    civo apikey save --load-from-env
+
+Notes:
+* This command will generate one file called '.civo.json' in your home directory
+* The NAME is just an identifier for your own reference. This can be useful if you have multiple accounts.
+* Some ideas for NAME are: 'personal', 'work', 'ci-server', 'staging', 'production'
+* When --load-from-env flag is provided, we assume you have set the following environment variables:
+  * (required) CIVO_API_KEY e.g. 'export CIVO_API_KEY=<YOUR_CIVO_API_KEY>'
+  * (optional) CIVO_API_KEY_NAME e.g. 'export CIVO_API_KEY_NAME=personal'
+  * When CIVO_API_KEY_NAME is not set, it will default to the hostname where the this CLI is running
+`
+
 var loadApiKeyFromEnv bool
 
 var apikeySaveCmd = &cobra.Command{
@@ -20,7 +39,7 @@ var apikeySaveCmd = &cobra.Command{
 	Aliases: []string{"add", "store", "create", "new"},
 	Short:   "Save a new API key",
 	Args:    cobra.MinimumNArgs(0),
-	Example: "civo apikey save NAME KEY",
+	Example: apikeySaveCmdExample,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		var name, apiKey string
@@ -54,8 +73,12 @@ var apikeySaveCmd = &cobra.Command{
 			nameEnvRef := "CIVO_API_KEY_NAME"
 			nameEnv, present := os.LookupEnv(nameEnvRef)
 			if !present || nameEnv == "" {
-				utility.Error("%q environment variable is missing", nameEnvRef)
-				os.Exit(1)
+				hostname, err := os.Hostname()
+				if err != nil {
+					utility.Error("unable to retrieve hostname - %s", err)
+					os.Exit(1)
+				}
+				nameEnv = hostname
 			}
 
 			apiKeyEnvRef := "CIVO_API_KEY"
