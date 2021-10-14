@@ -20,7 +20,7 @@ var loadBalancerCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(loadBalancerCmd)
+	// rootCmd.AddCommand(loadBalancerCmd)
 	loadBalancerCmd.AddCommand(loadBalancerListCmd)
 	loadBalancerCmd.AddCommand(loadBalancerRemoveCmd)
 	loadBalancerCmd.AddCommand(loadBalancerCreateCmd)
