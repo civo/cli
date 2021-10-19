@@ -253,7 +253,8 @@ $ civo instance show api-demo.test
         SSD disk : 25
           Region : LON1
       Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
-   Disk image ID : ubuntu-bionic
+   
+   ID : ubuntu-bionic
      Snapshot ID : 
     Initial User : demo-user
 Initial Password : demo-user
@@ -272,7 +273,7 @@ You will be able to see the instance's details by running `civo instance show ap
 #### Disk images and instance sizes
 You can view the Disk images by running `civo diskimage ls`
 ```sh
-$ civo disk image ls 
+$ civo diskimage ls 
 +--------------------------------------+---------------+---------+-----------+--------------+
 | ID                                   | Name          | Version | State     | Distribution |
 +--------------------------------------+---------------+---------+-----------+--------------+
