@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var kuberneteNodePoolList []utility.ObjecteList
+var kubernetesNodePoolList []utility.ObjecteList
 var kubernetesNodePoolDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"delete", "rm"},
@@ -38,19 +38,19 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 		}
 
 		if len(args) == 1 {
-			kuberneteNodePoolList = append(kuberneteNodePoolList, utility.ObjecteList{ID: args[0], Name: args[1]})
+			kubernetesNodePoolList = append(kubernetesNodePoolList, utility.ObjecteList{ID: args[0], Name: args[1]})
 		} else {
 			for _, v := range args[1:] {
-				kuberneteNodePoolList = append(kuberneteNodePoolList, utility.ObjecteList{ID: args[0], Name: v})
+				kubernetesNodePoolList = append(kubernetesNodePoolList, utility.ObjecteList{ID: args[0], Name: v})
 			}
 		}
 
 		kubernetesPoolNameList := []string{}
-		for _, v := range kuberneteNodePoolList {
+		for _, v := range kubernetesNodePoolList {
 			kubernetesPoolNameList = append(kubernetesPoolNameList, v.Name)
 		}
 
-		if utility.UserConfirmedDeletion(fmt.Sprintf("node %s", pluralize.Pluralize(len(kuberneteNodePoolList), "pool")), defaultYes, strings.Join(kubernetesPoolNameList, ", ")) {
+		if utility.UserConfirmedDeletion(fmt.Sprintf("node %s", pluralize.Pluralize(len(kubernetesNodePoolList), "pool")), defaultYes, strings.Join(kubernetesPoolNameList, ", ")) {
 
 			nodePool := []civogo.KubernetesClusterPoolConfig{}
 			kubernetesFindCluster, err := client.FindKubernetesCluster(args[0])
@@ -63,7 +63,7 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 				nodePool = append(nodePool, civogo.KubernetesClusterPoolConfig{ID: v.ID, Count: v.Count, Size: v.Size})
 			}
 
-			for _, kubeList := range kuberneteNodePoolList {
+			for _, kubeList := range kubernetesNodePoolList {
 				nodePool = utility.RemoveNodePool(nodePool, kubeList.Name)
 			}
 
@@ -79,14 +79,14 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 
 			ow := utility.NewOutputWriter()
 
-			for _, v := range kuberneteNodePoolList {
+			for _, v := range kubernetesNodePoolList {
 				ow.StartLine()
 				ow.AppendDataWithLabel("id", v.Name, "ID")
 			}
 
 			switch outputFormat {
 			case "json":
-				if len(kuberneteNodePoolList) == 1 {
+				if len(kubernetesNodePoolList) == 1 {
 					ow.WriteSingleObjectJSON(prettySet)
 				} else {
 					ow.WriteMultipleObjectsJSON(prettySet)
@@ -94,7 +94,7 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(outputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted from the cluster (%s)\n", fmt.Sprintf("node %s", pluralize.Pluralize(len(kuberneteNodePoolList), "pool")), utility.Green(strings.Join(kubernetesPoolNameList, ", ")), utility.Green(kubernetesCluster.Name))
+				fmt.Printf("The %s (%s) has been deleted from the cluster (%s)\n", fmt.Sprintf("node %s", pluralize.Pluralize(len(kubernetesNodePoolList), "pool")), utility.Green(strings.Join(kubernetesPoolNameList, ", ")), utility.Green(kubernetesCluster.Name))
 			}
 		} else {
 			fmt.Println("Operation aborted.")
