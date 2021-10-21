@@ -234,17 +234,18 @@ func checkKubeDir() {
 }
 
 // RemoveNodePool is a utility function to remove node pool from a kuberentes cluster
-func RemoveNodePool(s []civogo.KubernetesClusterPoolConfig, id string) []civogo.KubernetesClusterPoolConfig {
+func RemoveNodePool(s []civogo.KubernetesClusterPoolConfig, id string, names []string) ([]civogo.KubernetesClusterPoolConfig, []string) {
 	key := 0
 	for k, v := range s {
 		if strings.Contains(v.ID, id) {
 			key = k
+			names = append(names, v.ID)
 			break
 		}
 	}
 
 	s[len(s)-1], s[key] = s[key], s[len(s)-1]
-	return s[:len(s)-1]
+	return s[:len(s)-1], names
 }
 
 // UpdateNodePool is a utility function to update node pool from a kuberentes cluster

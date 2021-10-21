@@ -52,6 +52,7 @@ var kubernetesNodePoolScaleCmd = &cobra.Command{
 		nodePoolFound := false
 		for _, pool := range kubernetesFindCluster.Pools {
 			if strings.Contains(pool.ID, nodePoolID) {
+				nodePoolID = pool.ID
 				nodePoolFound = true
 			}
 		}
