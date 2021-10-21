@@ -67,8 +67,9 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 				nodePool = append(nodePool, civogo.KubernetesClusterPoolConfig{ID: v.ID, Count: v.Count, Size: v.Size})
 			}
 
+			kubernetesPoolNameList = nil
 			for _, kubeList := range kuberneteNodePoolList {
-				nodePool = utility.RemoveNodePool(nodePool, kubeList.Name)
+				nodePool, kubernetesPoolNameList = utility.RemoveNodePool(nodePool, kubeList.Name, kubernetesPoolNameList)
 			}
 
 			configKubernetes := &civogo.KubernetesClusterConfig{
