@@ -70,7 +70,7 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The pool (%s) was added to the cluster (%s)\n", utility.Green(poolID[:6]), utility.Green(kubernetesCluster.Name))
+			fmt.Printf("The pool (%s) was added to the cluster (%s)\n", utility.Green(poolID), utility.Green(kubernetesCluster.Name))
 		}
 	},
 }

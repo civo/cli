@@ -47,6 +47,10 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 
 		kubernetesPoolNameList := []string{}
 		for _, v := range kubernetesNodePoolList {
+			if len(v.Name) < 6 {
+				utility.Error("Please provide the node pool ID with at least 6 characters for %s", v.Name)
+				os.Exit(1)
+			}
 			kubernetesPoolNameList = append(kubernetesPoolNameList, v.Name)
 		}
 
@@ -63,8 +67,9 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 				nodePool = append(nodePool, civogo.KubernetesClusterPoolConfig{ID: v.ID, Count: v.Count, Size: v.Size})
 			}
 
+			kubernetesPoolNameList = nil
 			for _, kubeList := range kubernetesNodePoolList {
-				nodePool = utility.RemoveNodePool(nodePool, kubeList.Name)
+				nodePool, kubernetesPoolNameList = utility.RemoveNodePool(nodePool, kubeList.Name, kubernetesPoolNameList)
 			}
 
 			configKubernetes := &civogo.KubernetesClusterConfig{

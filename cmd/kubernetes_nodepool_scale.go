@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
@@ -25,6 +26,12 @@ var kubernetesNodePoolScaleCmd = &cobra.Command{
 		return getKubernetesList(toComplete), cobra.ShellCompDirectiveNoFileComp
 	},
 	Run: func(cmd *cobra.Command, args []string) {
+		nodePoolID := args[1]
+		if len(nodePoolID) < 6 {
+			utility.Error("Please provide the node pool ID with at least 6 characters for %s", nodePoolID)
+			os.Exit(1)
+		}
+
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
@@ -42,10 +49,10 @@ var kubernetesNodePoolScaleCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		nodePoolID := args[1]
 		nodePoolFound := false
 		for _, pool := range kubernetesFindCluster.Pools {
-			if pool.ID == nodePoolID {
+			if strings.Contains(pool.ID, nodePoolID) {
+				nodePoolID = pool.ID
 				nodePoolFound = true
 			}
 		}
