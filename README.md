@@ -590,7 +590,7 @@ The pool (8064c7) was added to the cluster (my-first-cluster)
 
 #### Scaling pools in the cluster
 
-You can scale a pool in your cluster, while the cluster is running. It takes the name of the cluster (or the ID), the pool ID (min. 6 characters), and `--nodes` which is the new number of nodes in the pool. You can get the pool ID details form `civo k3s show my-first-cluster`
+You can scale a pool in your cluster, while the cluster is running. It takes the name of the cluster (or the ID), the pool ID (at least 6 characters), and `--nodes` which is the new number of nodes in the pool. You can get the pool ID details form `civo k3s show my-first-cluster`
 
 ```sh
 civo kubernetes node-pool scale my-first-cluster pool-id --nodes 5
@@ -598,7 +598,7 @@ civo kubernetes node-pool scale my-first-cluster pool-id --nodes 5
 
 #### Deleting pools in the cluster
 
-You can delete a pool in your cluster. It takes the name of the cluster (or the ID) and the pool ID (min. 6 characters)
+You can delete a pool in your cluster. It takes the name of the cluster (or the ID) and the pool ID (at least 6 characters)
 
 ```sh
 civo kubernetes node-pool delete my-first-cluster pool-id
