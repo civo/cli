@@ -28,7 +28,7 @@ var kubernetesNodePoolScaleCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		nodePoolID := args[1]
 		if len(nodePoolID) < 6 {
-			utility.Error("Please provide the node pool ID with atleast 6 characters for %s", nodePoolID)
+			utility.Error("Please provide the node pool ID with at least 6 characters for %s", nodePoolID)
 			os.Exit(1)
 		}
 
