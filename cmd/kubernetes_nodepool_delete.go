@@ -48,7 +48,7 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 		kubernetesPoolNameList := []string{}
 		for _, v := range kuberneteNodePoolList {
 			if len(v.Name) < 6 {
-				utility.Error("Please provide the node pool ID with atleast 6 characters for %s", v.Name)
+				utility.Error("Please provide the node pool ID with at least 6 characters for %s", v.Name)
 				os.Exit(1)
 			}
 			kubernetesPoolNameList = append(kubernetesPoolNameList, v.Name)
