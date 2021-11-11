@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
@@ -39,6 +40,9 @@ var domainRecordCreateCmd = &cobra.Command{
 			TTL:      recordTTL,
 			Priority: recordPriority,
 		}
+
+		// Sanitace the record type
+		recordType = strings.ReplaceAll(recordType, " ", "")
 
 		if recordType == "A" || recordType == "alias" {
 			newRecordConfig.Type = civogo.DNSRecordTypeA
