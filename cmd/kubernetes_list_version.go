@@ -14,8 +14,8 @@ var kubernetesListVersionCmd = &cobra.Command{
 	Use:     "versions",
 	Aliases: []string{"version"},
 	Example: `civo kubernetes versions ls`,
-	Short:   "List all Kubernetes clusters version",
-	Long: `List all Kubernetes clusters versions.
+	Short:   "List all Kubernetes cluster versions",
+	Long: `List all Kubernetes cluster versions.
 If you wish to use a custom format, the available fields are:
 
 	* version
