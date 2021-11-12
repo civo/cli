@@ -10,13 +10,27 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var saveConfig, mergeConfig, switchConfig bool
+var kubernetesConfigCmdExample = `* To merge and save:
+    civo kubernetes config CLUSTER_NAME --save
+    civo kubernetes config CLUSTER_NAME --save --merge
+
+* To overwrite and save:
+    civo kubernetes config CLUSTER_NAME --save --overwrite
+
+Notes:
+* By default, when --save is specified, we will merge your kubeconfig (unless --overwrite is specified).
+* The --merge and --overwrite flags can't be used together.
+* To auto-switch to new kubeconfig, --switch is required. Without it, your active context will remain unchanged.
+* When --overwrite is specified, --switch is not required. Your context will be updated automatically.
+`
+
+var saveConfig, mergeConfig, switchConfig, overwriteConfig bool
 var localPathConfig string
 
 var kubernetesConfigCmd = &cobra.Command{
 	Use:     "config",
 	Aliases: []string{"conf"},
-	Example: "civo kubernetes config CLUSTER_NAME --save --merge",
+	Example: kubernetesConfigCmdExample,
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Get a Kubernetes cluster's config",
 	Long: `Show the Kubernetes config for a specified cluster.
@@ -35,9 +49,23 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if switchConfig && !mergeConfig {
-			utility.Error("You can't use --switch flag without --merge flag")
+		// default to merge strategy
+		if !mergeConfig && !overwriteConfig {
+			mergeConfig = true
+		}
+
+		if overwriteConfig && mergeConfig {
+			utility.Error("You can't use --merge and --overwrite flags together")
 			os.Exit(1)
+		}
+
+		if switchConfig && !mergeConfig {
+			if overwriteConfig {
+				utility.Info("--switch is not required when --overwrite is present")
+			} else {
+				utility.Error("The --switch flag can only be used together with --merge flag")
+				os.Exit(1)
+			}
 		}
 
 		kube, err := client.FindKubernetesCluster(args[0])
@@ -53,7 +81,8 @@ If you wish to use a custom format, the available fields are:
 
 		if saveConfig {
 			if !mergeConfig && strings.Contains(localPathConfig, ".kube") {
-				if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) {
+				// overwrite and save
+				if overwriteConfig || utility.UserConfirmedOverwrite("kubernetes config", defaultYes) {
 					err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig, switchConfig, kube.Name)
 					if err != nil {
 						utility.Error("Saving the cluster config failed with %s", err)
@@ -64,6 +93,7 @@ If you wish to use a custom format, the available fields are:
 					os.Exit(1)
 				}
 			} else {
+				// merge and save
 				err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfig, switchConfig, kube.Name)
 				if err != nil {
 					utility.Error("Saving the cluster config failed with %s", err)

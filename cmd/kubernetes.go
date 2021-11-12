@@ -69,8 +69,9 @@ func init() {
 	}
 
 	kubernetesConfigCmd.Flags().BoolVarP(&saveConfig, "save", "s", false, "save the config")
-	kubernetesConfigCmd.Flags().BoolVarP(&switchConfig, "switch", "i", false, "switch context to newly-created cluster")
-	kubernetesConfigCmd.Flags().BoolVarP(&mergeConfig, "merge", "m", false, "merge the config with existing kubeconfig if it already exists.")
+	kubernetesConfigCmd.Flags().BoolVarP(&switchConfig, "switch", "i", false, "switch context to newly-created cluster (needs --merge flag)")
+	kubernetesConfigCmd.Flags().BoolVarP(&mergeConfig, "merge", "m", false, "merge the config with existing kubeconfig if it already exists")
+	kubernetesConfigCmd.Flags().BoolVarP(&overwriteConfig, "overwrite", "w", false, "overwrite the kubeconfig file")
 	kubernetesConfigCmd.Flags().StringVarP(&localPathConfig, "local-path", "p", fmt.Sprintf("%s/.kube/config", home), "local path to save the kubeconfig file")
 
 	kubernetesCreateCmd.Flags().StringVarP(&targetNodesSize, "size", "s", "g3.k3s.medium", "the size of nodes to create.")
@@ -84,7 +85,7 @@ func init() {
 	kubernetesCreateCmd.Flags().BoolVarP(&mergeConfigKubernetes, "merge", "m", false, "merge the config with existing kubeconfig if it already exists.")
 	kubernetesCreateCmd.Flags().BoolVarP(&switchConfigKubernetes, "switch", "", false, "switch context to newly-created cluster")
 	kubernetesCreateCmd.Flags().StringVarP(&existingFirewall, "existing-firewall", "e", "", "optional, ID of existing firewall to use")
-	kubernetesCreateCmd.Flags().StringVarP(&createFirewall, "create-firewall", "c", "", "optional, comma-separated list of ports to open - leave blank for default (80,443,6443) or you can use \"all\"")
+	kubernetesCreateCmd.Flags().StringVarP(&createFirewall, "create-firewall", "c", "", "optional, semicolon-separated list of ports to open - leave blank for default (80;443;6443) or you can use \"all\"")
 
 	kubernetesRenameCmd.Flags().StringVarP(&kubernetesNewName, "name", "n", "", "the new name for the cluster.")
 

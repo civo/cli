@@ -26,13 +26,15 @@ Notes:
 * The '--create-firewall' flag can accept:
     * an optional end port using 'start_port-end_port' format (e.g. 8000-8100)
     * an optional CIDR notation (e.g. 0.0.0.0/0)
-* When no CIDR notation is provided, the port will get 0.0.0.0/0 as default CIDR notation
-* When a CIDR notation is provided without slash notation, it will default to /32
+* When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
+* When a CIDR notation is provided without slash and number segment, it will default to /32
+* Within a rule, you can use comma separator for multiple ports to have same CIDR notation
+* To separate between rules, you can use semicolon symbol and wrap everything in double quotes (see below)
 * So the following would all be valid:
-    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4
-    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4,8081:8.8.8.8/32,8082:1.1.1.1/24,5000-5500:1.2.3.4,6000-6500:4.4.4.4/24
+    * "80,443,6443:0.0.0.0/0;8080:1.2.3.4" (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
+    * "80,443,6443;6000-6500:4.4.4.4/24" (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
 * When '--create-firewall' flag is blank, your cluster will be created with the following rules:
-    * 80:0.0.0.0/0,443:0.0.0.0/0,6443:0.0.0.0/0
+    * "80;443;6443" (open 80,443,6443 to public)
 * To open all ports for public access, "all" can be provided to '--create-firewall' flag (not recommended)
 `
 
@@ -128,7 +130,7 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		if createFirewall == "" {
-			configKubernetes.FirewallRule = "80,443,6443"
+			configKubernetes.FirewallRule = "80;443;6443"
 		} else {
 			configKubernetes.FirewallRule = createFirewall
 		}

@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"errors"
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/config"
@@ -18,12 +16,8 @@ var rootCmd = &cobra.Command{
 	Short: "CLI to manage cloud resources at Civo.com",
 	Long: `civo is a CLI library for managing cloud resources such
 as instances and Kubernetes clusters at Civo.com.`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cmd.Help()
-		if err != nil {
-			return err
-		}
-		return errors.New("a valid subcommand is required")
+	Run: func(cmd *cobra.Command, args []string) {
+		cmd.Help()
 	},
 }
 
@@ -32,7 +26,6 @@ as instances and Kubernetes clusters at Civo.com.`,
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
-		fmt.Println(err)
 		os.Exit(1)
 	}
 }
