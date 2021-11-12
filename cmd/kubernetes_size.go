@@ -15,8 +15,8 @@ var kubernetesSizeCmd = &cobra.Command{
 	Use:     "size",
 	Example: `civo kubernetes size"`,
 	Aliases: []string{"sizes", "all"},
-	Short:   "List kubernetes size",
-	Long:    `List all current kubernetes size.`,
+	Short:   "List Kubernetes node sizes",
+	Long:    `List all currently available Kubernetes node sizes.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
