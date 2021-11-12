@@ -49,7 +49,7 @@ var (
 				}
 
 				if res.Outdated {
-					utility.RedConfirm("A newer version (v%s) is available, please upgrade\n", res.Current)
+					utility.RedConfirm("A newer version (v%s) is available, please upgrade with \"civo update\"\n", res.Current)
 				}
 			case quiet:
 				fmt.Printf("v%s\n", VersionCli)
@@ -63,7 +63,7 @@ var (
 				}
 
 				if res.Outdated {
-					utility.RedConfirm("A newer version (v%s) is available, please upgrade\n", res.Current)
+					utility.RedConfirm("A newer version (v%s) is available, please upgrade with \"civo update\"\n", res.Current)
 				}
 			}
 		},
