@@ -11,6 +11,7 @@ import (
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
+	"github.com/google/uuid"
 	"github.com/spf13/cobra"
 )
 
@@ -122,11 +123,13 @@ var kubernetesCreateCmd = &cobra.Command{
 			}
 		}
 
+		newPool := []civogo.KubernetesClusterPoolConfig{}
+		poolID := uuid.NewString()
+		newPool = append(newPool, civogo.KubernetesClusterPoolConfig{ID: poolID, Count: numTargetNodes, Size: targetNodesSize})
 		configKubernetes := &civogo.KubernetesClusterConfig{
-			Name:            clusterName,
-			NumTargetNodes:  numTargetNodes,
-			TargetNodesSize: targetNodesSize,
-			NetworkID:       network.ID,
+			Name:      clusterName,
+			NetworkID: network.ID,
+			Pools:     newPool,
 		}
 
 		if createFirewall == "" {
