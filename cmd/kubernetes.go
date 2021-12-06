@@ -26,7 +26,7 @@ var kubernetesCmd = &cobra.Command{
 var kubernetesNodePoolCmd = &cobra.Command{
 	Use:     "node-pool",
 	Aliases: []string{"pool", "node-pool"},
-	Short:   "Details of Civo Kubernetes applications",
+	Short:   "Cluster node pool management",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := cmd.Help()
 		if err != nil {

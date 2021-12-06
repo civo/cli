@@ -13,7 +13,7 @@ var kubernetesNode string
 
 var kubernetesRecycleCmd = &cobra.Command{
 	Use:     "recycle",
-	Short:   "recycle a Kubernetes node",
+	Short:   "Recycle a Kubernetes node",
 	Example: "civo kubernetes recycle CLUSTER_NAME --node NODE_NAME [flags]",
 	Args:    cobra.MinimumNArgs(1),
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
