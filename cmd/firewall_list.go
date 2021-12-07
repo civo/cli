@@ -52,7 +52,9 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 			ow.AppendDataWithLabel("name", firewall.Name, "Name")
 			ow.AppendDataWithLabel("network", network.Label, "Network")
 			ow.AppendDataWithLabel("rules_count", strconv.Itoa(firewall.RulesCount), "Total rules")
-			ow.AppendDataWithLabel("instances_count", strconv.Itoa(firewall.InstancesCount), "Total Instances")
+			ow.AppendDataWithLabel("instances_count", strconv.Itoa(firewall.InstanceCount), "Total Instances")
+			ow.AppendDataWithLabel("clusters_count", strconv.Itoa(firewall.ClusterCount), "Total Clusters")
+			ow.AppendDataWithLabel("loadbalancer_count", strconv.Itoa(firewall.LoadBalancerCount), "Total LoadBalancer")
 		}
 
 		switch outputFormat {
