@@ -54,11 +54,21 @@ $ curl -sL https://civo.com/get | sh
 Civo CLI is available to download on windows via Chocolatey and Scoop
 
 For installing via Chocolatey you need [Chocolatey](https://chocolatey.org/install) package manager installed on your PC.
-- run `choco install civo-cli` and it will install Civo CLI on your PC.
+- run the following command after confirming Chocolatey on your PC 
+ ```
+ choco install civo-cli
+ ``` 
+ and it will install Civo CLI on your PC.
 
 For installing via Scoop you need [Scoop](https://scoop.sh/) installed as a package manager, then:
-- add the extras bucket with `scoop bucket add extras`
-- install civo with `scoop install civo`.
+- add the extras bucket with 
+```
+scoop bucket add extras
+```
+- install civo with 
+```
+scoop install civo
+```
 
 You will also, of course, need a Civo account, for which you can [register here](https://www.civo.com/signup).
 
