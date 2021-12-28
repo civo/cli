@@ -162,7 +162,7 @@ civo k8s list
 
 ## Global Options
 
-The civo cli have mutiple global options, that you can use, like this:
+The civo cli have multiple global options, that you can use, like this:
 
 ```
       --config string   config file (default is $HOME/.civo.json)
@@ -171,7 +171,7 @@ The civo cli have mutiple global options, that you can use, like this:
   -o, --output string   output format (json/human/custom) (default "human")
       --pretty          Print pretty the json output
       --region string   Choose the region to connect to, if you use this option it will use it over the default region
-  -y, --yes             Automatic yes to prompts; assume "yes" as answer to all prompts and run non-interactivel
+  -y, --yes             Automatic yes to prompts; assume "yes" as answer to all prompts and run non-interactive
 ```
 
 ## API Keys
@@ -294,7 +294,7 @@ $ civo diskimage ls
 | d927ad2f-5073-4ed6-b2eb-b8e61aef29a8 | ubuntu-focal  |   20.04 | available | ubuntu       |
 +--------------------------------------+---------------+---------+-----------+--------------+
 ```
-You can view the instance sizes list by runing `civo size ls`
+You can view the instance sizes list by running `civo size ls`
 
 ```sh
 $ civo size ls 
@@ -591,7 +591,7 @@ Created Kubernetes cluster my-first-cluster
 #### Adding pools the cluster
 
 You can add more pools to your cluster live (obviously 1 is the minimum) while the cluster is running. It takes the name of the cluster (or the ID), the parameter of `--nodes` which is the new number of nodes to run and `--size` which is the size of the pool,
-if `--node` and `--size` are not expecified, the default values will be used.
+if `--node` and `--size` are not specified, the default values will be used.
 
 ```sh
 civo kubernetes node-pool create my-first-cluster
