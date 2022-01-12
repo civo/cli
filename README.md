@@ -96,7 +96,7 @@ git clone https://github.com/civo/cli.git
 cd cli
 make
 cd ..
-cp -r cli ./$HOME
+cp -r cli $HOME
 export PATH="$HOME/cli:$PATH"
 ```
 With this, we have installed the Civo CLI successfully. Check it is working by running any of the following commands.
