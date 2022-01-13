@@ -86,6 +86,7 @@ func init() {
 	kubernetesCreateCmd.Flags().BoolVarP(&switchConfigKubernetes, "switch", "", false, "switch context to newly-created cluster")
 	kubernetesCreateCmd.Flags().StringVarP(&existingFirewall, "existing-firewall", "e", "", "optional, ID of existing firewall to use")
 	kubernetesCreateCmd.Flags().StringVarP(&createFirewall, "create-firewall", "c", "", "optional, semicolon-separated list of ports to open - leave blank for default (80;443;6443) or you can use \"all\"")
+	kubernetesCreateCmd.Flags().StringVarP(&cniPlugin, "cni-plugin", "p", "flannel", "optional, possible options: flannel,cilium.")
 
 	kubernetesRenameCmd.Flags().StringVarP(&kubernetesNewName, "name", "n", "", "the new name for the cluster.")
 
