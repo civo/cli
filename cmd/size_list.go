@@ -52,16 +52,16 @@ Example: civo size ls -o custom -f "Code: name (type)"`,
 
 			switch {
 			case filterSize == "database" || filterSize == "Database":
-				search = "db"
+				search = ".db."
 			case filterSize == "kubernetes" || filterSize == "Kubernetes":
-				search = "k3s"
+				search = ".kube,"
 			case filterSize == "instance" || filterSize == "Instance":
 				search = "iaas"
 			}
 
 			for _, size := range sizes {
 				if search == "iaas" {
-					if !strings.Contains(size.Name, "db") && !strings.Contains(size.Name, "k3s") {
+					if !strings.Contains(size.Name, ".db.") && !strings.Contains(size.Name, ".kube.") {
 						filter = append(filter, size)
 					}
 				} else {
@@ -83,10 +83,10 @@ Example: civo size ls -o custom -f "Code: name (type)"`,
 			ow.AppendDataWithLabel("description", size.Description, "Description")
 
 			switch {
-			case strings.Contains(size.Name, "db"):
-				ow.AppendDataWithLabel("type", "Database", "Type")
-			case strings.Contains(size.Name, "k3s"):
-				ow.AppendDataWithLabel("type", "Kubernetes", "Type")
+			case strings.Contains(size.Name, ".db."):
+				ow.AppendDataWithLabel("Type", "Database", "Type")
+			case strings.Contains(size.Name, ".k3s.") || strings.Contains(size.Name, ".kube."):
+				ow.AppendDataWithLabel("Type", "Kubernetes", "Type")
 			default:
 				ow.AppendDataWithLabel("type", "Instance", "Type")
 			}

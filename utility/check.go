@@ -62,7 +62,7 @@ func GetK3sSize() ([]string, error) {
 	}
 
 	for _, v := range allSize {
-		if strings.Contains(v.Name, "k3s") {
+		if strings.Contains(v.Name, ".kube.") {
 			k8sSize = append(k8sSize, v.Name)
 		}
 	}

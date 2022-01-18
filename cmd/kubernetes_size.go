@@ -37,7 +37,7 @@ var kubernetesSizeCmd = &cobra.Command{
 		}
 
 		for _, size := range sizes {
-			if strings.Contains(size.Name, "k3s") {
+			if strings.Contains(size.Name, ".kube.") {
 				filter = append(filter, size)
 			}
 		}

@@ -67,7 +67,7 @@ var kubernetesCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if !strings.Contains(targetNodesSize, "k3s") {
+		if !strings.Contains(targetNodesSize, ".kube.") {
 
 			k8sSize, err := utility.GetK3sSize()
 			if err != nil {

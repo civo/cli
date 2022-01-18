@@ -110,7 +110,7 @@ If you wish to use a custom format, the available fields are:
 
 					for _, instance := range kubernetesCluster.Instances {
 						for _, pinstance := range pool.InstanceNames {
-							if strings.Contains(pinstance, instance.Hostname[5:]) {
+							if instance.Hostname != "" && strings.Contains(pinstance, instance.Hostname[5:]) {
 								owNode.StartLine()
 								owNode.AppendData("Name", instance.Hostname)
 								owNode.AppendData("IP", instance.PublicIP)

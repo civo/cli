@@ -79,7 +79,7 @@ For Linux Civo CLI can be installed by various methods.
 
 * Install via brew, as shows in above step.
 
-* Install via wget, specifying the release version you want: 
+* Install via wget, specifying the release version you want:
 
 ```
 wget https://github.com/civo/cli/releases/download/v0.7.6/civo-0.7.6-linux-amd64.tar.gz
@@ -562,7 +562,7 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
   -n, --nodes int                    the number of nodes to create (the master also acts as a node). (default 3)
   -r, --remove-applications string   optional, remove default application names shown by running  'civo kubernetes applications ls'
       --save                         save the config
-  -s, --size string                  the size of nodes to create. (default "g3.k3s.medium")
+  -s, --size string                  the size of nodes to create. (default "g4s.kube.medium")
       --switch                       switch context to newly-created cluster
   -v, --version string               the k3s version to use on the cluster. Defaults to the latest. (default "latest")
   -w, --wait                         a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE
