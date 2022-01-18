@@ -37,7 +37,7 @@ var instanceSizeCmd = &cobra.Command{
 		}
 
 		for _, size := range sizes {
-			if !strings.Contains(size.Name, ".kube.") && !strings.Contains(size.Name, ".kube.") {
+			if !strings.Contains(size.Name, ".kube.") && !strings.Contains(size.Name, ".k3s.") {
 				filter = append(filter, size)
 			}
 		}
