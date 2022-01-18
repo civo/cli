@@ -77,7 +77,9 @@ Example: civo size ls -o custom -f "Code: name (type)"`,
 		ow := utility.NewOutputWriter()
 
 		for _, size := range sizes {
-
+			if !size.Selectable {
+				continue
+			}
 			ow.StartLine()
 			ow.AppendDataWithLabel("name", size.Name, "Name")
 			ow.AppendDataWithLabel("description", size.Description, "Description")
@@ -85,7 +87,6 @@ Example: civo size ls -o custom -f "Code: name (type)"`,
 			ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(size.CPUCores), "CPU")
 			ow.AppendDataWithLabel("ram_mb", strconv.Itoa(size.RAMMegabytes), "RAM")
 			ow.AppendDataWithLabel("disk_gb", strconv.Itoa(size.DiskGigabytes), "SSD")
-			ow.AppendDataWithLabel("selectable", utility.BoolToYesNo(size.Selectable), "Selectable")
 		}
 
 		switch outputFormat {
