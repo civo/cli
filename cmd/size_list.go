@@ -54,14 +54,14 @@ Example: civo size ls -o custom -f "Code: name (type)"`,
 			case filterSize == "database" || filterSize == "Database":
 				search = ".db."
 			case filterSize == "kubernetes" || filterSize == "Kubernetes":
-				search = ".kube,"
+				search = ".kube."
 			case filterSize == "instance" || filterSize == "Instance":
 				search = "iaas"
 			}
 
 			for _, size := range sizes {
 				if search == "iaas" {
-					if !strings.Contains(size.Name, ".db.") && !strings.Contains(size.Name, ".kube.") {
+					if !strings.Contains(size.Name, ".db.") && !strings.Contains(size.Name, ".kube.") && !strings.Contains(size.Name, ".k3s.") {
 						filter = append(filter, size)
 					}
 				} else {
@@ -81,15 +81,7 @@ Example: civo size ls -o custom -f "Code: name (type)"`,
 			ow.StartLine()
 			ow.AppendDataWithLabel("name", size.Name, "Name")
 			ow.AppendDataWithLabel("description", size.Description, "Description")
-
-			switch {
-			case strings.Contains(size.Name, ".db."):
-				ow.AppendDataWithLabel("Type", "Database", "Type")
-			case strings.Contains(size.Name, ".k3s.") || strings.Contains(size.Name, ".kube."):
-				ow.AppendDataWithLabel("Type", "Kubernetes", "Type")
-			default:
-				ow.AppendDataWithLabel("type", "Instance", "Type")
-			}
+			ow.AppendDataWithLabel("type", utility.CheckSize(size.Name), "Type")
 			ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(size.CPUCores), "CPU")
 			ow.AppendDataWithLabel("ram_mb", strconv.Itoa(size.RAMMegabytes), "RAM")
 			ow.AppendDataWithLabel("disk_gb", strconv.Itoa(size.DiskGigabytes), "SSD")

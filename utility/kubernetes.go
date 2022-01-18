@@ -258,3 +258,15 @@ func UpdateNodePool(s []civogo.KubernetesClusterPoolConfig, id string, count int
 	}
 	return s
 }
+
+// CheckSize is a utility function to check thesize an return the size in the right format
+func CheckSize(size string) string {
+	switch {
+	case strings.Contains(size, ".db."):
+		return "Database"
+	case strings.Contains(size, ".k3s.") || strings.Contains(size, ".kube."):
+		return "Kubernetes"
+	default:
+		return "Instance"
+	}
+}
