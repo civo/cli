@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/civo/cli/config"
@@ -20,17 +19,22 @@ If you wish to use a custom format, the available fields are:
 
 	* id
 	* name
-	* protocol
-	* port
-	* tls_certificate
-	* tls_key
-	* policy
-	* health_check_path
-	* fail_timeout
-	* max_conns
-	* ignore_invalid_backend_tls`,
+	* algorithm
+	* pulic_ip
+	* state
+	* private_ip
+	* firewall_id
+	* cluter_id
+	* external_traffic_policy
+	* session_affinity
+	* session_affinity_config_timeout`,
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
+		if regionSet != "" {
+			client.Region = regionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
@@ -47,33 +51,26 @@ If you wish to use a custom format, the available fields are:
 			ow.StartLine()
 
 			ow.AppendDataWithLabel("id", lb.ID, "ID")
-			ow.AppendDataWithLabel("name", lb.Hostname, "Name")
-			ow.AppendDataWithLabel("protocol", lb.Protocol, "Protocol")
-			ow.AppendDataWithLabel("port", strconv.Itoa(lb.Port), "Port")
+			ow.AppendDataWithLabel("name", lb.Name, "Name")
+			ow.AppendDataWithLabel("algorithm", lb.Algorithm, "Algorithm")
+			ow.AppendDataWithLabel("public_ip", lb.PublicIP, "Public IP")
+			ow.AppendDataWithLabel("state", lb.State, "State")
 
 			if outputFormat == "json" || outputFormat == "custom" {
-				ow.AppendDataWithLabel("tls_certificate", lb.TLSCertificate, "TLS Cert")
-				ow.AppendDataWithLabel("tls_key", lb.TLSKey, "TLS Key")
-				ow.AppendDataWithLabel("policy", lb.Policy, "Policy")
-				ow.AppendDataWithLabel("health_check_path", lb.HealthCheckPath, "Health Check Path")
-				ow.AppendDataWithLabel("fail_timeout", strconv.Itoa(lb.FailTimeout), "Fail Timeout")
-				ow.AppendDataWithLabel("max_conns", strconv.Itoa(lb.MaxConns), "Max. Connections")
-				ow.AppendDataWithLabel("ignore_invalid_backend_tls", strconv.FormatBool(lb.IgnoreInvalidBackendTLS), "Ignore Invalid Backend TLS?")
+				ow.AppendDataWithLabel("private_ip", lb.PrivateIP, "Private IP")
+				ow.AppendDataWithLabel("firewall_id", lb.FirewallID, "Firewall ID")
+				ow.AppendDataWithLabel("cluster_id", lb.ClusterID, "Cluster ID")
+				ow.AppendDataWithLabel("external_traffic_policy", lb.ExternalTrafficPolicy, "External Traffic Policy")
+				ow.AppendDataWithLabel("session_affinity", lb.SessionAffinity, "Session Affinity")
+				ow.AppendDataWithLabel("session_affinity_config_timeout", string(lb.SessionAffinityConfigTimeout), "Session Affinity ConfigT imeout")
 			}
 
 			var backendList []string
-
 			for _, backend := range lb.Backends {
-				instance, err := client.FindInstance(backend.InstanceID)
-				if err != nil {
-					utility.Error("Finding the load balancer failed with %s", err)
-					os.Exit(1)
-				}
-				backendList = append(backendList, instance.Hostname)
+				backendList = append(backendList, backend.IP)
 			}
 
 			ow.AppendData("Backends", strings.Join(backendList, ", "))
-
 		}
 
 		switch outputFormat {
