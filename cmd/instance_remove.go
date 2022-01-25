@@ -15,7 +15,7 @@ import (
 
 // InstanceList is a tmp list to hold all instance to delete
 
-var instanceList []utility.ObjecteList
+var instanceList []utility.ObjectList
 var instanceRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Example: "civo instance remove ID/HOSTNAME",
@@ -52,13 +52,13 @@ If you wish to use a custom format, the available fields are:
 				}
 			}
 
-			instanceList = append(instanceList, utility.ObjecteList{ID: instance.ID, Name: instance.Hostname})
+			instanceList = append(instanceList, utility.ObjectList{ID: instance.ID, Name: instance.Hostname})
 
 		} else {
 			for _, v := range args {
 				instance, err := client.FindInstance(v)
 				if err == nil {
-					instanceList = append(instanceList, utility.ObjecteList{ID: instance.ID, Name: instance.Hostname})
+					instanceList = append(instanceList, utility.ObjectList{ID: instance.ID, Name: instance.Hostname})
 				}
 			}
 		}

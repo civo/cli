@@ -112,7 +112,6 @@ If you wish to use a custom format, the available fields are:
 		}
 		config.TemplateID = diskImage.ID
 
-
 		if publicip != "" {
 			config.PublicIPRequired = publicip
 		}

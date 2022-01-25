@@ -70,6 +70,28 @@ func GetK3sSize() ([]string, error) {
 	return k8sSize, nil
 }
 
+// GetDBSizes is a functon to return only the DB sizes
+func GetDBSizes() ([]string, error) {
+	client, err := config.CivoAPIClient()
+	if err != nil {
+		return nil, err
+	}
+
+	dbSizes := []string{}
+	allSize, err := client.ListInstanceSizes()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, v := range allSize {
+		if strings.Contains(v.Name, "db") {
+			dbSizes = append(dbSizes, v.Name)
+		}
+	}
+
+	return dbSizes, nil
+}
+
 // CheckAPPName is a function to check if the app name is valid
 func CheckAPPName(appName string) bool {
 	client, err := config.CivoAPIClient()
@@ -133,6 +155,12 @@ func CheckAvailability(resource string, regionSet string) (bool, string, error) 
 		}
 	}
 
+	if resource == "db" {
+		if defaultRegion.Features.DBaaS && !defaultRegion.OutOfCapacity {
+			return true, "", nil
+		}
+	}
+
 	return false, defaultRegion.Code, nil
 }
 
@@ -144,11 +172,22 @@ func EnsureCurrentRegion() {
 	}
 }
 
+// GetCurrentRegion returns the current region configured on the CLI
+func GetCurrentRegion() (string, error) {
+	if config.Current.Meta.DefaultRegion != "" {
+		return config.Current.Meta.DefaultRegion, nil
+	}
+	Error("No region set - list available regions with \"civo region ls\" and choose a default using \"civo region current REGION\", or specify one with every command using \"--region=REGION\"\n")
+	os.Exit(1)
+	return "", nil
+}
+
 // ValidNameLength is a function to check is the name is valid
 func ValidNameLength(name string) bool {
 	return len(name) > 63
 }
 
+// CanManageVolume checks if the volume is associated with a cluster
 func CanManageVolume(volume *civogo.Volume) bool {
 	return volume.ClusterID == ""
 }

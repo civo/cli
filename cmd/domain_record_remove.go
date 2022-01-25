@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var domainRecordList []utility.ObjecteList
+var domainRecordList []utility.ObjectList
 var domainRecordRemoveCmd = &cobra.Command{
 	Use:     "remove [DOMAIN|DOMAIN_ID] [RECORD_ID]",
 	Aliases: []string{"delete", "destroy", "rm"},
@@ -53,12 +53,12 @@ var domainRecordRemoveCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			domainRecordList = append(domainRecordList, utility.ObjecteList{ID: record.ID, Name: record.Name})
+			domainRecordList = append(domainRecordList, utility.ObjectList{ID: record.ID, Name: record.Name})
 		} else {
 			for _, v := range args[1:] {
 				record, err := client.GetDNSRecord(domain.ID, v)
 				if err == nil {
-					domainRecordList = append(domainRecordList, utility.ObjecteList{ID: record.ID, Name: record.Name})
+					domainRecordList = append(domainRecordList, utility.ObjectList{ID: record.ID, Name: record.Name})
 				}
 			}
 		}

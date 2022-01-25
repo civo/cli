@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var firewallRuleList []utility.ObjecteList
+var firewallRuleList []utility.ObjectList
 var firewallRuleRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"delete", "destroy", "rm"},
@@ -58,12 +58,12 @@ var firewallRuleRemoveCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			firewallRuleList = append(firewallRuleList, utility.ObjecteList{ID: rule.ID, Name: rule.Label})
+			firewallRuleList = append(firewallRuleList, utility.ObjectList{ID: rule.ID, Name: rule.Label})
 		} else {
 			for _, v := range args[1:] {
 				rule, err := client.FindFirewallRule(firewall.ID, v)
 				if err == nil {
-					firewallRuleList = append(firewallRuleList, utility.ObjecteList{ID: rule.ID, Name: rule.Label})
+					firewallRuleList = append(firewallRuleList, utility.ObjectList{ID: rule.ID, Name: rule.Label})
 				}
 			}
 		}

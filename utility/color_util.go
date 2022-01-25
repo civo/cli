@@ -48,7 +48,7 @@ func Error(msg string, args ...interface{}) {
 	fmt.Fprintf(os.Stderr, "%s: %s\n", color.Red.Sprintf("Error"), fmt.Sprintf(msg, args...))
 }
 
-// Warning is the function to handler all error in the Cli
+// Info displays an info level message
 func Info(msg string, args ...interface{}) {
 	fmt.Fprintf(os.Stderr, "%s: %s\n", color.Blue.Sprintf("Info"), fmt.Sprintf(msg, args...))
 }

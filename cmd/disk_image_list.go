@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// DiskImage is the root command for the disk-image subcommand
 type DiskImage struct {
 	ID           string
 	Name         string

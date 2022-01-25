@@ -32,7 +32,7 @@ Notes:
   * When CIVO_API_KEY_NAME is not set, it will default to the hostname where the this CLI is running
 `
 
-var loadApiKeyFromEnv bool
+var loadAPIKeyFromEnv bool
 
 var apikeySaveCmd = &cobra.Command{
 	Use:     "save",
@@ -45,7 +45,7 @@ var apikeySaveCmd = &cobra.Command{
 		var name, apiKey string
 		var err error
 
-		if len(args) == 0 && !loadApiKeyFromEnv {
+		if len(args) == 0 && !loadAPIKeyFromEnv {
 			reader := bufio.NewReader(os.Stdin)
 			fmt.Printf("Enter a nice name for this account/API Key: ")
 
@@ -64,12 +64,12 @@ var apikeySaveCmd = &cobra.Command{
 			apiKey = string(apikeyBytes)
 		}
 
-		if len(args) == 2 && !loadApiKeyFromEnv {
+		if len(args) == 2 && !loadAPIKeyFromEnv {
 			name = args[0]
 			apiKey = args[1]
 		}
 
-		if loadApiKeyFromEnv {
+		if loadAPIKeyFromEnv {
 			nameEnvRef := "CIVO_API_KEY_NAME"
 			nameEnv, present := os.LookupEnv(nameEnvRef)
 			if !present || nameEnv == "" {

@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var sshList []utility.ObjecteList
+var sshList []utility.ObjectList
 var sshKeyRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -39,12 +39,12 @@ var sshKeyRemoveCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			sshList = append(sshList, utility.ObjecteList{ID: sshKey.ID, Name: sshKey.Name})
+			sshList = append(sshList, utility.ObjectList{ID: sshKey.ID, Name: sshKey.Name})
 		} else {
 			for _, v := range args {
 				sshKey, err := client.FindSSHKey(v)
 				if err == nil {
-					sshList = append(sshList, utility.ObjecteList{ID: sshKey.ID, Name: sshKey.Name})
+					sshList = append(sshList, utility.ObjectList{ID: sshKey.ID, Name: sshKey.Name})
 				}
 			}
 		}
