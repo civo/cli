@@ -29,6 +29,7 @@ var permissionsListCmd = &cobra.Command{
 		for _, permission := range permissions {
 			ow.StartLine()
 
+			ow.AppendDataWithLabel("code", permission.Code, "Code")
 			ow.AppendDataWithLabel("name", permission.Name, "Name")
 			ow.AppendDataWithLabel("description", permission.Description, "Description")
 		}
