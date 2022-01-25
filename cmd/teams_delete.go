@@ -81,7 +81,7 @@ var teamsDeleteCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(outputFields)
 			default:
-				fmt.Printf("The team %s (%s) has been deleted\n", pluralize.Pluralize(len(teamList), ""), utility.Green(strings.Join(teamNameList, ", ")))
+				fmt.Printf("The team %s(%s) has been deleted\n", pluralize.Pluralize(len(teamList), ""), utility.Green(strings.Join(teamNameList, ", ")))
 			}
 		} else {
 			fmt.Println("Operation aborted.")
