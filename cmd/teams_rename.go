@@ -9,13 +9,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var newTeamName string
-
 var teamsRenameCmd = &cobra.Command{
 	Use:     "rename",
 	Short:   "Rename a team",
-	Example: "civo teams rename OLD_TEAM_NAME --new-name NEW_TEAM_NAME",
-	Args:    cobra.MinimumNArgs(1),
+	Example: "civo teams rename OLD_TEAM_NAME NEW_TEAM_NAME",
+	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 
@@ -29,6 +27,8 @@ var teamsRenameCmd = &cobra.Command{
 			utility.Error("Team %s", err)
 			os.Exit(1)
 		}
+
+		newTeamName := args[1]
 
 		team, err := client.RenameTeam(findTeam.ID, newTeamName)
 		if err != nil {
