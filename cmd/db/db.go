@@ -38,4 +38,5 @@ func init() {
 	createCmd.Flags().StringVarP(&firewallID, "firewall", "", "", "the firewall to use for the database")
 
 	DBCmd.AddCommand(getCommand)
+	DBCmd.AddCommand(listCmd)
 }

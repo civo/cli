@@ -48,6 +48,7 @@ var getCommand = &cobra.Command{
 
 		ow.AppendData("ID", db.ID)
 		ow.AppendData("Name", db.Name)
+		ow.AppendData("Software", db.Software)
 		ow.AppendData("Region", client.Region)
 		ow.AppendData("Replicas", strconv.Itoa(db.Replicas))
 		ow.AppendData("Size", db.Size)
@@ -56,6 +57,59 @@ var getCommand = &cobra.Command{
 		ow.AppendDataWithLabel("Public IP", db.PublicIP, "Public IP")
 		ow.WriteKeyValues()
 		// TODO: Figure out JSON formatting, etc
+	},
+}
+
+var listCmd = &cobra.Command{
+	Use:     "ls",
+	Aliases: []string{"list", "all"},
+	Example: `civo db ls `,
+	Short:   "List all databases",
+	// TODO: Fill in other fields
+	Long: `List all databases.
+If you wish to use a custom format, the available fields are:
+
+	* id
+	* name
+	* region
+	* replicas
+	* status`,
+	Run: func(cmd *cobra.Command, args []string) {
+		reg, err := utility.GetCurrentRegion()
+		if err != nil {
+			utility.Error("Failed to get region: %s", err)
+			os.Exit(1)
+		}
+
+		client, err := config.CivoAPIClient()
+		if reg != "" {
+			client.Region = reg
+		}
+		if err != nil {
+			utility.Error("Creating the connection to Civo's API failed with %s", err)
+			os.Exit(1)
+		}
+
+		databases, err := client.ListDatabases()
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
+		ow := utility.NewOutputWriter()
+		for _, db := range databases.Items {
+			ow.StartLine()
+
+			ow.AppendDataWithLabel("id", db.ID, "ID")
+			ow.AppendDataWithLabel("name", db.Name, "Name")
+			ow.AppendDataWithLabel("region", client.Region, "Region")
+			ow.AppendDataWithLabel("software", db.Software, "Software")
+			ow.AppendDataWithLabel("status", utility.ColorStatus(db.Status), "Status")
+
+		}
+
+		ow.WriteTable()
+
 	},
 }
 

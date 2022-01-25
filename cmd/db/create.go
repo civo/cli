@@ -41,7 +41,7 @@ var createCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		// TODO: Enable this check once size config maps gets updated with DB sizes
+		// TODO: Enable this check once size configmap gets updated with DB sizes
 		// if !strings.Contains(size, "db") {
 		// 	dbSize, err := utility.GetDBSizes()
 		// 	if err != nil {
@@ -54,13 +54,11 @@ var createCmd = &cobra.Command{
 		// }
 
 		if len(args) > 0 {
-
 			if utility.ValidNameLength(args[0]) {
 				utility.Warning("the cluster name cannot be longer than 63 characters")
 				os.Exit(1)
 			}
 			dbName = args[0]
-
 		} else {
 			dbName = utility.RandomName()
 		}
@@ -99,7 +97,7 @@ var createCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		// TODO: Check how to use these variables
+		// TODO: Check how to use these variables. Common package between root and sub command packages?
 		// ow := utility.NewOutputWriterWithMap(map[string]string{"id": db.ID, "name": db.Name})
 		// switch outputFormat {
 		// case "json":
