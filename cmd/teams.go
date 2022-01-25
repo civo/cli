@@ -24,6 +24,4 @@ func init() {
 	teamsCmd.AddCommand(teamsCreateCmd)
 	teamsCmd.AddCommand(teamsRenameCmd)
 	teamsCmd.AddCommand(teamsDeleteCmd)
-
-	teamsRenameCmd.Flags().StringVarP(&newTeamName, "new-name", "n", "", "the new name for the team.")
 }
