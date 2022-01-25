@@ -25,6 +25,8 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 - [SSH Keys](#ssh-keys)
 - [DiskImages](#disk-image)
 - [Volumes](#volumes)
+- [Teams](#teams)
+- [Permissions](#permissions)
 - [Region](#region)
 - [Enabling shell autocompletion](#enabling-shell-autocompletion)
 - [Contributing](#contributing)
@@ -1182,6 +1184,122 @@ The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 w
 
 ```
 
+## Teams
+Teams are a grouping of users, each member of a team having one or more permissions, or roles. When a user logs in, they don't have to select which team to use - only which account they want to act within. The permissions available are the total set of permissions they have across the teams in that account, combined.
+
+#### List all teams
+
+You can run `civo teams ls` to get the list of all teams
+```sh
+$ civo teams ls
++--------------------------------------+------------------+
+| ID                                   | Name             |
++--------------------------------------+------------------+
+| 39a755c3-87b4-4d7b-9b05-a8dfb8672081 | Support          |
+| 3f233c4f-b931-44f2-9417-acf79b7f1a2d | Developers       |
+| 5fdff566-a77a-4343-9c41-8ad714ec8593 | Management       |
+| ad54-4614-8740-8604216b7ad4          | Technical Staff  |
+| d1bc7dd6-2930-4c8d-b9df-0b9b2bfbf68c | Site Reliability |
+| e7ec2649-ad54-4614-8740-8604216b7ad4 | Owners           |
++--------------------------------------+------------------+
+```
+
+#### Create a new team
+
+To create a new team in your account, the cmd you need to run is `civo teams create <NEW-TEAM-NAME>` and a new team will be created with the given name.
+```sh
+$ civo teams create Community
+Created a team called Community with team ID 475a087b-bec8-4a66-ac14-95bc09bd8d1e
+```
+
+#### Rename a team
+
+To rename a team, you need to run the cmd `civo teams rename <OLD-TEAM-NAME> <NEW-TEAM-NAME>`
+```sh
+$ civo teams rename Community Advocacy
+The team with ID 475a087b-bec8-4a66-ac14-95bc09bd8d1e was renamed to Advocacy
+```
+
+#### Delete a team
+
+To delete a team, you need to run the cmd `civo teams delete <TEAM-NAME>`
+```sh
+$ civo teams delete Advocacy
+Warning: Are you sure you want to delete the Advocacy team  (y/N) ? y
+The team (Advocacy) has been deleted
+``` 
+
+
+## Permissions
+Each member of a team is assigned one or more permissions, or roles. The permissions available are the total set of permissions they have across the teams in that account, combined.
+
+#### List all permissions
+
+You have to run the cmd `civo permissions ls` to list down all the available permissions.
+```sh
+$ civo permissions ls
++-------------------------+----------------------------+------------------------------------------------------------------------------------------------+
+| Code                    | Name                       | Description                                                                                    |
++-------------------------+----------------------------+------------------------------------------------------------------------------------------------+
+| *.*                     | Owner                      | Can perform any action                                                                         |
+| organisation.owner      | Organisation Owner         | Can administer organisation details                                                            |
+| billing.*               | Billing Administrator      | Can view/change billing details and see invoices                                               |
+| billing.details_viewer  | Billing Details Viewer     | Can view billing details                                                                       |
+| billing.invoices_viewer | Billing Invoices Viewer    | Can view invoices                                                                              |
+| billing.details_changer | Billing Details Changer    | Can change billing details                                                                     |
+| team.*                  | Team Administrator         | Can administer teams and their members                                                         |
+| team.viewer             | Team Viewer                | Can view existing teams and their members                                                      |
+| team.creater            | Team Creater               | Can create new teams, as well as add/remove team members                                       |
+| team.updater            | Team Updater               | Can update team details, as well as add/remove team members                                    |
+| team.deleter            | Team Deleter               | Can remove teams (and therefore all team members)                                              |
+| kubernetes.*            | Kubernetes Administrator   | Can view/change Kubernetes clusters                                                            |
+| kubernetes.viewer       | Kubernetes Viewer          | Can view existing Kubernetes clusters                                                          |
+| kubernetes.creater      | Kubernetes Creater         | Can create new Kubernetes clusters                                                             |
+| kubernetes.updater      | Kubernetes Updater         | Can make changes to existing Kubernetes clusters, such as scaling or marketplace installations |
+| kubernetes.deleter      | Kubernetes Deleter         | Can delete Kubernetes clusters                                                                 |
+| firewall.*              | Firewall Administrator     | Can view/change firewalls                                                                      |
+| firewall.viewer         | Firewall Viewer            | Can view existing firewalls and their rules                                                    |
+| firewall.creater        | Firewall Creater           | Can create new firewalls                                                                       |
+| firewall.updater        | Firewall Updater           | Can update existing firewalls and change their rules                                           |
+| firewall.deleter        | Firewall Deleter           | Can delete firewalls                                                                           |
+| compute.*               | Compute Administrator      | Can view/change Compute instances                                                              |
+| compute.viewer          | Compute Viewer             | Can view existing Compute instances                                                            |
+| compute.creater         | Compute Creater            | Can create new Compute instances                                                               |
+| compute.updater         | Compute Updater            | Can update (e.g. scale, rename) existing Compute instances                                     |
+| compute.deleter         | Compute Deleter            | Can delete Compute instances                                                                   |
+| loadbalancer.*          | Loadbalancer Administrator | Can view/change Loadbalancers                                                                  |
+| loadbalancer.viewer     | Loadbalancer Viewer        | Can view existing Loadbalancers                                                                |
+| loadbalancer.creater    | Loadbalancer Creater       | Can create new Loadbalancers                                                                   |
+| loadbalancer.updater    | Loadbalancer Updater       | Can update (e.g. scale, rename) existing Loadbalancers                                         |
+| loadbalancer.deleter    | Loadbalancer Deleter       | Can delete Loadbalancers                                                                       |
+| dns.*                   | DNS Administrator          | Can view/change DNS domain names and records                                                   |
+| dns.viewer              | DNS Viewer                 | Can view existing DNS domain names and records                                                 |
+| dns.creater             | DNS Creater                | Can create new DNS domain names and records                                                    |
+| dns.updater             | DNS Updater                | Can update existing DNS domain names and records                                               |
+| dns.deleter             | DNS Deleter                | Can delete DNS domain names and records                                                        |
+| network.*               | Network Administrator      | Can view/change networks                                                                       |
+| network.viewer          | Network Viewer             | Can view existing networks                                                                     |
+| network.creater         | Network Creater            | Can create new networks                                                                        |
+| network.updater         | Network Updater            | Can rename existing networks                                                                   |
+| network.deleter         | Network Deleter            | Can delete networks                                                                            |
+| quota.manager           | Quota Manager              | Can request changes to the account quota                                                       |
+| volume.*                | Volume Administrator       | Can view/change volumes                                                                        |
+| volume.viewer           | Volume Viewer              | Can view volumes                                                                               |
+| volume.creater          | Volume Creater             | Can create new volumes                                                                         |
+| volume.updater          | Volume Updater             | Can change existing volumes (e.g. manage attachments)                                          |
+| volume.deleter          | Volume Deleter             | Can delete volumes                                                                             |
+| sshkey.*                | SSH Keys Administrator     | Can view/change SSH keys                                                                       |
+| sshkey.viewer           | SSH Keys Viewer            | Can view existing SSH keys                                                                     |
+| sshkey.creater          | SSH Keys Creater           | Can upload new SSH keys                                                                        |
+| sshkey.updater          | SSH Keys Updater           | Can change existing SSH keys                                                                   |
+| sshkey.deleter          | SSH Keys Deleter           | Can delete SSH keys                                                                            |
+| webhook.*               | Webhook Administrator      | Can view/change webhooks                                                                       |
+| webhook.viewer          | Webhook Viewer             | Can view existing webhooks                                                                     |
+| webhook.creater         | Webhook Creater            | Can create new webhooks                                                                        |
+| webhook.updater         | Webhook Updater            | Can change existing webhooks                                                                   |
+| webhook.deleter         | Webhook Deleter            | Can delete webhooks                                                                            |
++-------------------------+----------------------------+------------------------------------------------------------------------------------------------+
+```
 
 ## Region
 As Civo grows, more regions for your instances will become available. You can run `civo region ls` to list the regions available. Block storage (Volumes) is region-specific, so if you configure an instance in one region, any volumes you wish to attach to that instance would have to be in the same region.
