@@ -9,7 +9,7 @@ import (
 var permissionsCmd = &cobra.Command{
 	Use:     "permissions",
 	Aliases: []string{"permission"},
-	Short:   "\nManage permissions in your team",
+	Short:   "List available permissions",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := cmd.Help()
 		if err != nil {

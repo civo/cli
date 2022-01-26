@@ -8,7 +8,7 @@ import (
 
 var teamsCmd = &cobra.Command{
 	Use:   "teams",
-	Short: "\nManage teams in Civo",
+	Short: "Manage teams in Civo",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := cmd.Help()
 		if err != nil {
