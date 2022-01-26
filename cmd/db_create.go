@@ -1,4 +1,4 @@
-package db
+package cmd
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var createCmd = &cobra.Command{
+var dbCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
 	Example: "civo db create --size g3.medium  hello",
@@ -71,7 +71,7 @@ var createCmd = &cobra.Command{
 				os.Exit(1)
 			}
 		} else {
-			network, err = client.FindNetwork(networkID)
+			network, err = client.FindNetwork(dbNetworkID)
 			if err != nil {
 				utility.Error("Network %s", err)
 				os.Exit(1)
@@ -80,7 +80,7 @@ var createCmd = &cobra.Command{
 
 		configDB := civogo.CreateDatabaseRequest{
 			Name:                 dbName,
-			Size:                 size,
+			Size:                 dbSize,
 			Software:             software,
 			SoftwareVersion:      softwareVersion,
 			NetworkID:            network.ID,

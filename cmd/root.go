@@ -3,7 +3,6 @@ package cmd
 import (
 	"os"
 
-	"github.com/civo/cli/cmd/db"
 	"github.com/civo/cli/config"
 	"github.com/spf13/cobra"
 )
@@ -41,7 +40,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&regionSet, "region", "", "", "Choose the region to connect to, if you use this option it will use it over the default region")
 	rootCmd.PersistentFlags().BoolVarP(&prettySet, "pretty", "", false, "Print pretty the json output")
 
-	rootCmd.AddCommand(db.DBCmd)
+	rootCmd.AddCommand(DBCmd)
 
 	// Add warning if the region is empty, for the user with the old config
 	config.ReadConfig()

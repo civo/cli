@@ -1,4 +1,4 @@
-package db
+package cmd
 
 import (
 	"os"
@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var getCommand = &cobra.Command{
+var dbGetCommand = &cobra.Command{
 	Use:     "get",
 	Short:   "Get details about a Civo Database",
 	Aliases: []string{"show", "inspect"},
