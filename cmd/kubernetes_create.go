@@ -75,7 +75,7 @@ var kubernetesCreateCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			utility.Error("You can create a cluster with this %s size, Possible values: %s", targetNodesSize, k8sSize)
+			utility.Error("You can't create a cluster with the specified size %s. Possible values: %s", targetNodesSize, k8sSize)
 			os.Exit(1)
 		}
 
