@@ -19,7 +19,8 @@ If you wish to use a custom format, the available fields are:
 	* id
 	* label
 	* region
-	* default`,
+	* default
+	* status`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -46,6 +47,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("label", network.Label, "Label")
 			ow.AppendDataWithLabel("region", client.Region, "Region")
 			ow.AppendDataWithLabel("default", strconv.FormatBool(network.Default), "Default")
+			ow.AppendDataWithLabel("status", network.Status, "Status")
 		}
 
 		switch outputFormat {
