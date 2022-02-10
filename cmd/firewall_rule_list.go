@@ -20,6 +20,7 @@ If you wish to use a custom format, the available fields are:
 
 	* id
 	* direction
+	* action
 	* protocol
 	* start_port
 	* end_port
@@ -53,6 +54,10 @@ If you wish to use a custom format, the available fields are:
 		for _, firewallRule := range firewallRules {
 			ow.StartLine()
 
+			if firewallRule.EndPort == "" && firewallRule.StartPort != "" {
+				firewallRule.EndPort = firewallRule.StartPort
+			}
+
 			ow.AppendDataWithLabel("id", firewallRule.ID, "ID")
 			// TODO: Check if is necessary this in the table, because you need pass like arg the name or the id of the firewall
 			//ow.AppendDataWithLabel("Firewall", firewall.Name, "Firewall")
@@ -60,6 +65,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("protocol", firewallRule.Protocol, "Protocol")
 			ow.AppendDataWithLabel("start_port", firewallRule.StartPort, "Start Port")
 			ow.AppendDataWithLabel("end_port", firewallRule.EndPort, "End Port")
+			ow.AppendDataWithLabel("action", firewallRule.Action, "Action")
 			ow.AppendDataWithLabel("cidr", strings.Join(firewallRule.Cidr, ", "), "Cidr")
 			ow.AppendDataWithLabel("label", firewallRule.Label, "Label")
 		}
