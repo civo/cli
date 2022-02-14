@@ -91,10 +91,12 @@ func CheckAPPName(appName string) bool {
 	return false
 }
 
-//CheckIfAppHasPrefix is a function to check if the app name has prefix "-"
-func CheckIfAppHasPrefix(appName string) bool {
-	if strings.HasPrefix(appName, "-") {
-		return true
+//Contains is a function to check if the slice contains the specified string
+func Contains(appNames []string, appName string) bool {
+	for _, app := range appNames {
+		if app == appName {
+			return true
+		}
 	}
 	return false
 }
