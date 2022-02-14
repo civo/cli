@@ -201,6 +201,9 @@ var kubernetesCreateCmd = &cobra.Command{
 					utility.Warning("the app that tries to install %s is not valid", v)
 					os.Exit(1)
 				}
+				if utility.CheckIfAppHasPrefix(v) {
+					break
+				}
 			}
 			configKubernetes.Applications = installApplications
 		}
