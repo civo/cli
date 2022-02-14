@@ -175,6 +175,9 @@ var kubernetesCreateCmd = &cobra.Command{
 			for _, v := range strings.Split(removeapplications, ",") {
 				if utility.CheckAPPName(v) {
 					rmApp = append(rmApp, fmt.Sprintf("-%s", v))
+					if utility.Contains(rmApp, "-metrics-server") || utility.Contains(rmApp, "-traefik-v2-nodeport") {
+						continue
+					}
 				} else {
 					utility.Warning("the app that tries to remove %s is not valid", v)
 					os.Exit(1)
@@ -200,9 +203,6 @@ var kubernetesCreateCmd = &cobra.Command{
 				if !utility.CheckAPPName(v) {
 					utility.Warning("the app that tries to install %s is not valid", v)
 					os.Exit(1)
-				}
-				if utility.CheckIfAppHasPrefix(v) {
-					break
 				}
 			}
 			configKubernetes.Applications = installApplications
