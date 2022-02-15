@@ -16,7 +16,7 @@ import (
 
 var numTargetNodes int
 var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes bool
-var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, installApplications, networkID, existingFirewall, createFirewall, cniPlugin string
+var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, networkID, existingFirewall, createFirewall, cniPlugin string
 var kubernetesCluster *civogo.KubernetesCluster
 
 var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
@@ -166,47 +166,19 @@ var kubernetesCreateCmd = &cobra.Command{
 			configKubernetes.KubernetesVersion = kubernetesVersion
 		}
 
-		if applications != "" {
-			installApplications = applications
+		defaultApplications, err := utility.ListDefaultApps()
+		if err != nil {
+			utility.Error("Error %s", err)
+			os.Exit(1)
 		}
-
-		if removeapplications != "" {
-			var rmApp []string
-			for _, v := range strings.Split(removeapplications, ",") {
-				if utility.CheckAPPName(v) {
-					rmApp = append(rmApp, fmt.Sprintf("-%s", v))
-					if utility.Contains(rmApp, "-metrics-server") || utility.Contains(rmApp, "-traefik-v2-nodeport") {
-						continue
-					}
-				} else {
-					utility.Warning("the app that tries to remove %s is not valid", v)
-					os.Exit(1)
-				}
-
+		apps := InstallApps(defaultApplications, applications, removeapplications)
+		for _, app := range apps {
+			if !utility.CheckAPPName(app) {
+				utility.Error("%q is not a valid application name", app)
+				os.Exit(1)
 			}
-			if installApplications != "" {
-				for _, v := range strings.Split(installApplications, ",") {
-					if !utility.CheckAPPName(v) {
-						utility.Warning("the app that tries to install %s is not valid", v)
-						os.Exit(1)
-					}
-				}
-				installApplications = fmt.Sprintf("%s,%s", installApplications, strings.Join(rmApp, ","))
-			} else {
-				installApplications = strings.Join(rmApp, ",")
-			}
-
 		}
-
-		if installApplications != "" {
-			for _, v := range strings.Split(installApplications, ",") {
-				if !utility.CheckAPPName(v) {
-					utility.Warning("the app that tries to install %s is not valid", v)
-					os.Exit(1)
-				}
-			}
-			configKubernetes.Applications = installApplications
-		}
+		configKubernetes.Applications = strings.Join(apps, ",")
 
 		if !mergeConfigKubernetes && saveConfigKubernetes {
 			if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) {
@@ -285,4 +257,23 @@ var kubernetesCreateCmd = &cobra.Command{
 
 		}
 	},
+}
+
+func InstallApps(defaultApps []string, apps, removeApps string) []string {
+	var iApps []string
+	if apps != "" {
+		iApps = strings.Split(apps, ",")
+	}
+	iApps = append(defaultApps, iApps...)
+
+	if removeApps != "" {
+		for i, v := range iApps {
+			for _, v2 := range strings.Split(removeApps, ",") {
+				if v == v2 {
+					iApps = append(iApps[:i], iApps[i+1:]...)
+				}
+			}
+		}
+	}
+	return iApps
 }

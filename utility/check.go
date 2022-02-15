@@ -91,14 +91,24 @@ func CheckAPPName(appName string) bool {
 	return false
 }
 
-//Contains is a function to check if the slice contains the specified string
-func Contains(appNames []string, appName string) bool {
-	for _, app := range appNames {
-		if app == appName {
-			return true
+func ListDefaultApps() ([]string, error) {
+	client, err := config.CivoAPIClient()
+	if err != nil {
+		return nil, err
+	}
+
+	allApps, err := client.ListKubernetesMarketplaceApplications()
+	if err != nil {
+		return nil, err
+	}
+
+	var defaultApps []string
+	for _, v := range allApps {
+		if v.Default {
+			defaultApps = append(defaultApps, v.Name)
 		}
 	}
-	return false
+	return defaultApps, nil
 }
 
 // CheckAvailability is a function to check if the user can
