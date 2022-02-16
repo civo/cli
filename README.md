@@ -874,7 +874,6 @@ The domain record called www with ID 4e181dde-bde8-4744-8984-067f957a7d59 was de
 You can configure custom firewall rules for your instances using the Firewall component of Civo CLI. These are freely configurable, however customers should be careful to not lock out their own access to their instances. By default, all ports are closed for custom firewalls.
 
 Firewalls can be configured with rules, and they can be made to apply to your chosen instance(s) with subsequent commands.
-
 #### Configuring a New Firewall
 
 To create a new Firewall, use `civo firewall create new_firewall_name`:
@@ -883,35 +882,42 @@ To create a new Firewall, use `civo firewall create new_firewall_name`:
 $ civo firewall create civocli_demo
 Created a firewall called civocli_demo with ID ab2a25d7-edd4-4ecd-95c4-58cb6bc402de
 ```
+Also you can create a firewall without rules by default, using the flag `-r` or `--createrules` and set to `false`, in both cases you need use like this
+
+```bash
+civo firewall create new_firewall_name --createrules=false
+
+```
 
 You will then be able to **configure rules** that allow connections to and from your instance by adding a new rule using `civo firewall rule create firewall_id` with the required and your choice of optional parameters, listed here and used in an example below:
 
 ```text
 Options:
--c, --cidr string Array  the CIDR of the rule you can use (e.g. -c 10.10.10.1/32, 10.10.10.2/32)
--d, --direction string   the direction of the rule need to be ingress
+-a, --action string      the action of the rule can be allow or deny (default is allow) (default "allow")
+-c, --cidr string        the CIDR of the rule you can use (e.g. -c 10.10.10.1/32,148.2.6.120/32) (default "0.0.0.0/0")
+-d, --direction string   the direction of the rule can be ingress or egress (default is ingress) (default "ingress")
 -e, --endport string     the end port of the rule
 -h, --help               help for create
 -l, --label string       a string that will be the displayed as the name/reference for this rule
--p, --protocol string    the protocol choice (from: TCP, UDP, ICMP)
+-p, --protocol string    the protocol choice (TCP, UDP, ICMP) (default "TCP")
 -s, --startport string   the start port of the rule
 ```
 
 Example usage:
 
 ```sh
-$ civo firewall rule create civocli_demo --startport=22 --direction=ingress --label='SSH access for CLI demo'
+$ civo firewall rule create civocli_demo --startport=22 --direction=ingress --label='SSH access for CLI demo' -a allow
  New rule SSH access for CLI demo created
 
 $ civo firewall rule list civocli_demo
-+--------------------------------------+-----------+----------+------------+----------+-----------+-------------------------+
-| ID                                   | Direction | Protocol | Start Port | End Port | Cidr      | Label                   |
-+--------------------------------------+-----------+----------+------------+----------+-----------+-------------------------+
-| 00270e70-0e1b-498e-9a21-9bcc65736811 | ingress   | tcp      |         22 |          | 0.0.0.0/0 | SSH access for CLI demo |
-+--------------------------------------+-----------+----------+------------+----------+-----------+-------------------------+
++--------------------------------------+-----------+----------+------------+----------+--------+-----------+-------------------------+
+| ID                                   | Direction | Protocol | Start Port | End Port | Action | Cidr      | Label                   |
++--------------------------------------+-----------+----------+------------+----------+--------+-----------+-------------------------+
+| 74fff0d7-0ba4-497b-bbc1-83179b4e3b23 | ingress   | tcp      |         22 |       22 | allow  | 0.0.0.0/0 | SSH access for CLI demo |
++--------------------------------------+-----------+----------+------------+----------+-----------+----------------------------------+
 ```
 
-You can see all active rules for a particular firewall by calling `civo firewall rule firewall_id`, where `firewall_id` is the UUID of your particular firewall.
+You can see all active rules for a particular firewall by calling `civo firewall rule ls firewall_id`, where `firewall_id` is the UUID of your particular firewall.
 
 #### Managing Firewalls
 
@@ -919,11 +925,11 @@ You can see an overview of your firewalls using `civo firewall list` showing you
 
 ```sh
 $ civo firewall list
-+--------------------------------------+--------------+-------------+----------------+--------+
-| ID                                   | Name         | Total rules | Total Instances | Region |
-+--------------------------------------+--------------+-------------+----------------+--------+
-| 232d91e9-1550-4c96-bcb6-e9dfecd3e9ee | civocli_demo |           4 |              3 | lon1   |
-+--------------------------------------+--------------+-------------+----------------+--------+
++--------------------------------------+--------------------+---------+-------------+-----------------+----------------+--------------------+
+| ID                                   | Name               | Network | Total rules | Total Instances | Total Clusters | Total LoadBalancer |
++--------------------------------------+--------------------+---------+-------------+-----------------+----------------+--------------------+
+| 3ac0681d-2f71-4921-ae20-019272d9248b | Default (all open) | Default |           3 |               0 |              0 |                  0 |
++--------------------------------------+--------------+-------------+----------------+----------------+----------------+--------------------+
 ```
 
 To configure an instance to use a particular firewall, see [Instances/Setting firewalls elsewhere in this guide](#setting-firewalls).
