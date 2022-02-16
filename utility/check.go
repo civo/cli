@@ -3,11 +3,14 @@ package utility
 import (
 	"fmt"
 	"math"
+
 	"os"
 	"runtime"
 	"strings"
 
 	"github.com/civo/civogo"
+	"golang.org/x/crypto/ssh"
+
 	"github.com/civo/cli/config"
 )
 
@@ -151,4 +154,14 @@ func ValidNameLength(name string) bool {
 
 func CanManageVolume(volume *civogo.Volume) bool {
 	return volume.ClusterID == ""
+}
+
+// ValidateSSHKey is a function to check if the public key is valid
+func ValidateSSHKey(key []byte) error {
+	_, _, _, _, err := ssh.ParseAuthorizedKey(key)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
