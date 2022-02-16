@@ -45,6 +45,7 @@ var firewallRuleCreateCmd = &cobra.Command{
 			StartPort:  startPort,
 			Cidr:       strings.Split(cidr, ","),
 			Label:      label,
+			Action:     action,
 		}
 
 		// Check the rule address, if the input is different
@@ -57,17 +58,6 @@ var firewallRuleCreateCmd = &cobra.Command{
 			directionValue = "to"
 		} else {
 			utility.Error("'--direction' flag can't be empty")
-			os.Exit(1)
-		}
-
-		// Check the rule action, if the input is different
-		// from (allow or deny) then we will generate an error
-		if action == "allow" {
-			newRuleConfig.Action = action
-		} else if action == "deny" {
-			newRuleConfig.Action = action
-		} else {
-			utility.Error("'--action' flag can't be empty")
 			os.Exit(1)
 		}
 

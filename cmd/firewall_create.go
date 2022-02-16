@@ -11,6 +11,7 @@ import (
 )
 
 var firewallnetwork string
+var createRules bool
 var defaultNetwork *civogo.Network
 
 var firewallCreateCmd = &cobra.Command{
@@ -45,7 +46,7 @@ var firewallCreateCmd = &cobra.Command{
 			}
 		}
 
-		firewall, err := client.NewFirewall(args[0], defaultNetwork.ID)
+		firewall, err := client.NewFirewall(args[0], defaultNetwork.ID, &createRules)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)

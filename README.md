@@ -874,7 +874,6 @@ The domain record called www with ID 4e181dde-bde8-4744-8984-067f957a7d59 was de
 You can configure custom firewall rules for your instances using the Firewall component of Civo CLI. These are freely configurable, however customers should be careful to not lock out their own access to their instances. By default, all ports are closed for custom firewalls.
 
 Firewalls can be configured with rules, and they can be made to apply to your chosen instance(s) with subsequent commands.
-
 #### Configuring a New Firewall
 
 To create a new Firewall, use `civo firewall create new_firewall_name`:
@@ -882,6 +881,12 @@ To create a new Firewall, use `civo firewall create new_firewall_name`:
 ```sh
 $ civo firewall create civocli_demo
 Created a firewall called civocli_demo with ID ab2a25d7-edd4-4ecd-95c4-58cb6bc402de
+```
+Also you can create a firewall without rules by default, using the flag `-r` or `--createrules` and set to `false`, in both cases you need use like this
+
+```bash
+civo firewall create new_firewall_name --createrules=false
+
 ```
 
 You will then be able to **configure rules** that allow connections to and from your instance by adding a new rule using `civo firewall rule create firewall_id` with the required and your choice of optional parameters, listed here and used in an example below:
