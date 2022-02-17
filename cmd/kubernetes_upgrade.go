@@ -15,8 +15,8 @@ var kubernetesNewVersion string
 var kubernetesUpgradeCmd = &cobra.Command{
 	Use:     "upgrade",
 	Aliases: []string{"change", "modify"},
-	Example: "civo kubernetes upgrade CLUSTER_NAME --version VERSION",
-	Short:   "Upgrade/rescale a Kubernetes cluster",
+	Example: "civo kubernetes upgrade CLUSTER_NAME --version CLUSTER_VERSION",
+	Short:   "Upgrade a Kubernetes cluster to desired version (from 'civo k3s versions')",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -54,7 +54,7 @@ var kubernetesUpgradeCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The kubernetes cluster %s was upgraded to %s\n", utility.Green(kubernetesCluster.Name), utility.Green(kubernetesNewVersion))
+			fmt.Printf("The kubernetes cluster %s has started upgrading to %s\n", utility.Green(kubernetesCluster.Name), utility.Green(kubernetesNewVersion))
 		}
 	},
 }
