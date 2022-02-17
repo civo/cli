@@ -888,10 +888,10 @@ To create a new Firewall, use `civo firewall create new_firewall_name`:
 $ civo firewall create civocli_demo
 Created a firewall called civocli_demo with ID ab2a25d7-edd4-4ecd-95c4-58cb6bc402de
 ```
-Also you can create a firewall without rules by default, using the flag `-r` or `--createrules` and set to `false`, in both cases you need use like this
+Also you can create a firewall without rules by default, using the flag `-r` or `--create-rules` and set to `false`, in both cases you need use like this
 
 ```bash
-civo firewall create new_firewall_name --createrules=false
+civo firewall create new_firewall_name --create-rules=false
 
 ```
 
