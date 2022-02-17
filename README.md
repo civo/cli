@@ -768,6 +768,12 @@ Installed marketplace applications:
 +---------+-----------+-----------+--------------+
 ```
 
+**Note:** Applications like `metrics-server` are installed by default on any new cluster you create. If you don't need to install the default applications, use the `--remove-applications` flag as below:
+
+```sh
+$ civo kubernetes create apps-demo-cluster --nodes=2 --applications=Redis,Linkerd --remove-applications=metrics-server
+```
+
 #### Installing Applications to an Existing Cluster
 
 If you want to add a new application to an existing cluster, you can do so by running the `civo applications` command specifying the cluster and the app(s) you wish to add:

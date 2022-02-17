@@ -94,6 +94,26 @@ func CheckAPPName(appName string) bool {
 	return false
 }
 
+func ListDefaultApps() ([]string, error) {
+	client, err := config.CivoAPIClient()
+	if err != nil {
+		return nil, err
+	}
+
+	allApps, err := client.ListKubernetesMarketplaceApplications()
+	if err != nil {
+		return nil, err
+	}
+
+	var defaultApps []string
+	for _, v := range allApps {
+		if v.Default {
+			defaultApps = append(defaultApps, v.Name)
+		}
+	}
+	return defaultApps, nil
+}
+
 // CheckAvailability is a function to check if the user can
 // create Iaas and k8s cluster base on the result of region
 func CheckAvailability(resource string, regionSet string) (bool, string, error) {
