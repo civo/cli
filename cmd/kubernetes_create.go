@@ -15,15 +15,17 @@ import (
 )
 
 var numTargetNodes int
-var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes bool
-var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, networkID, existingFirewall, createFirewall, cniPlugin string
+var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes, createFirewall bool
+var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, networkID, existingFirewall, cniPlugin, rulesFirewall string
 var kubernetesCluster *civogo.KubernetesCluster
 
 var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
 
 Notes:
+* The '--create-firewall' It will be create the default rules for the firewall.
 * The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
-* The '--create-firewall' flag can accept:
+* The '--firewall-rules' flag can be used with '--create-firewall'.
+* The '--firewall-rules' flag can accept:
     * an optional end port using 'start_port-end_port' format (e.g. 8000-8100)
     * an optional CIDR notation (e.g. 0.0.0.0/0)
 * When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
@@ -33,9 +35,7 @@ Notes:
 * So the following would all be valid:
     * "80,443,6443:0.0.0.0/0;8080:1.2.3.4" (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
     * "80,443,6443;6000-6500:4.4.4.4/24" (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
-* When '--create-firewall' flag is blank, your cluster will be created with the following rules:
-    * "80;443;6443" (open 80,443,6443 to public)
-* To open all ports for public access, "all" can be provided to '--create-firewall' flag (not recommended)
+* When '--create-firewall' flag is blank, your cluster will be created with the default rules all open
 `
 
 var kubernetesCreateCmd = &cobra.Command{
@@ -68,13 +68,11 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		if !strings.Contains(targetNodesSize, ".kube.") {
-
 			k8sSize, err := utility.GetK3sSize()
 			if err != nil {
 				utility.Error("Error %s", err)
 				os.Exit(1)
 			}
-
 			utility.Error("You can't create a cluster with the specified size %s. Possible values: %s", targetNodesSize, k8sSize)
 			os.Exit(1)
 		}
@@ -135,14 +133,20 @@ var kubernetesCreateCmd = &cobra.Command{
 			CNIPlugin:       cni,
 		}
 
-		if createFirewall == "" {
-			configKubernetes.FirewallRule = "80;443;6443"
-		} else {
-			configKubernetes.FirewallRule = createFirewall
+		if rulesFirewall != "" && !createFirewall {
+			utility.Error("You can't use --firewall-rules without --create-firewall")
+			os.Exit(1)
+		}
+
+		if createFirewall {
+			configKubernetes.FirewallRule = "all"
+		}
+		if createFirewall && rulesFirewall != "" {
+			configKubernetes.FirewallRule = rulesFirewall
 		}
 
 		if existingFirewall != "" {
-			if createFirewall != "" {
+			if rulesFirewall != "" {
 				utility.Error("You can't use --create-firewall together with --existing-firewall flag")
 				os.Exit(1)
 			}
@@ -161,6 +165,9 @@ var kubernetesCreateCmd = &cobra.Command{
 			configKubernetes.InstanceFirewall = ef.ID
 			configKubernetes.FirewallRule = ""
 		}
+
+		fmt.Fprintf(os.Stderr, "Creating Kubernetes cluster %+v\n", configKubernetes)
+		os.Exit(1)
 
 		if kubernetesVersion != "latest" {
 			configKubernetes.KubernetesVersion = kubernetesVersion

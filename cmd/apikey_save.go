@@ -10,7 +10,7 @@ import (
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 var apikeySaveCmdExample = `* Interactive way:
@@ -56,7 +56,7 @@ var apikeySaveCmd = &cobra.Command{
 			}
 			name = strings.TrimSuffix(name, "\n")
 			fmt.Printf("Enter the API key: ")
-			apikeyBytes, err := terminal.ReadPassword(0)
+			apikeyBytes, err := term.ReadPassword(0)
 			if err != nil {
 				utility.Error("Error reading api key", err)
 				os.Exit(1)
