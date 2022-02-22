@@ -15,17 +15,19 @@ import (
 )
 
 var numTargetNodes int
+var rulesFirewall string
 var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes, createFirewall bool
-var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, networkID, existingFirewall, cniPlugin, rulesFirewall string
+var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, networkID, existingFirewall, cniPlugin string
 var kubernetesCluster *civogo.KubernetesCluster
 
 var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
 
 Notes:
-* The '--create-firewall' will add default rules for the firewall if none are specified by using '--firewall-rules'.
+* The '--create-firewall' will open the ports 80,443 and 6443 in the firewall if '--firewall-rules' is not used.
 * The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
-* The '--firewall-rules' flag can be used with '--create-firewall'.
+* The '--firewall-rules' flag need to be used with '--create-firewall'.
 * The '--firewall-rules' flag can accept:
+    * You can pass 'all' to open all ports.
     * An optional end port using 'start_port-end_port' format (e.g. 8000-8100)
     * An optional CIDR notation (e.g. 0.0.0.0/0)
     * When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
@@ -132,14 +134,14 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		if rulesFirewall != "" && !createFirewall {
-			utility.Error("You can't use --firewall-rules without --create-firewall")
+			utility.Error("You can't use --firewall-rules without --create-firewall flag")
 			os.Exit(1)
 		}
 
-		if createFirewall {
-			configKubernetes.FirewallRule = "all"
+		if createFirewall && rulesFirewall == "default" {
+			configKubernetes.FirewallRule = "80,443,6443"
 		}
-		if createFirewall && rulesFirewall != "" {
+		if createFirewall && rulesFirewall != "default" {
 			configKubernetes.FirewallRule = rulesFirewall
 		}
 
@@ -163,9 +165,6 @@ var kubernetesCreateCmd = &cobra.Command{
 			configKubernetes.InstanceFirewall = ef.ID
 			configKubernetes.FirewallRule = ""
 		}
-
-		fmt.Fprintf(os.Stderr, "Creating Kubernetes cluster %+v\n", configKubernetes)
-		os.Exit(1)
 
 		if kubernetesVersion != "latest" {
 			configKubernetes.KubernetesVersion = kubernetesVersion
