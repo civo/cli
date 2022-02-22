@@ -40,7 +40,7 @@ func init() {
 	firewallCmd.AddCommand(firewallRemoveCmd)
 
 	firewallCreateCmd.Flags().StringVarP(&firewallnetwork, "network", "n", "default", "the network to create the firewall")
-	firewallCreateCmd.Flags().BoolVarP(&createRules, "createrules", "r", true, "the create rules flag is used to create the default firewall rules, if is not defined will be set to true")
+	firewallCreateCmd.Flags().BoolVarP(&createRules, "create-rules", "r", true, "the create rules flag is used to create the default firewall rules, if is not defined will be set to true")
 
 	// Firewalls rule cmd
 	firewallCmd.AddCommand(firewallRuleCmd)

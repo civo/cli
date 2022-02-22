@@ -15,27 +15,28 @@ import (
 )
 
 var numTargetNodes int
-var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes bool
-var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, networkID, existingFirewall, createFirewall, cniPlugin string
+var rulesFirewall string
+var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes, createFirewall bool
+var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, networkID, existingFirewall, cniPlugin string
 var kubernetesCluster *civogo.KubernetesCluster
 
 var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
 
 Notes:
+* The '--create-firewall' will open the ports 80,443 and 6443 in the firewall if '--firewall-rules' is not used.
 * The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
-* The '--create-firewall' flag can accept:
-    * an optional end port using 'start_port-end_port' format (e.g. 8000-8100)
-    * an optional CIDR notation (e.g. 0.0.0.0/0)
-* When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
-* When a CIDR notation is provided without slash and number segment, it will default to /32
-* Within a rule, you can use comma separator for multiple ports to have same CIDR notation
-* To separate between rules, you can use semicolon symbol and wrap everything in double quotes (see below)
-* So the following would all be valid:
+* The '--firewall-rules' flag need to be used with '--create-firewall'.
+* The '--firewall-rules' flag can accept:
+    * You can pass 'all' to open all ports.
+    * An optional end port using 'start_port-end_port' format (e.g. 8000-8100)
+    * An optional CIDR notation (e.g. 0.0.0.0/0)
+    * When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
+    * When a CIDR notation is provided without slash and number segment, it will default to /32
+    * Within a rule, you can use comma separator for multiple ports to have same CIDR notation
+    * To separate between rules, you can use semicolon symbol and wrap everything in double quotes (see below)
+    So the following would all be valid:
     * "80,443,6443:0.0.0.0/0;8080:1.2.3.4" (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
     * "80,443,6443;6000-6500:4.4.4.4/24" (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
-* When '--create-firewall' flag is blank, your cluster will be created with the following rules:
-    * "80;443;6443" (open 80,443,6443 to public)
-* To open all ports for public access, "all" can be provided to '--create-firewall' flag (not recommended)
 `
 
 var kubernetesCreateCmd = &cobra.Command{
@@ -68,13 +69,11 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		if !strings.Contains(targetNodesSize, ".kube.") {
-
 			k8sSize, err := utility.GetK3sSize()
 			if err != nil {
 				utility.Error("Error %s", err)
 				os.Exit(1)
 			}
-
 			utility.Error("You can't create a cluster with the specified size %s. Possible values: %s", targetNodesSize, k8sSize)
 			os.Exit(1)
 		}
@@ -96,7 +95,6 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		if len(args) > 0 {
-
 			if utility.ValidNameLength(args[0]) {
 				utility.Warning("the cluster name cannot be longer than 63 characters")
 				os.Exit(1)
@@ -135,14 +133,20 @@ var kubernetesCreateCmd = &cobra.Command{
 			CNIPlugin:       cni,
 		}
 
-		if createFirewall == "" {
-			configKubernetes.FirewallRule = "80;443;6443"
-		} else {
-			configKubernetes.FirewallRule = createFirewall
+		if rulesFirewall != "" && !createFirewall {
+			utility.Error("You can't use --firewall-rules without --create-firewall flag")
+			os.Exit(1)
 		}
 
-		if existingFirewall != "" {
-			if createFirewall != "" {
+		if createFirewall && rulesFirewall == "default" {
+			configKubernetes.FirewallRule = "80,443,6443"
+		}
+		if createFirewall && rulesFirewall != "default" {
+			configKubernetes.FirewallRule = rulesFirewall
+		}
+
+		if existingFirewall != "" && createFirewall {
+			if createFirewall {
 				utility.Error("You can't use --create-firewall together with --existing-firewall flag")
 				os.Exit(1)
 			}

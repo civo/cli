@@ -555,34 +555,38 @@ $ civo kubernetes size
 You can create a cluster by running `civo kubernetes create` with a cluster name parameter, as well as any options you provide:
 
 ```bash
-  -a, --applications string          optional, use names shown by running 'civo kubernetes applications ls'
-  -c, --create-firewall string       optional, comma-separated list of ports to open - leave blank for default (80,443,6443) or you can use "all"
-  -e, --existing-firewall string     optional, ID of existing firewall to use
-  -h, --help                         help for create
-  -m, --merge                        merge the config with existing kubeconfig if it already exists.
-  -t, --network string               the name of the network to use in the creation (default "default")
-  -n, --nodes int                    the number of nodes to create (the master also acts as a node). (default 3)
-  -r, --remove-applications string   optional, remove default application names shown by running  'civo kubernetes applications ls'
-      --save                         save the config
-  -s, --size string                  the size of nodes to create. (default "g4s.kube.medium")
-      --switch                       switch context to newly-created cluster
-  -v, --version string               the k3s version to use on the cluster. Defaults to the latest. (default "latest")
-  -w, --wait                         a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE
+-a, --applications string          optional, use names shown by running 'civo kubernetes applications ls'
+-p, --cni-plugin string            optional, possible options: flannel,cilium. (default "flannel")
+-c, --create-firewall              optional, create a firewall for the cluster with all open ports
+-e, --existing-firewall string     optional, ID of existing firewall to use
+-u, --firewall-rules string        optional, can be used if the --create-firewall flag is set, semicolon-separated list of ports to open (default "default")
+-h, --help                         help for create
+-m, --merge                        merge the config with existing kubeconfig if it already exists.
+-t, --network string               the name of the network to use in the creation (default "default")
+-n, --nodes int                    the number of nodes to create (the master also acts as a node). (default 3)
+-r, --remove-applications string   optional, remove default application names shown by running  'civo kubernetes applications ls'
+	--save                         save the config
+-s, --size string                  the size of nodes to create. (default "g4s.kube.medium")
+	--switch                       switch context to newly-created cluster
+-v, --version string               the k3s version to use on the cluster. Defaults to the latest. Example - 'civo k3s create --version 1.21.2+k3s1' (default "latest")
+-w, --wait                         a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE
 ```
 
 *Note* 
+* The '--create-firewall' will open the ports 80,443 and 6443 in the firewall if '--firewall-rules' is not used.
 * The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
-* The '--create-firewall' flag can accept:
-    * an optional end port using 'start_port-end_port' format (e.g. 8000-8100)
-    * an optional CIDR notation (e.g. 0.0.0.0/0)
-* When no CIDR notation is provided, the port will get 0.0.0.0/0 as default CIDR notation
-* When a CIDR notation is provided without slash notation, it will default to /32
-* So the following would all be valid:
-    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4
-    * 443,80,6443:0.0.0.0/0,8080:1.2.3.4,8081:8.8.8.8/32,8082:1.1.1.1/24,5000-5500:1.2.3.4,6000-6500:4.4.4.4/24
-* When '--create-firewall' flag is blank, your cluster will be created with the following rules:
-    * 80:0.0.0.0/0,443:0.0.0.0/0,6443:0.0.0.0/0
-* To open all ports for public access, "all" can be provided to '--create-firewall' flag (not recommended)
+* The '--firewall-rules' flag need to be used with '--create-firewall'.
+* The '--firewall-rules' flag can accept:
+    * You can pass 'all' to open all ports.
+    * An optional end port using 'start_port-end_port' format (e.g. 8000-8100)
+    * An optional CIDR notation (e.g. 0.0.0.0/0)
+    * When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
+    * When a CIDR notation is provided without slash and number segment, it will default to /32
+    * Within a rule, you can use comma separator for multiple ports to have same CIDR notation
+    * To separate between rules, you can use semicolon symbol and wrap everything in double quotes (see below)
+    So the following would all be valid:
+    * "80,443,6443:0.0.0.0/0;8080:1.2.3.4" (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
+    * "80,443,6443;6000-6500:4.4.4.4/24" (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
 
 
 ```sh
@@ -888,10 +892,9 @@ To create a new Firewall, use `civo firewall create new_firewall_name`:
 $ civo firewall create civocli_demo
 Created a firewall called civocli_demo with ID ab2a25d7-edd4-4ecd-95c4-58cb6bc402de
 ```
-Also you can create a firewall without rules by default, using the flag `-r` or `--createrules` and set to `false`, in both cases you need use like this
-
+You can also create a firewall without any default rules by using the flag `-r` or `--create-rules` set to `false`. In both cases, the usage is like:
 ```bash
-civo firewall create new_firewall_name --createrules=false
+civo firewall create new_firewall_name --create-rules=false
 
 ```
 
