@@ -96,22 +96,23 @@ If you wish to use a custom format, the available fields are:
 		} else {
 			ow.WriteKeyValues()
 
-			kubeVersions, err := client.ListAvailableKubernetesVersions()
-			if err != nil {
-				utility.Error("%s", err)
-				os.Exit(1)
-			}
 			if kubernetesCluster.UpgradeAvailableTo != "" {
+				var versionsList []string
+				kubeVersions, err := client.ListAvailableKubernetesVersions()
+				if err != nil {
+					utility.Error("%s", err)
+					os.Exit(1)
+				}
 				for _, version := range kubeVersions {
 					if version.Type == "deprecated" {
 						continue
 					}
 					if version.Version > kubernetesCluster.Version {
-						fmt.Println()
-						fmt.Printf(utility.Red("* An upgrade to v%s-k3s1 is available. Learn more about how to upgrade: civo k3s upgrade --help"), version.Version)
-						fmt.Println()
+						versionsList = append(versionsList, version.Version)
 					}
 				}
+				fmt.Printf(utility.Red("\n* An upgrade to v%s is available. Learn more about how to upgrade: civo k3s upgrade --help"), strings.Join(versionsList, ", "))
+				fmt.Println()
 
 				if len(kubernetesCluster.Instances) > 0 {
 					fmt.Println()
