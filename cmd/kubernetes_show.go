@@ -11,6 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var stableVersion = "1.22.2"
+
 var kubernetesShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"get", "inspect"},
@@ -97,9 +99,11 @@ If you wish to use a custom format, the available fields are:
 			ow.WriteKeyValues()
 
 			if kubernetesCluster.UpgradeAvailableTo != "" {
-				fmt.Println()
-				fmt.Printf(utility.Red("* An upgrade to v%s is available. To upgrade use: civo k3s upgrade %s --version %s"), kubernetesCluster.UpgradeAvailableTo, kubernetesCluster.Name, kubernetesCluster.UpgradeAvailableTo)
-				fmt.Println()
+				if kubernetesCluster.Version < stableVersion {
+					fmt.Println()
+					fmt.Printf(utility.Red("* An upgrade to v%s-k3s1 is available. Learn more about how to upgrade: civo k3s upgrade --help"), stableVersion)
+					fmt.Println()
+				}
 			}
 
 			if len(kubernetesCluster.Instances) > 0 {
