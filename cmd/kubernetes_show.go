@@ -11,8 +11,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var stableVersion = "1.22.2"
-
 var kubernetesShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"get", "inspect"},
@@ -98,55 +96,65 @@ If you wish to use a custom format, the available fields are:
 		} else {
 			ow.WriteKeyValues()
 
-			if kubernetesCluster.UpgradeAvailableTo != "" {
-				if kubernetesCluster.Version < stableVersion {
-					fmt.Println()
-					fmt.Printf(utility.Red("* An upgrade to v%s-k3s1 is available. Learn more about how to upgrade: civo k3s upgrade --help"), stableVersion)
-					fmt.Println()
-				}
+			kubeVersions, err := client.ListAvailableKubernetesVersions()
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
 			}
+			if kubernetesCluster.UpgradeAvailableTo != "" {
+				for _, version := range kubeVersions {
+					if version.Type == "deprecated" {
+						continue
+					}
+					if version.Version > kubernetesCluster.Version {
+						fmt.Println()
+						fmt.Printf(utility.Red("* An upgrade to v%s-k3s1 is available. Learn more about how to upgrade: civo k3s upgrade --help"), version.Version)
+						fmt.Println()
+					}
+				}
 
-			if len(kubernetesCluster.Instances) > 0 {
-				fmt.Println()
-				for _, pool := range kubernetesCluster.Pools {
-					ow.WriteHeader(fmt.Sprintf("Pool (%s)", pool.ID[:6]))
-					owNode := utility.NewOutputWriter()
+				if len(kubernetesCluster.Instances) > 0 {
+					fmt.Println()
+					for _, pool := range kubernetesCluster.Pools {
+						ow.WriteHeader(fmt.Sprintf("Pool (%s)", pool.ID[:6]))
+						owNode := utility.NewOutputWriter()
 
-					for _, instance := range kubernetesCluster.Instances {
-						for _, pinstance := range pool.InstanceNames {
-							if instance.Hostname != "" && strings.Contains(pinstance, instance.Hostname[5:]) {
-								owNode.StartLine()
-								owNode.AppendData("Name", instance.Hostname)
-								owNode.AppendData("IP", instance.PublicIP)
-								owNode.AppendData("Status", instance.Status)
-								owNode.AppendData("Size", instance.Size)
-								owNode.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
-								owNode.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
-								owNode.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
+						for _, instance := range kubernetesCluster.Instances {
+							for _, pinstance := range pool.InstanceNames {
+								if instance.Hostname != "" && strings.Contains(pinstance, instance.Hostname[5:]) {
+									owNode.StartLine()
+									owNode.AppendData("Name", instance.Hostname)
+									owNode.AppendData("IP", instance.PublicIP)
+									owNode.AppendData("Status", instance.Status)
+									owNode.AppendData("Size", instance.Size)
+									owNode.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
+									owNode.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "Ram")
+									owNode.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
+								}
 							}
 						}
+						owNode.WriteTable()
+						ow.WriteHeader("Labels")
+						fmt.Printf("kubernetes.civo.com/node-pool=%s\n", pool.ID)
+						fmt.Printf("kubernetes.civo.com/node-size=%s\n", pool.Size)
+						fmt.Println()
 					}
-					owNode.WriteTable()
-					ow.WriteHeader("Labels")
-					fmt.Printf("kubernetes.civo.com/node-pool=%s\n", pool.ID)
-					fmt.Printf("kubernetes.civo.com/node-size=%s\n", pool.Size)
-					fmt.Println()
-				}
 
-				if len(kubernetesCluster.InstalledApplications) > 0 {
-					fmt.Println()
-					ow.WriteHeader("Applications")
-					owApp := utility.NewOutputWriter()
+					if len(kubernetesCluster.InstalledApplications) > 0 {
+						fmt.Println()
+						ow.WriteHeader("Applications")
+						owApp := utility.NewOutputWriter()
 
-					for _, app := range kubernetesCluster.InstalledApplications {
-						owApp.StartLine()
+						for _, app := range kubernetesCluster.InstalledApplications {
+							owApp.StartLine()
 
-						owApp.AppendData("Name", app.Name)
-						owApp.AppendData("Version", app.Version)
-						owApp.AppendData("Installed", strconv.FormatBool(app.Installed))
-						owApp.AppendData("Category", app.Category)
+							owApp.AppendData("Name", app.Name)
+							owApp.AppendData("Version", app.Version)
+							owApp.AppendData("Installed", strconv.FormatBool(app.Installed))
+							owApp.AppendData("Category", app.Category)
+						}
+						owApp.WriteTable()
 					}
-					owApp.WriteTable()
 				}
 			}
 		}
