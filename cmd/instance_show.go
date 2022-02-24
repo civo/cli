@@ -76,7 +76,6 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("diskimage_id", instance.SourceID, "Disk image ID")
 		ow.AppendDataWithLabel("initial_user", instance.InitialUser, "Initial User")
 		ow.AppendDataWithLabel("initial_password", instance.InitialPassword, "Initial Password")
-		ow.AppendDataWithLabel("ssh_key", instance.SSHKey, "SSH Key")
 		ow.AppendDataWithLabel("ssh_key_id", instance.SSHKeyID, "SSH Key ID")
 		ow.AppendDataWithLabel("firewall_id", instance.FirewallID, "Firewall ID")
 		ow.AppendDataWithLabel("tags", strings.Join(instance.Tags, " "), "Tags")
