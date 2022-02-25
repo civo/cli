@@ -133,7 +133,7 @@ var kubernetesCreateCmd = &cobra.Command{
 			CNIPlugin:       cni,
 		}
 
-		if rulesFirewall != "" && !createFirewall {
+		if rulesFirewall != "default" && !createFirewall {
 			utility.Error("You can't use --firewall-rules without --create-firewall flag")
 			os.Exit(1)
 		}
@@ -183,6 +183,11 @@ var kubernetesCreateCmd = &cobra.Command{
 			}
 		}
 		configKubernetes.Applications = strings.Join(apps, ",")
+
+		// We check if the user don't expecify a firewall we send to create a new one with the default rules
+		if !createFirewall && rulesFirewall == "default" {
+			configKubernetes.FirewallRule = "80,443,6443"
+		}
 
 		if !mergeConfigKubernetes && saveConfigKubernetes {
 			if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) {
