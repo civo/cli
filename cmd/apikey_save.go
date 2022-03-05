@@ -38,12 +38,18 @@ var apikeySaveCmd = &cobra.Command{
 	Use:     "save",
 	Aliases: []string{"add", "store", "create", "new"},
 	Short:   "Save a new API key",
-	Args:    cobra.MinimumNArgs(0),
 	Example: apikeySaveCmdExample,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		var name, apiKey string
 		var err error
+
+		// if arg is more than one, return an error
+		if len(args) > 0 {
+			utility.Info("This command not need arguments")
+			os.Exit(1)
+		}
+
 
 		if len(args) == 0 && !loadApiKeyFromEnv {
 			reader := bufio.NewReader(os.Stdin)
