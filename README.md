@@ -537,16 +537,16 @@ You can list all kubernetes sizes by running `civo kubernetes size`.
 
 ```sh
 $ civo kubernetes size
-+----------------+-------------+------------+-----+-------+-----+------------+
-| Name           | Description | Type       | CPU | RAM   | SSD | Selectable |
-+----------------+-------------+------------+-----+-------+-----+------------+
-| g3.k3s.xsmall  | Extra Small | Kubernetes |   1 |  1024 |  15 | Yes        |
-| g3.k3s.small   | Small       | Kubernetes |   1 |  2048 |  15 | Yes        |
-| g3.k3s.medium  | Medium      | Kubernetes |   2 |  4096 |  15 | Yes        |
-| g3.k3s.large   | Large       | Kubernetes |   4 |  8192 |  15 | Yes        |
-| g3.k3s.xlarge  | Extra Large | Kubernetes |   6 | 16384 |  15 | Yes        |
-| g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 | 32768 |  15 | Yes        |
-+----------------+-------------+------------+-----+-------+-----+------------+
++----------------+-------------+------------+-----------+--------+--------+------------+
+| Name           | Description | Type       | CPU Cores | RAM MB | SSD GB | Selectable |
++----------------+-------------+------------+-----------+--------+--------+------------+
+| g3.k3s.xsmall  | Extra Small | Kubernetes |         1 |  1024  |     15 | Yes        |
+| g3.k3s.small   | Small       | Kubernetes |         1 |  2048  |     15 | Yes        |
+| g3.k3s.medium  | Medium      | Kubernetes |         2 |  4096  |     15 | Yes        |
+| g3.k3s.large   | Large       | Kubernetes |         4 |  8192  |     15 | Yes        |
+| g3.k3s.xlarge  | Extra Large | Kubernetes |         6 | 16384  |     15 | Yes        |
+| g3.k3s.2xlarge | 2X Large    | Kubernetes |         8 | 32768  |     15 | Yes        |
++----------------+-------------+------------+-----------+----------+-----+------------+
 
 ```
 
