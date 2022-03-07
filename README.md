@@ -197,6 +197,8 @@ $ civo apikey current Demo_Test_Key
   Set the default API Key to be Demo_Test_Key
 ```
 
+By default, the Civo account credentials API Key along with other settings like region will be saved in a file called `.civo.json` in the user home directory. The default location of the file can be changed using the environment variable `CIVO_CONFIG`.
+
 #### Managing and listing API keys
 
 You can list all stored API keys in your configuration by invoking `civo apikey list` or remove one by name by using `civo apikey remove apikey_name`.
