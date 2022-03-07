@@ -48,9 +48,9 @@ var kubernetesSizeCmd = &cobra.Command{
 			ow.AppendDataWithLabel("name", size.Name, "Name")
 			ow.AppendDataWithLabel("description", size.Description, "Description")
 			ow.AppendDataWithLabel("type", "Kubernetes", "Type")
-			ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(size.CPUCores), "CPU")
-			ow.AppendDataWithLabel("ram_mb", strconv.Itoa(size.RAMMegabytes), "RAM")
-			ow.AppendDataWithLabel("disk_gb", strconv.Itoa(size.DiskGigabytes), "SSD")
+			ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(size.CPUCores), "CPU Cores")
+			ow.AppendDataWithLabel("ram_mb", strconv.Itoa(size.RAMMegabytes), "RAM MB")
+			ow.AppendDataWithLabel("disk_gb", strconv.Itoa(size.DiskGigabytes), "SSD GB")
 			ow.AppendDataWithLabel("selectable", utility.BoolToYesNo(size.Selectable), "Selectable")
 		}
 
