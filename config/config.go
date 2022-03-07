@@ -32,7 +32,7 @@ var Filename string
 
 // ReadConfig reads in config file and ENV variables if set.
 func ReadConfig() {
-	filename, found := os.LookupEnv("CIVOCONFIG")
+	filename, found := os.LookupEnv("CIVO_CONFIG")
 	if found {
 		Filename = filename
 	}
