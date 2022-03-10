@@ -44,12 +44,12 @@ var apikeySaveCmd = &cobra.Command{
 		var name, apiKey string
 		var err error
 
-		// if arg is more than one, return an error
-		if len(args) > 0 {
-			utility.Info("This command not need arguments")
+		// if arg is more than two, return an error
+		if len(args) > 2 {
+			utility.Info("There are to many arguments for this command")
+			cmd.Help()
 			os.Exit(1)
 		}
-
 
 		if len(args) == 0 && !loadApiKeyFromEnv {
 			reader := bufio.NewReader(os.Stdin)
