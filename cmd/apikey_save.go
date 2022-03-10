@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"runtime"
 	"strings"
+	"syscall"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
@@ -44,12 +46,12 @@ var apikeySaveCmd = &cobra.Command{
 		var name, apiKey string
 		var err error
 
-		// if arg is more than one, return an error
-		if len(args) > 0 {
-			utility.Info("This command not need arguments")
+		// if arg is more than two, return an error
+		if len(args) > 2 {
+			utility.Info("There are too many arguments for this command")
+			cmd.Help()
 			os.Exit(1)
 		}
-
 
 		if len(args) == 0 && !loadApiKeyFromEnv {
 			reader := bufio.NewReader(os.Stdin)
@@ -60,9 +62,13 @@ var apikeySaveCmd = &cobra.Command{
 				utility.Error("Error reading name", err)
 				os.Exit(1)
 			}
-			name = strings.TrimSuffix(name, "\n")
+			if runtime.GOOS == "windows" {
+				name = strings.TrimSuffix(name, "\r\n")
+			} else {
+				name = strings.TrimSuffix(name, "\n")
+			}
 			fmt.Printf("Enter the API key: ")
-			apikeyBytes, err := term.ReadPassword(0)
+			apikeyBytes, err := term.ReadPassword(int(syscall.Stdin))
 			if err != nil {
 				utility.Error("Error reading api key", err)
 				os.Exit(1)
