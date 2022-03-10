@@ -16,7 +16,7 @@ import (
 )
 
 var wait bool
-var size, diskimage, publicip, initialuser, sshkey, tags, network, firewall string
+var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, firewall string
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -71,6 +71,14 @@ If you wish to use a custom format, the available fields are:
 		if err != nil {
 			utility.Error("Unable to create a new config for the instance %s", err)
 			os.Exit(1)
+		}
+
+		if hostnameCreate != "" {
+			if utility.ValidNameLength(hostnameCreate) {
+				utility.Warning("the hostname cannot be longer than 63 characters")
+				os.Exit(1)
+			}
+			config.Hostname = hostnameCreate
 		}
 
 		if len(args) > 0 {
