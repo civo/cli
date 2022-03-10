@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"runtime"
 	"strings"
+	"syscall"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
@@ -60,9 +62,13 @@ var apikeySaveCmd = &cobra.Command{
 				utility.Error("Error reading name", err)
 				os.Exit(1)
 			}
-			name = strings.TrimSuffix(name, "\n")
+			if runtime.GOOS == "windows" {
+				name = strings.TrimSuffix(name, "\r\n")
+			} else {
+				name = strings.TrimSuffix(name, "\n")
+			}
 			fmt.Printf("Enter the API key: ")
-			apikeyBytes, err := term.ReadPassword(0)
+			apikeyBytes, err := term.ReadPassword(int(syscall.Stdin))
 			if err != nil {
 				utility.Error("Error reading api key", err)
 				os.Exit(1)
