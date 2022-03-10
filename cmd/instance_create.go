@@ -20,12 +20,12 @@ var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, networ
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
-	Aliases: []string{"new"},
+	Aliases: []string{"new", "add"},
 	Short:   "Create a new instance",
-	Example: "civo instance create --hostname=foo.example.com [flags]",
-	Long: `You can create an instance with a hostname parameter, as well as any options you provide.
+	Example: "civo instance create HOSTNAME [flags]",
+	Long: `You can create an instance with a hostname argument, as well as any other options you provide. 
+If you don't provide a hostname, it will be automatically generated.
 If you wish to use a custom format, the available fields are:
-
 	* id
 	* hostname
 	* size
@@ -81,6 +81,14 @@ If you wish to use a custom format, the available fields are:
 			config.Hostname = hostnameCreate
 		}
 
+		if len(args) > 0 {
+			if utility.ValidNameLength(args[0]) {
+				utility.Warning("the hostname cannot be longer than 63 characters")
+				os.Exit(1)
+			}
+			config.Hostname = args[0]
+		}
+
 		if region != "" {
 			config.Region = region
 		}
@@ -92,26 +100,40 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		sizeIsValid := false
-		for _, s := range sizes {
-			if size == s.Name {
-				sizeIsValid = true
-				break
+		if size != "" {
+			for _, s := range sizes {
+				if s.Name == size {
+					config.Size = s.Name
+					sizeIsValid = true
+					break
+				}
+			}
+			if !sizeIsValid {
+				utility.Error("The provided size is not valid")
+				os.Exit(1)
 			}
 		}
 
-		if !sizeIsValid {
-			utility.Error("The provided size is not valid")
-			os.Exit(1)
-		}
-		config.Size = size
-
-		diskImage, err := client.FindDiskImage(diskimage)
+		diskimages, err := client.ListDiskImages()
 		if err != nil {
-			utility.Error("DiskImage %s", err)
+			utility.Error("Unable to list disk images %s", err)
 			os.Exit(1)
 		}
-		config.TemplateID = diskImage.ID
 
+		diskimageIsValid := false
+		if diskimage != "" {
+			for _, d := range diskimages {
+				if d.Name == diskimage {
+					config.TemplateID = d.ID
+					diskimageIsValid = true
+					break
+				}
+			}
+			if !diskimageIsValid {
+				utility.Error("The provided disk image is not valid")
+				os.Exit(1)
+			}
+		}
 
 		if publicip != "" {
 			config.PublicIPRequired = publicip
