@@ -48,7 +48,7 @@ var apikeySaveCmd = &cobra.Command{
 
 		// if arg is more than two, return an error
 		if len(args) > 2 {
-			utility.Info("There are to many arguments for this command")
+			utility.Info("There are too many arguments for this command")
 			cmd.Help()
 			os.Exit(1)
 		}
