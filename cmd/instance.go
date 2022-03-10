@@ -44,11 +44,8 @@ func init() {
 	instanceUpdateCmd.Flags().StringVarP(&hostname, "hostname", "s", "", "the instance's hostname")
 
 	instanceCreateCmd.Flags().BoolVarP(&wait, "wait", "w", false, "wait until the instance's is ready")
-	instanceCreateCmd.Flags().StringVarP(&hostnameCreate, "hostname", "s", "", "the instance's hostname")
 	instanceCreateCmd.Flags().StringVarP(&size, "size", "i", "", "the instance's size (from 'civo instance size' command)")
-	instanceCreateCmd.MarkFlagRequired("size")
 	instanceCreateCmd.Flags().StringVarP(&diskimage, "diskimage", "t", "", "the instance's disk image (from 'civo diskimage ls' command)")
-	instanceCreateCmd.MarkFlagRequired("diskimage")
 	instanceCreateCmd.Flags().StringVarP(&publicip, "publicip", "p", "create", "This should be either \"none\" or \"create\"")
 	instanceCreateCmd.Flags().StringVarP(&initialuser, "initialuser", "u", "", "the instance's initial user")
 	instanceCreateCmd.Flags().StringVarP(&sshkey, "sshkey", "k", "", "the instance's ssh key you can use the Name or the ID")
