@@ -23,6 +23,27 @@ var instanceCreateCmd = &cobra.Command{
 	Aliases: []string{"new", "add"},
 	Short:   "Create a new instance",
 	Example: "civo instance create HOSTNAME [flags]",
+	Long: `You can create an instance with a hostname argument, as well as any other options you provide. 
+If you don't provide a hostname, it will be automatically generated.
+If you wish to use a custom format, the available fields are:
+	* id
+	* hostname
+	* size
+	* region
+	* public_ip
+	* status
+	* network_id
+	* diskimage_id
+	* initial_user
+	* ssh_key
+	* notes
+	* firewall_id
+	* tags
+	* script
+	* created_at
+	* reverse_dns
+	* private_ip
+	* public_ip`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
