@@ -29,7 +29,8 @@ If you wish to use a custom format, the available fields are:
 	* cluster_id
 	* external_traffic_policy
 	* session_affinity
-	* session_affinity_config_timeout`,
+	* session_affinity_config_timeout
+	* dns_entry`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
