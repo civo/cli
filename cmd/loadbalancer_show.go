@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -21,14 +22,15 @@ If you wish to use a custom format, the available fields are:
 	* id
 	* name
 	* algorithm
-	* pulic_ip
+	* public_ip
 	* state
 	* private_ip
 	* firewall_id
-	* cluter_id
+	* cluster_id
 	* external_traffic_policy
 	* session_affinity
-	* session_affinity_config_timeout`,
+	* session_affinity_config_timeout
+	* dns_entry`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -55,6 +57,7 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("algorithm", lb.Algorithm, "Algorithm")
 		ow.AppendDataWithLabel("public_ip", lb.PublicIP, "Public IP")
 		ow.AppendDataWithLabel("state", lb.State, "State")
+		ow.AppendDataWithLabel("dns_entry", fmt.Sprintf("%s.lb.civo.com", lb.ID), "DNS Entry")
 
 		if outputFormat == "json" || outputFormat == "custom" {
 			ow.AppendDataWithLabel("private_ip", lb.PrivateIP, "Private IP")
