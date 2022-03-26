@@ -19,6 +19,8 @@ var volumeCmd = &cobra.Command{
 	},
 }
 
+var forceVolumeAction bool
+
 func init() {
 	rootCmd.AddCommand(volumeCmd)
 	volumeCmd.AddCommand(volumeCreateCmd)
@@ -36,6 +38,10 @@ func init() {
 	volumeResizeCmd.MarkFlagRequired("size-gb")
 
 	volumeAttachCmd.Flags().BoolVarP(&waitVolumeAttach, "wait", "w", false, "wait until the volume is attached")
+	volumeAttachCmd.Flags().BoolVar(&forceVolumeAction, "force", false, "attach volume without safety checks")
 
 	volumeDetachCmd.Flags().BoolVarP(&waitVolumeDetach, "wait", "w", false, "wait until the volume is detached")
+	volumeDetachCmd.Flags().BoolVar(&forceVolumeAction, "force", false, "detach volume without safety checks")
+
+	volumeRemoveCmd.Flags().BoolVar(&forceVolumeAction, "force", false, "remove volume without safety checks")
 }

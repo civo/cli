@@ -43,7 +43,7 @@ var volumeDetachCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if !utility.CanManageVolume(volume) {
+		if !utility.CanManageVolume(volume) && !forceVolumeAction {
 			cluster, err := client.FindKubernetesCluster(volume.ClusterID)
 			if err != nil {
 				utility.Error("Unable to find cluster - %s", err)
