@@ -21,7 +21,8 @@ If you wish to use a custom format, the available fields are:
 	* version
 	* category
 	* plans
-	* dependencies`,
+	* dependencies
+	* default`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
