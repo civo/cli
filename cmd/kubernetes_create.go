@@ -18,6 +18,7 @@ var numTargetNodes int
 var rulesFirewall string
 var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes, createFirewall bool
 var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, networkID, existingFirewall, cniPlugin string
+var installdefaultapplications bool
 var kubernetesCluster *civogo.KubernetesCluster
 
 var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
@@ -170,10 +171,14 @@ var kubernetesCreateCmd = &cobra.Command{
 			configKubernetes.KubernetesVersion = kubernetesVersion
 		}
 
-		defaultApplications, err := utility.ListDefaultApps()
-		if err != nil {
-			utility.Error("Error %s", err)
-			os.Exit(1)
+		defaultApplications := []string{}
+		if installdefaultapplications {
+			defaultApps, err := utility.ListDefaultApps()
+			if err != nil {
+				utility.Error("Error %s", err)
+				os.Exit(1)
+			}
+			defaultApplications = defaultApps
 		}
 		apps := InstallApps(defaultApplications, applications, removeapplications)
 		for _, app := range apps {
