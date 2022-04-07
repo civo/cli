@@ -54,6 +54,7 @@ func init() {
 	instanceCreateCmd.Flags().StringVarP(&firewall, "firewall", "l", "", "the instance's firewall you can use the Name or the ID")
 	instanceCreateCmd.Flags().StringVarP(&tags, "tags", "g", "", "the instance's tags")
 	instanceCreateCmd.Flags().StringVarP(&tags, "region", "e", "", "the region code identifier to have your instance built in")
+	instanceCreateCmd.Flags().StringVar(&script, "script", "", "path to a script that will be uploaded to /usr/local/bin/civo-user-init-script on your instance, read/write/executable only by root and then will be executed at the end of the cloud initialization")
 
 	instanceStopCmd.Flags().BoolVarP(&waitStop, "wait", "w", false, "wait until the instance's is stoped")
 }

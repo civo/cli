@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"strings"
 	"time"
@@ -17,6 +18,7 @@ import (
 
 var wait bool
 var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, firewall string
+var script string
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -186,6 +188,41 @@ If you wish to use a custom format, the available fields are:
 			}
 
 			config.FirewallID = fw.ID
+		}
+
+		if script != "" {
+			var file *os.File
+			if script == "-" {
+				file = os.Stdin
+			} else {
+				if f, err := os.Open(script); err != nil {
+					utility.Error("error opening script '%s': %s", script, err)
+					os.Exit(1)
+				} else {
+					file = f
+				}
+			}
+
+			defer file.Close()
+
+			var buf []byte = make([]byte, 1)
+
+		readloop:
+			for {
+				_, err := file.Read(buf)
+
+				switch {
+				case err == io.EOF:
+					break readloop
+
+				case err != nil:
+					utility.Error("read failed on script '%s': %s", script, err)
+					os.Exit(1)
+
+				default:
+					config.Script += string(buf)
+				}
+			}
 		}
 
 		if tags != "" {
