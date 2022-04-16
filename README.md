@@ -1009,6 +1009,88 @@ $ civo network remove 74b69006-ea59-46a0-96c4-63f5bfa290e1
 Removed the network cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa290e1
 ```
 
+##Load Balancers
+
+Civo Load Balancers are external to custer, but created and managed as part of cluster's service definitions. In terms of Kubernetes, a Civo Load Balancer is a Service object with rules much like other Service objects in Kubernetes, a Civo Load Balancer is a service object with rules much like other Service type objects in Kubernetes, with a key difference that its state is handled by Cloud Controller MAnnager.
+
+#### Load Balancer configuration options 
+
+Configuration options for Load Balancer are to be specified in the `spec` block of `LoadBalancer` service defination.
+
+#### Alogrithm
+If load balancing algorithm is provided, is one of `round_robin` or `least_connections`. The default is `round_robin`. This is specified in an annotation prefixed by `kubernetes.civo.com/` :
+
+```sh
+  annotations:
+    kubernetes.civo.com/loadbalancer-algorithm: least_connections
+
+    OR 
+
+     annotations:
+    kubernetes.civo.com/loadbalancer-algorithm: round_robin
+```
+
+#### External Traffic Policy 
+
+The external traffic policy, if provided is one of the `Cluster` or `Local.Cluster`, the default, means routing of external traffic to cluster-wide endpoints and ensures evenness request load across . `Local` is only for HTTP traffic, and preserves the client source IP using a `X-Forwarded-For` header added to the request, with the side effect of less efficient load balancing.
+
+```sh
+
+externalTrafficPolicy: Cluster
+
+OR 
+
+externalTrafficPolicy: Local
+```
+
+####Session affinity configuration
+
+To ensure that all the requests from a particular client IP get routed to the same Pod within a given time frame by setting the optional session affinity configuration. The structure of optional configuration is as follows:
+
+```sh
+sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 480
+
+```
+The default value of the `timeoutSeconds` is 10800, i.e. 3 hours.
+
+#### FireWall ID 
+
+The firewall configuration of Load Balancer is specified in an annotation `kubernetes.civo/firewall-id` that takes the ID of your chosen firewall as input, such as:
+
+```sh
+metadata:
+  annotations:
+    kubernetes.civo.com/firewall-id: 3eb6534a-4f81-4bb9-9d91-a382391f18ad
+
+```
+####Proxy Protocol 
+
+Civo Load Balancer support the [HAProxy Protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/). It allows for the preservation of client IP information to supporting services such as NgniX. The supported values are `send-proxy` and `send-preoxy-v2`.
+
+Proxy Protocol can be enabled with: 
+```sh
+metadata:
+  annotations:
+    kubernetes.civo.com/loadbalancer-enableProxyProtocol: send-proxy
+
+```
+####Deleting a Load Balancer 
+The Cloud Controller Manager (CCM) running in your cluster will handle the deletion of a Civo Load Balancer once the accompanying Service is deleted from your cluster. You can delete the load balancer, and stop billing for the load balancer, by either deleting the service definition using the manifest file as in the example below, or by deleting the service from the cluster itself:
+
+```sh
+$ kubectl delete -f loadbalancer.yaml
+service "civo-lb-service" deleted
+
+$ kubectl get svc
+NAME                TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE
+kubernetes          ClusterIP      10.43.0.1       <none>          443/TCP          5d22h
+my-app              ClusterIP      10.43.215.229   <none>          5000/TCP         4d18h
+
+```
+
 
 ## Quota
 
