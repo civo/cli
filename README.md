@@ -1009,7 +1009,7 @@ $ civo network remove 74b69006-ea59-46a0-96c4-63f5bfa290e1
 Removed the network cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa290e1
 ```
 
-##Load Balancers
+## Load Balancers
 
 Civo Load Balancers are external to custer, but created and managed as part of cluster's service definitions. In terms of Kubernetes, a Civo Load Balancer is a Service object with rules much like other Service objects in Kubernetes, a Civo Load Balancer is a service object with rules much like other Service type objects in Kubernetes, with a key difference that its state is handled by Cloud Controller MAnnager.
 
@@ -1043,7 +1043,7 @@ OR
 externalTrafficPolicy: Local
 ```
 
-####Session affinity configuration
+#### Session affinity configuration
 
 To ensure that all the requests from a particular client IP get routed to the same Pod within a given time frame by setting the optional session affinity configuration. The structure of optional configuration is as follows:
 
@@ -1066,7 +1066,7 @@ metadata:
     kubernetes.civo.com/firewall-id: 3eb6534a-4f81-4bb9-9d91-a382391f18ad
 
 ```
-####Proxy Protocol 
+#### Proxy Protocol 
 
 Civo Load Balancer support the [HAProxy Protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol/). It allows for the preservation of client IP information to supporting services such as NgniX. The supported values are `send-proxy` and `send-preoxy-v2`.
 
@@ -1077,7 +1077,8 @@ metadata:
     kubernetes.civo.com/loadbalancer-enableProxyProtocol: send-proxy
 
 ```
-####Deleting a Load Balancer 
+#### Deleting a Load Balancer
+
 The Cloud Controller Manager (CCM) running in your cluster will handle the deletion of a Civo Load Balancer once the accompanying Service is deleted from your cluster. You can delete the load balancer, and stop billing for the load balancer, by either deleting the service definition using the manifest file as in the example below, or by deleting the service from the cluster itself:
 
 ```sh
