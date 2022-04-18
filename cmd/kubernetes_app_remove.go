@@ -19,7 +19,7 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 	Example: "civo kubernetes application remove NAME --cluster CLUSTER_NAME",
 	Aliases: []string{"uninstall"},
 	Args:    cobra.MinimumNArgs(1),
-	Short:   "Remove the marketplace application to a Kubernetes cluster",
+	Short:   "Remove the marketplace application from a Kubernetes cluster",
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
