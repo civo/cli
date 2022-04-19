@@ -41,7 +41,7 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		allsplit := strings.Split(args[0], ",")
+		allApps := strings.Split(args[0], ",")
 		tmpFile, err := ioutil.TempFile(os.TempDir(), "kubeconfig-")
 		if err != nil {
 			utility.Error("Cannot create temporary file", err)
@@ -50,7 +50,7 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 			utility.Error("Failed to write to temporary file", err)
 		}
 		defer os.Remove(tmpFile.Name())
-		for _, split := range allsplit {
+		for _, split := range allApps {
 			appName := split
 			// TODO: Ideally this would come from the Civo API, but the Civo API doesn't currently return uninstall.sh
 			// https://www.civo.com/api/kubernetes#listing-applications
@@ -64,7 +64,7 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 
 			if err := cmd_config.Run(); err != nil {
 				if exitError, ok := err.(*exec.ExitError); ok {
-					fmt.Printf("Failed to uninstall application %s (exited with code %d)\n", appName, exitError.ExitCode())
+					utility.Error("Failed to uninstall application %s (exited with code %d)\n", appName, exitError.ExitCode())
 					cmd := exec.Command("curl", "-s", fmt.Sprintf("https://raw.githubusercontent.com/civo/kubernetes-marketplace/master/%s/uninstall.sh", appName))
 					output, _ := cmd.CombinedOutput()
 					fmt.Println("--------------- Uninstall script ---------------")
@@ -73,7 +73,7 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 					fmt.Println(b.String())
 					os.Exit(1)
 				} else {
-					fmt.Printf("Failed to uninstall application %s because of %s\n", appName, err.Error())
+					utility.Error("Failed to uninstall application %s because of %s\n", appName, err.Error())
 					os.Exit(1)
 				}
 			}
