@@ -19,6 +19,7 @@ import (
 var wait bool
 var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, firewall string
 var script string
+var skipShebangCheck bool
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -207,6 +208,22 @@ If you wish to use a custom format, the available fields are:
 
 			var buf []byte = make([]byte, 1)
 
+			if !skipShebangCheck {
+				var shebangBuf []byte = make([]byte, 2)
+
+				if _, err := file.Read(shebangBuf); err != nil {
+					utility.Error("read failed during shebang check on script '%s': %s", script, err)
+					os.Exit(1)
+				}
+
+				config.Script += string(shebangBuf)
+
+				if config.Script != "#!" {
+					utility.Error("shebang not found in '%s', either add shebang line or pass --skip-shebang-check", script)
+					os.Exit(1)
+				}
+			}
+
 		readloop:
 			for {
 				_, err := file.Read(buf)
@@ -216,7 +233,7 @@ If you wish to use a custom format, the available fields are:
 					break readloop
 
 				case err != nil:
-					utility.Error("read failed on script '%s': %s", script, err)
+					utility.Error("read failed during readloop on script '%s': %s", script, err)
 					os.Exit(1)
 
 				default:
