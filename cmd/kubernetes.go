@@ -85,7 +85,7 @@ func init() {
 	kubernetesCreateCmd.Flags().BoolVarP(&mergeConfigKubernetes, "merge", "m", false, "merge the config with existing kubeconfig if it already exists.")
 	kubernetesCreateCmd.Flags().BoolVarP(&switchConfigKubernetes, "switch", "", false, "switch context to newly-created cluster")
 	kubernetesCreateCmd.Flags().StringVarP(&existingFirewall, "existing-firewall", "e", "", "optional, ID of existing firewall to use")
- 	kubernetesCreateCmd.Flags().StringVarP(&rulesFirewall, "firewall-rules", "u", "default", "optional, can be used if the --create-firewall flag is set, semicolon-separated list of ports to open")
+	kubernetesCreateCmd.Flags().StringVarP(&rulesFirewall, "firewall-rules", "u", "default", "optional, can be used if the --create-firewall flag is set, semicolon-separated list of ports to open")
 	kubernetesCreateCmd.Flags().BoolVarP(&createFirewall, "create-firewall", "c", false, "optional, create a firewall for the cluster with all open ports")
 	kubernetesCreateCmd.Flags().StringVarP(&cniPlugin, "cni-plugin", "p", "flannel", "optional, possible options: flannel,cilium.")
 
@@ -102,9 +102,12 @@ func init() {
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppListCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppAddCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppShowCmd)
+	kubernetesApplicationsCmd.AddCommand(kubernetesAppRemoveCmd)
 
 	kubernetesAppAddCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to install the app.")
 	kubernetesAppAddCmd.MarkFlagRequired("cluster")
+	kubernetesAppRemoveCmd.Flags().StringVarP(&kubernetesClusterApp, "cluster", "c", "", "the name of the cluster to remove the app.")
+	kubernetesAppRemoveCmd.MarkFlagRequired("cluster")
 
 	// Kubernetes NodePool
 	kubernetesCmd.AddCommand(kubernetesNodePoolCmd)
