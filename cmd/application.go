@@ -53,6 +53,9 @@ func init() {
 	appCmd.AddCommand(appScaleCmd)
 	appScaleCmd.Flags().StringVarP(&processType, "process-type", "t", "", "The type of process you want to scale. E.g. web, worker, etc.")
 	appScaleCmd.Flags().IntVarP(&processCount, "process-count", "c", 0, "The number by which you want to scale the process. E.g. 2, 3, etc.")
+	appCmd.AddCommand(appRemoteCmd)
+	appRemoteCmd.Flags().StringVarP(&remoteName, "remote-name", "r", "", "The name of remote you want to add. E.g. civo")
+	appRemoteCmd.Flags().StringVarP(&remoteURL, "remote-url", "u", "", "The URL of remote you want to add.")
 
 	//App domain commands
 	appCmd.AddCommand(appDomainCmd)
