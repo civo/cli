@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/civo/cli/config"
@@ -20,7 +21,8 @@ If you wish to use a custom format, the available fields are:
 	* version
 	* category
 	* plans
-	* dependencies`,
+	* dependencies
+	* default`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -51,6 +53,8 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("category", kubeApp.Category, "Category")
 			ow.AppendDataWithLabel("plans", strings.Join(plansApps, ", "), "Plans")
 			ow.AppendDataWithLabel("dependencies", strings.Join(kubeApp.Dependencies, ", "), "Dependencies")
+			ow.AppendDataWithLabel("default", strconv.FormatBool(kubeApp.Default), "Default")
+
 		}
 
 		switch outputFormat {
