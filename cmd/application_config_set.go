@@ -18,7 +18,7 @@ var appConfigSetCmd = &cobra.Command{
 	Use:     "set",
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Set application config",
-	Example: "civo app config set APP_NAME --n=foo --v=bar",
+	Example: "civo app config set APP_NAME --name=foo --value=bar",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
