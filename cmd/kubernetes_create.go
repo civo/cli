@@ -276,9 +276,9 @@ func InstallApps(defaultApps []string, apps, removeApps string) []string {
 	iApps = append(defaultApps, iApps...)
 
 	if removeApps != "" {
-		for i, v := range iApps {
-			for _, v2 := range strings.Split(removeApps, ",") {
-				if v == v2 {
+		for _, app := range strings.Split(removeApps, ",") {
+			for i := len(iApps) - 1; i >= 0; i-- {
+				if iApps[i] == app {
 					iApps = append(iApps[:i], iApps[i+1:]...)
 				}
 			}
