@@ -30,7 +30,7 @@ require (
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/tcnksm/go-latest v0.0.0-20170313132115-e3007ae9052e
 	github.com/tj/go-update v2.2.4+incompatible
-	github.com/ulikunitz/xz v0.5.7 // indirect
+	github.com/ulikunitz/xz v0.5.10 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
