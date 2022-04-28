@@ -32,6 +32,11 @@ var appConfigSetCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		if configName == "PORT" {
+			utility.Error("PORT is an immutable field picked by Civo.")
+			os.Exit(1)
+		}
+
 		updatedConfig := civogo.EnvVar{
 			Name:  configName,
 			Value: configValue,

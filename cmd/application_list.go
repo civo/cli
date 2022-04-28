@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -42,7 +41,12 @@ var appListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("size", app.Size, "Size")
 			ow.AppendDataWithLabel("network_id", app.NetworkID, "Network ID")
 			ow.AppendDataWithLabel("domains", strings.Join(app.Domains, " "), "Domains")
-			fmt.Println(app.ProcessInfo)
+
+			for _, process := range app.ProcessInfo {
+				ow.StartLine()
+				ow.AppendDataWithLabel("process_type", process.ProcessType, "Process Type")
+				ow.AppendDataWithLabel("process_count", string(process.ProcessCount), "Process Count")
+			}
 		}
 
 		switch outputFormat {

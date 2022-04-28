@@ -73,7 +73,7 @@ var appRemoteCmd = &cobra.Command{
 		}
 
 		//Add a new remote.
-		remote_cmd = exec.Command("git", "remote", "add", remoteName, fmt.Sprintf("git@git.civo.app:%s/%s/%s", client.Region, client.APIKey, findApp.Name))
+		remote_cmd = exec.Command("git", "remote", "add", remoteName, fmt.Sprintf("git@git.civo.app:%s/%s/%s", client.Region, client.GetAccountID(), findApp.Name))
 		//How to get account id from api key above?
 		remote_cmd.Stdout = &stdout
 		remote_cmd.Stderr = &stderr

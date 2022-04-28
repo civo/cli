@@ -79,7 +79,7 @@ var appCreateCmd = &cobra.Command{
 					utility.Error("%s", err)
 					os.Exit(1)
 				}
-				if application.Status == "ACTIVE" {
+				if strings.ToLower(application.Status) == "available" {
 					stillCreating = false
 					s.Stop()
 				} else {

@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -32,7 +30,8 @@ var appConfigShowCmd = &cobra.Command{
 
 		ow := utility.NewOutputWriter()
 		for _, config := range app.Config {
-			fmt.Println(config)
+			ow.AppendDataWithLabel("name", config.Name, "Name")
+			ow.AppendDataWithLabel("value", config.Value, "Value")
 		}
 
 		switch outputFormat {

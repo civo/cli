@@ -37,6 +37,14 @@ var appDomainAddCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		if args[1] == "" {
+			utility.Error("You must provide a domain name")
+			os.Exit(1)
+		} else if !strings.Contains(args[1], ".") {
+			utility.Error("You must provide a valid domain name")
+			os.Exit(1)
+		}
+
 		application := &civogo.UpdateApplicationRequest{
 			Domains: append(findApp.Domains, args[1]),
 		}

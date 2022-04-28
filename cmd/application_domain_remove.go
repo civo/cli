@@ -36,9 +36,11 @@ var appDomainRemoveCmd = &cobra.Command{
 			if errors.Is(err, civogo.ZeroMatchesError) {
 				utility.Error("sorry there is no %s application in your account", utility.Red(args[0]))
 				os.Exit(1)
-			}
-			if errors.Is(err, civogo.MultipleMatchesError) {
+			} else if errors.Is(err, civogo.MultipleMatchesError) {
 				utility.Error("sorry we found more than one application with that name in your account")
+				os.Exit(1)
+			} else {
+				utility.Error("%s", err)
 				os.Exit(1)
 			}
 		}
@@ -47,6 +49,7 @@ var appDomainRemoveCmd = &cobra.Command{
 			if appDomain == args[1] {
 				remove(findApp.Domains, appDomain)
 				utility.Info("Domain %s removed from %s", utility.Green(appDomain), utility.Green(args[0]))
+				break
 			}
 		}
 	},
