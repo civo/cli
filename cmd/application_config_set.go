@@ -32,13 +32,13 @@ var appConfigSetCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		updatedConfig := civogo.EnvVar{
+			Name:  configName,
+			Value: configValue,
+		}
+
 		config := &civogo.UpdateApplicationRequest{
-			Config: []civogo.EnvVar{
-				{
-					Name:  configName,
-					Value: configValue,
-				},
-			},
+			Config: append(findApp.Config, updatedConfig),
 		}
 
 		app, err := client.UpdateApplication(findApp.ID, config)

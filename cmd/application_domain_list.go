@@ -32,14 +32,8 @@ var appDomainListCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		appDomains, err := client.ListAppDomains(app.ID)
-		if err != nil {
-			utility.Error("%s", err)
-			os.Exit(1)
-		}
-
 		ow := utility.NewOutputWriter()
-		for _, appDomain := range appDomains {
+		for _, appDomain := range app.Domains {
 			ow.StartLine()
 			ow.AppendDataWithLabel("app_domain", appDomain, "App Domain Name")
 		}

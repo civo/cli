@@ -12,12 +12,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var remoteName, remoteURL string
+var remoteName string
 
 var appRemoteCmd = &cobra.Command{
 	Use:     "remote",
 	Short:   "Add a remote to your current git repository",
-	Example: "civo app remote APP_NAME -r REMOTE_NAME -u REMOTE_URL",
+	Example: "civo app remote APP_NAME -r REMOTE_NAME",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		var stdout bytes.Buffer
@@ -69,10 +69,12 @@ var appRemoteCmd = &cobra.Command{
 		} else {
 			//What should be the condition here?
 			fmt.Println("git remote already exists")
+			os.Exit(1)
 		}
 
 		//Add a new remote.
-		remote_cmd = exec.Command("git", "remote", "add", remoteName, remoteURL)
+		remote_cmd = exec.Command("git", "remote", "add", remoteName, fmt.Sprintf("git@git.civo.app:%s/%s/%s", client.Region, client.APIKey, findApp.Name))
+		//How to get account id from api key above?
 		remote_cmd.Stdout = &stdout
 		remote_cmd.Stderr = &stderr
 		err = remote_cmd.Run()

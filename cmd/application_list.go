@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -35,9 +37,12 @@ var appListCmd = &cobra.Command{
 		ow := utility.NewOutputWriter()
 		for _, app := range applications.Items {
 			ow.StartLine()
-
-			ow.AppendDataWithLabel("process_type", app.ProcessInfo[0].ProcessType, "Process Type")
-			ow.AppendDataWithLabel("process_count", string(rune(app.ProcessInfo[0].ProcessCount)), "Process Count")
+			ow.AppendDataWithLabel("id", app.ID, "ID")
+			ow.AppendDataWithLabel("name", app.Name, "Name")
+			ow.AppendDataWithLabel("size", app.Size, "Size")
+			ow.AppendDataWithLabel("network_id", app.NetworkID, "Network ID")
+			ow.AppendDataWithLabel("domains", strings.Join(app.Domains, " "), "Domains")
+			fmt.Println(app.ProcessInfo)
 		}
 
 		switch outputFormat {

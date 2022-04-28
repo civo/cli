@@ -2,25 +2,24 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
+
+	"os"
+
 	"github.com/spf13/cobra"
 )
 
-var processType string
-var processCount int
+var envVarName string
 
-var appScaleCmd = &cobra.Command{
-	Use:     "scale",
-	Aliases: []string{"change", "modify", "upgrade"},
-	Example: "civo app scale APP-NAME --process-type=web --process-count=3",
-	Short:   "Scale processes of your application",
+var appConfigUnSetCmd = &cobra.Command{
+	Use:     "unset",
 	Args:    cobra.MinimumNArgs(1),
+	Short:   "Unset application config",
+	Example: "civo app config unset APP_NAME --name=foo",
 	Run: func(cmd *cobra.Command, args []string) {
-
 		client, err := config.CivoAPIClient()
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -29,20 +28,20 @@ var appScaleCmd = &cobra.Command{
 
 		findApp, err := client.FindApplication(args[0])
 		if err != nil {
-			utility.Error("App %s", err)
+			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
-		processInfo := civogo.ProcessInfo{
-			ProcessType:  processType,
-			ProcessCount: processCount,
+		config := &civogo.UpdateApplicationRequest{
+			Config: []civogo.EnvVar{
+				{
+					Name:  configName,
+					Value: configValue,
+				},
+			},
 		}
 
-		application := &civogo.UpdateApplicationRequest{
-			ProcessInfo: append(findApp.ProcessInfo, processInfo),
-		}
-
-		app, err := client.UpdateApplication(findApp.ID, application)
+		app, err := client.UpdateApplication(findApp.ID, config)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
@@ -56,7 +55,7 @@ var appScaleCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			fmt.Printf("The application %s has been updated.\n", utility.Green(app.Name))
+			fmt.Printf("Application %s's config has been updated.\n", utility.Green(app.Name))
 		}
 	},
 }

@@ -49,13 +49,14 @@ func init() {
 	rootCmd.AddCommand(appCmd)
 	appCmd.AddCommand(appListCmd)
 	appCmd.AddCommand(appCreateCmd)
+	appCreateCmd.Flags().StringVarP(&appName, "name", "n", "", "Name of the application")
+	appCreateCmd.Flags().StringVarP(&appSize, "size", "s", "", "Size of the application")
 	appCmd.AddCommand(appRemoveCmd)
 	appCmd.AddCommand(appScaleCmd)
 	appScaleCmd.Flags().StringVarP(&processType, "process-type", "t", "", "The type of process you want to scale. E.g. web, worker, etc.")
 	appScaleCmd.Flags().IntVarP(&processCount, "process-count", "c", 0, "The number by which you want to scale the process. E.g. 2, 3, etc.")
 	appCmd.AddCommand(appRemoteCmd)
 	appRemoteCmd.Flags().StringVarP(&remoteName, "remote-name", "r", "", "The name of remote you want to add. E.g. civo")
-	appRemoteCmd.Flags().StringVarP(&remoteURL, "remote-url", "u", "", "The URL of remote you want to add.")
 
 	//App domain commands
 	appCmd.AddCommand(appDomainCmd)
@@ -69,4 +70,6 @@ func init() {
 	appConfigCmd.AddCommand(appConfigSetCmd)
 	appConfigSetCmd.Flags().StringVarP(&configName, "name", "n", "", "The name of the environment variable you want to set.")
 	appConfigSetCmd.Flags().StringVarP(&configValue, "value", "v", "", "The value of the environment variable you want to set.")
+	appConfigCmd.AddCommand(appConfigUnSetCmd)
+	appConfigUnSetCmd.Flags().StringVarP(&envVarName, "env-var-name", "e", "", "The name of the env variable you want to unset.")
 }

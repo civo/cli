@@ -2,10 +2,7 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
-	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -46,59 +43,23 @@ var appDomainRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if len(args) == 2 {
-			domain, err := client.FindAppDomain(args[1], findApp.ID)
-			if err != nil {
-				if errors.Is(err, civogo.ErrDNSDomainNotFound) {
-					utility.Error("sorry there is no %s app domain in your account", utility.Red(args[1]))
-					os.Exit(1)
-				}
+		for _, appDomain := range findApp.Domains {
+			if appDomain == args[1] {
+				remove(findApp.Domains, appDomain)
+				utility.Info("Domain %s removed from %s", utility.Green(appDomain), utility.Green(args[0]))
 			}
-			appDomainList = append(appDomainList, domain)
-		} else {
-			for _, v := range args[1:] {
-				domain, err := client.FindAppDomain(v, findApp.ID)
-				if err == nil {
-					appDomainList = append(appDomainList, domain)
-				}
-			}
-		}
-
-		domainNameList := []string{}
-		for _, v := range appDomainList {
-			domainNameList = append(domainNameList, v)
-		}
-
-		if utility.UserConfirmedDeletion(fmt.Sprintf("app %s", pluralize.Pluralize(len(appDomainList), "domain")), defaultYes, strings.Join(domainNameList, ", ")) {
-			for _, v := range appDomainList {
-				domain, _ := client.FindAppDomain(v, findApp.ID)
-				_, err = client.DeleteAppDomain(appDomainList, findApp.ID, domain)
-				if err != nil {
-					utility.Error("error deleting the App domain: %s", err)
-					os.Exit(1)
-				}
-			}
-			ow := utility.NewOutputWriter()
-
-			for _, v := range appDomainList {
-				ow.StartLine()
-				ow.AppendDataWithLabel("domain_name", v, "App Domain Name")
-			}
-
-			switch outputFormat {
-			case "json":
-				if len(appDomainList) == 1 {
-					ow.WriteSingleObjectJSON(prettySet)
-				} else {
-					ow.WriteMultipleObjectsJSON(prettySet)
-				}
-			case "custom":
-				ow.WriteCustomOutput(outputFields)
-			default:
-				fmt.Printf("The domain %s (%s) has been deleted\n", pluralize.Pluralize(len(appDomainList), "domain"), strings.Join(domainNameList, ", "))
-			}
-		} else {
-			fmt.Println("Operation aborted.")
 		}
 	},
+}
+
+func remove(items []string, item string) []string {
+	newitems := []string{}
+
+	for _, i := range items {
+		if i != item {
+			newitems = append(newitems, i)
+		}
+	}
+
+	return newitems
 }

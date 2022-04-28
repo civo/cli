@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -28,17 +30,10 @@ var appConfigShowCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		config, err := client.GetAppConfig(app.ID)
-		if err != nil {
-			utility.Error("%s", err)
-			os.Exit(1)
-		}
-
 		ow := utility.NewOutputWriter()
-		ow.StartLine()
-
-		ow.AppendDataWithLabel("name", config.Name, "Name")
-		ow.AppendDataWithLabel("value", config.Value, "Value")
+		for _, config := range app.Config {
+			fmt.Println(config)
+		}
 
 		switch outputFormat {
 		case "json":
