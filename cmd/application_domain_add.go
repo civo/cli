@@ -2,16 +2,24 @@ package cmd
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
+	"net"
 	"os"
 
 	"github.com/spf13/cobra"
 )
+
+const (
+	DNSName string = `^([a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62}){1}(\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*[\._]?$`
+)
+
+var rxDNSName = regexp.MustCompile(DNSName)
 
 var appDomainAddCmd = &cobra.Command{
 	Use:     "add",
@@ -37,11 +45,8 @@ var appDomainAddCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if args[1] == "" {
-			utility.Error("You must provide a domain name")
-			os.Exit(1)
-		} else if !strings.Contains(args[1], ".") {
-			utility.Error("You must provide a valid domain name")
+		if !IsDNSName(args[1]) {
+			utility.Error("%s is not a valid domain name", args[1])
 			os.Exit(1)
 		}
 
@@ -66,4 +71,18 @@ var appDomainAddCmd = &cobra.Command{
 			fmt.Printf("\nYour application %s is now available at:\n %s", utility.Green(app.Name), utility.Green(strings.Join(app.Domains, ", ")))
 		}
 	},
+}
+
+// IsDNSName will validate the given string as a DNS name
+func IsDNSName(str string) bool {
+	if str == "" || len(strings.Replace(str, ".", "", -1)) > 255 {
+		// constraints already violated
+		return false
+	}
+	return !IsIP(str) && rxDNSName.MatchString(str)
+}
+
+// IsIP checks if a string is either IP version 4 or 6. Alias for `net.ParseIP`
+func IsIP(str string) bool {
+	return net.ParseIP(str) != nil
 }
