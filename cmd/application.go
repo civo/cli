@@ -51,7 +51,7 @@ var appScaleCmd = &cobra.Command{
 	Example: "civo app scale APP-NAME PROCESS-NAME=PROCESS-COUNT",
 	Short:   "Scale processes of your application",
 	Args:    cobra.MinimumNArgs(1),
-	Run:     ScaleCmd,
+	Run:     scaleCmd,
 }
 
 func init() {

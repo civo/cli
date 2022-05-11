@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func ScaleCmd(cmd *cobra.Command, args []string) {
+func scaleCmd(cmd *cobra.Command, args []string) {
 
 	client, err := config.CivoAPIClient()
 	if err != nil {
