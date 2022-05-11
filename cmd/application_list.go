@@ -34,8 +34,8 @@ var appListCmd = &cobra.Command{
 		}
 
 		ow := utility.NewOutputWriter()
+		ow.StartLine()
 		for _, app := range applications.Items {
-			ow.StartLine()
 			ow.AppendDataWithLabel("id", app.ID, "ID")
 			ow.AppendDataWithLabel("name", app.Name, "Name")
 			ow.AppendDataWithLabel("size", app.Size, "Size")
@@ -43,7 +43,6 @@ var appListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("domains", strings.Join(app.Domains, " "), "Domains")
 
 			for _, process := range app.ProcessInfo {
-				ow.StartLine()
 				ow.AppendDataWithLabel("process_type", process.ProcessType, "Process Type")
 				ow.AppendDataWithLabel("process_count", string(process.ProcessCount), "Process Count")
 			}
