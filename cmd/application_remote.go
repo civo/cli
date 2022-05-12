@@ -66,10 +66,6 @@ var appRemoteCmd = &cobra.Command{
 		if err != nil {
 			fmt.Printf("error running: git %s\n", strings.Join(remote_cmd.Args, " "))
 			fmt.Println(stderr.String())
-		} else {
-			//What should be the condition here?
-			fmt.Println("git remote already exists")
-			os.Exit(1)
 		}
 
 		//Add a new remote.
@@ -82,7 +78,7 @@ var appRemoteCmd = &cobra.Command{
 			fmt.Printf("error running: git %s\n", strings.Join(remote_cmd.Args, " "))
 			fmt.Println(stderr.String())
 		} else {
-			fmt.Println("Added the \"%s\" remote to your git repository", remoteName)
+			fmt.Printf("Added the \"%s\" remote to your git repository", remoteName)
 		}
 	},
 }
