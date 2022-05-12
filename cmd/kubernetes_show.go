@@ -88,7 +88,7 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendData("Nodes", strconv.Itoa(len(kubernetesCluster.Instances)))
 		ow.AppendData("Size", kubernetesCluster.TargetNodeSize)
 		ow.AppendData("Status", kubernetesCluster.Status)
-		ow.AppendData("Firewall",firewall.Name)
+		ow.AppendData("Firewall", firewall.Name)
 
 		if kubernetesCluster.UpgradeAvailableTo != "" {
 			ow.AppendDataWithLabel("KubernetesVersion", utility.Red(kubernetesCluster.KubernetesVersion+" *"), "Version")
@@ -100,11 +100,13 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("MasterIP", kubernetesCluster.MasterIP, "External IP")
 		ow.AppendDataWithLabel("DNSEntry", kubernetesCluster.DNSEntry, "DNS A record")
 
-		var appsList []string
-		for _, app := range kubernetesCluster.InstalledApplications {
-			appsList = append(appsList, app.Name)
+		if len(kubernetesCluster.InstalledApplications) > 0 {
+			var appsList []string
+			for _, app := range kubernetesCluster.InstalledApplications {
+				appsList = append(appsList, app.Name)
+			}
+			ow.AppendDataWithLabel("InstalledApplications", strings.Join(appsList, ", "), "Installed Applications")
 		}
-		ow.AppendDataWithLabel("InstalledApplications", strings.Join(appsList, ", "), "Installed Applications")
 
 		if outputFormat == "json" || outputFormat == "custom" {
 			//ow.AppendData("CloudConfig", template.CloudConfig)
@@ -116,7 +118,7 @@ If you wish to use a custom format, the available fields are:
 			}
 
 			ow.AppendDataWithLabel("UpgradeAvailableTo", kubernetesCluster.UpgradeAvailableTo, "Upgrade Available")
-	
+
 			if outputFormat == "json" {
 				ow.ToJSON(kubernetesCluster, prettySet)
 			} else {
@@ -143,7 +145,6 @@ If you wish to use a custom format, the available fields are:
 				fmt.Printf(utility.Red("\n* An upgrade to v%s is available. Learn more about how to upgrade: civo k3s upgrade --help"), strings.Join(versionsList, ", "))
 				fmt.Println()
 			}
-
 
 			if len(lbCluster) > 0 {
 				fmt.Println()
