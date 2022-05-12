@@ -190,7 +190,28 @@ func RequestedSplit(appList []civogo.KubernetesMarketplaceApplication, requested
 		allApp = append(allApp, checkApp)
 	}
 
-	return strings.Join(allApp, ", ")
+	return strings.Join(allApp, ",")
+}
+
+// RemoveApplicationFromInstalledList is a function to split all currently installed apps and remove one being uninstalled
+func RemoveApplicationFromInstalledList(current []civogo.KubernetesInstalledApplication, uninstall string) string {
+	appsToRemove := strings.Split(uninstall, ",")
+	remainingApps := []string{}
+
+	for i := range current {
+		remove := false
+		for j := range appsToRemove {
+			if current[i].Name == appsToRemove[j] { // Caveat - won't work with plans...
+				remove = true
+			}
+		}
+
+		if !remove {
+			remainingApps = append(remainingApps, current[i].Name)
+		}
+	}
+
+	return strings.Join(remainingApps, ",")
 }
 
 // function to search if the string is in the slice

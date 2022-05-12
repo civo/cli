@@ -32,7 +32,8 @@ If you wish to use a custom format, the available fields are:
 	* KubernetesVersion
 	* APIEndPoint
 	* MasterIP
-	* DNSEntry`,
+	* DNSEntry
+	* InstalledApplications`,
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 		if len(args) == 0 {
 			return getAllKubernetesList(), cobra.ShellCompDirectiveNoFileComp
@@ -77,6 +78,12 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("MasterIP", kubernetesCluster.MasterIP, "External IP")
 		ow.AppendDataWithLabel("DNSEntry", kubernetesCluster.DNSEntry, "DNS A record")
 
+		var appsList []string
+		for _, app := range kubernetesCluster.InstalledApplications {
+			appsList = append(appsList, app.Name)
+		}
+		ow.AppendDataWithLabel("InstalledApplications", strings.Join(appsList, ", "), "Installed Applications")
+
 		if outputFormat == "json" || outputFormat == "custom" {
 			//ow.AppendData("CloudConfig", template.CloudConfig)
 
@@ -114,50 +121,50 @@ If you wish to use a custom format, the available fields are:
 				fmt.Printf(utility.Red("\n* An upgrade to v%s is available. Learn more about how to upgrade: civo k3s upgrade --help"), strings.Join(versionsList, ", "))
 				fmt.Println()
 			}
-		}
-		if len(kubernetesCluster.Instances) > 0 {
-			fmt.Println()
-			for _, pool := range kubernetesCluster.Pools {
-				ow.WriteHeader(fmt.Sprintf("Pool (%s)", pool.ID[:6]))
-				owNode := utility.NewOutputWriter()
+			if len(kubernetesCluster.Instances) > 0 {
+				fmt.Println()
+				for _, pool := range kubernetesCluster.Pools {
+					ow.WriteHeader(fmt.Sprintf("Pool (%s)", pool.ID[:6]))
+					owNode := utility.NewOutputWriter()
 
-				for _, instance := range kubernetesCluster.Instances {
-					for _, pinstance := range pool.InstanceNames {
-						if instance.Hostname != "" && strings.Contains(pinstance, instance.Hostname[5:]) {
-							owNode.StartLine()
-							owNode.AppendData("Name", instance.Hostname)
-							owNode.AppendData("IP", instance.PublicIP)
-							owNode.AppendData("Status", instance.Status)
-							owNode.AppendData("Size", instance.Size)
-							owNode.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
-							owNode.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "RAM (MB)")
-							owNode.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk (GB)")
+					for _, instance := range kubernetesCluster.Instances {
+						for _, pinstance := range pool.InstanceNames {
+							if instance.Hostname != "" && strings.Contains(pinstance, instance.Hostname[5:]) {
+								owNode.StartLine()
+								owNode.AppendData("Name", instance.Hostname)
+								owNode.AppendData("IP", instance.PublicIP)
+								owNode.AppendData("Status", instance.Status)
+								owNode.AppendData("Size", instance.Size)
+								owNode.AppendDataWithLabel("CPUCores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
+								owNode.AppendDataWithLabel("RAMMegabytes", strconv.Itoa(instance.RAMMegabytes), "RAM (MB)")
+								owNode.AppendDataWithLabel("DiskGigabytes", strconv.Itoa(instance.DiskGigabytes), "SSD disk (GB)")
+							}
 						}
 					}
+					owNode.WriteTable()
+					fmt.Println()
+					ow.WriteHeader("Labels")
+					fmt.Printf("kubernetes.civo.com/node-pool=%s\n", pool.ID)
+					fmt.Printf("kubernetes.civo.com/node-size=%s\n", pool.Size)
+					fmt.Println()
 				}
-				owNode.WriteTable()
-				fmt.Println()
-				ow.WriteHeader("Labels")
-				fmt.Printf("kubernetes.civo.com/node-pool=%s\n", pool.ID)
-				fmt.Printf("kubernetes.civo.com/node-size=%s\n", pool.Size)
-				fmt.Println()
-			}
 
-			if len(kubernetesCluster.InstalledApplications) > 0 {
-				fmt.Println()
-				ow.WriteHeader("Applications")
-				owApp := utility.NewOutputWriter()
+				if len(kubernetesCluster.InstalledApplications) > 0 {
+					fmt.Println()
+					ow.WriteHeader("Applications")
+					owApp := utility.NewOutputWriter()
 
-				for _, app := range kubernetesCluster.InstalledApplications {
-					owApp.StartLine()
+					for _, app := range kubernetesCluster.InstalledApplications {
+						owApp.StartLine()
 
-					owApp.AppendData("Name", app.Name)
-					owApp.AppendData("Version", app.Version)
-					owApp.AppendData("Installed", strconv.FormatBool(app.Installed))
-					owApp.AppendData("Category", app.Category)
+						owApp.AppendData("Name", app.Name)
+						owApp.AppendData("Version", app.Version)
+						owApp.AppendData("Installed", strconv.FormatBool(app.Installed))
+						owApp.AppendData("Category", app.Category)
+					}
+					owApp.WriteTable()
+					fmt.Println()
 				}
-				owApp.WriteTable()
-				fmt.Println()
 			}
 		}
 	},
