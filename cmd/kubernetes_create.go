@@ -145,27 +145,6 @@ var kubernetesCreateCmd = &cobra.Command{
 			configKubernetes.FirewallRule = rulesFirewall
 		}
 
-		if existingFirewall != "" && createFirewall {
-			if createFirewall {
-				utility.Error("You can't use --create-firewall together with --existing-firewall flag")
-				os.Exit(1)
-			}
-
-			ef, err := client.FindFirewall(existingFirewall)
-			if err != nil {
-				utility.Error("Unable to find %q firewall - %s", existingFirewall, err)
-				os.Exit(1)
-			}
-
-			if ef.NetworkID != network.ID {
-				utility.Error("Unable to find firewall %q in %q network", ef.ID, network.Label)
-				os.Exit(1)
-			}
-
-			configKubernetes.InstanceFirewall = ef.ID
-			configKubernetes.FirewallRule = ""
-		}
-
 		if kubernetesVersion != "latest" {
 			configKubernetes.KubernetesVersion = kubernetesVersion
 		}
@@ -187,6 +166,27 @@ var kubernetesCreateCmd = &cobra.Command{
 		// We check if the user don't expecify a firewall we send to create a new one with the default rules
 		if !createFirewall && rulesFirewall == "default" {
 			configKubernetes.FirewallRule = "80,443,6443"
+		}
+
+		if existingFirewall != "" {
+			if createFirewall {
+				utility.Error("You can't use --create-firewall together with --existing-firewall flag")
+				os.Exit(1)
+			}
+
+			ef, err := client.FindFirewall(existingFirewall)
+			if err != nil {
+				utility.Error("Unable to find %q firewall - %s", existingFirewall, err)
+				os.Exit(1)
+			}
+
+			if ef.NetworkID != network.ID {
+				utility.Error("Unable to find firewall %q in %q network", ef.ID, network.Label)
+				os.Exit(1)
+			}
+
+			configKubernetes.InstanceFirewall = ef.ID
+			configKubernetes.FirewallRule = ""
 		}
 
 		if !mergeConfigKubernetes && saveConfigKubernetes {
