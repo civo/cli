@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var appName, appSize string
+var appName, appSize, appSSHKeyIDs string
 
 var appCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -41,6 +41,10 @@ var appCreateCmd = &cobra.Command{
 				os.Exit(1)
 			}
 			config.Name = appName
+		}
+
+		if appSSHKeyIDs != "" {
+			config.SSHKeyIDs = strings.Split(appSSHKeyIDs, ",")
 		}
 
 		if len(args) > 0 {
