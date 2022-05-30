@@ -54,6 +54,15 @@ var appScaleCmd = &cobra.Command{
 	Run:     scaleCmd,
 }
 
+var appLogCmd = &cobra.Command{
+	Use:     "log",
+	Aliases: []string{"log", "logs"},
+	Example: "civo app log APP-NAME",
+	Short:   "Check logs of your application",
+	Args:    cobra.MinimumNArgs(1),
+	Run:     logCmd,
+}
+
 func init() {
 	rootCmd.AddCommand(appCmd)
 	appCmd.AddCommand(appListCmd)
@@ -71,6 +80,9 @@ func init() {
 	appDomainCmd.AddCommand(appDomainListCmd)
 	appDomainCmd.AddCommand(appDomainAddCmd)
 	appDomainCmd.AddCommand(appDomainRemoveCmd)
+
+	//App logs
+	appCmd.AddCommand(appLogCmd)
 
 	//App config commands
 	appCmd.AddCommand(appConfigCmd)
