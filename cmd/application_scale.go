@@ -25,7 +25,6 @@ func scaleCmd(cmd *cobra.Command, args []string) {
 		utility.Error("App %s", err)
 		os.Exit(1)
 	}
-	fmt.Println("app found")
 
 	processInfo := make([]civogo.ProcessInfo, 0)
 	for _, arg := range args[1:] {

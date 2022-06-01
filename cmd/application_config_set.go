@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
@@ -18,7 +19,7 @@ var appConfigSetCmd = &cobra.Command{
 	Use:     "set",
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Set application config",
-	Example: "civo app config set APP_NAME --name=foo --value=bar",
+	Example: "civo app config set APP_NAME foo=bar foo2=bar2",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -37,13 +38,31 @@ var appConfigSetCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		updatedConfig := civogo.EnvVar{
-			Name:  configName,
-			Value: configValue,
+		updatedConfig := make([]civogo.EnvVar, len(findApp.Config))
+		for _, arg := range args[1:] {
+			if strings.Contains(arg, "=") {
+				parts := strings.Split(arg, "=")
+				if len(parts) != 2 {
+					utility.Error("Invalid argument %s", arg)
+					os.Exit(1)
+				}
+
+				updatedConfig = append(updatedConfig, civogo.EnvVar{
+					Name:  parts[0],
+					Value: parts[1],
+				})
+			}
+			for _, envVar := range findApp.Config {
+				for _, newEnvVar := range updatedConfig {
+					if envVar.Name == newEnvVar.Name {
+						envVar.Value = newEnvVar.Value
+					}
+				}
+			}
 		}
 
 		config := &civogo.UpdateApplicationRequest{
-			Config: append(findApp.Config, updatedConfig),
+			Config: updatedConfig,
 		}
 
 		app, err := client.UpdateApplication(findApp.ID, config)

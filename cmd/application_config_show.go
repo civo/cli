@@ -30,6 +30,7 @@ var appConfigShowCmd = &cobra.Command{
 
 		ow := utility.NewOutputWriter()
 		for _, config := range app.Config {
+			ow.StartLine()
 			ow.AppendDataWithLabel("name", config.Name, "Name")
 			ow.AppendDataWithLabel("value", config.Value, "Value")
 		}

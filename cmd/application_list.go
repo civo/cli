@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/civo/cli/config"
@@ -33,18 +34,29 @@ var appListCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		networks, err := client.ListNetworks()
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
 		ow := utility.NewOutputWriter()
 		ow.StartLine()
 		for _, app := range applications.Items {
 			ow.AppendDataWithLabel("id", app.ID, "ID")
 			ow.AppendDataWithLabel("name", app.Name, "Name")
 			ow.AppendDataWithLabel("size", app.Size, "Size")
-			ow.AppendDataWithLabel("network_id", app.NetworkID, "Network ID")
+			for _, network := range networks {
+				if app.NetworkID == network.ID {
+					ow.AppendDataWithLabel("network_name", network.Name, "Network Name")
+				}
+			}
+			ow.AppendDataWithLabel("status", app.Status, "Status")
 			ow.AppendDataWithLabel("domains", strings.Join(app.Domains, " "), "Domains")
 
 			for _, process := range app.ProcessInfo {
 				ow.AppendDataWithLabel("process_type", process.ProcessType, "Process Type")
-				ow.AppendDataWithLabel("process_count", string(process.ProcessCount), "Process Count")
+				ow.AppendDataWithLabel("process_count", strconv.Itoa(process.ProcessCount), "Process Count")
 			}
 		}
 

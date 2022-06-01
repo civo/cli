@@ -70,6 +70,7 @@ func init() {
 	appCreateCmd.Flags().StringVarP(&appName, "name", "n", "", "Name of the application")
 	appCreateCmd.Flags().StringVarP(&appSize, "size", "s", "", "Size of the application")
 	appCreateCmd.Flags().StringVarP(&appSSHKeyIDs, "ssh-key-ids", "k", "", "SSH key IDs to authenticate to git server ")
+	appCmd.AddCommand(appShowCmd)
 	appCmd.AddCommand(appRemoveCmd)
 	appCmd.AddCommand(appScaleCmd)
 	appCmd.AddCommand(appRemoteCmd)
