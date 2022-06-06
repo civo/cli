@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"encoding/base64"
 	"io/ioutil"
 	"os"
@@ -67,13 +68,13 @@ func logCmd(cmd *cobra.Command, args []string) {
 
 	ns := strings.Split(conf, "namespace: ")[1]
 	ns = strings.Split(ns, "\n")[0]
-	pods, err := clientset.CoreV1().Pods(ns).List(metav1.ListOptions{})
+	pods, err := clientset.CoreV1().Pods(ns).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		utility.Error("Failed to get logs application might not be running %s", err)
 		os.Exit(1)
 	}
 
-	deploymets, err := clientset.AppsV1().Deployments(ns).List(metav1.ListOptions{})
+	deploymets, err := clientset.AppsV1().Deployments(ns).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		utility.Error("Failed to get logs application might not be running %s", err)
 		os.Exit(1)
