@@ -48,7 +48,7 @@ var appListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("size", app.Size, "Size")
 			for _, network := range networks {
 				if app.NetworkID == network.ID {
-					ow.AppendDataWithLabel("network_name", network.Name, "Network Name")
+					ow.AppendDataWithLabel("network_name", network.Label, "Network Name")
 				}
 			}
 			ow.AppendDataWithLabel("status", app.Status, "Status")

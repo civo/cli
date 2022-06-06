@@ -63,6 +63,20 @@ var appLogCmd = &cobra.Command{
 	Run:     logCmd,
 }
 
+var appSSHKeyIDCmd = &cobra.Command{
+	Use:     "sshkey",
+	Aliases: []string{"ssh-key-id"},
+	Short:   "SSH key IDs of your application",
+	Long:    "\nYou can check already existing keys with `civo sshkey ls`. If no key is found, you can create one. See `civo sshkey create --help`",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := cmd.Help()
+		if err != nil {
+			return err
+		}
+		return errors.New("a valid subcommand is required")
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(appCmd)
 	appCmd.AddCommand(appListCmd)
@@ -93,4 +107,10 @@ func init() {
 	appConfigSetCmd.Flags().StringVarP(&configValue, "value", "v", "", "The value of the environment variable you want to set.")
 	appConfigCmd.AddCommand(appConfigUnSetCmd)
 	appConfigUnSetCmd.Flags().StringVarP(&envVarName, "env-var-name", "e", "", "The name of the env variable you want to unset.")
+
+	//App SSH key commands
+	appCmd.AddCommand(appSSHKeyIDCmd)
+	appSSHKeyIDCmd.AddCommand(appSSHKeyAddCmd)
+	appSSHKeyAddCmd.Flags().StringVarP(&appSSHKeyIDs, "ssh-key-ids", "k", "", "SSH key IDs to authenticate to git server ")
+	appSSHKeyAddCmd.Flags().StringVarP(&sshKeyName, "ssh-key-name", "n", "", "The name of the SSH key you want to add.")
 }

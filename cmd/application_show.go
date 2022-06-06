@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"strconv"
-	"strings"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -40,12 +40,12 @@ var appShowCmd = &cobra.Command{
 		ow := utility.NewOutputWriter()
 		ow.StartLine()
 
-		ow.AppendDataWithLabel("id", application.ID, "ID")
+		ow.AppendData("ID", application.ID)
 		ow.AppendDataWithLabel("name", application.Name, "Name")
 
 		for _, network := range networks {
 			if application.NetworkID == network.ID {
-				ow.AppendDataWithLabel("network_name", network.Name, "Network Name")
+				ow.AppendDataWithLabel("network_name", network.Label, "Network Name")
 			}
 		}
 
@@ -53,17 +53,8 @@ var appShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("description", application.Description, "Description")
 		ow.AppendDataWithLabel("image", application.Image, "Image")
 		ow.AppendDataWithLabel("size", application.Size, "Size")
-		ow.AppendDataWithLabel("domains", strings.Join(application.Domains, ", "), "Domains")
+		//ow.AppendDataWithLabel("domains", strings.Join(application.Domains, ", "), "Domains")
 		ow.AppendDataWithLabel("status", application.Status, "Status")
-		for _, process := range application.ProcessInfo {
-			ow.AppendDataWithLabel("processType", process.ProcessType, "Process Type")
-			ow.AppendDataWithLabel("processCount", strconv.Itoa(process.ProcessCount), "Process Count")
-		}
-
-		for _, config := range application.Config {
-			//ow.AppendDataWithLabel("name", config.Name, "Config Name")
-			ow.AppendDataWithLabel("value", config.Value, "Config Value")
-		}
 
 		switch outputFormat {
 		case "json":
@@ -73,5 +64,42 @@ var appShowCmd = &cobra.Command{
 		default:
 			ow.WriteKeyValues()
 		}
+
+		fmt.Println()
+		//ow.WriteHeader("Domains ")
+		owDomain := utility.NewOutputWriter()
+		for _, domain := range application.Domains {
+			owDomain.StartLine()
+			owDomain.AppendData("Domains :", domain)
+		}
+		fmt.Println()
+		owDomain.WriteTable()
+		fmt.Println()
+
+		fmt.Println()
+		ow.WriteHeader("Application Config ")
+		owConfig := utility.NewOutputWriter()
+		for _, config := range application.Config {
+			owConfig.StartLine()
+			owConfig.AppendData("Name", config.Name)
+			owConfig.AppendData("Value", config.Value)
+		}
+		fmt.Println()
+		owConfig.WriteTable()
+		fmt.Println()
+
+		if application.ProcessInfo != nil {
+			ow.WriteHeader("Application Processes ")
+			owProcess := utility.NewOutputWriter()
+			for _, process := range application.ProcessInfo {
+				owProcess.StartLine()
+				owProcess.AppendData("Type", process.ProcessType)
+				owProcess.AppendData("Count", strconv.Itoa(process.ProcessCount))
+			}
+			fmt.Println()
+			owProcess.WriteTable()
+			fmt.Println()
+		}
+
 	},
 }
