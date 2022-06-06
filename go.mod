@@ -32,6 +32,6 @@ require (
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	golang.org/x/crypto v0.0.0-20220214200702-86341886e292
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
-	k8s.io/apimachinery v0.0.0-20190612205821-1799e75a0719
-	k8s.io/client-go v12.0.0+incompatible
+	k8s.io/apimachinery v0.23.1
+	k8s.io/client-go v0.23.1
 )
