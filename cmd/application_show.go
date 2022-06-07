@@ -76,7 +76,15 @@ var appShowCmd = &cobra.Command{
 		owDomain.WriteTable()
 		fmt.Println()
 
+		owSSHKey := utility.NewOutputWriter()
+		for _, sshKey := range application.SSHKeyIDs {
+			owSSHKey.StartLine()
+			owSSHKey.AppendData("SSH Key ID's :", sshKey)
+		}
 		fmt.Println()
+		owSSHKey.WriteTable()
+		fmt.Println()
+
 		ow.WriteHeader("Application Config ")
 		owConfig := utility.NewOutputWriter()
 		for _, config := range application.Config {

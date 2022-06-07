@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"strconv"
-	"strings"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -52,7 +52,7 @@ var appListCmd = &cobra.Command{
 				}
 			}
 			ow.AppendDataWithLabel("status", app.Status, "Status")
-			ow.AppendDataWithLabel("domains", strings.Join(app.Domains, " "), "Domains")
+			ow.AppendDataWithLabel("domains", fmt.Sprintf(app.Domains[0]+" ..."), "Domains")
 
 			for _, process := range app.ProcessInfo {
 				ow.AppendDataWithLabel("process_type", process.ProcessType, "Process Type")
