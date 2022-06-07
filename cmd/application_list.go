@@ -52,7 +52,11 @@ var appListCmd = &cobra.Command{
 				}
 			}
 			ow.AppendDataWithLabel("status", app.Status, "Status")
-			ow.AppendDataWithLabel("domains", fmt.Sprintf(app.Domains[0]+" ..."), "Domains")
+			if len(app.Domains) > 1 {
+				ow.AppendDataWithLabel("domains", fmt.Sprintf(app.Domains[0]+" ..."), "Domains")
+			} else {
+				ow.AppendDataWithLabel("domains", app.Domains[0], "Domains")
+			}
 
 			for _, process := range app.ProcessInfo {
 				ow.AppendDataWithLabel("process_type", process.ProcessType, "Process Type")
