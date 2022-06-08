@@ -53,7 +53,6 @@ var appShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("description", application.Description, "Description")
 		ow.AppendDataWithLabel("image", application.Image, "Image")
 		ow.AppendDataWithLabel("size", application.Size, "Size")
-		//ow.AppendDataWithLabel("domains", strings.Join(application.Domains, ", "), "Domains")
 		ow.AppendDataWithLabel("status", application.Status, "Status")
 
 		switch outputFormat {
@@ -66,7 +65,6 @@ var appShowCmd = &cobra.Command{
 		}
 
 		fmt.Println()
-		//ow.WriteHeader("Domains ")
 		owDomain := utility.NewOutputWriter()
 		for _, domain := range application.Domains {
 			owDomain.StartLine()
@@ -76,10 +74,20 @@ var appShowCmd = &cobra.Command{
 		owDomain.WriteTable()
 		fmt.Println()
 
+		sshKeys, err := client.ListSSHKeys()
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
 		owSSHKey := utility.NewOutputWriter()
-		for _, sshKey := range application.SSHKeyIDs {
-			owSSHKey.StartLine()
-			owSSHKey.AppendData("SSH Key ID's :", sshKey)
+		ow.WriteHeader("SSH Keys ")
+		for _, sshKey := range sshKeys {
+			if contains(application.SSHKeyIDs, sshKey.ID) {
+				owSSHKey.StartLine()
+				owSSHKey.AppendData("Name", sshKey.Name)
+				owSSHKey.AppendData("ID", sshKey.ID)
+			}
 		}
 		fmt.Println()
 		owSSHKey.WriteTable()
@@ -108,6 +116,14 @@ var appShowCmd = &cobra.Command{
 			owProcess.WriteTable()
 			fmt.Println()
 		}
-
 	},
+}
+
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }

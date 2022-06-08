@@ -2,8 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"os/exec"
-	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/config"
@@ -36,59 +34,51 @@ var appSSHKeyAddCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if sshKeyName != "" {
-			sshKey, err := client.FindSSHKey(sshKeyName)
-			if err != nil {
-				utility.Error("%s", err)
-				os.Exit(1)
-			}
-			sshKeyLsCmd, err := exec.Command("civo", "sshkey", "ls").Output()
-			if err != nil {
-				utility.Error("%s", err)
-				os.Exit(1)
-			} else {
-				sshKeyList := strings.Split(string(sshKeyLsCmd), " ")
-				if contains(sshKeyList, sshKey.ID) {
+		sshKeys, err := client.ListSSHKeys()
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
 
+		var found bool
+		if sshKeyName != "" {
+			for _, sshKey := range sshKeys {
+				if sshKey.Name != sshKeyName {
+					continue
+				} else {
+					found = true
 					updateReq := &civogo.UpdateApplicationRequest{
 						SSHKeyIDs: append(findApp.SSHKeyIDs, sshKey.ID),
 					}
-
 					_, err := client.UpdateApplication(findApp.ID, updateReq)
 					if err != nil {
 						utility.Error("%s", err)
 						os.Exit(1)
 					}
-					fmt.Printf("Added SSH Key with name %s to application %s\n", sshKey.Name, findApp.Name)
-				} else {
-					utility.Error("SSH Key with name %s not found", sshKey.Name)
-					os.Exit(1)
+					fmt.Printf("Added SSH Key with name %s to application %s\n", sshKeyName, findApp.Name)
 				}
 			}
 		} else {
-			sshKeyLsCmd, err := exec.Command("civo", "sshkey", "ls").Output()
-			if err != nil {
-				utility.Error("%s", err)
-				os.Exit(1)
-			} else {
-				sshKeyList := strings.Split(string(sshKeyLsCmd), " ")
-				if contains(sshKeyList, args[1]) {
-
+			for _, sshKey := range sshKeys {
+				if sshKey.ID != args[1] {
+					continue
+				} else {
+					found = true
 					updateReq := &civogo.UpdateApplicationRequest{
 						SSHKeyIDs: append(findApp.SSHKeyIDs, args[1]),
 					}
-
 					_, err := client.UpdateApplication(findApp.ID, updateReq)
 					if err != nil {
 						utility.Error("%s", err)
 						os.Exit(1)
 					}
-					fmt.Printf("Added SSH Key ID %s to app %s\n", args[1], args[0])
-				} else {
-					utility.Error("SSH Key ID %s not found", args[1])
-					os.Exit(1)
+					fmt.Printf("Added SSH Key ID %s to app %s\n", args[1], findApp.Name)
 				}
 			}
+		}
+		if !found {
+			utility.Error("SSH Key %s not found", args[1])
+			os.Exit(1)
 		}
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"id": findApp.ID, "name": findApp.Name})
@@ -101,14 +91,6 @@ var appSSHKeyAddCmd = &cobra.Command{
 		default:
 			fmt.Printf("Application %s's SSH Key IDs have been updated.\n", utility.Green(findApp.Name))
 		}
-	},
-}
 
-func contains(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
+	},
 }
