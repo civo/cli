@@ -82,14 +82,13 @@ var objectStoreCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			if executionTime != "" {
+			if waitOS {
 				fmt.Printf("Created Object Store %s in %s in %s\n", utility.Green(objectStore.Name), utility.Green(client.Region), executionTime)
 				fmt.Printf("Created default admin credentials, access key is %s, this will be deleted if the Object Store is deleted. ", utility.Green(objectStore.AccessKeyID))
 				fmt.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(objectStore.AccessKeyID))
 			} else {
-				fmt.Printf("Created Object Store %s in %s\n", utility.Green(objectStore.Name), utility.Green(client.Region))
-				fmt.Printf("Created default admin credentials, access key is %s, this will be deleted if the Object Store is deleted. ", utility.Green(objectStore.AccessKeyID))
-				fmt.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(objectStore.AccessKeyID))
+				fmt.Printf("Creating Object Store %s in %s\n", utility.Green(objectStore.Name), utility.Green(client.Region))
+				fmt.Printf("To check the status of the Object Store run: civo objectstore show %s\n", utility.Green(objectStore.Name))
 			}
 		}
 	},

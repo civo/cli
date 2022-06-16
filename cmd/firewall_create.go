@@ -45,7 +45,7 @@ var firewallCreateCmd = &cobra.Command{
 			}
 		}
 
-		firewall, err := client.NewFirewall(args[0], defaultNetwork.ID)
+		firewall, err := client.NewFirewall(args[0], defaultNetwork.ID, nil)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)

@@ -38,7 +38,8 @@ var objectStoreShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("size", objectStore.MaxSize, "Size")
 		ow.AppendDataWithLabel("max_objects", strconv.Itoa(objectStore.MaxObjects), "Max Objects")
 		ow.AppendDataWithLabel("objectstore_endpoint", objectStore.ObjectStoreEndpoint, "Object Store Endpoint")
-		ow.AppendDataWithLabel("s3_region", "default", "S3 Region")
+		ow.AppendDataWithLabel("s3_region", "default", client.Region)
+		ow.AppendDataWithLabel("accesskey", objectStore.AccessKeyID, "Access Key")
 		ow.AppendDataWithLabel("status", objectStore.Status, "Status")
 
 		switch outputFormat {
@@ -48,6 +49,7 @@ var objectStoreShowCmd = &cobra.Command{
 			ow.WriteCustomOutput(outputFields)
 		default:
 			ow.WriteKeyValues()
+			fmt.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(objectStore.AccessKeyID))
 		}
 	},
 }
