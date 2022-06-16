@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
@@ -13,7 +14,7 @@ var objectStoreShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"get", "info"},
 	Example: `civo objectstore show OBJECTSTORE_NAME`,
-	Short:   "Prints information about an objectstore",
+	Short:   "Prints information about an Object Store",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -30,11 +31,13 @@ var objectStoreShowCmd = &cobra.Command{
 		ow := utility.NewOutputWriter()
 
 		ow.StartLine()
+		fmt.Println()
 		ow.AppendDataWithLabel("id", objectStore.ID, "ID")
+		ow.AppendDataWithLabel("name", objectStore.Name, "Name")
 		ow.AppendDataWithLabel("generated_name", objectStore.GeneratedName, "Generated Name")
 		ow.AppendDataWithLabel("size", objectStore.MaxSize, "Size")
 		ow.AppendDataWithLabel("max_objects", strconv.Itoa(objectStore.MaxObjects), "Max Objects")
-		ow.AppendDataWithLabel("bucket_url", objectStore.BucketURL, "Object Store Endpoint")
+		ow.AppendDataWithLabel("objectstore_endpoint", objectStore.ObjectStoreEndpoint, "Object Store Endpoint")
 		ow.AppendDataWithLabel("s3_region", "default", "S3 Region")
 		ow.AppendDataWithLabel("status", objectStore.Status, "Status")
 
@@ -44,7 +47,7 @@ var objectStoreShowCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			ow.WriteTable()
+			ow.WriteKeyValues()
 		}
 	},
 }

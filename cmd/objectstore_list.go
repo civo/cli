@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+	"strconv"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -12,7 +13,7 @@ var objectStoreListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
 	Example: `civo objectstore ls`,
-	Short:   "List all objectstores",
+	Short:   "List all Object Stores",
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -32,7 +33,8 @@ var objectStoreListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("id", objectStore.ID, "ID")
 			ow.AppendDataWithLabel("generated_name", objectStore.GeneratedName, "Generated Name")
 			ow.AppendDataWithLabel("size", objectStore.MaxSize, "Size")
-			ow.AppendDataWithLabel("bucket_url", objectStore.BucketURL, "Object Store Endpoint")
+			ow.AppendDataWithLabel("max_objects", strconv.Itoa(objectStore.MaxObjects), "Max Objects")
+			ow.AppendDataWithLabel("objectstore_endpoint", objectStore.ObjectStoreEndpoint, "Object Store Endpoint")
 			ow.AppendDataWithLabel("s3_region", "default", "S3 Region")
 			ow.AppendDataWithLabel("status", objectStore.Status, "Status")
 		}

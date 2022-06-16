@@ -19,7 +19,7 @@ var objectStoreList []utility.ObjecteList
 var objectStoreDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"rm", "remove", "destroy"},
-	Short:   "Remove an objectstore",
+	Short:   "Remove an Object Store",
 	Example: "civo objectstore delete OBJECTSTORE_NAME",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -33,11 +33,11 @@ var objectStoreDeleteCmd = &cobra.Command{
 			objectStore, err := client.FindObjectStore(args[0])
 			if err != nil {
 				if errors.Is(err, civogo.ZeroMatchesError) {
-					utility.Error("sorry there is no %s objectstore in your account", utility.Red(args[0]))
+					utility.Error("sorry there is no %s Object Store in your account", utility.Red(args[0]))
 					os.Exit(1)
 				}
 				if errors.Is(err, civogo.MultipleMatchesError) {
-					utility.Error("sorry we found more than one objectstore with that name in your account")
+					utility.Error("sorry we found more than one Object Store with that name in your account")
 					os.Exit(1)
 				}
 			}
@@ -66,7 +66,7 @@ var objectStoreDeleteCmd = &cobra.Command{
 				}
 				_, err = client.DeleteObjectStore(objectStore.ID)
 				if err != nil {
-					utility.Error("error deleting the objectStore: %s", err)
+					utility.Error("Error deleting the Object Store: %s", err)
 					os.Exit(1)
 				}
 			}
@@ -76,7 +76,7 @@ var objectStoreDeleteCmd = &cobra.Command{
 			for _, v := range objectStoreList {
 				ow.StartLine()
 				ow.AppendDataWithLabel("id", v.ID, "ID")
-				ow.AppendDataWithLabel("objectStore", v.Name, "objectStore")
+				ow.AppendDataWithLabel("objectStore", v.Name, "Object Store")
 			}
 
 			switch outputFormat {

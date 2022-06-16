@@ -8,8 +8,8 @@ import (
 
 var objectStoreCmd = &cobra.Command{
 	Use:     "objectstore",
-	Aliases: []string{"bucket"},
-	Short:   "Civo Objectstore/Bucket management commands",
+	Aliases: []string{"bucket", "buckets", "object", "objects"},
+	Short:   "Civo Object Store/Bucket management commands",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := cmd.Help()
 		if err != nil {
@@ -21,8 +21,8 @@ var objectStoreCmd = &cobra.Command{
 
 var objectStoreCredentialCmd = &cobra.Command{
 	Use:     "credential",
-	Aliases: []string{"credentials"},
-	Short:   "Credentials for Civo objectstore",
+	Aliases: []string{"credentials", "creds", "user", "users", "key", "keys"},
+	Short:   "Credentials for Civo Object Store",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := cmd.Help()
 		if err != nil {
@@ -45,6 +45,7 @@ func init() {
 	//Flags for create cmd
 	objectStoreCreateCmd.Flags().IntVarP(&bucketSize, "size", "s", 500, "Size of the bucket")
 	objectStoreCreateCmd.Flags().IntVarP(&maxObjects, "max-objects", "m", 1000, "Maximum number of objects in the bucket")
+	objectStoreCreateCmd.Flags().BoolVarP(&waitOS, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the Object Store to be ready")
 
 	//Flags for update cmd
 	objectStoreUpdateCmd.Flags().IntVarP(&bucketSize, "size", "s", 500, "Size of the bucket")
@@ -53,5 +54,4 @@ func init() {
 	//Credential commands
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialSecretCmd)
 	objectStoreCredentialSecretCmd.Flags().StringVarP(&accessKey, "access-key", "a", "", "Access Key")
-	objectStoreCredentialSecretCmd.Flags().StringVarP(&name, "name", "n", "", "Name of the objectstore")
 }

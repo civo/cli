@@ -27,11 +27,16 @@ var objectStoreUpdateCmd = &cobra.Command{
 
 		findObjectStore, err := client.FindObjectStore(args[0])
 		if err != nil {
-			utility.Error("objectStore %s", err)
+			utility.Error("Object Store %s", err)
 			os.Exit(1)
 		}
 
-		objectStore, err := client.UpdateObjectStore(findObjectStore.ID, &civogo.UpdateObjectStorageRequest{
+		if bucketSize == 0 && maxObjects == 0 {
+			utility.Error("You must specify either a size to update your Object Store or max objects to update your Object Store")
+			os.Exit(1)
+		}
+
+		objectStore, err := client.UpdateObjectStore(findObjectStore.ID, &civogo.UpdateObjectStoreRequest{
 			MaxSizeGB:  bucketSize,
 			MaxObjects: maxObjects,
 		})
@@ -49,13 +54,13 @@ var objectStoreUpdateCmd = &cobra.Command{
 			ow.WriteCustomOutput(outputFields)
 		default:
 			if bucketSize != 0 && maxObjects == 1000 {
-				fmt.Printf("The objectStore with ID %s was updated to size: %sGB\n", utility.Green(objectStore.ID), utility.Green(strconv.Itoa(bucketSize)))
+				fmt.Printf("The Object Store with ID %s was updated to size: %s GB\n", utility.Green(objectStore.ID), strconv.Itoa(bucketSize))
 				os.Exit(0)
 			} else if maxObjects != 0 && bucketSize == 500 {
-				fmt.Printf("The objectStore with ID %s was updated to max objects: %s\n", utility.Green(objectStore.ID), utility.Green(strconv.Itoa(maxObjects)))
+				fmt.Printf("The Object Store with ID %s was updated to max objects: %s\n", utility.Green(objectStore.ID), strconv.Itoa(maxObjects))
 				os.Exit(0)
 			}
-			fmt.Printf("The objectStore with ID %s was updated to size: %sGB, objects: %s\n", utility.Green(objectStore.ID), utility.Green(strconv.Itoa(bucketSize)), utility.Green(strconv.Itoa(maxObjects)))
+			fmt.Printf("The Object Store with ID %s was updated to size: %s GB, objects: %s\n", utility.Green(objectStore.ID), strconv.Itoa(bucketSize), strconv.Itoa(maxObjects))
 		}
 	},
 }
