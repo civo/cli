@@ -39,6 +39,7 @@ var objectStoreUpdateCmd = &cobra.Command{
 		objectStore, err := client.UpdateObjectStore(findObjectStore.ID, &civogo.UpdateObjectStoreRequest{
 			MaxSizeGB:  bucketSize,
 			MaxObjects: maxObjects,
+			Region:     client.Region,
 		})
 		if err != nil {
 			utility.Error("%s", err)

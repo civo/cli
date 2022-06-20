@@ -56,5 +56,5 @@ func init() {
 	objectStoreCredentialSecretCmd.Flags().StringVarP(&accessKey, "access-key", "a", "", "Access Key")
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialExportCmd)
 	objectStoreCredentialExportCmd.Flags().StringVarP(&accessKey, "access-key", "a", "", "Access Key")
-	objectStoreCredentialExportCmd.Flags().StringVarP(&format, "format", "", "", "Format of the output (We support env and s3cfg formats.)")
+	objectStoreCredentialExportCmd.Flags().StringVarP(&format, "format", "", "env", "Format of the output (We support env and s3cfg formats.)")
 }

@@ -58,13 +58,13 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
-		}
-
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+
+		if regionSet != "" {
+			client.Region = regionSet
 		}
 
 		if !strings.Contains(targetNodesSize, ".kube.") {

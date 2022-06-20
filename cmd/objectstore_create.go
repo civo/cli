@@ -24,10 +24,16 @@ var objectStoreCreateCmd = &cobra.Command{
 	Long:    "Bucket size should be in Gigabytes (GB) and must be a multiple of 500, starting from 500.\n An Object Store name will be generated from the prefix provided.\n",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+
+		if regionSet != "" {
+			client.Region = regionSet
 		}
 
 		if bucketSize == 0 {
@@ -37,6 +43,7 @@ var objectStoreCreateCmd = &cobra.Command{
 			Name:       args[0],
 			MaxSizeGB:  bucketSize,
 			MaxObjects: maxObjects,
+			Region:     client.Region,
 		})
 		if err != nil {
 			utility.Error("%s", err)

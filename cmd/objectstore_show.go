@@ -38,7 +38,7 @@ var objectStoreShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("size", objectStore.MaxSize, "Size")
 		ow.AppendDataWithLabel("max_objects", strconv.Itoa(objectStore.MaxObjects), "Max Objects")
 		ow.AppendDataWithLabel("objectstore_endpoint", objectStore.ObjectStoreEndpoint, "Object Store Endpoint")
-		ow.AppendDataWithLabel("s3_region", "default", client.Region)
+		ow.AppendDataWithLabel("region", client.Region, "Region")
 		ow.AppendDataWithLabel("accesskey", objectStore.AccessKeyID, "Access Key")
 		ow.AppendDataWithLabel("status", objectStore.Status, "Status")
 
