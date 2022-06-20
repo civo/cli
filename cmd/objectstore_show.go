@@ -15,6 +15,7 @@ var objectStoreShowCmd = &cobra.Command{
 	Aliases: []string{"get", "info"},
 	Example: `civo objectstore show OBJECTSTORE_NAME`,
 	Short:   "Prints information about an Object Store",
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
