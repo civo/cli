@@ -40,7 +40,7 @@ var objectStoreCreateCmd = &cobra.Command{
 			bucketSize = 500
 		}
 		store, err := client.NewObjectStore(&civogo.CreateObjectStoreRequest{
-			Name:       args[0],
+			Prefix:     args[0],
 			MaxSizeGB:  bucketSize,
 			MaxObjects: maxObjects,
 			Region:     client.Region,
