@@ -60,9 +60,10 @@ var objectStoreCredentialExportCmd = &cobra.Command{
 			fmt.Printf("# Tip: You can redirect output with (>> ~/.s3cfg) to automatically configure s3cmd\n")
 			fmt.Printf("[default]\n")
 			fmt.Printf("access_key = %s\n", objectStore.AccessKeyID)
-			fmt.Printf("access_token = %s\n", objectStore.SecretAccessKey)
+			fmt.Printf("secret_key = %s\n", objectStore.SecretAccessKey)
 			fmt.Printf("bucket_location = %s\n", client.Region)
 			fmt.Printf("host_base = objectstorage.%s.civo.io\n", strings.ToLower(client.Region))
+			fmt.Printf("signature_v2 = True")
 		} else {
 			utility.Error("You must provide a valid format to export to. Supported formats are env and s3cfg. See --help for more information.")
 			os.Exit(1)

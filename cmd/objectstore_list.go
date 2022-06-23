@@ -30,7 +30,7 @@ var objectStoreListCmd = &cobra.Command{
 		for _, objectStore := range objectStores {
 			ow.StartLine()
 			ow.AppendDataWithLabel("id", objectStore.ID[:6], "ID")
-			ow.AppendDataWithLabel("generated_name", objectStore.GeneratedName, "Generated Name")
+			ow.AppendDataWithLabel("name", objectStore.Name, "Name")
 			ow.AppendDataWithLabel("size", objectStore.MaxSize, "Size")
 			ow.AppendDataWithLabel("objectstore_endpoint", objectStore.ObjectStoreEndpoint, "Object Store Endpoint")
 			ow.AppendDataWithLabel("status", objectStore.Status, "Status")

@@ -12,10 +12,10 @@ import (
 )
 
 var objectStoreUpdateCmd = &cobra.Command{
-	Use:     "update",
-	Aliases: []string{"edit", "modify", "change", "resize"},
+	Use:     "resize",
+	Aliases: []string{"edit", "modify", "change", "update"},
 	Short:   "Update an Object Store",
-	Example: "civo objectstore update OBJECTSTORE_NAME --size SIZE --max-objects MAX_OBJECTS",
+	Example: "civo objectstore resize OBJECTSTORE_NAME --size SIZE",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
