@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -36,7 +37,7 @@ var objectStoreShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("name", objectStore.Name, "Name")
 		ow.AppendDataWithLabel("generated_name", objectStore.GeneratedName, "Generated Name")
 		ow.AppendDataWithLabel("size", objectStore.MaxSize, "Size")
-		ow.AppendDataWithLabel("objectstore_endpoint", objectStore.ObjectStoreEndpoint, "Object Store Endpoint")
+		ow.AppendDataWithLabel("objectstore_endpoint", fmt.Sprintf("objectstorage.%s.civo.io", strings.ToLower(regionSet)), "Object Store Endpoint")
 		ow.AppendDataWithLabel("region", client.Region, "Region")
 		ow.AppendDataWithLabel("accesskey", objectStore.AccessKeyID, "Access Key")
 		ow.AppendDataWithLabel("status", objectStore.Status, "Status")
