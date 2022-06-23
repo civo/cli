@@ -44,12 +44,10 @@ func init() {
 
 	//Flags for create cmd
 	objectStoreCreateCmd.Flags().IntVarP(&bucketSize, "size", "s", 500, "Size of the bucket")
-	objectStoreCreateCmd.Flags().IntVarP(&maxObjects, "max-objects", "m", 1000, "Maximum number of objects in the bucket")
 	objectStoreCreateCmd.Flags().BoolVarP(&waitOS, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the Object Store to be ready")
 
 	//Flags for update cmd
 	objectStoreUpdateCmd.Flags().IntVarP(&bucketSize, "size", "s", 500, "Size of the bucket")
-	objectStoreUpdateCmd.Flags().IntVarP(&maxObjects, "max-objects", "m", 1000, "Maximum number of objects in the bucket")
 
 	//Credential commands
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialSecretCmd)

@@ -31,8 +31,8 @@ var objectStoreUpdateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if bucketSize == 0 && maxObjects == 0 {
-			utility.Error("You must specify either a size to update your Object Store or max objects to update your Object Store")
+		if bucketSize == 0 {
+			utility.Error("You must specify size to update your Object Store")
 			os.Exit(1)
 		}
 
@@ -52,14 +52,10 @@ var objectStoreUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(outputFields)
 		default:
-			if bucketSize != 0 && maxObjects == 1000 {
+			if bucketSize != 0 {
 				fmt.Printf("The Object Store with ID %s was updated to size: %s GB\n", utility.Green(objectStore.ID), strconv.Itoa(bucketSize))
 				os.Exit(0)
-			} else if maxObjects != 0 && bucketSize == 500 {
-				fmt.Printf("The Object Store with ID %s was updated to max objects: %s\n", utility.Green(objectStore.ID), strconv.Itoa(maxObjects))
-				os.Exit(0)
 			}
-			fmt.Printf("The Object Store with ID %s was updated to size: %s GB, objects: %s\n", utility.Green(objectStore.ID), strconv.Itoa(bucketSize), strconv.Itoa(maxObjects))
 		}
 	},
 }

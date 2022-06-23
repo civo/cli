@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -13,15 +12,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var maxObjects, bucketSize int
+var bucketSize int
 var waitOS bool
 
 var objectStoreCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
-	Example: "civo objectstore create OBJECTSTORE_NAME_PREFIX --size SIZE",
+	Example: "civo objectstore create OBJECTSTORE_NAME --size SIZE",
 	Short:   "Create a new Object Store",
-	Long:    "Bucket size should be in Gigabytes (GB) and must be a multiple of 500, starting from 500.\n An Object Store name will be generated from the prefix provided.\n",
+	Long:    "Bucket size should be in Gigabytes (GB) and must be a multiple of 500, starting from 500.\n",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -40,7 +39,7 @@ var objectStoreCreateCmd = &cobra.Command{
 			bucketSize = 500
 		}
 		store, err := client.NewObjectStore(&civogo.CreateObjectStoreRequest{
-			Prefix:    args[0],
+			Name:      args[0],
 			MaxSizeGB: bucketSize,
 			Region:    client.Region,
 		})
@@ -54,7 +53,7 @@ var objectStoreCreateCmd = &cobra.Command{
 			startTime := utility.StartTime()
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Prefix = fmt.Sprintf("Creating an Object Store with maxSize %s, maxObjects %s called %s... ", store.MaxSize, strconv.Itoa(store.MaxObjects), store.Name)
+			s.Prefix = fmt.Sprintf("Creating an Object Store with maxSize %s, called %s... ", store.MaxSize, store.Name)
 			s.Start()
 
 			for stillCreating {
