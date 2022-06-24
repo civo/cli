@@ -19,10 +19,13 @@ var objectStoreUpdateCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
-
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+
+		if regionSet != "" {
+			client.Region = regionSet
 		}
 
 		findObjectStore, err := client.FindObjectStore(args[0])
@@ -38,6 +41,7 @@ var objectStoreUpdateCmd = &cobra.Command{
 
 		objectStore, err := client.UpdateObjectStore(findObjectStore.ID, &civogo.UpdateObjectStoreRequest{
 			MaxSizeGB: bucketSize,
+			Region:    client.Region,
 		})
 		if err != nil {
 			utility.Error("%s", err)
