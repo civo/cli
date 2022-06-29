@@ -3,12 +3,11 @@ package cmd
 import (
 	"os"
 
+	"github.com/civo/cli/cmd/ip"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/spf13/cobra"
 )
-
-var outputFields, outputFormat, regionSet string
-var defaultYes, prettySet bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -34,11 +33,13 @@ func init() {
 	cobra.OnInitialize(config.ReadConfig)
 
 	rootCmd.PersistentFlags().StringVarP(&config.Filename, "config", "", "", "config file (default is $HOME/.civo.json)")
-	rootCmd.PersistentFlags().StringVarP(&outputFields, "fields", "f", "", "output fields for custom format output (use -h to determine fields)")
-	rootCmd.PersistentFlags().StringVarP(&outputFormat, "output", "o", "human", "output format (json/human/custom)")
-	rootCmd.PersistentFlags().BoolVarP(&defaultYes, "yes", "y", false, "Automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively")
-	rootCmd.PersistentFlags().StringVarP(&regionSet, "region", "", "", "Choose the region to connect to, if you use this option it will use it over the default region")
-	rootCmd.PersistentFlags().BoolVarP(&prettySet, "pretty", "", false, "Print pretty the json output")
+	rootCmd.PersistentFlags().StringVarP(&common.OutputFields, "fields", "f", "", "output fields for custom format output (use -h to determine fields)")
+	rootCmd.PersistentFlags().StringVarP(&common.OutputFormat, "output", "o", "human", "output format (json/human/custom)")
+	rootCmd.PersistentFlags().BoolVarP(&common.DefaultYes, "yes", "y", false, "Automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively")
+	rootCmd.PersistentFlags().StringVarP(&common.RegionSet, "region", "", "", "Choose the region to connect to, if you use this option it will use it over the default region")
+	rootCmd.PersistentFlags().BoolVarP(&common.PrettySet, "pretty", "", false, "Print pretty the json output")
+
+	rootCmd.AddCommand(ip.IPCmd)
 
 	// Add warning if the region is empty, for the user with the old config
 	config.ReadConfig()

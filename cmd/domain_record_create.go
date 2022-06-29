@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -72,11 +73,11 @@ var domainRecordCreateCmd = &cobra.Command{
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"id": domain.ID, "name": domain.Name})
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteSingleObjectJSON(prettySet)
+			ow.WriteSingleObjectJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			fmt.Printf("Created %s record %s for %s with a TTL of %s seconds and with a priority of %s with ID %s", utility.Green(string(record.Type)), utility.Green(record.Name), utility.Green(domain.Name), utility.Green(strconv.Itoa(record.TTL)), utility.Green(strconv.Itoa(record.Priority)), utility.Green(record.ID))
 		}

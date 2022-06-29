@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -30,8 +31,8 @@ civo instance show ID/HOSTNAME -o custom -f "PublicIP"`,
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -44,7 +45,7 @@ civo instance show ID/HOSTNAME -o custom -f "PublicIP"`,
 			os.Exit(1)
 		}
 
-		if outputFormat == "human" {
+		if common.OutputFormat == "human" {
 			fmt.Printf("The instance %s (%s) has the public IP %s\n", utility.Green(instance.Hostname), instance.ID, utility.Green(instance.PublicIP))
 		} else {
 			ow := utility.NewOutputWriter()
@@ -52,10 +53,10 @@ civo instance show ID/HOSTNAME -o custom -f "PublicIP"`,
 			ow.AppendDataWithLabel("id", instance.ID, "ID")
 			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
 			ow.AppendDataWithLabel("public_ip", instance.PublicIP, "Public ID")
-			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON(prettySet)
+			if common.OutputFormat == "json" {
+				ow.WriteSingleObjectJSON(common.PrettySet)
 			} else {
-				ow.WriteCustomOutput(outputFields)
+				ow.WriteCustomOutput(common.OutputFields)
 			}
 		}
 	},

@@ -8,6 +8,7 @@ import (
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -54,7 +55,7 @@ var sshKeyRemoveCmd = &cobra.Command{
 			sshKeyNameList = append(sshKeyNameList, v.Name)
 		}
 
-		if utility.UserConfirmedDeletion(fmt.Sprintf("ssh %s", pluralize.Pluralize(len(sshList), "key")), defaultYes, strings.Join(sshKeyNameList, ", ")) {
+		if utility.UserConfirmedDeletion(fmt.Sprintf("ssh %s", pluralize.Pluralize(len(sshList), "key")), common.DefaultYes, strings.Join(sshKeyNameList, ", ")) {
 
 			for _, v := range sshList {
 				_, err = client.DeleteSSHKey(v.ID)
@@ -72,15 +73,15 @@ var sshKeyRemoveCmd = &cobra.Command{
 				ow.AppendDataWithLabel("name", v.Name, "Name")
 			}
 
-			switch outputFormat {
+			switch common.OutputFormat {
 			case "json":
 				if len(sshList) == 1 {
-					ow.WriteSingleObjectJSON(prettySet)
+					ow.WriteSingleObjectJSON(common.PrettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON(prettySet)
+					ow.WriteMultipleObjectsJSON(common.PrettySet)
 				}
 			case "custom":
-				ow.WriteCustomOutput(outputFields)
+				ow.WriteCustomOutput(common.OutputFields)
 			default:
 				fmt.Printf("The ssh %s (%s) has been deleted\n", pluralize.Pluralize(len(sshList), "key"), utility.Green(strings.Join(sshKeyNameList, ", ")))
 			}

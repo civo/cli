@@ -9,6 +9,7 @@ import (
 
 	"github.com/briandowns/spinner"
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -47,7 +48,7 @@ var kubernetesCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
-		check, region, err := utility.CheckAvailability("kubernetes", regionSet)
+		check, region, err := utility.CheckAvailability("kubernetes", common.RegionSet)
 		if err != nil {
 			utility.Error("Error checking availability %s", err)
 			os.Exit(1)
@@ -59,8 +60,8 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		if err != nil {
@@ -190,7 +191,7 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 
 		if !mergeConfigKubernetes && saveConfigKubernetes {
-			if utility.UserConfirmedOverwrite("kubernetes config", defaultYes) {
+			if utility.UserConfirmedOverwrite("kubernetes config", common.DefaultYes) {
 				kubernetesCluster, err = client.NewKubernetesClusters(configKubernetes)
 				if err != nil {
 					utility.Error("%s", err)
@@ -252,11 +253,11 @@ var kubernetesCreateCmd = &cobra.Command{
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"id": kubernetesCluster.ID, "name": kubernetesCluster.Name})
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteSingleObjectJSON(prettySet)
+			ow.WriteSingleObjectJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			if executionTime != "" {
 				fmt.Printf("The cluster %s (%s) has been created in %s\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID, executionTime)
@@ -268,6 +269,7 @@ var kubernetesCreateCmd = &cobra.Command{
 	},
 }
 
+// InstallApps returns the list of applications to install
 func InstallApps(defaultApps []string, apps, removeApps string) []string {
 	var iApps []string
 	if apps != "" {

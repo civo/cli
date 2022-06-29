@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -34,8 +35,8 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		kubernetesClusters, err := client.ListKubernetesClusters()
@@ -55,17 +56,17 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("pools", strconv.Itoa(len(cluster.Pools)), "Pools")
 			ow.AppendDataWithLabel("status", utility.ColorStatus(cluster.Status), "Status")
 
-			if outputFormat == "json" || outputFormat == "custom" {
+			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 				ow.AppendDataWithLabel("status", cluster.Status, "Status")
 			}
 
 		}
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON(prettySet)
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteTable()
 		}

@@ -10,6 +10,7 @@ import (
 	"github.com/briandowns/spinner"
 
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -50,7 +51,7 @@ If you wish to use a custom format, the available fields are:
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
-		check, region, err := utility.CheckAvailability("iaas", regionSet)
+		check, region, err := utility.CheckAvailability("iaas", common.RegionSet)
 		if err != nil {
 			utility.Error("Error checking availability %s", err)
 			os.Exit(1)
@@ -62,8 +63,8 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -287,7 +288,7 @@ If you wish to use a custom format, the available fields are:
 			}
 		}
 
-		if outputFormat == "human" {
+		if common.OutputFormat == "human" {
 			if executionTime != "" {
 				fmt.Printf("The instance %s %s has been created in %s\n", utility.Green(instance.Hostname), publicIP, executionTime)
 			} else {
@@ -314,10 +315,10 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("reverse_dns", resp.ReverseDNS, "Reverse  DNS")
 			ow.AppendDataWithLabel("private_ip", resp.PrivateIP, "Private IP")
 
-			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON(prettySet)
+			if common.OutputFormat == "json" {
+				ow.WriteSingleObjectJSON(common.PrettySet)
 			} else {
-				ow.WriteCustomOutput(outputFields)
+				ow.WriteCustomOutput(common.OutputFields)
 			}
 		}
 	},

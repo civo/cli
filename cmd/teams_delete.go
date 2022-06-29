@@ -8,6 +8,7 @@ import (
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -53,7 +54,7 @@ var teamsDeleteCmd = &cobra.Command{
 			teamNameList = append(teamNameList, v.Name)
 		}
 
-		if utility.UserConfirmedDeletion(fmt.Sprintf("team %s", pluralize.Pluralize(len(teamList), "")), defaultYes, strings.Join(teamNameList, ", ")) {
+		if utility.UserConfirmedDeletion(fmt.Sprintf("team %s", pluralize.Pluralize(len(teamList), "")), common.DefaultYes, strings.Join(teamNameList, ", ")) {
 
 			for _, v := range teamList {
 				_, err = client.DeleteTeam(v.ID)
@@ -71,15 +72,15 @@ var teamsDeleteCmd = &cobra.Command{
 				ow.AppendDataWithLabel("name", v.Name, "Name")
 			}
 
-			switch outputFormat {
+			switch common.OutputFormat {
 			case "json":
 				if len(teamList) == 1 {
-					ow.WriteSingleObjectJSON(prettySet)
+					ow.WriteSingleObjectJSON(common.PrettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON(prettySet)
+					ow.WriteMultipleObjectsJSON(common.PrettySet)
 				}
 			case "custom":
-				ow.WriteCustomOutput(outputFields)
+				ow.WriteCustomOutput(common.OutputFields)
 			default:
 				fmt.Printf("The team %s(%s) has been deleted\n", pluralize.Pluralize(len(teamList), ""), utility.Green(strings.Join(teamNameList, ", ")))
 			}

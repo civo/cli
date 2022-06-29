@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -84,11 +85,11 @@ Example: civo domain record show RECORD_ID -o custom -f "ID: Name"`,
 		ow.AppendDataWithLabel("created_at", record.CreatedAt.Format(time.RFC1123), "Created At")
 		ow.AppendDataWithLabel("updated_at", record.UpdatedAt.Format(time.RFC1123), "Updated At")
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON(prettySet)
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteKeyValues()
 		}

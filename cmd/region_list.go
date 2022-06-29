@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -42,7 +43,7 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 			ow.AppendDataWithLabel("country", region.CountryName, "Country")
 
 			defaultLabel := ""
-			if outputFormat == "json" || outputFormat == "custom" {
+			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 				defaultLabel = utility.BoolToYesNo(region.Default)
 			} else {
 				if config.Current.Meta.DefaultRegion != "" {
@@ -59,11 +60,11 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 			ow.AppendDataWithLabel("current", defaultLabel, "Current")
 		}
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON(prettySet)
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteTable()
 		}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -27,8 +28,8 @@ Example: civo instance console ID/NAME`,
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -47,7 +48,7 @@ Example: civo instance console ID/NAME`,
 			os.Exit(1)
 		}
 
-		if outputFormat == "human" {
+		if common.OutputFormat == "human" {
 			fmt.Printf("The instance %s (%s) has a console at %s\n", utility.Green(instance.Hostname), instance.ID,
 				utility.Green(url))
 		} else {
@@ -56,10 +57,10 @@ Example: civo instance console ID/NAME`,
 			ow.AppendDataWithLabel("id", instance.ID, "ID")
 			ow.AppendDataWithLabel("url", url, "Console URL")
 			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
-			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON(prettySet)
+			if common.OutputFormat == "json" {
+				ow.WriteSingleObjectJSON(common.PrettySet)
 			} else {
-				ow.WriteCustomOutput(outputFields)
+				ow.WriteCustomOutput(common.OutputFields)
 			}
 		}
 	},

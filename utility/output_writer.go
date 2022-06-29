@@ -37,7 +37,7 @@ func (a byLen) Swap(i, j int) {
 //   # Then one of:
 //   ow.WriteSingleObjectJSON()
 //   ow.WriteMultipleObjectsJSON()
-//   ow.WriteCustomOutput(outputFields)
+//   ow.WriteCustomOutput(common.OutputFields)
 //   ow.WriteKeyValues()
 //   ow.WriteTable()
 type OutputWriter struct {

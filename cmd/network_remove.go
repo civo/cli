@@ -8,6 +8,7 @@ import (
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -24,8 +25,8 @@ var networkRemoveCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -72,7 +73,7 @@ var networkRemoveCmd = &cobra.Command{
 			networkNameList = append(networkNameList, v.Name)
 		}
 
-		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(networkList), "network"), defaultYes, strings.Join(networkNameList, ", ")) {
+		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(networkList), "network"), common.DefaultYes, strings.Join(networkNameList, ", ")) {
 
 			for _, v := range networkList {
 				_, err = client.DeleteNetwork(v.ID)
@@ -93,15 +94,15 @@ var networkRemoveCmd = &cobra.Command{
 				ow.AppendDataWithLabel("label", v.Name, "Name")
 			}
 
-			switch outputFormat {
+			switch common.OutputFormat {
 			case "json":
 				if len(networkList) == 1 {
-					ow.WriteSingleObjectJSON(prettySet)
+					ow.WriteSingleObjectJSON(common.PrettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON(prettySet)
+					ow.WriteMultipleObjectsJSON(common.PrettySet)
 				}
 			case "custom":
-				ow.WriteCustomOutput(outputFields)
+				ow.WriteCustomOutput(common.OutputFields)
 			default:
 				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(networkList), "network"), utility.Green(strings.Join(networkNameList, ", ")))
 			}
