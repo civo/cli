@@ -36,7 +36,7 @@ var objectStoreShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("id", objectStore.ID, "ID")
 		ow.AppendDataWithLabel("name", objectStore.Name, "Name")
 		ow.AppendDataWithLabel("size", objectStore.MaxSize, "Size")
-		ow.AppendDataWithLabel("objectstore_endpoint", fmt.Sprintf("objectstorage.%s.civo.io", strings.ToLower(client.Region)), "Object Store Endpoint")
+		ow.AppendDataWithLabel("objectstore_endpoint", fmt.Sprintf("objectstore.%s.civo.com", strings.ToLower(client.Region)), "Object Store Endpoint")
 		ow.AppendDataWithLabel("region", client.Region, "Region")
 		ow.AppendDataWithLabel("accesskey", objectStore.AccessKeyID, "Access Key")
 		ow.AppendDataWithLabel("status", objectStore.Status, "Status")
