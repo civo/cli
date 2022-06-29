@@ -29,7 +29,7 @@ var objectStoreListCmd = &cobra.Command{
 		}
 
 		ow := utility.NewOutputWriter()
-		for _, objectStore := range objectStores {
+		for _, objectStore := range objectStores.Items {
 			ow.StartLine()
 			ow.AppendDataWithLabel("id", objectStore.ID[:6], "ID")
 			ow.AppendDataWithLabel("name", objectStore.Name, "Name")
