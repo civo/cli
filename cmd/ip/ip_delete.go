@@ -48,7 +48,7 @@ Please make sure to delete your domains aren't pointed to it before deleting it.
 			}
 		}
 
-		if utility.UserConfirmedDeletion("ip", common.DefaultYes, ip.Name) {
+		if utility.UserConfirmedDeletion("IP", common.DefaultYes, ip.Name) {
 			_, err = client.DeleteIP(ip.ID)
 			if err != nil {
 				utility.Error("%s", err)

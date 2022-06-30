@@ -16,7 +16,7 @@ var ipCreateCmd = &cobra.Command{
 	Aliases: []string{"new", "add", "allocate"},
 	Example: `civo ip reserve 
 civo ip reserve -n "server-1"`,
-	Short: "Create a new ip",
+	Short: "Reserve a new ip",
 	Long:  `You can name your ip with the --name flag.`,
 	Args:  cobra.MinimumNArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {

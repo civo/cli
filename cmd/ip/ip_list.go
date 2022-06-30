@@ -41,8 +41,11 @@ var ipListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("id", ip.ID, "ID")
 			ow.AppendDataWithLabel("name", ip.Name, "Name")
 			ow.AppendDataWithLabel("address", ip.IP, "Address")
-			ow.AppendDataWithLabel("type", ip.AssignedTo.Type, "Type")
-			ow.AppendDataWithLabel("assigned_to", fmt.Sprintf("%s (%s)", ip.AssignedTo.Name, ip.AssignedTo.Type), "Assigned To(type)")
+			if ip.AssignedTo.ID != "" {
+				ow.AppendDataWithLabel("assigned_to", fmt.Sprintf("%s (%s)", ip.AssignedTo.Name, ip.AssignedTo.Type), "Assigned To(type)")
+			} else {
+				ow.AppendDataWithLabel("assigned_to", "No resource", "Assigned To(type)")
+			}
 		}
 
 		switch common.OutputFormat {
