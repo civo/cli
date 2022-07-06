@@ -46,7 +46,7 @@ civo ip assign <ip id> --instance <instance ID>`,
 			}
 		}
 
-		instance, err := client.FindInstance(args[1])
+		instance, err := client.FindInstance(instance)
 		if err != nil {
 			if errors.Is(err, civogo.ZeroMatchesError) {
 				utility.Error("sorry there is no %s instance in your account", utility.Red(args[0]))
@@ -65,6 +65,7 @@ civo ip assign <ip id> --instance <instance ID>`,
 		})
 		if err != nil {
 			utility.Error("%s", err)
+			os.Exit(1)
 		}
 
 		ow := utility.NewOutputWriter()
