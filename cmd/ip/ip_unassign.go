@@ -15,8 +15,8 @@ import (
 var ipUnassignCmd = &cobra.Command{
 	Use:     "unassign",
 	Aliases: []string{"detach"},
-	Example: `civo ip unassign  127.0.0.1 
-civo ip Unassign server-1 
+	Example: `civo ip unassign  127.0.0.1
+civo ip Unassign server-1
 civo ip Unassign <ip id>`,
 
 	Short: "Unassign IP address to an instance",
@@ -43,12 +43,14 @@ civo ip Unassign <ip id>`,
 				os.Exit(1)
 			} else {
 				utility.Error("%s", err)
+				os.Exit(1)
 			}
 		}
 		if utility.UserConfirmedUnassign("ip", common.DefaultYes, ip.Name) {
 			_, err = client.UnassignIP(ip.ID)
 			if err != nil {
 				utility.Error("%s", err)
+				os.Exit(1)
 			}
 
 			ow := utility.NewOutputWriter()

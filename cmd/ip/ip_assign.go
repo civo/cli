@@ -59,10 +59,7 @@ civo ip assign <ip id> --instance <instance ID>`,
 			}
 		}
 
-		_, err = client.AssignIP(ip.ID, &civogo.AssignedTo{
-			Type: "instance",
-			ID:   instance.ID,
-		})
+		_, err = client.AssignIP(ip.ID, instance.ID, "instance")
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
