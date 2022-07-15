@@ -59,7 +59,7 @@ civo ip assign <ip id> --instance <instance ID>`,
 			}
 		}
 
-		_, err = client.AssignIP(ip.ID, instance.ID, "instance")
+		_, err = client.AssignIP(ip.ID, instance.ID, "instance", client.Region)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)

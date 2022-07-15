@@ -47,7 +47,8 @@ civo ip rename <ip id> server-2 `,
 
 		rename := args[1]
 		RenameReq := civogo.UpdateIPRequest{
-			Name: rename,
+			Name:   rename,
+			Region: client.Region,
 		}
 
 		ip, err = client.UpdateIP(ip.ID, &RenameReq)

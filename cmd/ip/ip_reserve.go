@@ -31,7 +31,9 @@ civo ip reserve -n "server-1"`,
 			os.Exit(1)
 		}
 
-		createReq := civogo.CreateIPRequest{}
+		createReq := civogo.CreateIPRequest{
+			Region: client.Region,
+		}
 		if name != "" {
 			createReq.Name = name
 		}

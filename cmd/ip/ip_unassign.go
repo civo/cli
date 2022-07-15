@@ -47,7 +47,7 @@ civo ip Unassign <ip id>`,
 			}
 		}
 		if utility.UserConfirmedUnassign("ip", common.DefaultYes, ip.Name) {
-			_, err = client.UnassignIP(ip.ID)
+			_, err = client.UnassignIP(ip.ID, client.Region)
 			if err != nil {
 				utility.Error("%s", err)
 				os.Exit(1)
