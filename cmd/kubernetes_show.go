@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -45,8 +46,8 @@ If you wish to use a custom format, the available fields are:
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -108,7 +109,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("InstalledApplications", strings.Join(appsList, ", "), "Installed Applications")
 		}
 
-		if outputFormat == "json" || outputFormat == "custom" {
+		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 			//ow.AppendData("CloudConfig", template.CloudConfig)
 
 			if kubernetesCluster.UpgradeAvailableTo != "" {
@@ -119,10 +120,10 @@ If you wish to use a custom format, the available fields are:
 
 			ow.AppendDataWithLabel("UpgradeAvailableTo", kubernetesCluster.UpgradeAvailableTo, "Upgrade Available")
 
-			if outputFormat == "json" {
-				ow.ToJSON(kubernetesCluster, prettySet)
+			if common.OutputFormat == "json" {
+				ow.ToJSON(kubernetesCluster, common.PrettySet)
 			} else {
-				ow.WriteCustomOutput(outputFields)
+				ow.WriteCustomOutput(common.OutputFields)
 			}
 		} else {
 			ow.WriteKeyValues()

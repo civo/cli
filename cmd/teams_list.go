@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -31,11 +32,11 @@ var teamsListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("id", team.ID, "ID")
 			ow.AppendDataWithLabel("name", team.Name, "Name")
 		}
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON(prettySet)
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteTable()
 		}

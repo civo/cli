@@ -1,7 +1,7 @@
 civo
 dest/civo_*
 cli
-dist/
+dest/
 .idea
 .local.yml
 temporal*

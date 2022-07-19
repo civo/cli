@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -38,11 +39,11 @@ var teamsRenameCmd = &cobra.Command{
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"id": team.ID, "name": team.Name})
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteSingleObjectJSON(prettySet)
+			ow.WriteSingleObjectJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			fmt.Printf("The team with ID %s was renamed to %s\n", utility.Green(team.ID), utility.Green(team.Name))
 		}

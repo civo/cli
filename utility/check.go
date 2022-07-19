@@ -94,6 +94,7 @@ func CheckAPPName(appName string) bool {
 	return false
 }
 
+// ListDefaultApps is a function to list the default apps in the marketplace
 func ListDefaultApps() ([]string, error) {
 	client, err := config.CivoAPIClient()
 	if err != nil {
@@ -172,6 +173,7 @@ func ValidNameLength(name string) bool {
 	return len(name) > 63
 }
 
+// CanManageVolume is a function to check if a cluster can manage the volume
 func CanManageVolume(volume *civogo.Volume) bool {
 	return volume.ClusterID == ""
 }

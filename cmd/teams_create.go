@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -37,11 +38,11 @@ var teamsCreateCmd = &cobra.Command{
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"id": team.ID, "name": team.Name})
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteSingleObjectJSON(prettySet)
+			ow.WriteSingleObjectJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			fmt.Printf("Created a team called %s with team ID %s\n", utility.Green(team.Name), utility.Green(team.ID))
 		}

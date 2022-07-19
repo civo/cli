@@ -7,6 +7,7 @@ import (
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -56,7 +57,7 @@ var domainRemoveCmd = &cobra.Command{
 			domainNameList = append(domainNameList, v.Name)
 		}
 
-		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(domainList), "domain"), defaultYes, strings.Join(domainNameList, ", ")) {
+		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(domainList), "domain"), common.DefaultYes, strings.Join(domainNameList, ", ")) {
 
 			for _, v := range domainList {
 				domain, _ := client.FindDNSDomain(v.ID)
@@ -75,15 +76,15 @@ var domainRemoveCmd = &cobra.Command{
 				ow.AppendDataWithLabel("domain", v.Name, "Domain")
 			}
 
-			switch outputFormat {
+			switch common.OutputFormat {
 			case "json":
 				if len(domainList) == 1 {
-					ow.WriteSingleObjectJSON(prettySet)
+					ow.WriteSingleObjectJSON(common.PrettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON(prettySet)
+					ow.WriteMultipleObjectsJSON(common.PrettySet)
 				}
 			case "custom":
-				ow.WriteCustomOutput(outputFields)
+				ow.WriteCustomOutput(common.OutputFields)
 			default:
 				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(domainList), "domain"), utility.Green(strings.Join(domainNameList, ", ")))
 			}

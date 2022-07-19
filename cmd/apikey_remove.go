@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -22,7 +23,7 @@ var apikeyRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if utility.UserConfirmedDeletion("api key", defaultYes, args[0]) {
+		if utility.UserConfirmedDeletion("api key", common.DefaultYes, args[0]) {
 			numKeys := len(config.Current.APIKeys)
 			delete(config.Current.APIKeys, index)
 			config.SaveConfig()

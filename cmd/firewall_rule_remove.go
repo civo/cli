@@ -7,6 +7,7 @@ import (
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -26,8 +27,8 @@ var firewallRuleRemoveCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -73,7 +74,7 @@ var firewallRuleRemoveCmd = &cobra.Command{
 			firewallRuleNameList = append(firewallRuleNameList, v.Name)
 		}
 
-		if utility.UserConfirmedDeletion(fmt.Sprintf("firewall %s", pluralize.Pluralize(len(firewallRuleList), "rule")), defaultYes, strings.Join(firewallRuleNameList, ", ")) {
+		if utility.UserConfirmedDeletion(fmt.Sprintf("firewall %s", pluralize.Pluralize(len(firewallRuleList), "rule")), common.DefaultYes, strings.Join(firewallRuleNameList, ", ")) {
 
 			for _, v := range firewallRuleList {
 				_, err = client.DeleteFirewallRule(firewall.ID, v.ID)
@@ -91,15 +92,15 @@ var firewallRuleRemoveCmd = &cobra.Command{
 				ow.AppendDataWithLabel("label", v.Name, "Label")
 			}
 
-			switch outputFormat {
+			switch common.OutputFormat {
 			case "json":
 				if len(firewallRuleList) == 1 {
-					ow.WriteSingleObjectJSON(prettySet)
+					ow.WriteSingleObjectJSON(common.PrettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON(prettySet)
+					ow.WriteMultipleObjectsJSON(common.PrettySet)
 				}
 			case "custom":
-				ow.WriteCustomOutput(outputFields)
+				ow.WriteCustomOutput(common.OutputFields)
 			default:
 				fmt.Printf("The firewall %s (%s) has been deleted\n", pluralize.Pluralize(len(firewallRuleList), "rule"), strings.Join(firewallRuleNameList, ", "))
 			}

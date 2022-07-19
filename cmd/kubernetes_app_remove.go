@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -17,15 +18,15 @@ import (
 var kubernetesAppRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Example: "civo kubernetes application remove NAME --cluster CLUSTER_NAME",
-	Aliases: []string{"rm","uninstall"},
+	Aliases: []string{"rm", "uninstall"},
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Remove the marketplace application from a Kubernetes cluster",
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -55,14 +56,14 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 			// TODO: Ideally this would come from the Civo API, but the Civo API doesn't currently return uninstall.sh
 			// https://www.civo.com/api/kubernetes#listing-applications
 			filepath := fmt.Sprintf("bash <(curl -s https://raw.githubusercontent.com/civo/kubernetes-marketplace/master/%s/uninstall.sh)", appName)
-			cmd_config := exec.Command("/bin/bash", "-c", filepath)
+			cmdConfig := exec.Command("/bin/bash", "-c", filepath)
 			var b bytes.Buffer
-			cmd_config.Stdout = &b
-			cmd_config.Stderr = &b
-			cmd_config.Env = os.Environ()
-			cmd_config.Env = append(cmd_config.Env, "KUBECONFIG="+tmpFile.Name())
+			cmdConfig.Stdout = &b
+			cmdConfig.Stderr = &b
+			cmdConfig.Env = os.Environ()
+			cmdConfig.Env = append(cmdConfig.Env, "KUBECONFIG="+tmpFile.Name())
 
-			if err := cmd_config.Run(); err != nil {
+			if err := cmdConfig.Run(); err != nil {
 				if exitError, ok := err.(*exec.ExitError); ok {
 					utility.Error("Failed to uninstall application %s (exited with code %d)\n", appName, exitError.ExitCode())
 					cmd := exec.Command("curl", "-s", fmt.Sprintf("https://raw.githubusercontent.com/civo/kubernetes-marketplace/master/%s/uninstall.sh", appName))

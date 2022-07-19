@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -35,8 +36,8 @@ If you wish to use a custom format, the available fields are:
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -59,7 +60,7 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("state", lb.State, "State")
 		ow.AppendDataWithLabel("dns_entry", fmt.Sprintf("%s.lb.civo.com", lb.ID), "DNS Entry")
 
-		if outputFormat == "json" || outputFormat == "custom" {
+		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 			ow.AppendDataWithLabel("private_ip", lb.PrivateIP, "Private IP")
 			ow.AppendDataWithLabel("firewall_id", lb.FirewallID, "Firewall ID")
 			ow.AppendDataWithLabel("cluster_id", lb.ClusterID, "Cluster ID")
@@ -75,11 +76,11 @@ If you wish to use a custom format, the available fields are:
 
 		ow.AppendData("Backends", strings.Join(backendList, ", "))
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.ToJSON(lb, prettySet)
+			ow.ToJSON(lb, common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteTable()
 		}

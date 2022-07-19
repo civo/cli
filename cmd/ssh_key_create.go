@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -52,11 +53,11 @@ var sshKeyCreateCmd = &cobra.Command{
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"id": sshKey.ID, "name": sshKey.Name})
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteSingleObjectJSON(prettySet)
+			ow.WriteSingleObjectJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			fmt.Printf("Created an SSH key called %s with ID %s\n", utility.Green(sshKey.Name), utility.Green(sshKey.ID))
 		}

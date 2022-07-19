@@ -3,11 +3,13 @@ package cmd
 import (
 	"os"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
+// DiskImage contains the fields of a Civo disk image
 type DiskImage struct {
 	ID           string
 	Name         string
@@ -33,8 +35,8 @@ If you wish to use a custom format, the available fields are:
 Example: civo diskimage ls -o=custom -f=id,name`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -70,11 +72,11 @@ Example: civo diskimage ls -o=custom -f=id,name`,
 			ow.AppendDataWithLabel("distribution", diskImage.Distribution, "Distribution")
 		}
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON(prettySet)
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteTable()
 		}

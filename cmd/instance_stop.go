@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -27,8 +28,8 @@ If you wish to use a custom format, the available fields are:
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -68,17 +69,17 @@ If you wish to use a custom format, the available fields are:
 			}
 		}
 
-		if outputFormat == "human" {
+		if common.OutputFormat == "human" {
 			fmt.Printf("The instance %s (%s) is being stopped\n", utility.Green(instance.Hostname), instance.ID)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
 			ow.AppendDataWithLabel("id", instance.ID, "ID")
 			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
-			if outputFormat == "json" {
-				ow.WriteSingleObjectJSON(prettySet)
+			if common.OutputFormat == "json" {
+				ow.WriteSingleObjectJSON(common.PrettySet)
 			} else {
-				ow.WriteCustomOutput(outputFields)
+				ow.WriteCustomOutput(common.OutputFields)
 			}
 		}
 	},

@@ -8,6 +8,7 @@ import (
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -30,8 +31,8 @@ var kubernetesRemoveCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -65,7 +66,7 @@ var kubernetesRemoveCmd = &cobra.Command{
 			kubernetesNameList = append(kubernetesNameList, v.Name)
 		}
 
-		if utility.UserConfirmedDeletion(fmt.Sprintf("Kubernetes %s", pluralize.Pluralize(len(kuberneteList), "cluster")), defaultYes, strings.Join(kubernetesNameList, ", ")) {
+		if utility.UserConfirmedDeletion(fmt.Sprintf("Kubernetes %s", pluralize.Pluralize(len(kuberneteList), "cluster")), common.DefaultYes, strings.Join(kubernetesNameList, ", ")) {
 
 			for _, v := range kuberneteList {
 				_, err = client.DeleteKubernetesCluster(v.ID)
@@ -83,14 +84,14 @@ var kubernetesRemoveCmd = &cobra.Command{
 				ow.AppendDataWithLabel("name", v.Name, "Name")
 			}
 
-			switch outputFormat {
+			switch common.OutputFormat {
 			case "json":
 				if len(kuberneteList) == 1 {
-					ow.WriteSingleObjectJSON(prettySet)
+					ow.WriteSingleObjectJSON(common.PrettySet)
 				} else {
-					ow.WriteMultipleObjectsJSON(prettySet)
+					ow.WriteMultipleObjectsJSON(common.PrettySet)
 				}
-				ow.WriteCustomOutput(outputFields)
+				ow.WriteCustomOutput(common.OutputFields)
 			default:
 				fmt.Printf("The Kubernetes %s (%s) has been deleted\n", pluralize.Pluralize(len(kuberneteList), "cluster"), utility.Green(strings.Join(kubernetesNameList, ", ")))
 			}

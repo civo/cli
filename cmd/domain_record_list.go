@@ -4,6 +4,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -62,11 +63,11 @@ If you wish to use a custom format, the available fields are:
 
 		}
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON(prettySet)
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteTable()
 		}

@@ -1,21 +1,24 @@
-package cmd
+package ip
 
 import (
 	"fmt"
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
-var networkUpdateCmd = &cobra.Command{
-	Use:     "update",
-	Aliases: []string{"change", "modify"},
-	Example: "civo network rm OLD_NAME NEW_NAME",
-	Short:   "Rename a network",
-	Args:    cobra.MinimumNArgs(2),
+var ipCreateCmd = &cobra.Command{
+	Use:     "reserve",
+	Aliases: []string{"new", "add", "allocate"},
+	Example: `civo ip reserve 
+civo ip reserve -n "server-1"`,
+	Short: "Reserve a new ip",
+	Long:  `You can name your ip with the --name flag.`,
+	Args:  cobra.MinimumNArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -28,27 +31,31 @@ var networkUpdateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		oldNetwork, err := client.FindNetwork(args[0])
-		if err != nil {
-			utility.Error("Network %s", err)
-			os.Exit(1)
+		createReq := civogo.CreateIPRequest{
+			Region: client.Region,
+		}
+		if name != "" {
+			createReq.Name = name
 		}
 
-		network, err := client.RenameNetwork(args[1], oldNetwork.ID)
+		ip, err := client.NewIP(&createReq)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"id": network.ID, "label": network.Label})
-
+		ow := utility.NewOutputWriter()
 		switch common.OutputFormat {
 		case "json":
 			ow.WriteSingleObjectJSON(common.PrettySet)
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Renamed the network called %s with ID %s to %s\n", utility.Green(oldNetwork.Label), utility.Green(network.ID), utility.Green(network.Label))
+			if name != "" {
+				fmt.Printf("Reserved IP called %s with ID %s\n", utility.Green(name), utility.Green(ip.ID))
+			} else {
+				fmt.Printf("Reserved IP with ID %s\n", utility.Green(ip.ID))
+			}
 		}
 	},
 }

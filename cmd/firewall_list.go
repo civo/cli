@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -28,8 +29,8 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -57,11 +58,11 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 			ow.AppendDataWithLabel("loadbalancer_count", strconv.Itoa(firewall.LoadBalancerCount), "Total LoadBalancer")
 		}
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON(prettySet)
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteTable()
 		}

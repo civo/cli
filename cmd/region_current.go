@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -50,11 +51,11 @@ var regionCurrentCmd = &cobra.Command{
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"region": args[0], "name": regionName})
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteSingleObjectJSON(prettySet)
+			ow.WriteSingleObjectJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			fmt.Printf("The default region was set to (%s) %s\n", regionName, utility.Green(args[0]))
 		}

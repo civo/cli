@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -43,8 +44,8 @@ If you wish to use a custom format, the available fields are:
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if regionSet != "" {
-			client.Region = regionSet
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -72,7 +73,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("private_ip", instance.PrivateIP, "Private IP")
 			ow.AppendDataWithLabel("status", utility.ColorStatus(instance.Status), "Status")
 
-			if outputFormat == "json" || outputFormat == "custom" {
+			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 				ow.AppendDataWithLabel("network_id", instance.NetworkID, "Network ID")
 				// ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "")
 				// ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "")
@@ -91,11 +92,11 @@ If you wish to use a custom format, the available fields are:
 			}
 		}
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON(prettySet)
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteTable()
 		}

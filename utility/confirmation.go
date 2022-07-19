@@ -58,6 +58,21 @@ func UserConfirmedDeletion(resourceType string, ignoringConfirmed bool, objectTo
 	return true
 }
 
+// UserConfirmedUnassign builds a message to ask the user to confirm unassign
+// a resource and then sends it through to AskForConfirm to
+// parses and verifies user input.
+func UserConfirmedUnassign(resourceType string, ignoringConfirmed bool, objectToDelete string) bool {
+	if !ignoringConfirmed {
+		message := fmt.Sprintf("unassign %s %s from Civo resource", Green(objectToDelete), resourceType)
+		err := AskForConfirm(message)
+		if err != nil {
+			return false
+		}
+	}
+
+	return true
+}
+
 // UserConfirmedOverwrite builds a message to ask the user to confirm overwrite config
 // and then sends it through to AskForConfirm to
 // parses and verifies user input.

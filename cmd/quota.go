@@ -3,6 +3,7 @@ package cmd
 import (
 	"strconv"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -56,7 +57,7 @@ If you wish to use a custom format, the available fields are:
 		ow := utility.NewOutputWriter()
 		ow.StartLine()
 
-		if outputFormat == "json" || outputFormat == "custom" {
+		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 			ow.AppendDataWithLabel("instance_count_limit", strconv.Itoa(quota.InstanceCountLimit), "InstanceCountLimit")
 			ow.AppendDataWithLabel("instance_count_usage", strconv.Itoa(quota.InstanceCountUsage), "InstanceCountUsage")
 			ow.AppendDataWithLabel("cpu_core_limit", strconv.Itoa(quota.CPUCoreLimit), "InstanceCountUsage")
@@ -96,11 +97,11 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("LoadBalancer Count", utility.CheckQuotaPercent(quota.LoadBalancerCountLimit, quota.LoadBalancerCountUsage))
 		}
 
-		switch outputFormat {
+		switch common.OutputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON(prettySet)
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(outputFields)
+			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteKeyValues()
 		}

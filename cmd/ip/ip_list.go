@@ -1,27 +1,21 @@
-package cmd
+package ip
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
-	"os"
-	"strconv"
-
 	"github.com/spf13/cobra"
 )
 
-var kubernetesListVersionCmd = &cobra.Command{
-	Use:     "versions",
-	Aliases: []string{"version"},
-	Example: `civo kubernetes versions ls`,
-	Short:   "List all Kubernetes cluster versions",
-	Long: `List all Kubernetes cluster versions.
-If you wish to use a custom format, the available fields are:
-
-	* version
-	* type
-	* default`,
+var ipListCmd = &cobra.Command{
+	Use:     "ls",
+	Aliases: []string{"list", "all"},
+	Example: `civo ip ls`,
+	Short:   "List ips",
+	Long:    `List all available reserved ips`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -34,23 +28,24 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		kubeVersions, err := client.ListAvailableKubernetesVersions()
+		ips, err := client.ListIPs()
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
 		ow := utility.NewOutputWriter()
-		for _, version := range kubeVersions {
-			if version.Type == "deprecated" {
-				continue
-			}
 
+		for _, ip := range ips.Items {
 			ow.StartLine()
-
-			ow.AppendDataWithLabel("version", version.Version, "Version")
-			ow.AppendDataWithLabel("type", version.Type, "Type")
-			ow.AppendDataWithLabel("default", strconv.FormatBool(version.Default), "Default")
+			ow.AppendDataWithLabel("id", ip.ID, "ID")
+			ow.AppendDataWithLabel("name", ip.Name, "Name")
+			ow.AppendDataWithLabel("address", ip.IP, "Address")
+			if ip.AssignedTo.ID != "" {
+				ow.AppendDataWithLabel("assigned_to", fmt.Sprintf("%s (%s)", ip.AssignedTo.Name, ip.AssignedTo.Type), "Assigned To(type)")
+			} else {
+				ow.AppendDataWithLabel("assigned_to", "No resource", "Assigned To(type)")
+			}
 		}
 
 		switch common.OutputFormat {
