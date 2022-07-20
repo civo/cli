@@ -40,7 +40,9 @@ If you wish to use a custom format, the available fields are:
 	* SecurityGroupRuleLimit
 	* SecurityGroupRuleUsage
 	* LoadBalancerCountLimit
-	* LoadBalancerCountUsage`,
+	* LoadBalancerCountUsage
+	* ObjectStoreGigabytesLimit
+	* ObjectStoreGigabytesUsage`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -82,6 +84,8 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("security_group_rule_usage", strconv.Itoa(quota.SecurityGroupRuleUsage), "SecurityGroupRuleUsage")
 			ow.AppendDataWithLabel("loadbalancer_count_limit", strconv.Itoa(quota.LoadBalancerCountLimit), "LoadBalancerCountLimit")
 			ow.AppendDataWithLabel("loadbalancer_count_usage", strconv.Itoa(quota.LoadBalancerCountUsage), "LoadBalancerCountUsage")
+			ow.AppendDataWithLabel("objectstore_gb_limit", strconv.Itoa(quota.ObjectStoreGigabytesLimit), "ObjectStoreGigabytesLimit")
+			ow.AppendDataWithLabel("objectstore_gb_usage", strconv.Itoa(quota.ObjectStoreGigabytesUsage), "ObjectStoreGigabytesUsage")
 		} else {
 			ow.AppendData("Instance Count", utility.CheckQuotaPercent(quota.InstanceCountLimit, quota.InstanceCountUsage))
 			ow.AppendData("CPUCore", utility.CheckQuotaPercent(quota.CPUCoreLimit, quota.CPUCoreUsage))
@@ -95,6 +99,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("Security Group", utility.CheckQuotaPercent(quota.SecurityGroupLimit, quota.SecurityGroupUsage))
 			ow.AppendData("Security Group Rule", utility.CheckQuotaPercent(quota.SecurityGroupRuleLimit, quota.SecurityGroupRuleUsage))
 			ow.AppendData("LoadBalancer Count", utility.CheckQuotaPercent(quota.LoadBalancerCountLimit, quota.LoadBalancerCountUsage))
+			ow.AppendData("ObjectStore Gigabytes", utility.CheckQuotaPercent(quota.ObjectStoreGigabytesLimit, quota.ObjectStoreGigabytesUsage))
 		}
 
 		switch common.OutputFormat {
