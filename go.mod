@@ -9,10 +9,9 @@ require (
 	github.com/bradfitz/iter v0.0.0-20191230175014-e8f45d346db8 // indirect
 	github.com/briandowns/spinner v1.11.1
 	github.com/c4milo/unpackit v0.0.0-20170704181138-4ed373e9ef1c // indirect
-	github.com/civo/civogo v0.2.98
+	github.com/civo/civogo v0.3.1
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
-	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/google/go-github v17.0.0+incompatible // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/google/uuid v1.2.0
@@ -27,7 +26,6 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/spf13/cobra v1.1.1
-	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/tcnksm/go-latest v0.0.0-20170313132115-e3007ae9052e
 	github.com/tj/go-update v2.2.4+incompatible
 	github.com/ulikunitz/xz v0.5.10 // indirect
