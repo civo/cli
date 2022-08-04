@@ -1,4 +1,4 @@
-package cmd
+package volume
 
 import (
 	"errors"
@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var volumeCmd = &cobra.Command{
+var VolumeCmd = &cobra.Command{
 	Use:     "volume",
 	Aliases: []string{"volumes"},
 	Short:   "Details of Civo volumes",
@@ -20,13 +20,12 @@ var volumeCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(volumeCmd)
-	volumeCmd.AddCommand(volumeCreateCmd)
-	volumeCmd.AddCommand(volumeListCmd)
-	volumeCmd.AddCommand(volumeRemoveCmd)
+	VolumeCmd.AddCommand(volumeCreateCmd)
+	VolumeCmd.AddCommand(volumeListCmd)
+	VolumeCmd.AddCommand(volumeRemoveCmd)
 	// volumeCmd.AddCommand(volumeResizeCmd)
-	volumeCmd.AddCommand(volumeAttachCmd)
-	volumeCmd.AddCommand(volumeDetachCmd)
+	VolumeCmd.AddCommand(volumeAttachCmd)
+	VolumeCmd.AddCommand(volumeDetachCmd)
 
 	volumeCreateCmd.Flags().IntVarP(&createSizeGB, "size-gb", "s", 0, "The new size in GB (required)")
 	volumeCreateCmd.Flags().StringVarP(&networkVolumeID, "network", "t", "default", "The network name/ID where the volume will be created")

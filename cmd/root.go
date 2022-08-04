@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/civo/cli/cmd/ip"
+	"github.com/civo/cli/cmd/volume"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/spf13/cobra"
@@ -40,6 +41,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&common.PrettySet, "pretty", "", false, "Print pretty the json output")
 
 	rootCmd.AddCommand(ip.IPCmd)
+	rootCmd.AddCommand(volume.VolumeCmd)
 
 	// Add warning if the region is empty, for the user with the old config
 	config.ReadConfig()
