@@ -1,4 +1,4 @@
-package cmd
+package volume
 
 import (
 	"errors"
@@ -46,17 +46,6 @@ var volumeRemoveCmd = &cobra.Command{
 				utility.Error("sorry we found more than one volume with that value in your account")
 				os.Exit(1)
 			}
-		}
-
-		if !utility.CanManageVolume(volume) {
-			cluster, err := client.FindKubernetesCluster(volume.ClusterID)
-			if err != nil {
-				utility.Error("Unable to find cluster - %s", err)
-				os.Exit(1)
-			}
-
-			utility.Error("Unable to %s this volume because it's being managed by your %q Kubernetes cluster", cmd.Name(), cluster.Name)
-			os.Exit(1)
 		}
 
 		if utility.UserConfirmedDeletion("volume", common.DefaultYes, volume.Name) {
