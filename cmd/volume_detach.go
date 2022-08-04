@@ -44,17 +44,6 @@ var volumeDetachCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if !utility.CanManageVolume(volume) {
-			cluster, err := client.FindKubernetesCluster(volume.ClusterID)
-			if err != nil {
-				utility.Error("Unable to find cluster - %s", err)
-				os.Exit(1)
-			}
-
-			utility.Error("Unable to %s this volume because it's being managed by your %q Kubernetes cluster", cmd.Name(), cluster.Name)
-			os.Exit(1)
-		}
-
 		_, err = client.DetachVolume(volume.ID)
 		if err != nil {
 			utility.Error("error detaching the volume: %s", err)
