@@ -1,4 +1,4 @@
-package cmd
+package volume
 
 import (
 	"fmt"
@@ -65,20 +65,18 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 				ow.AppendDataWithLabel("network_id", "", "Network")
 			}
 
-			isClusterVolume := false
 			if volume.ClusterID != "" {
 				cluster, err := client.FindKubernetesCluster(volume.ClusterID)
 				if err != nil {
 					utility.Error("Finding the cluster failed with %s", err)
 					os.Exit(1)
 				}
-				isClusterVolume = true
 				ow.AppendDataWithLabel("cluster_id", cluster.Name, "Cluster")
 			} else {
 				ow.AppendDataWithLabel("cluster_id", "", "Cluster")
 			}
 
-			if volume.InstanceID != "" && !isClusterVolume {
+			if volume.InstanceID != "" {
 				instance, err := client.FindInstance(volume.InstanceID)
 				if err != nil {
 					utility.Error("Finding the instance failed with %s", err)
