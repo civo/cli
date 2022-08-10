@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -47,6 +48,24 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 			os.Exit(1)
 		}
 
+		networks, err := client.ListNetworks()
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
+		instances, err := client.ListAllInstances()
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
+		clusters, err := client.ListKubernetesClusters()
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
 		ow := utility.NewOutputWriter()
 
 		for _, volume := range volumes {
@@ -54,22 +73,26 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 			ow.AppendDataWithLabel("id", volume.ID, "ID")
 			ow.AppendDataWithLabel("name", volume.Name, "Name")
 
+			var network civogo.Network
+
 			if volume.NetworkID != "" {
-				network, err := client.FindNetwork(volume.NetworkID)
-				if err != nil {
-					utility.Error("Finding the network failed with %s", err)
-					os.Exit(1)
+				for _, network = range networks {
+					if network.ID == volume.NetworkID {
+						break
+					}
 				}
 				ow.AppendDataWithLabel("network_id", network.Label, "Network")
 			} else {
 				ow.AppendDataWithLabel("network_id", "", "Network")
 			}
 
+			var cluster *civogo.KubernetesCluster
 			if volume.ClusterID != "" {
-				cluster, err := client.FindKubernetesCluster(volume.ClusterID)
-				if err != nil {
-					utility.Error("Finding the cluster failed with %s", err)
-					os.Exit(1)
+				for _, c := range clusters.Items {
+					if c.ID == volume.ClusterID {
+						cluster = &c
+						break
+					}
 				}
 				ow.AppendDataWithLabel("cluster_id", cluster.Name, "Cluster")
 			} else {
@@ -77,12 +100,23 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 			}
 
 			if volume.InstanceID != "" {
-				instance, err := client.FindInstance(volume.InstanceID)
-				if err != nil {
-					utility.Error("Finding the instance failed with %s", err)
-					os.Exit(1)
+				if cluster != nil {
+					for _, instance := range cluster.Instances {
+						if instance.ID == volume.InstanceID {
+							ow.AppendDataWithLabel("instance_id", instance.Hostname, "Instance")
+							break
+						}
+					}
+				} else {
+					var instance civogo.Instance
+					for _, instance = range instances {
+						if instance.ID == volume.InstanceID {
+							break
+						}
+					}
+
+					ow.AppendDataWithLabel("instance_id", instance.Hostname, "Instance")
 				}
-				ow.AppendDataWithLabel("instance_id", instance.Hostname, "Instance")
 			} else {
 				ow.AppendDataWithLabel("instance_id", "", "Instance")
 			}
