@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// VolumeCmd is the volume command
 var VolumeCmd = &cobra.Command{
 	Use:     "volume",
 	Aliases: []string{"volumes"},
