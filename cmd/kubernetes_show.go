@@ -139,7 +139,7 @@ If you wish to use a custom format, the available fields are:
 					if version.Type == "deprecated" {
 						continue
 					}
-					if version.Version > kubernetesCluster.Version {
+					if kubernetesCluster.Version != version.Version && version.Type == "stable" {
 						versionsList = append(versionsList, version.Version)
 					}
 				}
