@@ -139,11 +139,11 @@ If you wish to use a custom format, the available fields are:
 					if version.Type == "deprecated" {
 						continue
 					}
-					if kubernetesCluster.Version != version.Version && version.Type == "stable" {
+					if version.Version > kubernetesCluster.Version {
 						versionsList = append(versionsList, version.Version)
 					}
 				}
-				fmt.Printf(utility.Red("\n* An upgrade to v%s is available. Learn more about how to upgrade: civo k3s upgrade --help"), strings.Join(versionsList, ", "))
+				fmt.Printf(utility.Red("\n* An upgrade to v%s is available. Learn more about how to upgrade: civo k3s upgrade --help"), kubernetesCluster.UpgradeAvailableTo)
 				fmt.Println()
 			}
 
