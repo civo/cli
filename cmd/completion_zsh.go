@@ -1,9 +1,10 @@
 package cmd
 
 import (
+	"os"
+
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var completionZshCmd = &cobra.Command{
