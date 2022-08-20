@@ -61,7 +61,9 @@ If you wish to use a custom format, the available fields are:
 		ow := utility.NewOutputWriter()
 		for _, instance := range instances {
 			ow.StartLine()
-
+			if len(instances) == 0 {
+				ow.AppendDataWithLabel("region", client.Region, "No instances found in this region")
+			}
 			ow.AppendDataWithLabel("id", instance.ID, "ID")
 			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
 			ow.AppendDataWithLabel("region", client.Region, "Region")
