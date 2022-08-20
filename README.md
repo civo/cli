@@ -1180,7 +1180,7 @@ The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 w
 
 #### Listing Volumes
 
-You can get an overall view of your volumes, their sizes and status by using `civo volume list`.
+You can get an overall view of your volumes, their sizes and status by using `civo volume list`:
 
 ```sh
 $ civo volume ls
@@ -1337,7 +1337,7 @@ civo region ls
 
 #### Change region
 
-To change the region the only cmd you need run is `civo region current <REGION-CODE>` and you will see a message like this
+To change the region the only cmd you need run is `civo region current <REGION-CODE>` and you will see a message like this:
 ```sh
  civo region current NYC1
 
