@@ -25,6 +25,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var version bool
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "civo",
@@ -32,7 +34,11 @@ var rootCmd = &cobra.Command{
 	Long: `civo is a CLI library for managing cloud resources such
 as instances and Kubernetes clusters at Civo.com.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Help()
+		if version {
+			versionCmd.Run(cmd, args)
+		} else {
+			cmd.Help()
+		}
 	},
 }
 
@@ -130,6 +136,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&common.DefaultYes, "yes", "y", false, "Automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively")
 	rootCmd.PersistentFlags().StringVarP(&common.RegionSet, "region", "", "", "Choose the region to connect to, if you use this option it will use it over the default region")
 	rootCmd.PersistentFlags().BoolVarP(&common.PrettySet, "pretty", "", false, "Print pretty the json output")
+	rootCmd.PersistentFlags().BoolVarP(&version, "version", "", false, "Print the version of the CLI")
 
 	rootCmd.AddCommand(apikey.APIKeyCmd)
 	rootCmd.AddCommand(diskimage.DiskImageCmd)
