@@ -244,7 +244,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if tags != "" {
-			config.TagsList = tags
+			config.Tags = strings.Split(tags, ",")
 		}
 
 		var executionTime, publicIP string
