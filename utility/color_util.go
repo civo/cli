@@ -3,12 +3,10 @@ package utility
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/civo/cli/common"
 	"github.com/gookit/color"
 	"github.com/savioxavier/termlink"
-	"github.com/tcnksm/go-latest"
 )
 
 // Green is the function to convert str to green in console
@@ -49,16 +47,7 @@ func Red(value string) string {
 
 // Error is the function to handler all error in the Cli
 func Error(msg string, args ...interface{}) {
-	githubTag := &latest.GithubTag{
-		Owner:             "civo",
-		Repository:        "cli",
-		FixVersionStrFunc: latest.DeleteFrontV(),
-	}
-	res, err := latest.Check(githubTag, strings.Replace(common.VersionCli, "v", "", 1))
-	if err != nil {
-		fmt.Printf("Checking for a newer version failed with %s", err)
-		os.Exit(1)
-	}
+	res := common.VersionCheck()
 	if res.Outdated {
 		updateVersion := "civo update"
 		gitIssueLink := termlink.ColorLink("GitHub issue", "https://github.com/civo/cli/issues", "italic green")
