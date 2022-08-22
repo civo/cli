@@ -24,18 +24,11 @@ var (
 				fmt.Printf("Build date (client): %s\n", common.DateCli)
 				fmt.Printf("Git commit (client): %s\n", common.CommitCli)
 				fmt.Printf("OS/Arch (client): %s/%s\n", runtime.GOOS, runtime.GOARCH)
-				res := common.VersionCheck()
-				if res.Outdated {
-					utility.RedConfirm("A newer version (v%s) is available, please upgrade with \"civo update\"\n", res.Current)
-				}
 			case quiet:
 				fmt.Printf("v%s\n", common.VersionCli)
 			default:
+				utility.Error("Testing Error")
 				fmt.Printf("Civo CLI v%s\n", common.VersionCli)
-				res := common.VersionCheck()
-				if res.Outdated {
-					utility.RedConfirm("A newer version (v%s) is available, please upgrade with \"civo update\"\n", res.Current)
-				}
 			}
 		},
 	}
