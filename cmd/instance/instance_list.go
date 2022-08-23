@@ -1,6 +1,7 @@
 package instance
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -59,41 +60,41 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		ow := utility.NewOutputWriter()
-		for _, instance := range instances {
-			ow.StartLine()
-			if len(instances) == 0 {
-				ow.AppendDataWithLabel("region", client.Region, "No instances found in this region")
-			}
-			ow.AppendDataWithLabel("id", instance.ID, "ID")
-			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
-			ow.AppendDataWithLabel("region", client.Region, "Region")
-			ow.AppendDataWithLabel("size", instance.Size, "Size")
-			ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
-			ow.AppendDataWithLabel("ram_mb", strconv.Itoa(instance.RAMMegabytes), "Ram")
-			ow.AppendDataWithLabel("disk_gb", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
-			ow.AppendDataWithLabel("public_ip", instance.PublicIP, "Public IP")
-			ow.AppendDataWithLabel("private_ip", instance.PrivateIP, "Private IP")
-			ow.AppendDataWithLabel("status", utility.ColorStatus(instance.Status), "Status")
+		if len(instances) == 0 {
+			fmt.Println("region", client.Region, ".No instances found in this region")
+		} else {
+			for _, instance := range instances {
+				ow.StartLine()
+				ow.AppendDataWithLabel("id", instance.ID, "ID")
+				ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
+				ow.AppendDataWithLabel("region", client.Region, "Region")
+				ow.AppendDataWithLabel("size", instance.Size, "Size")
+				ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
+				ow.AppendDataWithLabel("ram_mb", strconv.Itoa(instance.RAMMegabytes), "Ram")
+				ow.AppendDataWithLabel("disk_gb", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
+				ow.AppendDataWithLabel("public_ip", instance.PublicIP, "Public IP")
+				ow.AppendDataWithLabel("private_ip", instance.PrivateIP, "Private IP")
+				ow.AppendDataWithLabel("status", utility.ColorStatus(instance.Status), "Status")
 
-			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
-				ow.AppendDataWithLabel("network_id", instance.NetworkID, "Network ID")
-				// ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "")
-				// ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "")
-				ow.AppendDataWithLabel("diskimage_id", instance.SourceID, "Disk image ID")
-				ow.AppendDataWithLabel("initial_user", instance.InitialUser, "Initial User")
-				ow.AppendDataWithLabel("ssh_key", instance.SSHKey, "SSH Key")
-				ow.AppendDataWithLabel("notes", instance.Notes, "Notes")
-				ow.AppendDataWithLabel("firewall_id", instance.FirewallID, "Firewall ID")
-				ow.AppendDataWithLabel("tags", strings.Join(instance.Tags, " "), "Tags")
-				// ow.AppendDataWithLabel("CivostatsdToken", instance.CivostatsdToken, "")
-				// ow.AppendDataWithLabel("CivostatsdStats", instance.CivostatsdStats, "")
-				ow.AppendDataWithLabel("script", instance.Script, "Script")
-				ow.AppendDataWithLabel("created_at", instance.CreatedAt.Format(time.RFC1123), "Created At")
-				ow.AppendDataWithLabel("status", instance.Status, "Status")
-				ow.AppendDataWithLabel("reverse_dns", instance.ReverseDNS, "Reverse DNS")
+				if common.OutputFormat == "json" || common.OutputFormat == "custom" {
+					ow.AppendDataWithLabel("network_id", instance.NetworkID, "Network ID")
+					// ow.AppendDataWithLabel("PrivateIP", instance.PrivateIP, "")
+					// ow.AppendDataWithLabel("PublicIP", instance.PublicIP, "")
+					ow.AppendDataWithLabel("diskimage_id", instance.SourceID, "Disk image ID")
+					ow.AppendDataWithLabel("initial_user", instance.InitialUser, "Initial User")
+					ow.AppendDataWithLabel("ssh_key", instance.SSHKey, "SSH Key")
+					ow.AppendDataWithLabel("notes", instance.Notes, "Notes")
+					ow.AppendDataWithLabel("firewall_id", instance.FirewallID, "Firewall ID")
+					ow.AppendDataWithLabel("tags", strings.Join(instance.Tags, " "), "Tags")
+					// ow.AppendDataWithLabel("CivostatsdToken", instance.CivostatsdToken, "")
+					// ow.AppendDataWithLabel("CivostatsdStats", instance.CivostatsdStats, "")
+					ow.AppendDataWithLabel("script", instance.Script, "Script")
+					ow.AppendDataWithLabel("created_at", instance.CreatedAt.Format(time.RFC1123), "Created At")
+					ow.AppendDataWithLabel("status", instance.Status, "Status")
+					ow.AppendDataWithLabel("reverse_dns", instance.ReverseDNS, "Reverse DNS")
+				}
 			}
 		}
-
 		switch common.OutputFormat {
 		case "json":
 			ow.WriteMultipleObjectsJSON(common.PrettySet)
