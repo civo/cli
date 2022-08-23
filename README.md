@@ -11,6 +11,7 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 - [Introduction](#introduction)
 - [Global Options](#global-options)
 - [Set-Up](#set-up)
+- [Version/Updating CLI](#update)
 - [Docker Usage](#docker-usage)
 - [API Keys](#api-keys)
 - [Instances](#instances)
@@ -113,6 +114,10 @@ To use the tool, simply run `civo` with your chosen options. You can find contex
 `civo instance help`,
 `civo instance create help`
 and so on. The main components of Civo CLI are outlined in the following sections.
+
+## Version/Updating CLI
+
+Every user receives a reminder to update the CLI once in 24 hours as well as notified to update the CLI version in case of any error. Run `civo update` to update the CLI to the latest version.
 
 ## Docker Usage
 
