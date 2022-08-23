@@ -7,6 +7,7 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/civo/cli/common"
 	"github.com/civo/cli/utility"
 	"github.com/kierdavis/ansi"
 
@@ -31,7 +32,7 @@ var (
 				Store: &github.Store{
 					Owner:   "civo",
 					Repo:    "cli",
-					Version: VersionCli,
+					Version: common.VersionCli,
 				},
 			}
 
