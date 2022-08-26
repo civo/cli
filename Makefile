@@ -27,15 +27,15 @@ endif
 
 buildmac: $(BINARY_MAC)
 $(BINARY_MAC): buildprep
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_MAC) -ldflags "-s -X github.com/civo/cli/cmd.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/cmd.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/cmd.DateCli=$(shell date +%FT%T%Z)" -v
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_MAC) -ldflags "-s -X github.com/civo/cli/common.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/common.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/common.DateCli=$(shell date +%FT%T%Z)" -v
 
 buildlinux: $(BINARY_LINUX)
 $(BINARY_LINUX): buildprep
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_LINUX) -ldflags "-s -X github.com/civo/cli/cmd.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/cmd.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/cmd.DateCli=$(shell date +%FT%T%Z)" -v
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_LINUX) -ldflags "-s -X github.com/civo/cli/common.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/common.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/common.DateCli=$(shell date +%FT%T%Z)" -v
 
 buildwindows: $(BINARY_WINDOWS)
 $(BINARY_WINDOWS): buildprep
-	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_WINDOWS) -ldflags "-s -X github.com/civo/cli/cmd.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/cmd.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/cmd.DateCli=$(shell date +%FT%T%Z)" -v
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 $(GOBUILD) -o dest/$(BINARY_WINDOWS) -ldflags "-s -X github.com/civo/cli/common.VersionCli=$(VERSION_CLI) -X github.com/civo/cli/common.CommitCli=$(COMMIT_CLI) -X github.com/civo/cli/common.DateCli=$(shell date +%FT%T%Z)" -v
 
 buildprep:
 	git fetch --tags -f

@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/cli/common"
 	"github.com/gookit/color"
+	"github.com/savioxavier/termlink"
 )
 
 // Green is the function to convert str to green in console
@@ -45,6 +47,12 @@ func Red(value string) string {
 
 // Error is the function to handler all error in the Cli
 func Error(msg string, args ...interface{}) {
+	res := common.VersionCheck()
+	if res.Outdated {
+		updateVersion := "civo update"
+		gitIssueLink := termlink.ColorLink("GitHub issue", "https://github.com/civo/cli/issues", "italic green")
+		fmt.Printf("Please, run %q and retry the command. If you are still facing issues, please report it on our community slack or open a %s \n", updateVersion, gitIssueLink)
+	}
 	fmt.Fprintf(os.Stderr, "%s: %s\n", color.Red.Sprintf("Error"), fmt.Sprintf(msg, args...))
 }
 
@@ -65,6 +73,7 @@ func YellowConfirm(msg string, args ...interface{}) {
 
 // RedConfirm is the function to handler the new version of the Cli
 func RedConfirm(msg string, args ...interface{}) {
+
 	fmt.Fprintf(os.Stderr, "%s: %s", color.Red.Sprintf("IMPORTANT"), fmt.Sprintf(msg, args...))
 }
 
