@@ -22,7 +22,6 @@ import (
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -45,10 +44,8 @@ var completionCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := cmd.Help()
 		if err != nil {
-			log.Error(err)
 			return err
 		}
-		log.Warn("A valid command not provided")
 		return errors.New("a valid subcommand is required")
 	},
 }
@@ -62,7 +59,6 @@ var completionBashCmd = &cobra.Command{
 		err := rootCmd.GenBashCompletion(os.Stdout)
 		if err != nil {
 			utility.Error("%s", err.Error())
-			log.Fatal(err)
 			os.Exit(1)
 		}
 	},
@@ -77,7 +73,6 @@ var completionFishCmd = &cobra.Command{
 		err := rootCmd.GenFishCompletion(os.Stdout, true)
 		if err != nil {
 			utility.Error("%s", err.Error())
-			log.Fatal(err)
 			os.Exit(1)
 		}
 	},
@@ -92,7 +87,6 @@ var completionPowerShellCmd = &cobra.Command{
 		err := rootCmd.GenPowerShellCompletion(os.Stdout)
 		if err != nil {
 			utility.Error("%s", err.Error())
-			log.Fatal(err)
 			os.Exit(1)
 		}
 	},
@@ -107,7 +101,6 @@ var completionZshCmd = &cobra.Command{
 		err := rootCmd.GenZshCompletion(os.Stdout)
 		if err != nil {
 			utility.Error("%s", err.Error())
-			log.Fatal(err)
 			os.Exit(1)
 		}
 	},
@@ -118,7 +111,6 @@ var completionZshCmd = &cobra.Command{
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
-		log.Fatal(err)
 		os.Exit(1)
 	}
 }
@@ -154,10 +146,6 @@ func init() {
 	rootCmd.AddCommand(sshkey.SSHKeyCmd)
 	rootCmd.AddCommand(teams.TeamsCmd)
 	rootCmd.AddCommand(volume.VolumeCmd)
-	// To get the logs in JSON Format
-	log.SetFormatter(&log.JSONFormatter{})
-	// Add this line for logging filename and line number!
-	log.SetReportCaller(true)
 
 	// Add warning if the region is empty, for the user with the old config
 	config.ReadConfig()
