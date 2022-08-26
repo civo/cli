@@ -36,6 +36,7 @@ require (
 
 require github.com/sirupsen/logrus v1.9.0
 
+
 require (
 	github.com/MichaelMure/go-term-text v0.2.7 // indirect
 	github.com/alecthomas/chroma v0.7.1 // indirect
@@ -45,6 +46,7 @@ require (
 	github.com/eliukblau/pixterm/pkg/ansimage v0.0.0-20191210081756-9fb6cf8c2f75 // indirect
 	github.com/gomarkdown/markdown v0.0.0-20191123064959-2c17d62f5098 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/jwalton/go-supportscolor v1.1.0 // indirect
 	github.com/klauspost/compress v1.4.1 // indirect
 	github.com/klauspost/cpuid v1.2.0 // indirect
 	github.com/kyokomi/emoji v2.1.0+incompatible // indirect
