@@ -19,15 +19,17 @@ import (
 	"fmt"
 
 	"github.com/civo/cli/cmd"
+	"github.com/civo/cli/common"
 	"github.com/savioxavier/termlink"
 )
 
 func main() {
 	defer func() {
 		if err := recover(); err != nil {
+			res := common.VersionCheck().Current
 			updateCmd := "civo update"
 			gitIssueLink := termlink.ColorLink("GitHub issue", "https://github.com/civo/cli/issues", "italic green")
-			fmt.Printf("Please, run %q and retry the command. If you are still facing issues, please report it on our community slack or open a %s \n", updateCmd, gitIssueLink)
+			fmt.Printf("Your CLI Version : %s \nPlease, run %q and retry the command \nIf you are still facing issues, please report it on our community slack or open a %s \n", res, updateCmd, gitIssueLink)
 		}
 	}()
 	cmd.Execute()
