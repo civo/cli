@@ -3,6 +3,7 @@ package region
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -30,13 +31,13 @@ var regionCurrentCmd = &cobra.Command{
 			return
 		}
 
-		if config.Current.Meta.DefaultRegion == args[0] {
+		if strings.ToLower(config.Current.Meta.DefaultRegion) == strings.ToLower(args[0]) {
 			fmt.Printf("You are already using that region: %s\n", utility.Red(args[0]))
 			os.Exit(1)
 		}
 
 		for _, v := range regions {
-			if v.Code == args[0] {
+			if strings.ToLower(v.Code) == strings.ToLower(args[0]) {
 				config.Current.Meta.DefaultRegion = args[0]
 				regionName = v.Name
 				config.SaveConfig()
