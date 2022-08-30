@@ -56,7 +56,5 @@ func init() {
 	firewallRuleCreateCmd.Flags().StringVarP(&direction, "direction", "d", "ingress", "the direction of the rule can be ingress or egress (default is ingress)")
 	firewallRuleCreateCmd.Flags().StringVarP(&action, "action", "a", "allow", "the action of the rule can be allow or deny (default is allow)")
 	firewallRuleCreateCmd.Flags().StringVarP(&label, "label", "l", "", "a string that will be the displayed as the name/reference for this rule")
-	firewallRuleCreateCmd.MarkFlagRequired("direction")
-	firewallRuleCreateCmd.MarkFlagRequired("action")
 	firewallRuleCreateCmd.MarkFlagRequired("startport")
 }
