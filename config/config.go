@@ -75,6 +75,12 @@ func loadConfig(filename string) {
 		os.Exit(1)
 	}
 
+	checkEnvVarSet, found := os.LookupEnv("CIVO_TOKEN")
+	if found {
+		Current.APIKeys = map[string]string{"tempKey": checkEnvVarSet}
+		Current.Meta.CurrentAPIKey = "tempKey"
+	}
+
 	if time.Since(Current.Meta.LatestReleaseCheck) > (24 * time.Hour) {
 		Current.Meta.LatestReleaseCheck = time.Now()
 		dataBytes, err := json.Marshal(Current)
