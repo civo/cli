@@ -29,7 +29,7 @@ func main() {
 			res := common.VersionCheck().Current
 			updateCmd := "civo update"
 			gitIssueLink := termlink.ColorLink("GitHub issue", "https://github.com/civo/cli/issues", "italic green")
-			fmt.Printf("Your CLI Version : %s \nPlease, run %q and retry the command \nIf you are still facing issues, please report it on our community slack or open a %s \n", res, updateCmd, gitIssueLink)
+			fmt.Printf("panic : %s \nYour CLI Version : %s \nPlease, run %q and retry the command \nIf you are still facing issues, please report it on our community slack or open a %s \n", err, res, updateCmd, gitIssueLink)
 		}
 	}()
 	cmd.Execute()
