@@ -49,7 +49,7 @@ brew install civo
 or if you prefer you can run this in the console:
 
 ```sh
-$ curl -sL https://civo.com/get | sh
+curl -sL https://civo.com/get | sh
 ```
 
 ### Installing on Windows
