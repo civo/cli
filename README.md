@@ -136,7 +136,7 @@ You can also use the Kubernetes options of the CLI. Kubectl is included inside o
 touch $HOME/.civo.json
 mkdir $HOME/.kube/
 touch $HOME/.kube/config
-docker run -it --rm -v $HOME/.civo.json:/.civo.json -v $HOME/.kube/config:$HOME/.kube/config civo/cli:latest
+docker run -it --rm -v $HOME/.civo.json:/.civo.json -v $HOME/.kube/config:/root/.kube/config civo/cli:latest
 ```
 
 To make usage easier, an alias is recommended.  Here's an example how to set one to the same command as would be used if installed directly on the system, and using the Docker image:
