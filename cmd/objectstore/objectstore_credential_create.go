@@ -32,8 +32,8 @@ var objectStoreCredentialCreateCmd = &cobra.Command{
 		}
 
 		credential, err := client.NewObjectStoreCredential(&civogo.CreateObjectStoreCredentialRequest{
-			Name: args[0],
-			// Region:    client.Region,
+			Name:   args[0],
+			Region: client.Region,
 		})
 		if err != nil {
 			utility.Error("%s", err)
