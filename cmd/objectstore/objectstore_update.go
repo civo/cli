@@ -39,19 +39,9 @@ var objectStoreUpdateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		var credential *civogo.ObjectStoreCredential
-		if owner != "" {
-			credential, err = client.FindObjectStoreCredential(owner)
-			if err != nil {
-				utility.Error("%s", err)
-				os.Exit(1)
-			}
-		}
-
 		objectStore, err := client.UpdateObjectStore(findObjectStore.ID, &civogo.UpdateObjectStoreRequest{
-			MaxSizeGB:   bucketSize,
-			AccessKeyID: credential.AccessKeyID,
-			Region:      client.Region,
+			MaxSizeGB: bucketSize,
+			Region:    client.Region,
 		})
 		if err != nil {
 			utility.Error("%s", err)
@@ -66,15 +56,8 @@ var objectStoreUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			if bucketSize != 0 && owner != "" {
-				fmt.Printf("The Object Store with ID %s was updated to size: %d GB and owner %s \n", utility.Green(objectStore.ID), bucketSize, credential.Name)
-				os.Exit(0)
-			} else if bucketSize != 0 && owner == "" {
-				fmt.Printf("The Object Store with ID %s was updated to size: %d GB \n", utility.Green(objectStore.ID), bucketSize)
-				os.Exit(0)
-			} else {
-				fmt.Printf("The owner of Object Store with ID %s was updated to:%s \n", utility.Green(objectStore.ID), credential.Name)
-			}
+			fmt.Printf("The Object Store with ID %s was updated to size: %d GB \n", utility.Green(objectStore.ID), bucketSize)
+			os.Exit(0)
 		}
 	},
 }

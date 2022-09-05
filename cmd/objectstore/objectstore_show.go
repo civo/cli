@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -31,6 +32,15 @@ var objectStoreShowCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		var creds *civogo.ObjectStoreCredential
+		if objectStore.OwnerInfo.Name != "" {
+			creds, err = client.FindObjectStoreCredential(objectStore.OwnerInfo.Name)
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+		}
+
 		ow := utility.NewOutputWriter()
 
 		ow.StartLine()
@@ -40,7 +50,7 @@ var objectStoreShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("size", strconv.Itoa(objectStore.MaxSize), "Size")
 		ow.AppendDataWithLabel("objectstore_endpoint", fmt.Sprintf("objectstore.%s.civo.com", strings.ToLower(client.Region)), "Object Store Endpoint")
 		ow.AppendDataWithLabel("region", client.Region, "Region")
-		ow.AppendDataWithLabel("accesskey", objectStore.OwnerInfo.AccessKeyID, "Access Key")
+		ow.AppendDataWithLabel("accesskey", creds.AccessKeyID, "Access Key")
 		ow.AppendDataWithLabel("status", objectStore.Status, "Status")
 
 		switch common.OutputFormat {
