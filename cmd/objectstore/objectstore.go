@@ -61,7 +61,7 @@ func init() {
 	objectStoreCredentialExportCmd.Flags().StringVarP(&format, "format", "", "env", "Format of the output (We support env and s3cfg formats.)")
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialListCmd)
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialCreateCmd)
-	objectStoreCredentialCmd.AddCommand(objectStoreCredentialUpdateCmd)
+	// objectStoreCredentialCmd.AddCommand(objectStoreCredentialUpdateCmd)
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialDeleteCmd)
 
 	//Flags for credential create command
