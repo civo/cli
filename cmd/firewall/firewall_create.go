@@ -47,7 +47,11 @@ var firewallCreateCmd = &cobra.Command{
 			}
 		}
 
-		firewall, err := client.NewFirewall(args[0], defaultNetwork.ID, &createRules)
+		firewall, err := client.NewFirewall(&civogo.FirewallConfig{
+			Name:        args[0],
+			NetworkID:   defaultNetwork.ID,
+			CreateRules: &createRules,
+		})
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
