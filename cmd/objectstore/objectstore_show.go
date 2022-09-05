@@ -60,7 +60,7 @@ var objectStoreShowCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteKeyValues()
-			fmt.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(objectStore.OwnerInfo.AccessKeyID))
+			fmt.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(creds.AccessKeyID))
 		}
 	},
 }
