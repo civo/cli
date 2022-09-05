@@ -55,6 +55,7 @@ var objectStoreCredentialUpdateCmd = &cobra.Command{
 			AccessKeyID:       &credential.AccessKeyID,
 			SecretAccessKeyID: &credential.SecretAccessKeyID,
 			Suspended:         credential.Suspended,
+			Region:            client.Region,
 		})
 		if err != nil {
 			utility.Error("%s", err)
