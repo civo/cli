@@ -42,23 +42,33 @@ var objectStoreCreateCmd = &cobra.Command{
 		}
 
 		var credential *civogo.ObjectStoreCredential
+		var store *civogo.ObjectStore
 		if owner != "" {
 			credential, err = client.FindObjectStoreCredential(owner)
 			if err != nil {
 				utility.Error("%s", err)
 				os.Exit(1)
 			}
-		}
-
-		store, err := client.NewObjectStore(&civogo.CreateObjectStoreRequest{
-			Name:        args[0],
-			MaxSizeGB:   bucketSize,
-			AccessKeyID: credential.AccessKeyID,
-			Region:      client.Region,
-		})
-		if err != nil {
-			utility.Error("%s", err)
-			os.Exit(1)
+			store, err = client.NewObjectStore(&civogo.CreateObjectStoreRequest{
+				Name:        args[0],
+				MaxSizeGB:   bucketSize,
+				AccessKeyID: credential.AccessKeyID,
+				Region:      client.Region,
+			})
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+		} else {
+			store, err = client.NewObjectStore(&civogo.CreateObjectStoreRequest{
+				Name:      args[0],
+				MaxSizeGB: bucketSize,
+				Region:    client.Region,
+			})
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
 		}
 
 		var executionTime string

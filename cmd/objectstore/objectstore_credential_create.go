@@ -13,13 +13,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var credentialSize int
-
 var objectStoreCredentialCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
 	Short:   "Create a new Object Store Credential",
-	Example: "civo objectstore credential create CREDENTIAL_NAME --size SIZE",
+	Example: "civo objectstore credential create CREDENTIAL_NAME",
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -34,9 +32,8 @@ var objectStoreCredentialCreateCmd = &cobra.Command{
 		}
 
 		credential, err := client.NewObjectStoreCredential(&civogo.CreateObjectStoreCredentialRequest{
-			Name:      args[0],
-			MaxSizeGB: &credentialSize,
-			//Region:    client.Region,
+			Name: args[0],
+			// Region:    client.Region,
 		})
 		if err != nil {
 			utility.Error("%s", err)
