@@ -26,7 +26,10 @@ var objectStoreCredentialSecretCmd = &cobra.Command{
 		var key string
 		if accessKey != "" {
 			key = accessKey
+		} else if args[0] != "" {
+			key = args[0]
 		}
+
 		if key == "" {
 			utility.Error("You must provide an access key. See --help for more information.")
 			os.Exit(1)

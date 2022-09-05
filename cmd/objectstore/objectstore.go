@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var credentialSize int
+
 //ObjectStoreCmd manages Civo Object Store
 var ObjectStoreCmd = &cobra.Command{
 	Use:     "objectstore",
@@ -43,12 +45,13 @@ func init() {
 	ObjectStoreCmd.AddCommand(objectStoreCredentialCmd)
 
 	//Flags for create cmd
-	objectStoreCreateCmd.Flags().Int64VarP(&bucketSize, "size", "s", 500, "Size of the bucket")
-	objectStoreCreateCmd.Flags().StringVarP(&owner, "owner", "", "", "Owner of the bucket")
+	objectStoreCreateCmd.Flags().Int64VarP(&bucketSize, "size", "s", 500, "Size of the Object store")
+	objectStoreCreateCmd.Flags().StringVarP(&owner, "owner-name", "n", "", "Name of Owner of the Object store. You can reference name of any civo object store credential created before")
+	objectStoreCreateCmd.Flags().StringVarP(&owner, "owner-access-key", "a", "", "Access Key ID of Owner of the Object store. You can reference name of any civo object store credential created before")
 	objectStoreCreateCmd.Flags().BoolVarP(&waitOS, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the Object Store to be ready")
 
 	//Flags for update cmd
-	objectStoreUpdateCmd.Flags().Int64VarP(&bucketSize, "size", "s", 500, "Size of the bucket")
+	objectStoreUpdateCmd.Flags().Int64VarP(&bucketSize, "size", "s", 500, "Size of the object store")
 
 	//Credential commands
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialSecretCmd)
@@ -62,7 +65,6 @@ func init() {
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialDeleteCmd)
 
 	//Flags for credential create command
-	objectStoreCredentialCreateCmd.Flags().IntVarP(&credentialSize, "size", "s", 500, "Size to allocate to the credential")
 	objectStoreCredentialCreateCmd.Flags().BoolVarP(&waitOS, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the credential to be ready")
 
 	//Flags for credential update command

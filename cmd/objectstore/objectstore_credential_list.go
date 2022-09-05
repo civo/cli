@@ -2,7 +2,6 @@ package objectstore
 
 import (
 	"os"
-	"strconv"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -31,9 +30,8 @@ var objectStoreCredentialListCmd = &cobra.Command{
 		ow := utility.NewOutputWriter()
 		for _, credential := range creds.Items {
 			ow.StartLine()
-			ow.AppendDataWithLabel("id", credential.ID, "ID")
 			ow.AppendDataWithLabel("name", credential.Name, "Name")
-			ow.AppendDataWithLabel("size", strconv.Itoa(credential.MaxSizeGB), "Size")
+			ow.AppendDataWithLabel("access_key", credential.AccessKeyID, "Access Key")
 			ow.AppendDataWithLabel("status", credential.Status, "Status")
 		}
 
