@@ -7,6 +7,7 @@ import (
 )
 
 var credentialSize int
+var accessKey, secretAccessKey string
 
 //ObjectStoreCmd manages Civo Object Store
 var ObjectStoreCmd = &cobra.Command{
@@ -66,6 +67,8 @@ func init() {
 
 	//Flags for credential create command
 	objectStoreCredentialCreateCmd.Flags().BoolVarP(&waitOS, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the credential to be ready")
+	objectStoreCredentialCreateCmd.Flags().StringVarP(&accessKey, "access-key", "a", "", "Access Key")
+	objectStoreCredentialCreateCmd.Flags().StringVarP(&secretAccessKey, "secret-access-key", "s", "", "Secret Access Key")
 
 	//Flags for credential update command
 	objectStoreCredentialUpdateCmd.Flags().IntVarP(&credentialSize, "size", "s", 500, "Size to update to")

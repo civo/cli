@@ -18,6 +18,9 @@ var objectStoreCredentialCreateCmd = &cobra.Command{
 	Aliases: []string{"new", "add"},
 	Short:   "Create a new Object Store Credential",
 	Example: "civo objectstore credential create CREDENTIAL_NAME",
+	Long: `Create a new Object Store Credential with preexisting access key and secret key
+		civo objectstore credential create CREDENTIAL_NAME --access-key ACCESS_KEY --secret-key SECRET_KEY
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -31,10 +34,19 @@ var objectStoreCredentialCreateCmd = &cobra.Command{
 			client.Region = common.RegionSet
 		}
 
-		credential, err := client.NewObjectStoreCredential(&civogo.CreateObjectStoreCredentialRequest{
+		cred := &civogo.CreateObjectStoreCredentialRequest{
 			Name:   args[0],
 			Region: client.Region,
-		})
+		}
+		if accessKey != "" {
+			cred.AccessKeyID = &accessKey
+		}
+
+		if secretAccessKey != "" {
+			cred.SecretAccessKeyID = &secretAccessKey
+		}
+
+		credential, err := client.NewObjectStoreCredential(cred)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
