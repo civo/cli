@@ -62,7 +62,7 @@ func init() {
 	objectStoreCredentialExportCmd.Flags().StringVarP(&format, "format", "", "env", "Format of the output (We support env and s3cfg formats.)")
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialListCmd)
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialCreateCmd)
-	// objectStoreCredentialCmd.AddCommand(objectStoreCredentialUpdateCmd)
+	objectStoreCredentialCmd.AddCommand(objectStoreCredentialUpdateCmd)
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialDeleteCmd)
 
 	//Flags for credential create command
@@ -71,8 +71,6 @@ func init() {
 	objectStoreCredentialCreateCmd.Flags().StringVarP(&secretAccessKey, "secret-access-key", "s", "", "Secret Access Key")
 
 	//Flags for credential update command
-	objectStoreCredentialUpdateCmd.Flags().IntVarP(&credentialSize, "size", "s", 500, "Size to update to")
 	objectStoreCredentialUpdateCmd.Flags().StringVarP(&credAccessKey, "access-key", "a", "", "Access Key")
 	objectStoreCredentialUpdateCmd.Flags().StringVarP(&credSecretAccessKey, "secret-key", "k", "", "Secret Key")
-	objectStoreCredentialUpdateCmd.Flags().BoolVarP(&credSuspended, "suspended", "u", false, "Suspend the credential")
 }
