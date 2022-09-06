@@ -18,7 +18,7 @@ var objectStoreCredentialUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"edit", "modify", "change", "update"},
 	Short:   "Update an Object Store Credential",
-	Example: "civo objectstore credential update CREDENTIAL_NAME --size SIZE",
+	Example: "civo objectstore credential update CREDENTIAL_NAME --access-key=ACCESS_KEY --secret-access-key=SECRET_ACCESS_KEY",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
@@ -37,24 +37,16 @@ var objectStoreCredentialUpdateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if credentialSize != 0 {
-			credential.MaxSizeGB = credentialSize
-		}
 		if credAccessKey != "" {
 			credential.AccessKeyID = credAccessKey
 		}
 		if credSecretAccessKey != "" {
 			credential.SecretAccessKeyID = credSecretAccessKey
 		}
-		if credSuspended {
-			credential.Suspended = true
-		}
 
 		cred, err := client.UpdateObjectStoreCredential(credential.ID, &civogo.UpdateObjectStoreCredentialRequest{
-			MaxSizeGB:         &credential.MaxSizeGB,
 			AccessKeyID:       &credential.AccessKeyID,
 			SecretAccessKeyID: &credential.SecretAccessKeyID,
-			Suspended:         credential.Suspended,
 			Region:            client.Region,
 		})
 		if err != nil {
