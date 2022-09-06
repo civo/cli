@@ -10,8 +10,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var accessKey string
-
 var objectStoreCredentialSecretCmd = &cobra.Command{
 	Use:     "secret",
 	Short:   "Access the secret key for the Object Store by providing your access key.",
