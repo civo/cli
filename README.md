@@ -49,7 +49,7 @@ brew install civo
 or if you prefer you can run this in the console:
 
 ```sh
-$ curl -sL https://civo.com/get | sh
+curl -sL https://civo.com/get | sh
 ```
 
 ### Installing on Windows
@@ -136,7 +136,7 @@ You can also use the Kubernetes options of the CLI. Kubectl is included inside o
 touch $HOME/.civo.json
 mkdir $HOME/.kube/
 touch $HOME/.kube/config
-docker run -it --rm -v $HOME/.civo.json:/.civo.json -v $HOME/.kube/config:$HOME/.kube/config civo/cli:latest
+docker run -it --rm -v $HOME/.civo.json:/.civo.json -v $HOME/.kube/config:/root/.kube/config civo/cli:latest
 ```
 
 To make usage easier, an alias is recommended.  Here's an example how to set one to the same command as would be used if installed directly on the system, and using the Docker image:
@@ -672,11 +672,13 @@ Kubernetes cluster my-first-cluster is now named Production
 
 #### Starting a cluster without default applications
 
-By default, `Traefik` is bundled in with `k3s` to act as the ingress controller. If you want to set up a cluster without `traefik`, you can use the `remove-applications` option in the creation command to start a cluster without it:
+By default, `Traefik` is bundled in with `k3s`. If you want to set up a cluster without Traefik, you can use the `remove-applications` option in the creation command to start a cluster without it:
 
 ```sh
-civo kubernetes create --remove-applications=Traefik --nodes=2 --wait
+civo kubernetes create --remove-applications=Traefik-v2-nodeport --nodes=2 --wait
 ```
+
+The command uses the application name as displayed by running `civo kubernetes applications ls`.
 
 #### Removing the cluster
 
