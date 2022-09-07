@@ -54,6 +54,11 @@ var apikeySaveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		if len(args) > 0 && len(args) < 2 {
+			utility.Info("There are too few arguments for this command")
+			os.Exit(1)
+		}
+
 		if len(args) == 0 && !loadAPIKeyFromEnv {
 			reader := bufio.NewReader(os.Stdin)
 			fmt.Printf("Enter a nice name for this account/API Key: ")
