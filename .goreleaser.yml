@@ -17,7 +17,7 @@ builds:
       - goos: windows
         goarch: 386
     ldflags:
-      - -s -w -X github.com/civo/cli/cmd.VersionCli={{.Version}} -X github.com/civo/cli/cmd.CommitCli={{.Commit}} -X github.com/civo/cli/cmd.DateCli={{.Date}}
+      - -s -w -X  github.com/civo/cli/common.VersionCli={{.Version}} -X  github.com/civo/cli/common.CommitCli={{.Commit}} -X  github.com/civo/cli/common.DateCli={{.Date}}
 checksum:
   name_template: "{{ .ProjectName }}-{{ .Version }}-checksums.sha256"
 changelog:
