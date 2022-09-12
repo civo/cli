@@ -140,7 +140,8 @@ func SaveConfig() {
 
 func checkConfigFile(filename string) error {
 	file, err := os.Stat(filename)
-	curr := Config{}
+	curr := Config{APIKeys: map[string]string{}}
+
 	curr.Meta = Metadata{
 		Admin:           false,
 		DefaultRegion:   "LON1",
