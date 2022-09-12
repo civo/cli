@@ -19,6 +19,7 @@ type Config struct {
 	Meta    Metadata          `json:"meta"`
 }
 
+// Metadata describes the metadata for Civo's CLI
 type Metadata struct {
 	Admin              bool      `json:"admin"`
 	CurrentAPIKey      string    `json:"current_apikey"`
@@ -141,7 +142,6 @@ func SaveConfig() {
 func checkConfigFile(filename string) error {
 	file, err := os.Stat(filename)
 	curr := Config{APIKeys: map[string]string{}}
-
 	curr.Meta = Metadata{
 		Admin:           false,
 		DefaultRegion:   "LON1",
