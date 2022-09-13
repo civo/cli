@@ -13,6 +13,7 @@ import (
 	"github.com/civo/cli/cmd/kubernetes"
 	"github.com/civo/cli/cmd/loadbalancer"
 	"github.com/civo/cli/cmd/network"
+	"github.com/civo/cli/cmd/objectstore"
 	"github.com/civo/cli/cmd/permission"
 	"github.com/civo/cli/cmd/region"
 	"github.com/civo/cli/cmd/size"
@@ -147,6 +148,7 @@ func init() {
 	rootCmd.AddCommand(kubernetes.KubernetesCmd)
 	rootCmd.AddCommand(loadbalancer.LoadBalancerCmd)
 	rootCmd.AddCommand(network.NetworkCmd)
+	rootCmd.AddCommand(objectstore.ObjectStoreCmd)
 	rootCmd.AddCommand(permission.PermissionsCmd)
 	rootCmd.AddCommand(region.RegionCmd)
 	rootCmd.AddCommand(size.SizeCmd)

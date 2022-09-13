@@ -24,10 +24,11 @@ var (
 				fmt.Printf("Build date (client): %s\n", common.DateCli)
 				fmt.Printf("Git commit (client): %s\n", common.CommitCli)
 				fmt.Printf("OS/Arch (client): %s/%s\n", runtime.GOOS, runtime.GOARCH)
+				utility.CheckVersionUpdate()
 			case quiet:
 				fmt.Printf("v%s\n", common.VersionCli)
 			default:
-				utility.Error("Testing Error")
+				utility.CheckVersionUpdate()
 				fmt.Printf("Civo CLI v%s\n", common.VersionCli)
 			}
 		},
