@@ -15,10 +15,16 @@ var objectStoreCredentialSecretCmd = &cobra.Command{
 	Short:   "Access the secret key for the Object Store by providing your access key.",
 	Example: "civo objectstore credential secret --access-key ACCESS_KEY",
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		var key string
