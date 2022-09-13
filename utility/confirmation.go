@@ -89,12 +89,17 @@ func UserConfirmedOverwrite(resourceType string, ignoringConfirmed bool) bool {
 }
 
 // ReadUserInput reads user input.
-func ReadUserInput(in io.Reader) (string, error) {
+func ReadUserInput(in io.Reader) error {
 	reader := bufio.NewReader(in)
 	answer, err := reader.ReadString('\n')
 	if err != nil {
-		return "", err
+		return err
 	}
 	answer = strings.TrimRight(answer, "\r\n")
-	return strings.ToLower(answer), nil
+	strings.ToLower(answer)
+	if answer != "y" && answer != "ye" && answer != "yes" {
+		return fmt.Errorf("invalid user input")
+	}
+
+	return nil
 }
