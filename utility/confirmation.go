@@ -88,8 +88,8 @@ func UserConfirmedOverwrite(resourceType string, ignoringConfirmed bool) bool {
 	return true
 }
 
-// ReadUserInput reads user input.
-func ReadUserInput(in io.Reader) error {
+// ReadUserInputAndCheckIfYes is a function that can retrieve user input in form of string and checks if it is a yes.
+func ReadUserInputAndCheckIfYes(in io.Reader) error {
 	reader := bufio.NewReader(in)
 	answer, err := reader.ReadString('\n')
 	if err != nil {
