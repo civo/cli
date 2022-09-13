@@ -19,10 +19,16 @@ var objectStoreCredentialExportCmd = &cobra.Command{
 	Short:   "Export the credentials for your Object Store.",
 	Example: "civo objectstore credential export --access-key=ACCESS_KEY --format=FORMAT (We support env and s3cfg)",
 	Run: func(cmd *cobra.Command, args []string) {
+		utility.EnsureCurrentRegion()
+
 		client, err := config.CivoAPIClient()
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		var key string
