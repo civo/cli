@@ -72,8 +72,24 @@ func loadConfig(filename string) {
 	jsonParser := json.NewDecoder(configFile)
 	err = jsonParser.Decode(&Current)
 	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+		Current.Meta.Admin = false
+		Current.Meta.DefaultRegion = "LON1"
+		Current.Meta.URL = "https://api.civo.com"
+		Current.Meta.LastCmdExecuted = time.Now()
+
+		fileContend, jsonErr := json.Marshal(Current)
+		if jsonErr != nil {
+			fmt.Printf("Error parsing the JSON")
+			os.Exit(1)
+		}
+		err = ioutil.WriteFile(filename, fileContend, 0600)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}
+	if Current.APIKeys == nil {
+		Current.APIKeys = map[string]string{}
 	}
 
 	checkEnvVarSet, found := os.LookupEnv("CIVO_TOKEN")
