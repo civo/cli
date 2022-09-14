@@ -21,6 +21,7 @@ var objectStoreCredentialCreateCmd = &cobra.Command{
 	Long: `Create a new Object Store Credential with preexisting access key and secret key
 		civo objectstore credential create CREDENTIAL_NAME --access-key ACCESS_KEY --secret-key SECRET_KEY
 	`,
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
