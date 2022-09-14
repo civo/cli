@@ -9,7 +9,7 @@ require (
 	github.com/bradfitz/iter v0.0.0-20191230175014-e8f45d346db8 // indirect
 	github.com/briandowns/spinner v1.11.1
 	github.com/c4milo/unpackit v0.0.0-20170704181138-4ed373e9ef1c // indirect
-	github.com/civo/civogo v0.3.9
+	github.com/civo/civogo v0.3.12
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/google/go-github v17.0.0+incompatible // indirect
@@ -40,20 +40,11 @@ require (
 	github.com/MichaelMure/go-term-text v0.2.7 // indirect
 	github.com/alecthomas/chroma v0.7.1 // indirect
 	github.com/danwakefield/fnmatch v0.0.0-20160403171240-cbb64ac3d964 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/disintegration/imaging v1.6.2 // indirect
 	github.com/dlclark/regexp2 v1.1.6 // indirect
 	github.com/eliukblau/pixterm/pkg/ansimage v0.0.0-20191210081756-9fb6cf8c2f75 // indirect
-	github.com/go-logr/logr v0.4.0 // indirect
-	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gomarkdown/markdown v0.0.0-20191123064959-2c17d62f5098 // indirect
-	github.com/google/go-cmp v0.5.7 // indirect
-	github.com/google/gofuzz v1.1.0 // indirect
-	github.com/googleapis/gnostic v0.4.1 // indirect
-	github.com/imdario/mergo v0.3.5 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
-	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/jwalton/go-supportscolor v1.1.0 // indirect
 	github.com/klauspost/compress v1.4.1 // indirect
 	github.com/klauspost/cpuid v1.2.0 // indirect
@@ -61,25 +52,9 @@ require (
 	github.com/lucasb-eyer/go-colorful v1.0.3 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-runewidth v0.0.8 // indirect
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/image v0.0.0-20191206065243-da761ea9ff43 // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
-	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
 	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
-	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba // indirect
-	google.golang.org/appengine v1.6.5 // indirect
-	google.golang.org/protobuf v1.26.0 // indirect
-	gopkg.in/inf.v0 v0.9.1 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
-	k8s.io/api v0.21.2 // indirect
-	k8s.io/apimachinery v0.21.2 // indirect
-	k8s.io/client-go v0.21.2 // indirect
-	k8s.io/klog/v2 v2.8.0 // indirect
-	k8s.io/utils v0.0.0-20201110183641-67b214c5f920 // indirect
-	sigs.k8s.io/structured-merge-diff/v4 v4.1.0 // indirect
-	sigs.k8s.io/yaml v1.2.0 // indirect
 )
