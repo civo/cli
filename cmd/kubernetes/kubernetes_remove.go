@@ -66,6 +66,21 @@ var kubernetesRemoveCmd = &cobra.Command{
 			kubernetesNameList = append(kubernetesNameList, v.Name)
 		}
 
+		var volsNameList []string
+		for _, v := range kuberneteList {
+			vols, err := client.ListVolumesForCluster(v.ID)
+			if err != nil {
+				utility.Error("error getting the list of dangling volumes: %s", err)
+				os.Exit(1)
+			}
+			for _, v := range vols {
+				volsNameList = append(volsNameList, v.Name)
+			}
+			if vols != nil {
+				utility.YellowConfirm(fmt.Sprintf("You have the following volumes attached to this cluster - %s, please consider deleting the attached volumes before you delete the cluster\n", utility.Green(strings.Join(volsNameList, ", "))))
+			}
+		}
+
 		if utility.UserConfirmedDeletion(fmt.Sprintf("Kubernetes %s", pluralize.Pluralize(len(kuberneteList), "cluster")), common.DefaultYes, strings.Join(kubernetesNameList, ", ")) {
 
 			for _, v := range kuberneteList {

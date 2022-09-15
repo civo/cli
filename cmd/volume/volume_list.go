@@ -12,6 +12,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var dangling bool
+
 var volumeListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
@@ -42,10 +44,19 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 			os.Exit(1)
 		}
 
-		volumes, err := client.ListVolumes()
-		if err != nil {
-			utility.Error("%s", err)
-			os.Exit(1)
+		var volumes []civogo.Volume
+		if dangling {
+			volumes, err = client.ListDanglingVolumes()
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+		} else {
+			volumes, err = client.ListVolumes()
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
 		}
 
 		networks, err := client.ListNetworks()
@@ -94,7 +105,12 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 						break
 					}
 				}
-				ow.AppendDataWithLabel("cluster_id", cluster.Name, "Cluster")
+				if cluster != nil {
+					ow.AppendDataWithLabel("cluster_id", cluster.Name, "Cluster")
+				} else {
+					ow.AppendDataWithLabel("cluster_id", "", "Cluster")
+					volume.Status = "dangling"
+				}
 			} else {
 				ow.AppendDataWithLabel("cluster_id", "", "Cluster")
 			}

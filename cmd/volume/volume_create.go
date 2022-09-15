@@ -59,6 +59,10 @@ var volumeCreateCmd = &cobra.Command{
 
 		volume, err := client.NewVolume(volumeConfig)
 		if err != nil {
+			if err == civogo.QuotaLimitReachedError {
+				utility.Info("Please consider deleting dangling volumes, if any. To check if you have any dangling volumes, run `civo volume ls --dangling`")
+				os.Exit(1)
+			}
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
