@@ -253,6 +253,10 @@ If you wish to use a custom format, the available fields are:
 		var instance *civogo.Instance
 		resp, err := client.CreateInstance(config)
 		if err != nil {
+			if err == civogo.QuotaLimitReachedError {
+				utility.Info("Please consider deleting dangling volumes, if any. To check if you have any dangling volumes, run `civo volume ls --dangling`")
+				os.Exit(1)
+			}
 			utility.Error("%s", err)
 			os.Exit(1)
 		}

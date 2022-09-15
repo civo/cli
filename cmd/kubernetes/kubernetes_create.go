@@ -194,6 +194,10 @@ var kubernetesCreateCmd = &cobra.Command{
 			if utility.UserConfirmedOverwrite("kubernetes config", common.DefaultYes) {
 				kubernetesCluster, err = client.NewKubernetesClusters(configKubernetes)
 				if err != nil {
+					if err == civogo.QuotaLimitReachedError {
+						utility.Info("Please consider deleting dangling volumes, if any. To check if you have any dangling volumes, run `civo volume ls --dangling`")
+						os.Exit(1)
+					}
 					utility.Error("%s", err)
 					os.Exit(1)
 				}
@@ -204,6 +208,10 @@ var kubernetesCreateCmd = &cobra.Command{
 		} else {
 			kubernetesCluster, err = client.NewKubernetesClusters(configKubernetes)
 			if err != nil {
+				if err == civogo.QuotaLimitReachedError {
+					utility.Info("Please consider deleting dangling volumes, if any. To check if you have any dangling volumes, run `civo volume ls --dangling`")
+					os.Exit(1)
+				}
 				utility.Error("%s", err)
 				os.Exit(1)
 			}
