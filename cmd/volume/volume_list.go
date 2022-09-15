@@ -79,6 +79,7 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 
 		ow := utility.NewOutputWriter()
 
+		utility.Info("Volumes with status 'dangling' mean they are attached to a cluster that no longer exists. You can attach them to an instance, or delete them if they are no longer needed.")
 		for _, volume := range volumes {
 			ow.StartLine()
 			ow.AppendDataWithLabel("id", volume.ID, "ID")

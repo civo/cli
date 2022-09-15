@@ -77,7 +77,7 @@ var kubernetesRemoveCmd = &cobra.Command{
 				volsNameList = append(volsNameList, v.Name)
 			}
 			if vols != nil {
-				utility.YellowConfirm(fmt.Sprintf("You have the following volumes attached to this cluster - %s, please consider deleting the attached volumes before you delete the cluster\n", utility.Green(strings.Join(volsNameList, ", "))))
+				utility.YellowConfirm("There are volume(s) attached to this cluster. Consider deleting or detaching these before deleting the cluster:\n%s\n", utility.Green(strings.Join(volsNameList, ", ")))
 			}
 		}
 
