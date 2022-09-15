@@ -3,7 +3,6 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"time"
 
@@ -72,8 +71,24 @@ func loadConfig(filename string) {
 	jsonParser := json.NewDecoder(configFile)
 	err = jsonParser.Decode(&Current)
 	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+		Current.Meta.Admin = false
+		Current.Meta.DefaultRegion = "LON1"
+		Current.Meta.URL = "https://api.civo.com"
+		Current.Meta.LastCmdExecuted = time.Now()
+
+		fileContend, jsonErr := json.Marshal(Current)
+		if jsonErr != nil {
+			fmt.Printf("Error parsing the JSON")
+			os.Exit(1)
+		}
+		err = os.WriteFile(filename, fileContend, 0600)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}
+	if Current.APIKeys == nil {
+		Current.APIKeys = map[string]string{}
 	}
 
 	checkEnvVarSet, found := os.LookupEnv("CIVO_TOKEN")
@@ -90,7 +105,7 @@ func loadConfig(filename string) {
 			os.Exit(1)
 		}
 
-		err = ioutil.WriteFile(filename, dataBytes, 0600)
+		err = os.WriteFile(filename, dataBytes, 0600)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -126,7 +141,7 @@ func SaveConfig() {
 		os.Exit(1)
 	}
 
-	err = ioutil.WriteFile(filename, dataBytes, 0600)
+	err = os.WriteFile(filename, dataBytes, 0600)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -159,7 +174,7 @@ func checkConfigFile(filename string) error {
 		if err != nil {
 			return err
 		}
-		err = ioutil.WriteFile(filename, fileContend, 0600)
+		err = os.WriteFile(filename, fileContend, 0600)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -168,7 +183,7 @@ func checkConfigFile(filename string) error {
 	} else {
 		size := file.Size()
 		if size == 0 {
-			err = ioutil.WriteFile(filename, fileContend, 0600)
+			err = os.WriteFile(filename, fileContend, 0600)
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
@@ -194,5 +209,17 @@ func DefaultAPIKey() string {
 
 // CivoAPIClient returns a civogo client using the current default API key
 func CivoAPIClient() (*civogo.Client, error) {
-	return civogo.NewClientWithURL(DefaultAPIKey(), Current.Meta.URL, Current.Meta.DefaultRegion)
+	cliClient, err := civogo.NewClientWithURL(DefaultAPIKey(), Current.Meta.URL, Current.Meta.DefaultRegion)
+	if err != nil {
+		return nil, err
+	}
+
+	// Update the user agent to include the version of the CLI
+	cliComponent := &civogo.Component{
+		Name:    "civo-cli",
+		Version: common.VersionCheck().Current,
+	}
+	cliClient.SetUserAgent(cliComponent)
+
+	return cliClient, nil
 }
