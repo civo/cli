@@ -1023,9 +1023,11 @@ Removed the network cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa290e1
 
 #### Introduction
 
+Object stores are S3-compatible data storage structures on Civo. Through creating object stores in your account, you can manage unstructured data within the size limits of each object store and subject to your quota.
 #### Listing Object Stores
+
 You can run `civo objectstore ls` to get the list of all object stores in your account.
-```sh
+```console
 $ civo objectstore ls
 +--------+----------+------+---------------------------+--------+
 | ID     | Name     | Size | Object Store Endpoint     | Status |
@@ -1036,7 +1038,9 @@ $ civo objectstore ls
 ```
 
 #### Creating Object Stores
-You can create an object store by running `civo objectstore create` with an object store name parameter. You can also specify the size by using the `--size` flag. If you don't specify the size, it will be set to 500GB by default.
+
+You can create an object store by running `civo objectstore create` with an object store name parameter. You can also specify the size by using the `--size` flag. If you don't specify the size, it will be set to 500GB by default. If you do not specify a `--region` flag, the object store will be created in your currently-active region.
+
 ```sh
 $ civo objectstore create cli-demo
 
@@ -1045,16 +1049,19 @@ To check the status of the Object Store run: civo objectstore show cli-demo
 ```
 
 #### Updating Object Stores
+
 Provided you have room in your Civo quota, you can update the size of an object store by running `civo objectstore update` with the object store name and the new size.
-```sh
+
+```console
 $ civo objectstore update cli-demo --size=1000
 
 The Object Store with ID 699e42a7-918b-42f7-ac22-fb9869e835ad was updated to size: 1000 GB 
 ```
 
 #### Deleting Object Stores
+
 You can delete an object store by running `civo objectstore delete` with the object store name.
-```sh
+```console
 $ civo objectstore delete cli-demo 
 
 Warning: Are you sure you want to delete the cli-demo objectStore (y/N) ? y
@@ -1065,8 +1072,12 @@ The objectStore (cli-demo) has been deleted
 
 #### Introduction
 
+Access to object stores is controlled by credentials management. When a new object store is created, a default administrative set of credentials is created with it. You can create other credentials for object stores you create, and export credential information for use in applications. 
+
 #### Listing Object Store Credentials
+
 You can run `civo objectstore credential ls` to get the list of all object store credentials in your account.
+
 ```sh
 $ civo objectstore credential ls
 
@@ -1079,14 +1090,20 @@ $ civo objectstore credential ls
 ```
 
 #### Creating Object Store Credentials
+
 You can create an object store credential by running `civo objectstore credential create` with a credential name parameter. You can also specify an access key and a secret access key with `----access-key` and `--secret-key` flags respectively. If no flag is provided, we'll generate both the keys for you.
+
 ```sh
 $ civo objectstore credential create cli-demo-credential --access-key=YOUR_ACCESS_KEY --secret-key=YOUR_SECRET_KEY
 Creating Object Store Credential cli-demo-credential in LON1
 ```
 
 #### Exporting Credentials
-You can export the credentials by running `civo objectstore credential export` with the access key for your credential. We support export in 2 formats - `env` and `s3cfg`. If no `--format` flag is passed, we export it to `env` by default.
+
+You can export the credentials by running `civo objectstore credential export` with the access key for your credential. We support export in 2 formats - `env` and `s3cfg`. For more information on credential export formats, refer to the help text found at `civo objectstore credential export --help`.
+
+If no `--format` flag is passed, we export it to `env` by default.
+
 ```sh
 $ civo objectstore credential export --access-key=YOUR_ACCESS_KEY
 
@@ -1098,7 +1115,9 @@ export AWS_HOST=https://objectstore.lon1.civo.com
 ```
 
 #### Deleting Object Store Credentials
+
 You can delete an object store credential by running `civo objectstore credential delete` with the credential name as a parameter.
+
 ```sh
 $ civo objectstore credential delete civo objectstore credential delete cli-demo-fa5d-7de9b2
 
