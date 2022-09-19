@@ -1027,6 +1027,7 @@ Object stores are S3-compatible data storage structures on Civo. Through creatin
 #### Listing Object Stores
 
 You can run `civo objectstore ls` to get the list of all object stores in your account.
+
 ```console
 $ civo objectstore ls
 +--------+----------+------+---------------------------+--------+
@@ -1061,11 +1062,12 @@ The Object Store with ID 699e42a7-918b-42f7-ac22-fb9869e835ad was updated to siz
 #### Deleting Object Stores
 
 You can delete an object store by running `civo objectstore delete` with the object store name.
+
 ```console
 $ civo objectstore delete cli-demo 
 
-Warning: Are you sure you want to delete the cli-demo objectStore (y/N) ? y
-The objectStore (cli-demo) has been deleted
+Warning: Are you sure you want to delete the cli-demo Object Store (y/N) ? y
+The Object Store (cli-demo) has been deleted
 ```
 
 ## Object Store Credentials
@@ -1119,10 +1121,10 @@ export AWS_HOST=https://objectstore.lon1.civo.com
 You can delete an object store credential by running `civo objectstore credential delete` with the credential name as a parameter.
 
 ```sh
-$ civo objectstore credential delete civo objectstore credential delete cli-demo-fa5d-7de9b2
+$ civo objectstore credential delete cli-demo-fa5d-7de9b2
 
-Warning: Are you sure you want to delete the cli-demo-fa5d-7de9b2 objectStoreCredential (y/N) ? y
-The objectStoreCredential (cli-demo-fa5d-7de9b2) has been deleted
+Warning: Are you sure you want to delete the cli-demo-fa5d-7de9b2 Object Store Credential (y/N) ? y
+The Object Store Credential (cli-demo-fa5d-7de9b2) has been deleted
 ```
 
 
