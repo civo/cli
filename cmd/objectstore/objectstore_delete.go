@@ -63,7 +63,7 @@ var objectStoreDeleteCmd = &cobra.Command{
 			objectStoreNameList = append(objectStoreNameList, v.Name)
 		}
 
-		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(objectStoreList), "objectStore"), common.DefaultYes, strings.Join(objectStoreNameList, ", ")) {
+		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(objectStoreList), "Object Store"), common.DefaultYes, strings.Join(objectStoreNameList, ", ")) {
 
 			for _, v := range objectStoreList {
 				objectStore, err := client.FindObjectStore(v.ID)

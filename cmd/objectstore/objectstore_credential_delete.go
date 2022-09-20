@@ -62,7 +62,7 @@ var objectStoreCredentialDeleteCmd = &cobra.Command{
 			objectStoreCredsNameList = append(objectStoreCredsNameList, v.Name)
 		}
 
-		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(objectStoreCredsList), "objectStoreCredential"), common.DefaultYes, strings.Join(objectStoreCredsNameList, ", ")) {
+		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(objectStoreCredsList), "Object Store Credential"), common.DefaultYes, strings.Join(objectStoreCredsNameList, ", ")) {
 
 			for _, v := range objectStoreCredsList {
 				credential, err := client.FindObjectStoreCredential(v.ID)
