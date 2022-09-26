@@ -37,9 +37,7 @@ var objectStoreCreateCmd = &cobra.Command{
 			client.Region = common.RegionSet
 		}
 
-		if bucketSize == 0 {
-			bucketSize = 500
-		} else if bucketSize > 0 && bucketSize < 500 {
+		if bucketSize < 500 {
 			utility.YellowConfirm("The minimum size to create an object store is 500 GB. Would you like to create an %s of 500 GB? (y/n) ? ", utility.Green("object store"))
 			_, err := utility.UserAccepts(os.Stdin)
 			if err != nil {
