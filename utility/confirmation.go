@@ -87,3 +87,19 @@ func UserConfirmedOverwrite(resourceType string, ignoringConfirmed bool) bool {
 
 	return true
 }
+
+// UserAccepts is a function that can retrieve user input in form of string and checks if it is a yes.
+func UserAccepts(in io.Reader) (bool, error) {
+	reader := bufio.NewReader(in)
+	answer, err := reader.ReadString('\n')
+	if err != nil {
+		return false, err
+	}
+	answer = strings.TrimRight(answer, "\r\n")
+	strings.ToLower(answer)
+	if answer != "y" && answer != "ye" && answer != "yes" {
+		return false, fmt.Errorf("invalid user input")
+	}
+
+	return true, nil
+}
