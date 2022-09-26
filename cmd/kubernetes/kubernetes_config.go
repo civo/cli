@@ -89,6 +89,7 @@ If you wish to use a custom format, the available fields are:
 						utility.Error("Saving the cluster config failed with %s", err)
 						os.Exit(1)
 					}
+					config.Current.Clusters[kube.ID] = true
 				} else {
 					fmt.Println("Operation aborted.")
 					os.Exit(1)
@@ -100,6 +101,7 @@ If you wish to use a custom format, the available fields are:
 					utility.Error("Saving the cluster config failed with %s", err)
 					os.Exit(1)
 				}
+				config.Current.Clusters[kube.ID] = true
 			}
 
 		}

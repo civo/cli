@@ -1,6 +1,8 @@
 package kubernetes
 
 import (
+	"fmt"
+
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -60,6 +62,9 @@ If you wish to use a custom format, the available fields are:
 				ow.AppendDataWithLabel("status", cluster.Status, "Status")
 			}
 
+			if config.Current.Clusters[cluster.ID] == false {
+				ow.AppendDataWithLabel("name", cluster.Name+" *", "Name")
+			}
 		}
 
 		switch common.OutputFormat {
@@ -70,5 +75,7 @@ If you wish to use a custom format, the available fields are:
 		default:
 			ow.WriteTable()
 		}
+		fmt.Println()
+		utility.Info("Cluster names marked with * are clusters which are over 1 year old. You might want to consider redownloading the config for these clusters. Ignore if already downloaded.")
 	},
 }

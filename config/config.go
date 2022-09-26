@@ -14,8 +14,9 @@ import (
 
 // Config describes the configuration for Civo's CLI
 type Config struct {
-	APIKeys map[string]string `json:"apikeys"`
-	Meta    Metadata          `json:"meta"`
+	APIKeys  map[string]string `json:"apikeys"`
+	Meta     Metadata          `json:"meta"`
+	Clusters map[string]bool   `json:"clusters"`
 }
 
 // Metadata describes the metadata for Civo's CLI
