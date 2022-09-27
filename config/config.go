@@ -99,6 +99,26 @@ func loadConfig(filename string) {
 	}
 
 	if time.Since(Current.Meta.LatestReleaseCheck) > (24 * time.Hour) {
+		if len(Current.APIKeys) > 0 {
+			client, err := CivoAPIClient()
+			if err != nil {
+				fmt.Println("Unable to create a Civo API client, please report this at https://github.com/civo/cli")
+				os.Exit(1)
+			}
+			clusters, err := client.ListKubernetesClusters()
+			if err != nil {
+				fmt.Println(err.Error())
+				os.Exit(1)
+			}
+			Current.Clusters = make(map[string]bool)
+			for _, cluster := range clusters.Items {
+				Current.Clusters[cluster.ID] = true
+				timeSince := int(time.Since(cluster.BuiltAt).Hours()) % 8670
+				if timeSince > 0 {
+					Current.Clusters[cluster.ID] = false
+				}
+			}
+		}
 		Current.Meta.LatestReleaseCheck = time.Now()
 		dataBytes, err := json.Marshal(Current)
 		if err != nil {

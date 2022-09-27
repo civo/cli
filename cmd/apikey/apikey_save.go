@@ -7,7 +7,6 @@ import (
 	"runtime"
 	"strings"
 	"syscall"
-	"time"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
@@ -132,27 +131,6 @@ var apikeySaveCmd = &cobra.Command{
 			config.Current.Meta.CurrentAPIKey = name
 			config.SaveConfig()
 		}
-
-		if config.Current.Clusters == nil {
-			client, err := civogo.NewClientWithURL(apiKey, config.Current.Meta.URL, config.Current.Meta.DefaultRegion)
-			if err != nil {
-				utility.Error("Unable to create a Civo API client, please report this at https://github.com/civo/cli")
-				os.Exit(1)
-			}
-			clusters, err := client.ListKubernetesClusters()
-			if err != nil {
-				fmt.Println(err.Error())
-				os.Exit(1)
-			}
-			config.Current.Clusters = make(map[string]bool)
-			for _, cluster := range clusters.Items {
-				config.Current.Clusters[cluster.ID] = true
-				if time.Since(cluster.BuiltAt) > (365 * 24 * time.Hour) {
-					config.Current.Clusters[cluster.ID] = false
-				}
-			}
-		}
-		config.SaveConfig()
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"name": name, "key": apiKey})
 
