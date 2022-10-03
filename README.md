@@ -82,13 +82,21 @@ You will also, of course, need a Civo account, for which you can [register here]
 
 For Linux Civo CLI can be installed by various methods.
 
-* Install via brew, as shows in above step.
+* Install via the direct shell script:
 
-* Install via wget, specifying the release version you want:
+```sh
+curl -sL https://civo.com/get | sh
+```
+
+* Install via the brew package manager, as shown in the above instructions for MacOS.
+
+* Install via wget, specifying the [release version](https://github.com/civo/cli/releases) you want.
+
+***Note that the version in the example below may not be the latest. Specify the version based on the latest available if you are using this method.***
 
 ```
-wget https://github.com/civo/cli/releases/download/v0.7.6/civo-0.7.6-linux-amd64.tar.gz
-tar -xvf civo-0.7.6-linux-amd64.tar.gz
+wget https://github.com/civo/cli/releases/download/v1.0.40/civo-1.0.40-linux-amd64.tar.gz
+tar -xvf civo-1.0.40-linux-amd64.tar.gz
 chmod +x civo
 mv ./civo /usr/local/bin/
 ```
