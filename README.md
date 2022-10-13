@@ -1135,6 +1135,75 @@ Warning: Are you sure you want to delete the cli-demo-fa5d-7de9b2 Object Store C
 The Object Store Credential (cli-demo-fa5d-7de9b2) has been deleted
 ```
 
+## Load Balancers
+
+Load Balancer is a service that sends connections to the first server in the pool until it’s at capacity. When the server is full, it sends new connections to the next available server. It also acts as a stable endpoint for external traffic to access. 
+
+The load balancer tracks the availability of pods with the Kubernetes Endpoints API. When it receives a request for a specific Kubernetes service, the Kubernetes load balancer sorts in order or round robins the request among relevant Kubernetes pods for the service.
+
+The key components of Kubernetes load balancing are:
+
+1. Pods and containers - It helps you classify and select data. 
+2. Service - This is a group of pods and clusters under a common name.
+3. Ingress or the ingress controller - It provides access to services from external clients. 
+4. Kubernetes load balancer - This internally balances Kubernetes clusters.
+
+#### Uses of Load Balancers in Kubernetes
+
+Load balancing in Kubernetes helps improve server utilization, reduces ‘system down’ events, and provides faster data transactions. Additionally, Kubernetes load balancers work on level 7, providing you access to all data parsed through the system. In other words, you have the very best data monitoring and analytics possible when using Kubernetes load balancers.  
+
+#### How does Kubernetes handle Load Balancing
+
+Kubernetes handles load balancing through a load balancer. This can be internal or external. In the case of internal load balancing, the load balancer enables routing across containers. In essence, internal load balancers help you to optimize in-cluster load balancing. That said, external load balancing helps direct internet traffic to nodes.
+
+#### How to Set up a Load Balancer
+
+As mentioned above, a Civo Kubernetes Load Balancer is created as a service within your cluster. When that service object is created, the Civo API recognizes the request and assigns the Load Balancer a public IP address, as well as begins charging the account for its usage.
+
+Let's start by defining a route into our app that we deployed earlier. Here is a very bare-bones load balancer definition file:
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: civo-lb-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: echo
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 8443
+    name: echo
+```
+
+You can see that the object is of `kind: Service` and `type: LoadBalancer`. Any object with these qualities applied to your cluster will be picked up by the Cloud Controller Manager and trigger the creation of an external load balancer.
+
+If you save the file above as `loadbalancer.yaml` and run `kubectl apply -f loadbalancer.yaml` you should see the following:
+
+```
+$ kubectl apply -f loadbalancer.yaml
+service/civo-lb-service created
+```
+
+The load balancer should show on your cluster's dashboard page in your account too:
+As mentioned, this is a bare-bones Load Balancer. We will be looking at some configuration options in a moment, but let's test the routing first.
+Once the Civo Load Balancer is deployed by creating the Service object, it will begin routing requests sent to the IP address assigned. In this demonstration case, making a HTTP request to 74.220.23.6 on port 5000 will respond with a rotation of the echo deployment on the cluster. The app is one that responds with details of the request and server, so we can extract just the name of the responding host. This shows that the requests are routed to both replica pods I have defined for my app:
+
+```
+$ while sleep 1; do curl -k --silent https://74.220.23.6:5000 | grep -w Hostname; done
+Hostname: echo-588764ddd9-jlgx6
+Hostname: echo-588764ddd9-xdpjq
+Hostname: echo-588764ddd9-jlgx6
+Hostname: echo-588764ddd9-xdpjq
+Hostname: echo-588764ddd9-jlgx6
+Hostname: echo-588764ddd9-xdpjq
+Hostname: echo-588764ddd9-jlgx6
+```
+
+If you want to see what the `echo` app returns in full, you can run `curl -k https://your-load-balancer-ip-address:5000` - there's quite a lot of information there.
+
 
 ## Quota
 
