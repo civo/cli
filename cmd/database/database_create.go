@@ -14,9 +14,9 @@ import (
 var dbCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
-	Example: "civo db create <DATABASE-NAME> <DATABASE-SIZE> <SOFTWARE>",
+	Example: "civo db create <DATABASE-NAME> <DATABASE-SIZE>",
 	Short:   "Create a new database",
-	Args:    cobra.MinimumNArgs(3),
+	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -30,28 +30,40 @@ var dbCreateCmd = &cobra.Command{
 			client.Region = common.RegionSet
 		}
 
-		network, err := client.GetDefaultNetwork()
-		if err != nil {
-			utility.Error("Unable to find the default network: %s", err)
+		var network *civogo.Network
+		if networkID != "" {
+			network, err = client.FindNetwork(networkID)
+			if err != nil {
+				utility.Error("the network %s doesn't exist", networkID)
+				os.Exit(1)
+			}
+		} else {
+			network, err = client.GetDefaultNetwork()
+			if err != nil {
+				utility.Error("Unable to find the default network: %s", err)
+				os.Exit(1)
+			}
+		}
+
+		if replicas < 0 {
+			utility.Error("Replicas can't be negative")
 			os.Exit(1)
 		}
 
-		firewall, err := client.FindFirewall("default")
-		if err != nil {
-			utility.Error("Unable to find the default firewall: %s", err)
-			os.Exit(1)
+		if firewallID != "" {
+			_, err = client.FindFirewall(firewallID)
+			if err != nil {
+				utility.Error("the firewall %s doesn't exist", firewallID)
+				os.Exit(1)
+			}
 		}
 
 		configDB := civogo.CreateDatabaseRequest{
-			Name:                 args[0],
-			Size:                 args[1],
-			Software:             args[2],
-			SoftwareVersion:      softwareVersion,
-			NetworkID:            network.ID,
-			Replicas:             replicas,
-			NumSnapshotsToRetain: numSnapshots,
-			PublicIPRequired:     publicIP,
-			FirewallID:           firewall.ID,
+			Name:       args[0],
+			Size:       args[1],
+			NetworkID:  network.ID,
+			Replicas:   replicas,
+			FirewallID: firewallID,
 		}
 
 		db, err := client.NewDatabase(&configDB)
@@ -67,7 +79,7 @@ var dbCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Database %s (%s) has been created\n", utility.Green(db.Name), db.ID)
+			fmt.Printf("Database (%s) with ID %s has been created\n", utility.Green(db.Name), db.ID)
 		}
 	},
 }
