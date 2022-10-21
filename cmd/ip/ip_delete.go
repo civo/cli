@@ -14,7 +14,7 @@ import (
 
 var ipDeleteCmd = &cobra.Command{
 	Use:     "delete",
-	Aliases: []string{"unallocate", "free", "remove"},
+	Aliases: []string{"unallocate", "free", "remove", "rm"},
 	Example: `civo ip delete 127.0.0.1 
 civo ip delete server-1
 civo ip delete <ip id>
