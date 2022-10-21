@@ -31,9 +31,9 @@ func init() {
 	DBCmd.AddCommand(dbDeleteCmd)
 
 	dbCreateCmd.Flags().IntVarP(&replicas, "replicas", "r", 0, "the number of replicas for the database")
-	dbCreateCmd.Flags().StringVarP(&firewallID, "firewall", "f", "", "the firewall to use for the database")
+	dbCreateCmd.Flags().StringVarP(&firewallID, "firewall", "", "", "the firewall to use for the database")
 	dbCreateCmd.Flags().StringVarP(&networkID, "network", "n", "", "the network to use for the database")
 
 	dbUpdateCmd.Flags().IntVarP(&replicas, "replicas", "r", 0, "the number of replicas for the database")
-	dbUpdateCmd.Flags().StringVarP(&firewallID, "firewall", "f", "", "the firewall to use for the database")
+	dbUpdateCmd.Flags().StringVarP(&firewallID, "firewall", "", "", "the firewall to use for the database")
 }
