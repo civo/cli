@@ -14,12 +14,11 @@ import (
 var dbCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
-	Example: "civo db create <DATABASE-NAME> <DATABASE-SIZE>",
+	Example: "civo db create <DATABASE-NAME> --size <SIZE>",
 	Short:   "Create a new database",
-	Args:    cobra.MinimumNArgs(2),
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
-
 		client, err := config.CivoAPIClient()
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -45,7 +44,9 @@ var dbCreateCmd = &cobra.Command{
 			}
 		}
 
-		if replicas < 0 {
+		if replicas == 0 {
+			replicas = 1
+		} else if replicas < 0 {
 			utility.Error("Replicas can't be negative")
 			os.Exit(1)
 		}
@@ -58,9 +59,30 @@ var dbCreateCmd = &cobra.Command{
 			}
 		}
 
+		sizes, err := client.ListInstanceSizes()
+		if err != nil {
+			utility.Error("Unable to list sizes %s", err)
+			os.Exit(1)
+		}
+
+		sizeIsValid := false
+		if size != "" {
+			for _, s := range sizes {
+				if s.Name == size {
+					size = s.Name
+					sizeIsValid = true
+					break
+				}
+			}
+			if !sizeIsValid {
+				utility.Error("The provided size is not valid")
+				os.Exit(1)
+			}
+		}
+
 		configDB := civogo.CreateDatabaseRequest{
 			Name:       args[0],
-			Size:       args[1],
+			Size:       size,
 			NetworkID:  network.ID,
 			Replicas:   replicas,
 			FirewallID: firewallID,
