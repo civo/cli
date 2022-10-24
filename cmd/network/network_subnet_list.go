@@ -36,10 +36,14 @@ var networkSubnetListCmd = &cobra.Command{
 		for _, subnet := range subnets {
 			ow.StartLine()
 			ow.AppendDataWithLabel("id", subnet.ID, "ID")
-			ow.AppendDataWithLabel("label", subnet.Label, "Label")
-			ow.AppendDataWithLabel("network_id", subnet.NetworkID, "Network ID")
+			ow.AppendDataWithLabel("name", subnet.Name, "Name")
+			ow.AppendDataWithLabel("subnet_size", subnet.SubnetSize, "Subnet Size")
 			ow.AppendDataWithLabel("region", client.Region, "Region")
 			ow.AppendDataWithLabel("status", subnet.Status, "Status")
+
+			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
+				ow.AppendDataWithLabel("network_id", subnet.NetworkID, "Network ID")
+			}
 		}
 
 		switch common.OutputFormat {
