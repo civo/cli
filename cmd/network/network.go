@@ -6,6 +6,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var v4enabled, v6enabled bool
+var cidrv4 string
+
 // NetworkCmd manages Civo networks
 var NetworkCmd = &cobra.Command{
 	Use:     "network",
@@ -39,6 +42,10 @@ func init() {
 	NetworkCmd.AddCommand(networkUpdateCmd)
 	NetworkCmd.AddCommand(networkRemoveCmd)
 	NetworkCmd.AddCommand(networkSubnetCmd)
+
+	networkCreateCmd.Flags().BoolVarP(&v4enabled, "v4", "", true, "Enable IPv4 on the network")
+	networkCreateCmd.Flags().BoolVarP(&v6enabled, "v6", "", false, "Enable IPv6 on the network")
+	networkCreateCmd.Flags().StringVarP(&cidrv4, "cidr-v4", "c", "", "The CIDR for the IPv4 network")
 
 	networkSubnetCmd.AddCommand(networkSubnetListCmd)
 	networkSubnetCmd.AddCommand(networkSubnetCreateCmd)

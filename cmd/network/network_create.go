@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -28,9 +29,22 @@ var networkCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		network, err := client.NewNetwork(args[0])
+		var network *civogo.NetworkResult
+
+		nc := civogo.NetworkConfig{
+			Label:       args[0],
+			Region:      client.Region,
+			IPv4Enabled: &v4enabled,
+			IPv6Enabled: &v6enabled,
+		}
+
+		if cidrv4 != "" {
+			nc.CIDRv4 = cidrv4
+		}
+
+		network, err = client.CreateNetwork(nc)
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("Error creating the network: %s", err)
 			os.Exit(1)
 		}
 
