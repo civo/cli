@@ -2,9 +2,9 @@ package common
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
+	"github.com/google/go-github/github"
 	"github.com/tcnksm/go-latest"
 )
 
@@ -27,7 +27,8 @@ var (
 	DateCli = "unknown"
 )
 
-func VersionCheck() *latest.CheckResponse {
+// VersionCheck checks if there is a new version of the CLI
+func VersionCheck() (res *latest.CheckResponse, skip bool) {
 	githubTag := &latest.GithubTag{
 		Owner:             "civo",
 		Repository:        "cli",
@@ -35,8 +36,16 @@ func VersionCheck() *latest.CheckResponse {
 	}
 	res, err := latest.Check(githubTag, strings.Replace(VersionCli, "v", "", 1))
 	if err != nil {
+		if isGHRatelimitError(err) {
+			return nil, true
+		}
 		fmt.Printf("Checking for a newer version failed with %s \n", err)
-		os.Exit(1)
+		return nil, true
 	}
-	return res
+	return res, false
+}
+
+func isGHRatelimitError(err error) bool {
+	_, ok := err.(*github.RateLimitError)
+	return ok
 }

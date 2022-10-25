@@ -44,10 +44,13 @@ func Red(value string) string {
 	return newColor(value)
 }
 
+// CheckVersionUpdate checks if there's an update to be done
 func CheckVersionUpdate() {
-	res := common.VersionCheck()
-	if res.Outdated {
-		fmt.Printf("A newer version (v%s) is available, please upgrade with \"civo update\"\n", res.Current)
+	res, skip := common.VersionCheck()
+	if !skip {
+		if res.Outdated {
+			fmt.Printf("A newer version (v%s) is available, please upgrade with \"civo update\"\n", res.Current)
+		}
 	}
 }
 
