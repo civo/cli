@@ -161,7 +161,7 @@ func checkConfigFile(filename string) error {
 	curr := Config{APIKeys: map[string]string{}}
 	curr.Meta = Metadata{
 		Admin:           false,
-		DefaultRegion:   "LON1",
+		DefaultRegion:   "NYC1",
 		URL:             "https://api.civo.com",
 		LastCmdExecuted: time.Now(),
 	}
