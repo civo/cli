@@ -29,7 +29,7 @@ func main() {
 		if err := recover(); err != nil {
 			resp, skip := common.VersionCheck()
 			if skip == true {
-				fmt.Println("An error occurred, please try again later")
+				fmt.Println("An error occurred fetching the CLI tag, please try again later")
 				os.Exit(1)
 			}
 			res := resp.Current
