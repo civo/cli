@@ -49,5 +49,6 @@ func init() {
 
 	networkSubnetCmd.AddCommand(networkSubnetListCmd)
 	networkSubnetCmd.AddCommand(networkSubnetCreateCmd)
+	networkSubnetCmd.AddCommand(networkSubnetShowCmd)
 	networkSubnetCmd.AddCommand(networkSubnetRemoveCmd)
 }

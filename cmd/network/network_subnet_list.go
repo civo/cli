@@ -35,7 +35,7 @@ var networkSubnetListCmd = &cobra.Command{
 
 		for _, subnet := range subnets {
 			ow.StartLine()
-			ow.AppendDataWithLabel("id", subnet.ID, "ID")
+			ow.AppendDataWithLabel("id", utility.TruncateID(subnet.ID), "ID")
 			ow.AppendDataWithLabel("name", subnet.Name, "Name")
 			ow.AppendDataWithLabel("subnet_size", subnet.SubnetSize, "Subnet Size")
 			ow.AppendDataWithLabel("region", client.Region, "Region")
