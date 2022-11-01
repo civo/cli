@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"github.com/sirupsen/logrus"
 	"os"
 
 	"github.com/civo/cli/cmd/apikey"
@@ -32,7 +33,7 @@ var version bool
 var rootCmd = &cobra.Command{
 	Use:   "civo",
 	Short: "CLI to manage cloud resources at Civo.com",
-	Long: `civo is a CLI library for managing cloud resources such
+	Long: `civo CLI is a CLI library for managing cloud resources such
 as instances and Kubernetes clusters at Civo.com.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if version {
@@ -51,6 +52,7 @@ var completionCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := cmd.Help()
 		if err != nil {
+			logrus.Warn("A valid subcommand is not provided")
 			return err
 		}
 		return errors.New("a valid subcommand is required")
@@ -118,6 +120,7 @@ var completionZshCmd = &cobra.Command{
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
+		logrus.Fatal(err)
 		os.Exit(1)
 	}
 }
@@ -158,4 +161,16 @@ func init() {
 
 	// Add warning if the region is empty, for the user with the old config
 	config.ReadConfig()
+
+	// Log as Plain Text with colour coding.
+	logrus.SetFormatter(&logrus.TextFormatter{
+		DisableColors: false,
+		FullTimestamp: false,
+	})
+
+	// Output to stdout instead of the default stderr
+	logrus.SetOutput(os.Stdout)
+
+	// Only log the warning severity or above.
+	logrus.SetLevel(logrus.WarnLevel)
 }

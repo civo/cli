@@ -1,6 +1,7 @@
 package apikey
 
 import (
+	"github.com/sirupsen/logrus"
 	"sort"
 
 	"github.com/civo/cli/common"
@@ -41,6 +42,8 @@ Example: civo apikey ls -o custom -f "Name: Key"`,
 			ow.AppendDataWithLabel("default", defaultLabel, "Default")
 
 		}
+
+		logrus.Warn("This is a sample demo log")
 
 		switch common.OutputFormat {
 		case "json":
