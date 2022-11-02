@@ -1265,6 +1265,8 @@ $ civo diskimage ls
 
 Volumes are flexible-size additional storage for instances. By creating and associating a Volume with an instance, an additional virtual disk will be made available for backups or database files that can then moved to another instance.
 
+Volumes for Kubernetes clusters do not have to be created – a cluster object for a PersistentVolume and PersistentVolumeClaim will create the volume in your account.
+
 Volumes take disk space on your account's quota, and can only be created up to this quota limit. For more information about the quota system, see [Quota](#quota).
 
 #### Creating a Volume
@@ -1324,8 +1326,9 @@ To free up quota and therefore the amount to be billed to your account, you can 
 ```sh
 $ civo volume delete CLI-demo-volume
 The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 was deleted
-
 ```
+
+If a Kubernetes volume is showing with a status of `dangling` it can be deleted to release the quota and prevent further billing by running `civo volume delete <VOLUME-NAME> --region <REGION-NAME>`.
 
 ## Teams
 Teams are a grouping of users, each member of a team having one or more permissions, or roles. When a user logs in, they don't have to select which team to use - only which account they want to act within. The permissions available are the total set of permissions they have across the teams in that account, combined.
