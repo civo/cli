@@ -17,6 +17,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/civo/cli/cmd"
 	"github.com/civo/cli/common"
@@ -26,7 +27,13 @@ import (
 func main() {
 	defer func() {
 		if err := recover(); err != nil {
-			res := common.VersionCheck().Current
+			resp, skip := common.VersionCheck()
+			if skip == true {
+				fmt.Println("An error occurred fetching the CLI tag, please try again later")
+				os.Exit(1)
+			}
+			res := resp.Current
+
 			updateCmd := "civo update"
 			gitIssueLink := termlink.ColorLink("GitHub issue", "https://github.com/civo/cli/issues", "italic green")
 			fmt.Printf("panic : %s \nYour CLI Version : %s \nPlease, run %q and retry the command \nIf you are still facing issues, please report it on our community slack or open a %s \n", err, res, updateCmd, gitIssueLink)
