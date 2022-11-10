@@ -51,4 +51,16 @@ func init() {
 	networkSubnetCmd.AddCommand(networkSubnetCreateCmd)
 	networkSubnetCmd.AddCommand(networkSubnetShowCmd)
 	networkSubnetCmd.AddCommand(networkSubnetRemoveCmd)
+	networkSubnetCmd.AddCommand(networkSubnetAttachCmd)
+	networkSubnetCmd.AddCommand(networkSubnetDetachCmd)
+
+	networkSubnetAttachCmd.Flags().StringVarP(&subnetID, "subnet", "", "", "the id of subnet you want to attach to the instance")
+	networkSubnetAttachCmd.Flags().StringVarP(&instanceID, "instance", "", "", "the id of instance you want to attach your subnet to")
+	networkSubnetAttachCmd.MarkFlagRequired("subnet")
+	networkSubnetAttachCmd.MarkFlagRequired("instance")
+
+	networkSubnetDetachCmd.Flags().StringVarP(&subnetID, "subnet", "", "", "the id of subnet you want to attach to the instance")
+	networkSubnetDetachCmd.Flags().StringVarP(&instanceID, "instance", "", "", "the id of instance you want to attach your subnet to")
+	networkSubnetDetachCmd.MarkFlagRequired("subnet")
+	networkSubnetDetachCmd.MarkFlagRequired("instance")
 }
