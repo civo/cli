@@ -34,8 +34,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
-require github.com/savioxavier/termlink v1.2.1
-
 require (
 	github.com/MichaelMure/go-term-text v0.2.7 // indirect
 	github.com/alecthomas/chroma v0.7.1 // indirect
@@ -48,6 +46,7 @@ require (
 	github.com/jwalton/go-supportscolor v1.1.0 // indirect
 	github.com/klauspost/compress v1.4.1 // indirect
 	github.com/klauspost/cpuid v1.2.0 // indirect
+	github.com/konsorten/go-windows-terminal-sequences v1.0.1 // indirect
 	github.com/kyokomi/emoji v2.1.0+incompatible // indirect
 	github.com/lucasb-eyer/go-colorful v1.0.3 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect

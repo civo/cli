@@ -1,6 +1,7 @@
 package instance
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -59,9 +60,13 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		ow := utility.NewOutputWriter()
+		if len(instances) == 0 {
+			fmt.Println("No instances found in ", client.Region)
+			os.Exit(0)
+		}
+
 		for _, instance := range instances {
 			ow.StartLine()
-
 			ow.AppendDataWithLabel("id", instance.ID, "ID")
 			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
 			ow.AppendDataWithLabel("region", client.Region, "Region")
@@ -91,7 +96,6 @@ If you wish to use a custom format, the available fields are:
 				ow.AppendDataWithLabel("reverse_dns", instance.ReverseDNS, "Reverse DNS")
 			}
 		}
-
 		switch common.OutputFormat {
 		case "json":
 			ow.WriteMultipleObjectsJSON(common.PrettySet)
