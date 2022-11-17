@@ -39,7 +39,7 @@ var (
 			// fetch the new releases
 			releases, err := m.LatestReleases()
 			if err != nil {
-				if common.IsGHRatelimitError(err) {
+				if common.IsGHError(err) {
 					options := "1. Wait a few minutes and try again\n 2. Try switching to a different network (e.g. mobile data, VPN, etc)\n 3. Download latest CLI from https://github.com/civo/cli/releases"
 					fmt.Println("You have reached the github rate limit:\n " + options)
 					os.Exit(1)
