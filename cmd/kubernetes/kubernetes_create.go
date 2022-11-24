@@ -283,6 +283,7 @@ func InstallApps(defaultApps []string, apps, removeApps string) []string {
 
 	if apps != "" {
 		appsToInstall = strings.Split(apps, ",")
+		appsToInstall = append(appsToInstall, defaultApps...)
 	} else {
 		appsToInstall = defaultApps
 	}
