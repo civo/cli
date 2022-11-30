@@ -50,7 +50,7 @@ var dbShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("replicas", strconv.Itoa(db.Replicas), "Replicas")
 		ow.AppendDataWithLabel("software", db.Software, "Software")
 		ow.AppendDataWithLabel("software_version", db.SoftwareVersion, "Software Version")
-		ow.AppendDataWithLabel("public_ip", db.PublicIP, "Public IP")
+		ow.AppendDataWithLabel("public_ip", db.PublicIPv4, "Public IPv4")
 		ow.AppendDataWithLabel("username", db.Username, "Username")
 		ow.AppendDataWithLabel("password", db.Password, "Password")
 
