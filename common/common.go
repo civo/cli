@@ -36,7 +36,7 @@ func VersionCheck() (res *latest.CheckResponse, skip bool) {
 	}
 	res, err := latest.Check(githubTag, strings.Replace(VersionCli, "v", "", 1))
 	if err != nil {
-		if IsGHError(err) || IsGHRatelimitError(err) {
+		if IsGHError(err) {
 			return nil, true
 		}
 		fmt.Printf("Checking for a newer version failed with %s \n", err)
@@ -45,14 +45,8 @@ func VersionCheck() (res *latest.CheckResponse, skip bool) {
 	return res, false
 }
 
-// IsGHError checks if the error is a github rate limit error
+// IsGHError checks  if any errror from github is returned
 func IsGHError(err error) bool {
 	_, ok := err.(*github.ErrorResponse)
-	return ok
-}
-
-// IsGHRateLimitError checks if the error is a github rate limit error
-func IsGHRatelimitError(err error) bool {
-	_, ok := err.(*github.RateLimitError)
 	return ok
 }
