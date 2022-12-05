@@ -11,12 +11,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var networkCreateCmd = &cobra.Command{
+var networkSubnetCreateCmd = &cobra.Command{
 	Use:     "create",
-	Aliases: []string{"new", "add"},
-	Example: "civo network create NAME",
-	Short:   "Create a new network",
-	Args:    cobra.MinimumNArgs(1),
+	Aliases: []string{"create", "add"},
+	Short:   "Create a new subnet",
+	Example: "civo network subnet create <SUBNET-NAME> <NETWORK-ID>",
+	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -29,26 +29,23 @@ var networkCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		var network *civogo.NetworkResult
-
-		nc := civogo.NetworkConfig{
-			Label:       args[0],
-			Region:      client.Region,
-			IPv4Enabled: &v4enabled,
-			IPv6Enabled: &v6enabled,
-		}
-
-		if cidrv4 != "" {
-			nc.CIDRv4 = cidrv4
-		}
-
-		network, err = client.CreateNetwork(nc)
+		network, err := client.FindNetwork(args[1])
 		if err != nil {
-			utility.Error("Error creating the network: %s", err)
+			utility.Error("Network %s", err)
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"id": network.ID, "label": network.Label})
+		subnetConfig := civogo.SubnetConfig{
+			Name: args[0],
+		}
+
+		subnet, err := client.CreateSubnet(network.ID, subnetConfig)
+		if err != nil {
+			utility.Error("Subnet %s", err)
+			os.Exit(1)
+		}
+
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": subnet.ID, "name": subnet.Name})
 
 		switch common.OutputFormat {
 		case "json":
@@ -56,7 +53,7 @@ var networkCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Created a network called %s with ID %s\n", utility.Green(network.Label), utility.Green(network.ID))
+			fmt.Printf("The subnet (%s) was created in network with ID (%s)\n", utility.Green(subnet.Name), utility.Green(network.ID))
 		}
 	},
 }
