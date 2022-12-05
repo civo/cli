@@ -47,6 +47,8 @@ func VersionCheck() (res *latest.CheckResponse, skip bool) {
 
 // IsGHError checks  if any errror from github is returned
 func IsGHError(err error) bool {
-	_, ok := err.(*github.ErrorResponse)
-	return ok
+	_, rateLimit := err.(*github.RateLimitError)
+	_, abuseRateLimit := err.(*github.AbuseRateLimitError)
+	_, twoFactor := err.(*github.TwoFactorAuthError)
+	return rateLimit || abuseRateLimit || twoFactor
 }
