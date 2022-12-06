@@ -51,7 +51,7 @@ func VersionCheck() (res *latest.CheckResponse, skip bool) {
 func IsGHError(err error) error {
 	ghErr, ok := err.(*github.ErrorResponse)
 	if ok {
-		if ghErr.Response.StatusCode >= 400 || ghErr.Response.StatusCode < 500 {
+		if ghErr.Response.StatusCode >= 400 && ghErr.Response.StatusCode < 500 {
 			return errors.Wrap(err, `Failed to query the GitHub API for updates.`)
 		}
 		if ghErr.Response.StatusCode == http.StatusUnauthorized {
