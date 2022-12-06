@@ -9,15 +9,15 @@ import (
 func TestGithubError(t *testing.T) {
 	errorResponse := &github.ErrorResponse{Response: nil}
 	twoFactor := (*github.TwoFactorAuthError)(errorResponse)
-	if !IsGHError(twoFactor) {
+	if IsGHError(twoFactor) != nil {
 		t.Fail()
 	}
 	rateLimit := github.RateLimitError{}
-	if !IsGHError(&rateLimit) {
+	if IsGHError(&rateLimit) != nil {
 		t.Fail()
 	}
 	abuseRateLimit := github.AbuseRateLimitError{}
-	if !IsGHError(&abuseRateLimit) {
+	if IsGHError(&abuseRateLimit) != nil {
 		t.Fail()
 	}
 }

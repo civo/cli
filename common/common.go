@@ -2,9 +2,11 @@ package common
 
 import (
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/google/go-github/github"
+	"github.com/pkg/errors"
 	"github.com/tcnksm/go-latest"
 )
 
@@ -36,7 +38,7 @@ func VersionCheck() (res *latest.CheckResponse, skip bool) {
 	}
 	res, err := latest.Check(githubTag, strings.Replace(VersionCli, "v", "", 1))
 	if err != nil {
-		if IsGHError(err) {
+		if IsGHError(err) != nil {
 			return nil, true
 		}
 		fmt.Printf("Checking for a newer version failed with %s \n", err)
@@ -45,10 +47,18 @@ func VersionCheck() (res *latest.CheckResponse, skip bool) {
 	return res, false
 }
 
-// IsGHError checks  if any errror from github is returned
-func IsGHError(err error) bool {
-	_, rateLimit := err.(*github.RateLimitError)
-	_, abuseRateLimit := err.(*github.AbuseRateLimitError)
-	_, twoFactor := err.(*github.TwoFactorAuthError)
-	return rateLimit || abuseRateLimit || twoFactor
+//IsGHError checks if any error from github is returned
+func IsGHError(err error) error {
+	ghErr, ok := err.(*github.ErrorResponse)
+	if ok {
+		if ghErr.Response.StatusCode >= 400 || ghErr.Response.StatusCode < 500 {
+			return errors.Wrap(err, `Failed to query the GitHub API for updates.`)
+		}
+		if ghErr.Response.StatusCode == http.StatusUnauthorized {
+			return errors.Wrap(err, "Your Github token is invalid. Check the [github] section in ~/.gitconfig\n")
+		} else {
+			return errors.Wrap(err, "error finding latest release")
+		}
+	}
+	return nil
 }
