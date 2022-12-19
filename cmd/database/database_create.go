@@ -86,6 +86,7 @@ var dbCreateCmd = &cobra.Command{
 			NetworkID:  network.ID,
 			Replicas:   replicas,
 			FirewallID: firewallID,
+			Region:     client.Region,
 		}
 
 		db, err := client.NewDatabase(&configDB)
