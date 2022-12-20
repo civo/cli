@@ -47,7 +47,7 @@ var dbShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("name", db.Name, "Name")
 		ow.AppendDataWithLabel("status", db.Status, "Status")
 		ow.AppendDataWithLabel("size", db.Size, "Size")
-		ow.AppendDataWithLabel("replicas", strconv.Itoa(db.Replicas), "Replicas")
+		ow.AppendDataWithLabel("nodes", strconv.Itoa(db.Nodes), "Nodes")
 		ow.AppendDataWithLabel("software", db.Software, "Software")
 		ow.AppendDataWithLabel("software_version", db.SoftwareVersion, "Software Version")
 		ow.AppendDataWithLabel("public_ip", db.PublicIPv4, "Public IPv4")

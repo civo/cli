@@ -40,7 +40,7 @@ var dbListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("id", db.ID, "ID")
 			ow.AppendDataWithLabel("name", db.Name, "Name")
 			ow.AppendDataWithLabel("size", db.Size, "Size")
-			ow.AppendDataWithLabel("replicas", strconv.Itoa(db.Replicas), "Replicas")
+			ow.AppendDataWithLabel("nodes", strconv.Itoa(db.Nodes), "Nodes")
 			ow.AppendDataWithLabel("software", db.Software, "Software")
 			ow.AppendDataWithLabel("software_version", db.SoftwareVersion, "Software Version")
 			ow.AppendDataWithLabel("public_ip", db.PublicIPv4, "Public IPv4")

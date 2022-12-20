@@ -15,7 +15,7 @@ var dbUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"modify", "change"},
 	Short:   "Update a database",
-	Example: "civo db update DB_NAME --replicas 5 --name NEW_NAME",
+	Example: "civo db update DB_NAME --nodes 5 --name NEW_NAME",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -38,8 +38,9 @@ var dbUpdateCmd = &cobra.Command{
 
 		updatedDB, err := client.UpdateDatabase(findDB.ID, &civogo.UpdateDatabaseRequest{
 			Name:       updatedName,
-			Replicas:   replicas,
+			Nodes:      &nodes,
 			FirewallID: firewallID,
+			Region:     client.Region,
 		})
 		if err != nil {
 			utility.Error("%s", err)

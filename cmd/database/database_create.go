@@ -44,10 +44,10 @@ var dbCreateCmd = &cobra.Command{
 			}
 		}
 
-		if replicas == 0 {
-			replicas = 1
-		} else if replicas < 0 {
-			utility.Error("Replicas can't be negative")
+		if nodes == 0 {
+			nodes = 1
+		} else if nodes < 0 {
+			utility.Error("Nodes can't be negative")
 			os.Exit(1)
 		}
 
@@ -84,7 +84,7 @@ var dbCreateCmd = &cobra.Command{
 			Name:       args[0],
 			Size:       size,
 			NetworkID:  network.ID,
-			Replicas:   replicas,
+			Nodes:      nodes,
 			FirewallID: firewallID,
 			Region:     client.Region,
 		}
