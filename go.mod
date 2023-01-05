@@ -13,7 +13,7 @@ require (
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/google/go-github v17.0.0+incompatible
-	github.com/google/go-querystring v1.0.0 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/uuid v1.2.0
 	github.com/gookit/color v1.3.8
 	github.com/gosuri/uilive v0.0.4 // indirect
@@ -34,7 +34,10 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
-require github.com/savioxavier/termlink v1.2.1
+require (
+	github.com/pkg/errors v0.9.1
+	github.com/savioxavier/termlink v1.2.1
+)
 
 require (
 	github.com/MichaelMure/go-term-text v0.2.7 // indirect
@@ -52,7 +55,6 @@ require (
 	github.com/lucasb-eyer/go-colorful v1.0.3 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-runewidth v0.0.8 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/image v0.0.0-20191206065243-da761ea9ff43 // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
