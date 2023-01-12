@@ -39,6 +39,9 @@ var (
 			// fetch the new releases
 			releases, err := m.LatestReleases()
 			if err != nil {
+				if common.IsGHError(err) != nil {
+					os.Exit(1)
+				}
 				utility.Error("error fetching releases: %s", err)
 				os.Exit(1)
 			}

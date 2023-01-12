@@ -107,7 +107,7 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 					}
 				}
 				if cluster != nil {
-					ow.AppendDataWithLabel("cluster_id", cluster.Name, "Cluster")
+					ow.AppendDataWithLabel("cluster_id", cluster.ID, "Cluster")
 				} else {
 					ow.AppendDataWithLabel("cluster_id", "", "Cluster")
 					volume.Status = "dangling"

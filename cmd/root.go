@@ -138,7 +138,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&common.DefaultYes, "yes", "y", false, "Automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively")
 	rootCmd.PersistentFlags().StringVarP(&common.RegionSet, "region", "", "", "Choose the region to connect to, if you use this option it will use it over the default region")
 	rootCmd.PersistentFlags().BoolVarP(&common.PrettySet, "pretty", "", false, "Print pretty the json output")
-	rootCmd.PersistentFlags().BoolVarP(&version, "version", "", false, "Print the version of the CLI")
+	rootCmd.Flags().BoolVarP(&version, "version", "v", false, "Print the version of the CLI")
 
 	rootCmd.AddCommand(apikey.APIKeyCmd)
 	rootCmd.AddCommand(database.DBCmd)

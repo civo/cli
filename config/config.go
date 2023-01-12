@@ -110,10 +110,12 @@ func loadConfig(filename string) {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		res := common.VersionCheck()
-		if res.Outdated {
-			msg := "A newer version (v%s) is available, please upgrade with \"civo update\"\n"
-			fmt.Fprintf(os.Stderr, "%s: %s", color.Red.Sprintf("IMPORTANT"), fmt.Sprintf(msg, res.Current))
+		res, skip := common.VersionCheck()
+		if !skip {
+			if res.Outdated {
+				msg := "A newer version (v%s) is available, please upgrade with \"civo update\"\n"
+				fmt.Fprintf(os.Stderr, "%s: %s", color.Red.Sprintf("IMPORTANT"), fmt.Sprintf(msg, res.Current))
+			}
 		}
 	}
 
@@ -159,7 +161,7 @@ func checkConfigFile(filename string) error {
 	curr := Config{APIKeys: map[string]string{}}
 	curr.Meta = Metadata{
 		Admin:           false,
-		DefaultRegion:   "LON1",
+		DefaultRegion:   "NYC1",
 		URL:             "https://api.civo.com",
 		LastCmdExecuted: time.Now(),
 	}
@@ -214,10 +216,18 @@ func CivoAPIClient() (*civogo.Client, error) {
 		return nil, err
 	}
 
+	var version string
+	res, skip := common.VersionCheck()
+	if !skip {
+		version = res.Current
+	} else {
+		version = "0.0.0"
+	}
+
 	// Update the user agent to include the version of the CLI
 	cliComponent := &civogo.Component{
 		Name:    "civo-cli",
-		Version: common.VersionCheck().Current,
+		Version: version,
 	}
 	cliClient.SetUserAgent(cliComponent)
 
