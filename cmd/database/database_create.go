@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var rulesFirewall string
 var dbCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
@@ -81,12 +82,13 @@ var dbCreateCmd = &cobra.Command{
 		}
 
 		configDB := civogo.CreateDatabaseRequest{
-			Name:       args[0],
-			Size:       size,
-			NetworkID:  network.ID,
-			Nodes:      nodes,
-			FirewallID: firewallID,
-			Region:     client.Region,
+			Name:          args[0],
+			Size:          size,
+			NetworkID:     network.ID,
+			Nodes:         nodes,
+			FirewallID:    firewallID,
+			FirewallRules: rulesFirewall,
+			Region:        client.Region,
 		}
 
 		db, err := client.NewDatabase(&configDB)

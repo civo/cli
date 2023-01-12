@@ -42,7 +42,17 @@ If you wish to use a custom format, the available fields are:
 	* LoadBalancerCountLimit
 	* LoadBalancerCountUsage
 	* ObjectStoreGigabytesLimit
-	* ObjectStoreGigabytesUsage`,
+	* ObjectStoreGigabytesUsage
+	* DatabaseCountLimit
+	* DatabaseCountUsage
+	* DatabaseCPUCoreLimit
+	* DatabaseCPUCoreUsage
+	* DatabaseRAMMegabytesLimit
+	* DatabaseRAMMegabytesUsage
+	* DatabaseDiskGigabytesLimit
+	* DatabaseDiskGigabytesUsage
+	* DatabaseSnapshotCountLimit
+	* DatabaseSnapshotCountUsage`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -86,6 +96,16 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("loadbalancer_count_usage", strconv.Itoa(quota.LoadBalancerCountUsage), "LoadBalancerCountUsage")
 			ow.AppendDataWithLabel("objectstore_gb_limit", strconv.Itoa(quota.ObjectStoreGigabytesLimit), "ObjectStoreGigabytesLimit")
 			ow.AppendDataWithLabel("objectstore_gb_usage", strconv.Itoa(quota.ObjectStoreGigabytesUsage), "ObjectStoreGigabytesUsage")
+			ow.AppendDataWithLabel("database_count_limit", strconv.Itoa(quota.DatabaseCountLimit), "DatabaseCountLimit")
+			ow.AppendDataWithLabel("database_count_usage", strconv.Itoa(quota.DatabaseCountUsage), "DatabaseCountUsage")
+			ow.AppendDataWithLabel("database_cpu_core_limit", strconv.Itoa(quota.DatabaseCPUCoreLimit), "DatabaseCPUCoreLimit")
+			ow.AppendDataWithLabel("database_cpu_core_usage", strconv.Itoa(quota.DatabaseCPUCoreUsage), "DatabaseCPUCoreUsage")
+			ow.AppendDataWithLabel("database_ram_mb_limit", strconv.Itoa(quota.DatabaseRAMMegabytesLimit), "DatabaseRAMMegabytesLimit")
+			ow.AppendDataWithLabel("database_ram_mb_usage", strconv.Itoa(quota.DatabaseRAMMegabytesUsage), "DatabaseRAMMegabytesUsage")
+			ow.AppendDataWithLabel("database_disk_gb_limit", strconv.Itoa(quota.DatabaseDiskGigabytesLimit), "DatabaseDiskGigabytesLimit")
+			ow.AppendDataWithLabel("database_disk_gb_usage", strconv.Itoa(quota.DatabaseDiskGigabytesUsage), "DatabaseDiskGigabytesUsage")
+			ow.AppendDataWithLabel("database_snapshot_count_limit", strconv.Itoa(quota.DatabaseSnapshotCountLimit), "DatabaseSnapshotCountLimit")
+			ow.AppendDataWithLabel("database_snapshot_count_usage", strconv.Itoa(quota.DatabaseSnapshotCountUsage), "DatabaseSnapshotCountUsage")
 		} else {
 			ow.AppendData("Instance Count", utility.CheckQuotaPercent(quota.InstanceCountLimit, quota.InstanceCountUsage))
 			ow.AppendData("CPUCore", utility.CheckQuotaPercent(quota.CPUCoreLimit, quota.CPUCoreUsage))
@@ -100,6 +120,11 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("Security Group Rule", utility.CheckQuotaPercent(quota.SecurityGroupRuleLimit, quota.SecurityGroupRuleUsage))
 			ow.AppendData("LoadBalancer Count", utility.CheckQuotaPercent(quota.LoadBalancerCountLimit, quota.LoadBalancerCountUsage))
 			ow.AppendData("ObjectStore Gigabytes", utility.CheckQuotaPercent(quota.ObjectStoreGigabytesLimit, quota.ObjectStoreGigabytesUsage))
+			ow.AppendData("Database Count", utility.CheckQuotaPercent(quota.DatabaseCountLimit, quota.DatabaseCountUsage))
+			ow.AppendData("Database CPUCore", utility.CheckQuotaPercent(quota.DatabaseCPUCoreLimit, quota.DatabaseCPUCoreUsage))
+			ow.AppendData("Database RAM Megabytes", utility.CheckQuotaPercent(quota.DatabaseRAMMegabytesLimit, quota.DatabaseRAMMegabytesUsage))
+			ow.AppendData("Database Disk Gigabytes", utility.CheckQuotaPercent(quota.DatabaseDiskGigabytesLimit, quota.DatabaseDiskGigabytesUsage))
+			ow.AppendData("Database Snapshot Count", utility.CheckQuotaPercent(quota.DatabaseSnapshotCountLimit, quota.DatabaseSnapshotCountUsage))
 		}
 
 		switch common.OutputFormat {

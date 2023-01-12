@@ -1,3 +1,4 @@
+// Package database is the root command for civo database.
 package database
 
 import (
@@ -30,10 +31,14 @@ func init() {
 	DBCmd.AddCommand(dbUpdateCmd)
 	DBCmd.AddCommand(dbShowCmd)
 	DBCmd.AddCommand(dbDeleteCmd)
+	DBCmd.AddCommand(dbCredentialCmd)
+
+	dbCredentialCmd.Flags().BoolVarP(&connectionString, "connection-string", "c", false, "show the connection string for the database")
 
 	dbCreateCmd.Flags().IntVarP(&nodes, "nodes", "", 0, "the number of nodes for the database")
 	dbCreateCmd.Flags().StringVarP(&firewallID, "firewall", "", "", "the firewall to use for the database")
 	dbCreateCmd.Flags().StringVarP(&networkID, "network", "n", "", "the network to use for the database")
+	dbCreateCmd.Flags().StringVarP(&rulesFirewall, "firewall-rules", "u", "", "the firewall rules to use for the database")
 	dbCreateCmd.Flags().StringVarP(&size, "size", "s", "", "the size of the database")
 	dbCreateCmd.MarkFlagRequired("size")
 
