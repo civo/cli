@@ -280,8 +280,17 @@ func UpdateNodePool(s []civogo.KubernetesClusterPoolConfig, id string, count int
 	return s
 }
 
-// CheckSize is a utility function to check thesize an return the size in the right format
-func CheckSize(size string) string {
+// TrimID is a utility function to trim the ID to 6 characters
+func TrimID(id string) string {
+	if len(id) > 6 {
+		return id[:6]
+	}
+	return id
+}
+
+// SizeType is a utility function to to return the type of the size given it's name.
+// Possible types(case-sensitive) : Instance, Database, Kubernetes
+func SizeType(size string) string {
 	switch {
 	case strings.Contains(size, ".db."):
 		return "Database"

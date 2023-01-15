@@ -45,13 +45,6 @@ var dbCreateCmd = &cobra.Command{
 			}
 		}
 
-		if nodes == 0 {
-			nodes = 1
-		} else if nodes < 0 {
-			utility.Error("Nodes can't be negative")
-			os.Exit(1)
-		}
-
 		if firewallID != "" {
 			_, err = client.FindFirewall(firewallID)
 			if err != nil {
@@ -69,8 +62,7 @@ var dbCreateCmd = &cobra.Command{
 		sizeIsValid := false
 		if size != "" {
 			for _, s := range sizes {
-				if s.Name == size {
-					size = s.Name
+				if s.Name == size && utility.SizeType(s.Name) == "Database" {
 					sizeIsValid = true
 					break
 				}
