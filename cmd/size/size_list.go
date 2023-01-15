@@ -42,6 +42,8 @@ Example: civo size ls -o custom -f "Code: name (type)"`,
 		}
 
 		filter := []civogo.InstanceSize{}
+		// TODO: Rename ListInstanceSizes to ListSizes
+		// TODO: Add a filter in civogo to filter by type
 		sizes, err := client.ListInstanceSizes()
 		if err != nil {
 			utility.Error("%s", err)
@@ -52,11 +54,11 @@ Example: civo size ls -o custom -f "Code: name (type)"`,
 			search := ""
 
 			switch {
-			case filterSize == "database" || filterSize == "Database":
+			case strings.ToLower(filterSize) == "database" || strings.ToLower(filterSize) == "db":
 				search = ".db."
-			case filterSize == "kubernetes" || filterSize == "Kubernetes":
+			case strings.ToLower(filterSize) == "kubernetes" || strings.ToLower(filterSize) == "k8s" || strings.ToLower(filterSize) == "k3s" || strings.ToLower(filterSize) == "kube":
 				search = ".kube."
-			case filterSize == "instance" || filterSize == "Instance":
+			case strings.ToLower(filterSize) == "instance" || strings.ToLower(filterSize) == "iaas" || strings.ToLower(filterSize) == "vm":
 				search = "iaas"
 			}
 
@@ -84,7 +86,7 @@ Example: civo size ls -o custom -f "Code: name (type)"`,
 			ow.StartLine()
 			ow.AppendDataWithLabel("name", size.Name, "Name")
 			ow.AppendDataWithLabel("description", size.Description, "Description")
-			ow.AppendDataWithLabel("type", utility.CheckSize(size.Name), "Type")
+			ow.AppendDataWithLabel("type", utility.SizeType(size.Name), "Type")
 			ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(size.CPUCores), "CPU")
 			ow.AppendDataWithLabel("ram_mb", strconv.Itoa(size.RAMMegabytes), "RAM")
 			ow.AppendDataWithLabel("disk_gb", strconv.Itoa(size.DiskGigabytes), "SSD")

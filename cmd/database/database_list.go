@@ -37,7 +37,7 @@ var dbListCmd = &cobra.Command{
 		ow := utility.NewOutputWriter()
 		for _, db := range databases.Items {
 			ow.StartLine()
-			ow.AppendDataWithLabel("id", db.ID, "ID")
+			ow.AppendDataWithLabel("id", utility.TrimID(db.ID), "ID")
 			ow.AppendDataWithLabel("name", db.Name, "Name")
 			ow.AppendDataWithLabel("size", db.Size, "Size")
 			ow.AppendDataWithLabel("nodes", strconv.Itoa(db.Nodes), "Nodes")
