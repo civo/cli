@@ -50,7 +50,7 @@ var dbShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("nodes", strconv.Itoa(db.Nodes), "Nodes")
 		ow.AppendDataWithLabel("software", db.Software, "Software")
 		ow.AppendDataWithLabel("software_version", db.SoftwareVersion, "Software Version")
-		ow.AppendDataWithLabel("public_ip", db.PublicIPv4, "Public IPv4")
+		ow.AppendDataWithLabel("host", fmt.Sprintf("%s:%d", db.PublicIPv4, db.Port), "Host")
 
 		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 			ow.AppendDataWithLabel("firewall_id", db.FirewallID, "Firewall ID")
@@ -64,6 +64,7 @@ var dbShowCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteKeyValues()
+			fmt.Println("To get the credentials, run : civo db credential", db.Name)
 		}
 	},
 }

@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
@@ -43,7 +44,7 @@ var dbListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("nodes", strconv.Itoa(db.Nodes), "Nodes")
 			ow.AppendDataWithLabel("software", db.Software, "Software")
 			ow.AppendDataWithLabel("software_version", db.SoftwareVersion, "Software Version")
-			ow.AppendDataWithLabel("public_ip", db.PublicIPv4, "Public IPv4")
+			ow.AppendDataWithLabel("Host", fmt.Sprintf("%s:%d", db.PublicIPv4, db.Port), "Host")
 			ow.AppendDataWithLabel("status", db.Status, "Status")
 
 			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
@@ -61,6 +62,7 @@ var dbListCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteTable()
+			fmt.Println("To get the credentials for a database, use `civo db credential <name/ID>`")
 		}
 	},
 }
