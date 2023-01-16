@@ -44,7 +44,7 @@ var dbListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("nodes", strconv.Itoa(db.Nodes), "Nodes")
 			ow.AppendDataWithLabel("software", db.Software, "Software")
 			ow.AppendDataWithLabel("software_version", db.SoftwareVersion, "Software Version")
-			ow.AppendDataWithLabel("Host", fmt.Sprintf("%s:%d", db.PublicIPv4, db.Port), "Host")
+			ow.AppendDataWithLabel("host", fmt.Sprintf("%s:%d", db.PublicIPv4, db.Port), "Host")
 			ow.AppendDataWithLabel("status", db.Status, "Status")
 
 			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
