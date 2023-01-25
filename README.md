@@ -252,7 +252,7 @@ You can create an instance by running `civo instance create` with a hostname par
 
 ```sh
 Options:
-  -t, --diskimage string     the instance's disk image (from 'civo diskimage ls' command)
+  -t, --diskimage string     the instance's disk image name (from 'civo diskimage ls' command)
   -l, --firewall string      the instance's firewall you can use the Name or the ID
   -h, --help                 help for create
   -s, --hostname string      the instance's hostname
@@ -269,7 +269,7 @@ Options:
 Example usage:
 
 ```sh
-$ civo instance create --hostname=api-demo.test --size g3.small  --diskimage=12745392-15c7-4140-925d-441fe7ae57fd --initialuser=demo-user
+$ civo instance create --hostname=api-demo.test --size g3.small  --diskimage=ubuntu-focal --initialuser=demo-user
   The instance api-demo.test has been created
 
 $ civo instance show api-demo.test
