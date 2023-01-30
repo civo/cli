@@ -9,7 +9,11 @@ require (
 	github.com/bradfitz/iter v0.0.0-20191230175014-e8f45d346db8 // indirect
 	github.com/briandowns/spinner v1.11.1
 	github.com/c4milo/unpackit v0.0.0-20170704181138-4ed373e9ef1c // indirect
+<<<<<<< Updated upstream
 	github.com/civo/civogo v0.3.19
+=======
+	github.com/civo/civogo v0.3.23
+>>>>>>> Stashed changes
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/google/go-github v17.0.0+incompatible
