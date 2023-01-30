@@ -6,6 +6,7 @@ import (
 
 	"github.com/civo/cli/cmd/apikey"
 	"github.com/civo/cli/cmd/app"
+	"github.com/civo/cli/cmd/database"
 	"github.com/civo/cli/cmd/diskimage"
 	"github.com/civo/cli/cmd/domain"
 	"github.com/civo/cli/cmd/firewall"
@@ -141,6 +142,7 @@ func init() {
 	rootCmd.Flags().BoolVarP(&version, "version", "v", false, "Print the version of the CLI")
 
 	rootCmd.AddCommand(apikey.APIKeyCmd)
+	rootCmd.AddCommand(database.DBCmd)
 	rootCmd.AddCommand(diskimage.DiskImageCmd)
 	rootCmd.AddCommand(domain.DomainCmd)
 	rootCmd.AddCommand(firewall.FirewallCmd)
