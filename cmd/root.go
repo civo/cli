@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/civo/cli/cmd/apikey"
+	"github.com/civo/cli/cmd/app"
 	"github.com/civo/cli/cmd/diskimage"
 	"github.com/civo/cli/cmd/domain"
 	"github.com/civo/cli/cmd/firewall"
@@ -155,6 +156,7 @@ func init() {
 	rootCmd.AddCommand(sshkey.SSHKeyCmd)
 	rootCmd.AddCommand(teams.TeamsCmd)
 	rootCmd.AddCommand(volume.VolumeCmd)
+	rootCmd.AddCommand(app.AppCmd)
 
 	// Add warning if the region is empty, for the user with the old config
 	config.ReadConfig()

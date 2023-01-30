@@ -1,9 +1,7 @@
-package cmd
+package app
 
 import (
-	"fmt"
 	"os"
-	"strings"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -41,9 +39,8 @@ var appListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("id", app.ID, "ID")
 			ow.AppendDataWithLabel("name", app.Name, "Name")
 			ow.AppendDataWithLabel("size", app.Size, "Size")
-			ow.AppendDataWithLabel("network_id", app.NetworkID, "Network ID")
-			ow.AppendDataWithLabel("domains", strings.Join(app.Domains, " "), "Domains")
-			fmt.Println(app.ProcessInfo)
+			ow.AppendDataWithLabel("app_ip", app.AppIP, "App IP")
+			ow.AppendDataWithLabel("status", app.Status, "Status")
 		}
 
 		switch common.OutputFormat {
