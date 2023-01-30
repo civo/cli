@@ -21,10 +21,11 @@ var appCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
 	Example: "civo app create APP_NAME [flags]",
-	Args:    cobra.MinimumNArgs(1),
 	Short:   "Create a new application",
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
+
+		// TODO: Add network and firewall flags
 
 		client, err := config.CivoAPIClient()
 		if err != nil {
@@ -40,48 +41,47 @@ var appCreateCmd = &cobra.Command{
 
 		config.PublicIPv4Required = true
 
+		if image == "" && gitURL == "" {
+			utility.Error("No image or git info specified for the app")
+			os.Exit(1)
+		}
+
 		if gitURL != "" {
-			config.GitInfo.GitURL = gitURL
-			config.GitInfo.PullPreference.Branch = &branchName
-			config.GitInfo.PullPreference.Tag = &tagName
+			// TODO : Add in help menu
 			if os.Getenv("GIT_TOKEN") == "" {
-				utility.Error("GIT_TOKEN env var not found %s", err)
+				utility.Error("GIT_TOKEN env var not found")
 				os.Exit(1)
 			}
+			config.GitInfo = &civogo.GitInfo{}
 			config.GitInfo.GitToken = os.Getenv("GIT_TOKEN")
+			config.GitInfo.GitURL = gitURL
+			pullPref := &civogo.PullPreference{}
+			if branchName != "" {
+				pullPref.Branch = &branchName
+			}
+			if tagName != "" {
+				pullPref.Tag = &tagName
+			}
+			config.GitInfo.PullPreference = pullPref
 		}
 
 		if image != "" {
 			config.Image = &image
 		}
 
-		if config.Image == nil && config.GitInfo == nil {
-			utility.Error("No image or git info specified for the app %s", err)
-			os.Exit(1)
+		if len(args) > 0 {
+			if args[0] != "" {
+				if utility.ValidNameLength(args[0]) {
+					utility.Warning("the name cannot be longer than 40 characters")
+					os.Exit(1)
+				}
+				config.Name = args[0]
+			}
 		}
-
-		if utility.ValidNameLength(args[0]) {
-			utility.Warning("the name cannot be longer than 40 characters")
-			os.Exit(1)
-		}
-		config.Name = args[0]
-
-		// if len(args) > 0 {
-		// 	if utility.ValidNameLength(args[0]) {
-		// 		utility.Warning("the name cannot be longer than 40 characters")
-		// 		os.Exit(1)
-		// 	}
-		// 	config.Name = args[0]
-		// }
 
 		if appSize != "" {
 			config.Size = appSize
-		} else {
-			config.Size = "small"
 		}
-
-		var executionTime string
-		startTime := utility.StartTime()
 
 		var application *civogo.Application
 		resp, err := client.CreateApplication(config)
@@ -90,17 +90,24 @@ var appCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		var executionTime string
 		if wait {
+			startTime := utility.StartTime()
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
 			s.Prefix = fmt.Sprintf("Creating application (%s)... ", resp.Name)
 			s.Start()
 
+			var statusAvailable bool
 			for stillCreating {
 				application, err = client.FindApplication(resp.Name)
 				if err != nil {
 					utility.Error("%s", err)
 					os.Exit(1)
+				}
+				if strings.ToLower(application.Status) == "available" && !statusAvailable {
+					statusAvailable = true
+					fmt.Println("Environment has been set up, deploying workloads now.")
 				}
 				if strings.ToLower(application.Status) == "ready" {
 					stillCreating = false
@@ -122,7 +129,7 @@ var appCreateCmd = &cobra.Command{
 			if executionTime != "" {
 				fmt.Printf("The app %s has been created in %s\n", utility.Green(application.Name), executionTime)
 			} else {
-				fmt.Printf("The app %s has been created\n", utility.Green(application.Name))
+				fmt.Printf("The app %s is deploying\n", utility.Green(application.Name))
 			}
 		} else {
 			ow := utility.NewOutputWriter()

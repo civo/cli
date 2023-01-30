@@ -39,16 +39,39 @@ var appUpdateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		processInfo := civogo.ProcInfo{
-			ProcessType:  processType,
-			ProcessCount: processCount,
+		if name == "" {
+			name = findApp.Name
+		}
+
+		if size == "" {
+			size = findApp.Size
+		}
+
+		if firewallID == "" {
+			firewallID = findApp.FirewallID
+		}
+
+		procInfo := make([]civogo.ProcInfo, 0)
+		var procFound bool
+		for _, proc := range findApp.ProcessInfo {
+			if proc.ProcessType == processType {
+				procFound = true
+				proc.ProcessCount = processCount
+			}
+			procInfo = append(procInfo, proc)
+		}
+		if !procFound {
+			procInfo = append(procInfo, civogo.ProcInfo{
+				ProcessType:  processType,
+				ProcessCount: processCount,
+			})
 		}
 
 		app, err := client.UpdateApplication(findApp.ID, &civogo.UpdateApplicationRequest{
 			Name:        name,
 			Size:        size,
 			FirewallID:  firewallID,
-			ProcessInfo: append(findApp.ProcessInfo, processInfo),
+			ProcessInfo: procInfo,
 		})
 
 		if err != nil {

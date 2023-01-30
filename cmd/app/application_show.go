@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 	"os"
-	"strconv"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -45,18 +44,19 @@ var appShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("size", app.Size, "Size")
 		ow.AppendDataWithLabel("network_id", app.NetworkID, "Network ID")
 		ow.AppendDataWithLabel("firewall_id", app.FirewallID, "Firewall ID")
-		// ow.AppendDataWithLabel("image", string(*app.Image), "Image")
 		ow.AppendDataWithLabel("app_ip", app.AppIP, "App IP")
 		ow.AppendDataWithLabel("status", app.Status, "Status")
-		if app.ProcessInfo != nil {
-			for _, process := range app.ProcessInfo {
-				ow.AppendDataWithLabel("process_type", process.ProcessType, "Process Type")
-				ow.AppendDataWithLabel("process_count", strconv.Itoa(process.ProcessCount), "Process Count")
-			}
-		}
 		if app.GitInfo != nil {
 			ow.AppendDataWithLabel("git_url", app.GitInfo.GitURL, "Git URL")
 		}
+
+		// TODO: Separate this into a separate command
+		// if app.ProcessInfo != nil {
+		// 	for _, process := range app.ProcessInfo {
+		// 		ow.AppendDataWithLabel("process_type", process.ProcessType, "Process Type")
+		// 		ow.AppendDataWithLabel("process_count", strconv.Itoa(process.ProcessCount), "Process Count")
+		// 	}
+		// }
 
 		switch common.OutputFormat {
 		case "json":
