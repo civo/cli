@@ -8,6 +8,7 @@ import (
 	"github.com/google/go-github/github"
 	"github.com/pkg/errors"
 	"github.com/tcnksm/go-latest"
+	"github.com/savioxavier/termlink"
 )
 
 var (
@@ -28,6 +29,22 @@ var (
 	// DateCli is set from outside using ldflags
 	DateCli = "unknown"
 )
+
+// CheckVersionUpdate checks if there's an update to be done
+func CheckVersionUpdate() {
+	res, skip := VersionCheck()
+	if !skip {
+		if res.Outdated {
+			fmt.Printf("A newer version (v%s) is available, please upgrade with \"civo update\"\n", res.Current)
+		}
+	}
+}
+
+// IssueMessage is the message to be displayed when an error is returned
+func IssueMessage() {
+	gitIssueLink := termlink.ColorLink("GitHub issue", "https://github.com/civo/cli/issues", "italic green")
+	fmt.Printf("Please check if you are using the latest version of CLI and retry the command \nIf you are still facing issues, please report it on our community slack or open a %s \n", gitIssueLink)
+}
 
 // VersionCheck checks if there is a new version of the CLI
 func VersionCheck() (res *latest.CheckResponse, skip bool) {

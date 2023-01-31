@@ -8,7 +8,6 @@ import (
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
-	"github.com/gookit/color"
 	"github.com/mitchellh/go-homedir"
 )
 
@@ -110,13 +109,7 @@ func loadConfig(filename string) {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		res, skip := common.VersionCheck()
-		if !skip {
-			if res.Outdated {
-				msg := "A newer version (v%s) is available, please upgrade with \"civo update\"\n"
-				fmt.Fprintf(os.Stderr, "%s: %s", color.Red.Sprintf("IMPORTANT"), fmt.Sprintf(msg, res.Current))
-			}
-		}
+		common.CheckVersionUpdate()
 	}
 
 }
