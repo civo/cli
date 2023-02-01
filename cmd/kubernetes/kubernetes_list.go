@@ -51,6 +51,7 @@ If you wish to use a custom format, the available fields are:
 
 			ow.AppendDataWithLabel("id", cluster.ID, "ID")
 			ow.AppendDataWithLabel("name", cluster.Name, "Name")
+			ow.AppendDataWithLabel("cluster_type", cluster.ClusterType, "Cluster-Type")
 			ow.AppendDataWithLabel("region", client.Region, "Region")
 			ow.AppendDataWithLabel("nodes", strconv.Itoa(len(cluster.Instances)), "Nodes")
 			ow.AppendDataWithLabel("pools", strconv.Itoa(len(cluster.Pools)), "Pools")
