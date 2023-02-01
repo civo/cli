@@ -90,6 +90,7 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendData("Size", kubernetesCluster.TargetNodeSize)
 		ow.AppendData("Status", kubernetesCluster.Status)
 		ow.AppendData("Firewall", firewall.Name)
+		ow.AppendData("Cluster Type", kubernetesCluster.ClusterType)
 
 		if kubernetesCluster.UpgradeAvailableTo != "" {
 			ow.AppendDataWithLabel("KubernetesVersion", utility.Red(kubernetesCluster.KubernetesVersion+" *"), "Version")

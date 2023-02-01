@@ -54,6 +54,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("region", client.Region, "Region")
 			ow.AppendDataWithLabel("nodes", strconv.Itoa(len(cluster.Instances)), "Nodes")
 			ow.AppendDataWithLabel("pools", strconv.Itoa(len(cluster.Pools)), "Pools")
+			ow.AppendDataWithLabel("cluster_type", cluster.ClusterType, "Cluster Type")
 			ow.AppendDataWithLabel("status", utility.ColorStatus(cluster.Status), "Status")
 
 			if common.OutputFormat == "json" || common.OutputFormat == "custom" {

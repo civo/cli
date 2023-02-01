@@ -18,7 +18,7 @@ import (
 var numTargetNodes int
 var rulesFirewall string
 var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes, createFirewall bool
-var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, networkID, existingFirewall, cniPlugin string
+var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, networkID, existingFirewall, cniPlugin, clusterType string
 var kubernetesCluster *civogo.KubernetesCluster
 
 var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
@@ -126,11 +126,19 @@ var kubernetesCreateCmd = &cobra.Command{
 			utility.Error("CNI plugin provided isn't valid/supported")
 			os.Exit(1)
 		}
+
+		if clusterType != "" {
+			clusterType = strings.ToLower(clusterType)
+		} else {
+			clusterType = "k8s"
+		}
+
 		configKubernetes := &civogo.KubernetesClusterConfig{
 			Name:            clusterName,
 			NumTargetNodes:  numTargetNodes,
 			TargetNodesSize: targetNodesSize,
 			NetworkID:       network.ID,
+			ClusterType:     clusterType,
 			CNIPlugin:       cni,
 		}
 

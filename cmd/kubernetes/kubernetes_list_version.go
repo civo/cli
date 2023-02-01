@@ -48,8 +48,10 @@ If you wish to use a custom format, the available fields are:
 
 			ow.StartLine()
 
-			ow.AppendDataWithLabel("version", version.Version, "Version")
-			ow.AppendDataWithLabel("type", version.Type, "Type")
+			ow.AppendDataWithLabel("label", version.Label, "Version Name")
+			ow.AppendDataWithLabel("version", version.Version, "Kubernetes Version")
+			ow.AppendDataWithLabel("cluster_type", version.ClusterType, "Cluster Type")
+			ow.AppendDataWithLabel("type", version.Type, "Maturity")
 			ow.AppendDataWithLabel("default", strconv.FormatBool(version.Default), "Default")
 		}
 
