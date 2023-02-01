@@ -13,7 +13,7 @@ import (
 // KubernetesCmd manages Civo Kubernetes Clusters
 var KubernetesCmd = &cobra.Command{
 	Use:     "kubernetes",
-	Aliases: []string{"k3s", "k8s", "kube"},
+	Aliases: []string{"k8s", "kube"},
 	Short:   "Details of Civo Kubernetes clusters",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := cmd.Help()
