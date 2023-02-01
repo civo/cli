@@ -44,19 +44,9 @@ func Red(value string) string {
 	return newColor(value)
 }
 
-// CheckVersionUpdate checks if there's an update to be done
-func CheckVersionUpdate() {
-	res, skip := common.VersionCheck()
-	if !skip {
-		if res.Outdated {
-			fmt.Printf("A newer version (v%s) is available, please upgrade with \"civo update\"\n", res.Current)
-		}
-	}
-}
-
 // Error is the function to handler all error in the Cli
 func Error(msg string, args ...interface{}) {
-	CheckVersionUpdate()
+	common.IssueMessage()
 	fmt.Fprintf(os.Stderr, "%s: %s\n", color.Red.Sprintf("Error"), fmt.Sprintf(msg, args...))
 }
 

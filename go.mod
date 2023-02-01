@@ -12,7 +12,7 @@ require (
 	github.com/civo/civogo v0.3.23
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
-	github.com/google/go-github v17.0.0+incompatible // indirect
+	github.com/google/go-github v17.0.0+incompatible
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/uuid v1.2.0
 	github.com/gookit/color v1.3.8

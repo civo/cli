@@ -16,27 +16,13 @@ limitations under the License.
 package main
 
 import (
-	"fmt"
-	"os"
+	// "fmt"
+	// "os"
 
 	"github.com/civo/cli/cmd"
-	"github.com/civo/cli/common"
-	"github.com/savioxavier/termlink"
+	// "github.com/civo/cli/common"
 )
 
 func main() {
-	defer func() {
-		if err := recover(); err != nil {
-			resp, skip := common.VersionCheck()
-			gitIssueLink := termlink.ColorLink("GitHub issue", "https://github.com/civo/cli/issues", "italic green")
-			if skip == true {
-				fmt.Printf("panic : %s \nPlease check if you are using the latest version of CLI and retry the command \nIf you are still facing issues, please report it on our community slack or open a %s \n", err, gitIssueLink)
-				os.Exit(1)
-			}
-			res := resp.Current
-			updateCmd := "civo update"
-			fmt.Printf("panic : %s \nYour CLI Version : %s \nPlease, run %q and retry the command \nIf you are still facing issues, please report it on our community slack or open a %s \n", err, res, updateCmd, gitIssueLink)
-		}
-	}()
 	cmd.Execute()
 }
