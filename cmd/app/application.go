@@ -67,7 +67,7 @@ func init() {
 	// Update flags
 	appUpdateCmd.Flags().StringVarP(&name, "name", "n", "", "Updated Name of the application")
 	appUpdateCmd.Flags().StringVarP(&appSize, "size", "s", "", "Updated Size of the application")
-	appUpdateCmd.Flags().StringVarP(&firewallID, "firewall-id", "f", "", "Firewall ID of the application")
+	appUpdateCmd.Flags().StringVarP(&firewallID, "firewall-id", "", "", "Firewall ID of the application")
 	appUpdateCmd.Flags().StringVarP(&processType, "process-type", "t", "", "The type of process you want to scale. E.g. web, worker, etc.")
 	appUpdateCmd.Flags().IntVarP(&processCount, "process-count", "c", 0, "The number by which you want to scale the process. E.g. 2, 3, etc.")
 }
