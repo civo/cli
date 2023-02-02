@@ -85,6 +85,7 @@ If you wish to use a custom format, the available fields are:
 
 		ow.AppendData("ID", kubernetesCluster.ID)
 		ow.AppendData("Name", kubernetesCluster.Name)
+		ow.AppendData("ClusterType", kubernetesCluster.ClusterType)
 		ow.AppendData("Region", client.Region)
 		ow.AppendData("Nodes", strconv.Itoa(len(kubernetesCluster.Instances)))
 		ow.AppendData("Size", kubernetesCluster.TargetNodeSize)

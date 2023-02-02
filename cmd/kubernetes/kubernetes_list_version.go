@@ -1,6 +1,8 @@
 package kubernetes
 
 import (
+	"strings"
+
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -48,8 +50,18 @@ If you wish to use a custom format, the available fields are:
 
 			ow.StartLine()
 
-			ow.AppendDataWithLabel("version", version.Version, "Version")
-			ow.AppendDataWithLabel("type", version.Type, "Type")
+			if version.ClusterType == "" {
+				if strings.Contains(version.Label, "k3s") {
+					version.ClusterType = "k3s"
+				} else {
+					version.ClusterType = "talos"
+				}
+			}
+
+			ow.AppendDataWithLabel("label", version.Label, "Name")
+			ow.AppendDataWithLabel("version", version.Version, "K8s version")
+			ow.AppendDataWithLabel("cluster_type", version.ClusterType, "Cluster-Type")
+			ow.AppendDataWithLabel("type", version.Type, "Maturity")
 			ow.AppendDataWithLabel("default", strconv.FormatBool(version.Default), "Default")
 		}
 

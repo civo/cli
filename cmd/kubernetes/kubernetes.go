@@ -13,7 +13,7 @@ import (
 // KubernetesCmd manages Civo Kubernetes Clusters
 var KubernetesCmd = &cobra.Command{
 	Use:     "kubernetes",
-	Aliases: []string{"k3s", "k8s", "kube"},
+	Aliases: []string{"k3s", "k8s", "kube", "talos"},
 	Short:   "Details of Civo Kubernetes clusters",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := cmd.Help()
@@ -89,6 +89,7 @@ func init() {
 	kubernetesCreateCmd.Flags().StringVarP(&rulesFirewall, "firewall-rules", "u", "default", "optional, can be used if the --create-firewall flag is set, semicolon-separated list of ports to open")
 	kubernetesCreateCmd.Flags().BoolVarP(&createFirewall, "create-firewall", "c", false, "optional, create a firewall for the cluster with all open ports")
 	kubernetesCreateCmd.Flags().StringVarP(&cniPlugin, "cni-plugin", "p", "flannel", "optional, possible options: flannel,cilium.")
+	kubernetesCreateCmd.Flags().StringVarP(&clusterType, "cluster-type", "", "k3s", "optional, possible options: k3s,talos.")
 
 	kubernetesRenameCmd.Flags().StringVarP(&kubernetesNewName, "name", "n", "", "the new name for the cluster.")
 
