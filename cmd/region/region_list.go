@@ -1,6 +1,8 @@
 package region
 
 import (
+	"strings"
+
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -47,7 +49,7 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 				defaultLabel = utility.BoolToYesNo(region.Default)
 			} else {
 				if config.Current.Meta.DefaultRegion != "" {
-					if region.Code == config.Current.Meta.DefaultRegion {
+					if strings.ToLower(region.Code) == strings.ToLower(config.Current.Meta.DefaultRegion) {
 						defaultLabel = "<====="
 					}
 				} else {
