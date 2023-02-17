@@ -300,19 +300,24 @@ Initial Password : demo-user
 You will be able to see the instance's details by running `civo instance show api-demo.test` as above.
 
 #### Disk images and instance sizes
+
 You can view the Disk images by running `civo diskimage ls`
+
 ```sh
-$ civo diskimage ls 
+$ civo diskimage ls
 +--------------------------------------+---------------+---------+-----------+--------------+
 | ID                                   | Name          | Version | State     | Distribution |
 +--------------------------------------+---------------+---------+-----------+--------------+
-| 4921b107-964f-417c-bf63-c92fcf41ccbd | centos-7      |       7 | available | centos       |
-| a4204155-a876-43fa-b4d6-ea2af8774560 | debian-10     |      10 | available | debian       |
-| 9b661c46-ac4f-46e1-9f3d-aaacde9b4fec | debian-9      |       9 | available | debian       |
 | 12745392-15c7-4140-925d-441fe7ae57fd | ubuntu-bionic |   18.04 | available | ubuntu       |
+| a4204155-a876-43fa-b4d6-ea2af8774560 | debian-10     |      10 | available | debian       |
 | d927ad2f-5073-4ed6-b2eb-b8e61aef29a8 | ubuntu-focal  |   20.04 | available | ubuntu       |
+| 25fbbd96-d5ec-4d08-9c75-a5e154dabf9b | debian-11     |      11 | available | debian       |
+| eda67ea0-4282-4945-9b7b-d3e1cba1d987 | ubuntu-jammy  |   22.04 | available | ubuntu       |
+| 170db96f-8458-44aa-83ca-0c31fb81a835 | rocky-9-1     |     9.1 | available | rocky        |
+| 9b661c46-ac4f-46e1-9f3d-aaacde9b4fec | debian-9      |       9 | available | debian       |
 +--------------------------------------+---------------+---------+-----------+--------------+
 ```
+
 You can view the instance sizes list by running `civo size ls`
 
 ```sh
