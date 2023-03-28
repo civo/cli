@@ -163,7 +163,7 @@ func CheckAvailability(resource string, regionSet string) (bool, string, error) 
 		}
 	}
 
-	if resource == "load_balancer" {
+	if resource == "loadbalancer" {
 		if defaultRegion.Features.LoadBalancer && !defaultRegion.OutOfCapacity {
 			return true, "", nil
 		}
