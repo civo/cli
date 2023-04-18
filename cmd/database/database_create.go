@@ -87,18 +87,23 @@ var dbCreateCmd = &cobra.Command{
 			softwareVersion = "8.0"
 		}
 
+		if software == "PostgreSQL" && softwareVersion == "" {
+			softwareVersion = "14"
+		}
+
 		softwareIsValid := false
 		softwareVersionIsValid := false
 		if software != "" {
 			for swName, version := range dbVersions {
 				if swName == software {
 					softwareIsValid = true
-				}
-				for i, v := range version {
-					if v.SoftwareVersion == version[i].SoftwareVersion {
-						softwareVersionIsValid = true
+					for i, v := range version {
+						if v.SoftwareVersion == version[i].SoftwareVersion {
+							softwareVersionIsValid = true
+						}
 					}
 				}
+
 			}
 		}
 

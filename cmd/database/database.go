@@ -41,7 +41,7 @@ func init() {
 	dbCreateCmd.Flags().StringVarP(&rulesFirewall, "firewall-rules", "u", "", "the firewall rules to use for the database")
 	dbCreateCmd.Flags().StringVarP(&size, "size", "s", "g3.db.small", "the size of the database. You can list available DB sizes by `civo size list -s database`")
 	dbCreateCmd.Flags().StringVarP(&software, "software", "m", "MySQL", "the software to use for the database. One of: MySQL, PostgreSQL. Please make sure you use the correct capitalisation.")
-	dbCreateCmd.Flags().StringVarP(&softwareVersion, "version", "v", "8.0", "the version of the software to use for the database.")
+	dbCreateCmd.Flags().StringVarP(&softwareVersion, "version", "v", "", "the version of the software to use for the database.")
 
 	dbUpdateCmd.Flags().IntVarP(&nodes, "nodes", "", 0, "the number of nodes for the database")
 	dbUpdateCmd.Flags().StringVarP(&firewallID, "firewall", "", "", "the firewall to use for the database")
