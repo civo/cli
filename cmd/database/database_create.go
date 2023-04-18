@@ -15,7 +15,7 @@ var rulesFirewall string
 var dbCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
-	Example: "civo db create <DATABASE-NAME> --size <SIZE> --software <SOFTWARE_NAME>",
+	Example: "civo db create <DATABASE-NAME> --size <SIZE> --software <SOFTWARE_NAME> --version <SOFTWARE_VERSION>",
 	Short:   "Create a new database",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -83,7 +83,7 @@ var dbCreateCmd = &cobra.Command{
 			software = "MySQL"
 		}
 
-		if softwareVersion == "" {
+		if softwareVersion == "" && software == "MySQL" {
 			softwareVersion = "8.0"
 		}
 
