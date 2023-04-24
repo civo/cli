@@ -21,7 +21,7 @@ var kfcDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"rm", "remove", "destroy"},
 	Short:   "Delete a kubeflow cluster",
-	Example: "civo db delete <KFCLUSTER-NAME>",
+	Example: "civo kfc delete <KFCLUSTER-NAME>",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -40,11 +40,11 @@ var kfcDeleteCmd = &cobra.Command{
 			kfc, err := client.FindKfCluster(args[0])
 			if err != nil {
 				if errors.Is(err, civogo.ZeroMatchesError) {
-					utility.Error("sorry there is no %s Database in your account", utility.Red(args[0]))
+					utility.Error("sorry there is no %s kfcluster in your account", utility.Red(args[0]))
 					os.Exit(1)
 				}
 				if errors.Is(err, civogo.MultipleMatchesError) {
-					utility.Error("sorry we found more than one database with that name in your account")
+					utility.Error("sorry we found more than one kfcluster with that name in your account")
 					os.Exit(1)
 				}
 			}
@@ -83,7 +83,7 @@ var kfcDeleteCmd = &cobra.Command{
 			for _, v := range kfClusterList {
 				ow.StartLine()
 				ow.AppendDataWithLabel("id", v.ID, "ID")
-				ow.AppendDataWithLabel("kfcluster", v.Name, "Database")
+				ow.AppendDataWithLabel("kfcluster", v.Name, "KfCluster")
 			}
 
 			switch common.OutputFormat {
