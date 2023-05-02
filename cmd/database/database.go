@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var firewallID, networkID, size, updatedName string
+var firewallID, networkID, size, updatedName, software, softwareVersion string
 var nodes int
 
 // DBCmd is the root command for the db subcommand
@@ -40,6 +40,8 @@ func init() {
 	dbCreateCmd.Flags().StringVarP(&networkID, "network", "n", "", "the network to use for the database")
 	dbCreateCmd.Flags().StringVarP(&rulesFirewall, "firewall-rules", "u", "", "the firewall rules to use for the database")
 	dbCreateCmd.Flags().StringVarP(&size, "size", "s", "g3.db.small", "the size of the database. You can list available DB sizes by `civo size list -s database`")
+	dbCreateCmd.Flags().StringVarP(&software, "software", "m", "MySQL", "the software to use for the database. One of: MySQL, PostgreSQL. Please make sure you use the correct capitalisation.")
+	dbCreateCmd.Flags().StringVarP(&softwareVersion, "version", "v", "", "the version of the software to use for the database.")
 
 	dbUpdateCmd.Flags().IntVarP(&nodes, "nodes", "", 0, "the number of nodes for the database")
 	dbUpdateCmd.Flags().StringVarP(&firewallID, "firewall", "", "", "the firewall to use for the database")

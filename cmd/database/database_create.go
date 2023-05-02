@@ -15,7 +15,7 @@ var rulesFirewall string
 var dbCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
-	Example: "civo db create <DATABASE-NAME> --size <SIZE>",
+	Example: "civo db create <DATABASE-NAME> --size <SIZE> --software <SOFTWARE_NAME> --version <SOFTWARE_VERSION>",
 	Short:   "Create a new database",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -85,14 +85,60 @@ var dbCreateCmd = &cobra.Command{
 			}
 		}
 
+		dbVersions, err := client.ListDBVersions()
+		if err != nil {
+			utility.Error("Unable to list database versions %s", err)
+			os.Exit(1)
+		}
+
+		if software == "" {
+			software = "MySQL"
+		}
+
+		if softwareVersion == "" && software == "MySQL" {
+			softwareVersion = "8.0"
+		}
+
+		if software == "PostgreSQL" && softwareVersion == "" {
+			softwareVersion = "14"
+		}
+
+		softwareIsValid := false
+		softwareVersionIsValid := false
+		if software != "" {
+			for swName, version := range dbVersions {
+				if swName == software {
+					softwareIsValid = true
+					for i, v := range version {
+						if v.SoftwareVersion == version[i].SoftwareVersion {
+							softwareVersionIsValid = true
+						}
+					}
+				}
+
+			}
+		}
+
+		if !softwareIsValid {
+			utility.Error("The provided software name is not valid. Make sure you use correct capitalization (e.g. MySQL, PostgreSQL)")
+			os.Exit(1)
+		}
+
+		if !softwareVersionIsValid {
+			utility.Error("The provided software version is not valid")
+			os.Exit(1)
+		}
+
 		configDB := civogo.CreateDatabaseRequest{
-			Name:          args[0],
-			Size:          size,
-			NetworkID:     network.ID,
-			Nodes:         nodes,
-			FirewallID:    firewallID,
-			FirewallRules: rulesFirewall,
-			Region:        client.Region,
+			Name:            args[0],
+			Size:            size,
+			NetworkID:       network.ID,
+			Nodes:           nodes,
+			FirewallID:      firewallID,
+			FirewallRules:   rulesFirewall,
+			Software:        software,
+			SoftwareVersion: softwareVersion,
+			Region:          client.Region,
 		}
 
 		db, err := client.NewDatabase(&configDB)
