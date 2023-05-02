@@ -7,8 +7,8 @@ import (
 
 	"github.com/google/go-github/github"
 	"github.com/pkg/errors"
-	"github.com/tcnksm/go-latest"
 	"github.com/savioxavier/termlink"
+	"github.com/tcnksm/go-latest"
 )
 
 var (
