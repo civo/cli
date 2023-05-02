@@ -296,6 +296,8 @@ func SizeType(size string) string {
 		return "Database"
 	case strings.Contains(size, ".k3s.") || strings.Contains(size, ".kube."):
 		return "Kubernetes"
+	case strings.Contains(size, ".kf."):
+		return "KfCluster"
 	default:
 		return "Instance"
 	}
