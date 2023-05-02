@@ -58,11 +58,11 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, switchContext bo
 	var cmd *exec.Cmd
 
 	if osResult == "windows" {
-		os.Setenv("KUBECONFIG", fmt.Sprintf("%s;%s", localKubeconfigPath, file.Name()))
+		os.Setenv("KUBECONFIG", fmt.Sprintf("%s;%s", file.Name(), localKubeconfigPath))
 		cmd = exec.Command("powershell", "kubectl", "config", "view", "--merge", "--flatten")
 	} else {
 		// Append KUBECONFIGS in ENV Vars
-		appendKubeConfigENV := fmt.Sprintf("KUBECONFIG=%s:%s", localKubeconfigPath, file.Name())
+		appendKubeConfigENV := fmt.Sprintf("KUBECONFIG=%s:%s", file.Name(), localKubeconfigPath)
 		cmd = exec.Command("kubectl", "config", "view", "--merge", "--flatten")
 		cmd.Env = append(os.Environ(), appendKubeConfigENV)
 	}
