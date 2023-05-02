@@ -10,7 +10,7 @@ import (
 // KFClusterCmd is the root command for the kfcluster subcommand
 var KFClusterCmd = &cobra.Command{
 	Use:     "kfcluster",
-	Aliases: []string{"kfclusters", "kf", "kfc", "kfcs"},
+	Aliases: []string{"kfclusters", "kf", "kfc", "kfcs", "kubeflow", "kfaas"},
 	Short:   "Manage Civo Kubeflow Clusters",
 	Long:    `Create, update, delete, and list Civo Kubeflow Clusters.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
