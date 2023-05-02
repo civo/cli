@@ -23,6 +23,17 @@ var volumeCreateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
+		check, region, err := utility.CheckAvailability("volume", common.RegionSet)
+		if err != nil {
+			utility.Error("Error checking availability %s", err)
+			os.Exit(1)
+		}
+
+		if !check {
+			utility.Error("Sorry you can't create a volume in the %s region", region)
+			os.Exit(1)
+		}
+
 		client, err := config.CivoAPIClient()
 		if common.RegionSet != "" {
 			client.Region = common.RegionSet
