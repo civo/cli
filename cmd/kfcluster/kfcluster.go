@@ -27,6 +27,7 @@ func init() {
 	KFClusterCmd.AddCommand(kfcCreateCmd)
 	KFClusterCmd.AddCommand(kfcUpdateCmd)
 	KFClusterCmd.AddCommand(kfcDeleteCmd)
+	KFClusterCmd.AddCommand(kfcSizeCmd)
 
 	kfcCreateCmd.Flags().StringVarP(&firewallID, "firewall", "", "", "the firewall to use for the kubeflow cluster")
 	kfcCreateCmd.Flags().StringVarP(&networkID, "network", "n", "", "the network to use for the kubeflow cluster")
