@@ -115,6 +115,7 @@ func init() {
 	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolCreateCmd)
 	kubernetesNodePoolCreateCmd.Flags().StringVarP(&targetNodesPoolSize, "size", "s", "g4s.kube.medium", "the size of nodes to create.")
 	kubernetesNodePoolCreateCmd.Flags().IntVarP(&numTargetNodesPool, "nodes", "n", 3, "the number of nodes to create for the pool.")
+	kubernetesNodePoolCreateCmd.Flags().StringVarP(&nodePoolName, "name", "", "", "the name of the node pool.")
 
 	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolDeleteCmd)
 	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolScaleCmd)

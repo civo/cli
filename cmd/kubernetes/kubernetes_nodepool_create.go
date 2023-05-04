@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var targetNodesPoolSize string
+var targetNodesPoolSize, nodePoolName string
 var numTargetNodesPool int
 
 var kubernetesNodePoolCreateCmd = &cobra.Command{
@@ -50,7 +50,13 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 			newPool = append(newPool, civogo.KubernetesClusterPoolConfig{ID: v.ID, Count: v.Count, Size: v.Size})
 		}
 
-		poolID := uuid.NewString()
+		var poolID string
+		if nodePoolName != "" {
+			poolID = nodePoolName
+		} else {
+			poolID = uuid.NewString()
+		}
+
 		newPool = append(newPool, civogo.KubernetesClusterPoolConfig{ID: poolID, Count: numTargetNodesPool, Size: targetNodesPoolSize})
 
 		configKubernetes := &civogo.KubernetesClusterConfig{
