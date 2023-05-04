@@ -3,7 +3,6 @@ package kubernetes
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -66,9 +65,16 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
+		if os.Getenv("KUBECONFIG") != "" {
+			localPathConfig = os.Getenv("KUBECONFIG")
+		}
+
 		if saveConfig {
-			if overwriteConfig && strings.Contains(localPathConfig, ".kube") {
+			if overwriteConfig {
 				// overwrite and save
+				if localPathConfig == os.Getenv("KUBECONFIG") {
+					utility.Warning("Your $KUBECONFIG is set to %s, you are about to overwrite that config with your current kubeconfig.", localPathConfig)
+				}
 				if utility.UserConfirmedOverwrite("kubernetes config", common.DefaultYes) {
 					err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, false, switchConfig, kube.Name)
 					if err != nil {
