@@ -57,6 +57,11 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 			poolID = uuid.NewString()
 		}
 
+		if len(poolID) > 63 {
+			utility.Error("The pool name must be less than 64 characters")
+			os.Exit(1)
+		}
+
 		newPool = append(newPool, civogo.KubernetesClusterPoolConfig{ID: poolID, Count: numTargetNodesPool, Size: targetNodesPoolSize})
 
 		configKubernetes := &civogo.KubernetesClusterConfig{
