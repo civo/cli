@@ -1,6 +1,7 @@
 package firewall
 
 import (
+	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -43,9 +44,20 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 			os.Exit(1)
 		}
 
+		networks, err := client.ListNetworks()
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
+		var network civogo.Network
 		ow := utility.NewOutputWriter()
 		for _, firewall := range firewalls {
-			network, _ := client.FindNetwork(firewall.NetworkID)
+			for _, network = range networks {
+				if network.ID == firewall.NetworkID {
+					break
+				}
+			}
 
 			ow.StartLine()
 
