@@ -12,8 +12,8 @@ import (
 )
 
 var kubernetesNodePoolInstanceDeleteCmd = &cobra.Command{
-	Use:     "delete-instance",
-	Aliases: []string{"rm-instance"},
+	Use:     "instance-delete",
+	Aliases: []string{"instance-rm", "instance-remove"},
 	Short:   "Delete an instance from a node pool in a Kubernetes cluster",
 	Example: "civo kubernetes node-pool delete-instance CLUSTER_NAME NODEPOOL_ID INSTANCE_ID [flags]",
 	Args:    cobra.MinimumNArgs(3),
