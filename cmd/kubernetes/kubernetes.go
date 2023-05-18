@@ -122,6 +122,8 @@ func init() {
 	kubernetesNodePoolScaleCmd.Flags().IntVarP(&numTargetNodesPoolScale, "nodes", "n", 3, "the number of nodes to scale for the pool.")
 	kubernetesNodePoolScaleCmd.MarkFlagRequired("nodes")
 
+	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolInstanceDeleteCmd)
+	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolInstanceListCmd)
 }
 
 func getKubernetesList(value string) []string {
