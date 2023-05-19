@@ -1139,7 +1139,41 @@ $ civo objectstore credential delete cli-demo-fa5d-7de9b2
 Warning: Are you sure you want to delete the cli-demo-fa5d-7de9b2 Object Store Credential (y/N) ? y
 The Object Store Credential (cli-demo-fa5d-7de9b2) has been deleted
 ```
+## Load balancers
+On Civo, Kubernetes cluster LoadBalancer objects are external to your cluster, but created and managed as part of your cluster's service definitions. In other words, you create them like other Service objects in Kubernetes as part of your cluster definition, but their state is handled by the Cloud Controller Manager that speaks to the Civo API. This allows you to have a service that routes traffic into your cluster externally, balancing the traffic between the nodes.
 
+Civo Kubernetes load balancers are a managed implementation of the Kubernetes External Load Balancer. This means if you create a Service object of type LoadBalancer the Civo API will detect this, and on assigning the load balancer a public IP address will start to account for its usage as part of your billing and quota.
+
+Kubernetes load balancers, like all Civo resources, are billed hourly according to the current pricing.
+### Creating a Kubernetes load balancer
+Being strictly a Kubernetes object, Kubernetes load balancers must be defined in a running cluster. There is no way to start a Kubernetes load balancer for a cluster from the dashboard, as they are application-specific.
+
+Definining a load balancer can be done either using kubectl to define a Service in your cluster, or by launching a Marketplace application that defines one for you. The documentation below shows the creation of a load balancer using kubectl as Marketplace applications configure them automatically.
+
+To define a Civo Kubernetes load balancer object, at a minimum you need to define the Service and its type as LoadBalancer, such as:
+```sh
+apiVersion: v1
+kind: Service
+metadata:
+  name: civo-lb-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: example-app
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 8443
+    name: example-app
+```
+	As mentioned above, creating a load balancer relies on the Civo Cloud Controller Manager sending the appropriate request to the Civo API to handle the creation and configuration of the Load Balancer according to your specification. This system means that if you create any Service with type LoadBalancer, it will be picked up by the Civo API and as part of the Load balancers listing as well as on the cluster's dashboard page in your account.
+
+### Deleting a Kubernetes load balancer
+The Cloud Controller Manager (CCM) running in your cluster will handle the deletion of a Civo load balancer once the accompanying Service is deleted from your cluster. You can delete the load balancer, and stop billing for the load balancer, by either deleting the service definition using the manifest file as in the example below, or by deleting the service from the cluster itself:
+```sh
+$ kubectl delete -f loadbalancer.yaml
+service "civo-lb-service" deleted
+```
 
 ## Quota
 
