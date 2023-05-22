@@ -14,7 +14,7 @@ require (
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/google/go-querystring v1.1.0 // indirect
-	github.com/google/uuid v1.2.0
+	github.com/google/uuid v1.3.0
 	github.com/gookit/color v1.3.8
 	github.com/gosuri/uilive v0.0.4 // indirect
 	github.com/gosuri/uiprogress v0.0.1 // indirect
@@ -30,8 +30,7 @@ require (
 	github.com/tj/go-update v2.2.4+incompatible
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	golang.org/x/crypto v0.1.0
-	golang.org/x/term v0.5.0
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	golang.org/x/term v0.6.0
 )
 
 require (
@@ -47,6 +46,7 @@ require (
 	github.com/dlclark/regexp2 v1.1.6 // indirect
 	github.com/eliukblau/pixterm/pkg/ansimage v0.0.0-20191210081756-9fb6cf8c2f75 // indirect
 	github.com/gomarkdown/markdown v0.0.0-20191123064959-2c17d62f5098 // indirect
+	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jwalton/go-supportscolor v1.1.0 // indirect
 	github.com/klauspost/compress v1.4.1 // indirect
@@ -55,8 +55,10 @@ require (
 	github.com/lucasb-eyer/go-colorful v1.0.3 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-runewidth v0.0.8 // indirect
+	github.com/onsi/gomega v1.27.4 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/stretchr/testify v1.8.1 // indirect
 	golang.org/x/image v0.5.0 // indirect
-	golang.org/x/net v0.7.0 // indirect
-	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/net v0.8.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
 )
