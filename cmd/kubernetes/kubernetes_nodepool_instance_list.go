@@ -13,8 +13,8 @@ var kubernetesNodePoolInstanceListCmd = &cobra.Command{
 	Use:     "instance-ls",
 	Aliases: []string{"instance-list", "instance-all"},
 	Short:   "List all instances in a Kubernetes node pool",
-	Example: "civo kubernetes node-pool instance ls CLUSTER_NAME NODEPOOL_ID [flags]",
-	Args:    cobra.MinimumNArgs(2),
+	Example: "civo kubernetes node-pool instance-ls CLUSTER_NAME [flags]",
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -30,23 +30,36 @@ var kubernetesNodePoolInstanceListCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		pool, err := client.FindKubernetesClusterPool(cluster.ID, args[1])
-		if err != nil {
-			utility.Error("%s", err)
-			os.Exit(1)
-		}
-		if pool == nil {
-			utility.Error("Node pool with ID %s not found in cluster %s", args[1], args[0])
-			os.Exit(1)
-		}
-
 		ow := utility.NewOutputWriter()
-		for _, instance := range pool.Instances {
-			ow.StartLine()
-			ow.AppendDataWithLabel("ID", instance.ID, "ID")
-			ow.AppendDataWithLabel("Hostname", instance.Hostname, "Hostname")
-			ow.AppendDataWithLabel("Size", instance.Size, "Size")
-			ow.AppendDataWithLabel("Status", instance.Status, "Status")
+		if nodePoolID == "" {
+			for _, pool := range cluster.Pools {
+				for _, instance := range pool.Instances {
+
+					ow.StartLine()
+					ow.AppendDataWithLabel("ID", instance.ID, "ID")
+					ow.AppendDataWithLabel("Hostname", instance.Hostname, "Hostname")
+					ow.AppendDataWithLabel("Size", instance.Size, "Size")
+					ow.AppendDataWithLabel("Status", instance.Status, "Status")
+					ow.AppendDataWithLabel("Node Pool ID", pool.ID, "Node Pool ID")
+				}
+			}
+		} else {
+			pool, err := client.FindKubernetesClusterPool(cluster.ID, nodePoolID)
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+			if pool == nil {
+				utility.Error("Node pool with ID %s not found in cluster %s", nodePoolID, args[0])
+				os.Exit(1)
+			}
+			for _, instance := range pool.Instances {
+				ow.StartLine()
+				ow.AppendDataWithLabel("ID", instance.ID, "ID")
+				ow.AppendDataWithLabel("Hostname", instance.Hostname, "Hostname")
+				ow.AppendDataWithLabel("Size", instance.Size, "Size")
+				ow.AppendDataWithLabel("Status", instance.Status, "Status")
+			}
 		}
 
 		switch common.OutputFormat {
