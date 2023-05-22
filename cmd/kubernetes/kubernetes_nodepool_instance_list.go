@@ -1,6 +1,7 @@
 package kubernetes
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -32,16 +33,22 @@ var kubernetesNodePoolInstanceListCmd = &cobra.Command{
 
 		ow := utility.NewOutputWriter()
 		if nodePoolID == "" {
-			for _, pool := range cluster.Pools {
-				for _, instance := range pool.Instances {
 
-					ow.StartLine()
-					ow.AppendDataWithLabel("ID", instance.ID, "ID")
-					ow.AppendDataWithLabel("Hostname", instance.Hostname, "Hostname")
-					ow.AppendDataWithLabel("Size", instance.Size, "Size")
-					ow.AppendDataWithLabel("Status", instance.Status, "Status")
-					ow.AppendDataWithLabel("Node Pool ID", pool.ID, "Node Pool ID")
+			for _, pool := range cluster.Pools {
+				fmt.Println()
+				ow.WriteHeader(fmt.Sprintf("Node Pool %s", pool.ID))
+				owPool := utility.NewOutputWriter()
+
+				// Print all instances in this node pool
+				for _, instance := range pool.Instances {
+					owPool.StartLine()
+					owPool.AppendDataWithLabel("ID", instance.ID, "ID")
+					owPool.AppendDataWithLabel("Hostname", instance.Hostname, "Hostname")
+					owPool.AppendDataWithLabel("Size", instance.Size, "Size")
+					owPool.AppendDataWithLabel("Status", instance.Status, "Status")
+					owPool.AppendDataWithLabel("Node Pool", pool.ID, "Node Pool")
 				}
+				owPool.WriteTable()
 			}
 		} else {
 			pool, err := client.FindKubernetesClusterPool(cluster.ID, nodePoolID)
@@ -60,15 +67,14 @@ var kubernetesNodePoolInstanceListCmd = &cobra.Command{
 				ow.AppendDataWithLabel("Size", instance.Size, "Size")
 				ow.AppendDataWithLabel("Status", instance.Status, "Status")
 			}
+			ow.WriteTable()
+		}
+		if common.OutputFormat == "json" {
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
+		if common.OutputFormat == "custom" {
 			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
 		}
 	},
 }
