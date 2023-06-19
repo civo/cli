@@ -64,9 +64,9 @@ func VersionCheck() (res *latest.CheckResponse, skip bool) {
 	return res, false
 }
 
-//IsGHError checks if any error from github is returned
+// IsGHError checks if any error from github is returned
 func IsGHError(err error) error {
-	ghErr, ok := err.(*github.ErrorResponse)
+	ghErr, ok := err.(*github.RateLimitError)
 	if ok {
 		if ghErr.Response.StatusCode >= 400 && ghErr.Response.StatusCode < 500 {
 			return errors.Wrap(err, `Failed to query the GitHub API for updates.
@@ -81,10 +81,9 @@ func IsGHError(err error) error {
 			More information about that API can be found here: https://developer.github.com/v3/repos/releases/`)
 		}
 		if ghErr.Response.StatusCode == http.StatusUnauthorized {
-			return errors.Wrap(err, "Your Github token is invalid. Check the [github] section in ~/.gitconfig\n")
-		} else {
-			return errors.Wrap(err, "error finding latest release")
+			return errors.Wrap(err, "Your Github token is invalid. Check the [github] section in ~/.gitconfig")
 		}
+		return errors.Wrap(err, "error finding latest release")
 	}
 	return nil
 }
