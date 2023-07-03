@@ -151,6 +151,36 @@ If you wish to use a custom format, the available fields are:
 				owLB.WriteTable()
 			}
 
+			if kubernetesCluster.Conditions != nil {
+				fmt.Println()
+				ow.WriteHeader("Conditions")
+				owCond := utility.NewOutputWriter()
+				conditionFound := false
+				for _, cond := range kubernetesCluster.Conditions {
+					if cond.Type == ControlPlaneReady {
+						owCond.StartLine()
+						owCond.AppendDataWithLabel("message", "Control Plane is accessible", "Message")
+						owCond.AppendDataWithLabel("status", string(cond.Status), "Status")
+						conditionFound = true
+					}
+					if cond.Type == WorkerNodesReady {
+						owCond.StartLine()
+						owCond.AppendDataWithLabel("message", "Worker nodes from all pools are ready", "Message")
+						owCond.AppendDataWithLabel("status", string(cond.Status), "Status")
+						conditionFound = true
+					}
+					if cond.Type == ClusterVersionSync {
+						owCond.StartLine()
+						owCond.AppendDataWithLabel("message", "Cluster is on desired version", "Message")
+						owCond.AppendDataWithLabel("status", string(cond.Status), "Status")
+						conditionFound = true
+					}
+				}
+				if conditionFound {
+					owCond.WriteTable()
+				}
+			}
+
 			if len(kubernetesCluster.Instances) > 0 {
 				fmt.Println()
 				for _, pool := range kubernetesCluster.Pools {
