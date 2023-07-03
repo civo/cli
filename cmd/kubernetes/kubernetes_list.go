@@ -58,13 +58,13 @@ If you wish to use a custom format, the available fields are:
 			if cluster.Conditions != nil {
 				conditions := ""
 				for _, condition := range cluster.Conditions {
-					if condition.Type == "ControlPlaneReady" {
+					if condition.Type == ControlPlaneReady {
 						conditions += "Control Plane Accessible: " + string(condition.Status) + "\n"
 					}
-					if condition.Type == "WorkerNodesReady" {
+					if condition.Type == WorkerNodesReady {
 						conditions += "All Workers Up: " + string(condition.Status) + "\n"
 					}
-					if condition.Type == "ClusterVersionSync" {
+					if condition.Type == ClusterVersionSync {
 						conditions += "Cluster On Desired Version: " + string(condition.Status) + "\n"
 					}
 				}
