@@ -13,6 +13,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	// ControlPlaneReady is the condition type for the control plane being ready
+	ControlPlaneReady = "ControlPlaneReady"
+	// WorkerNodesReady is the condition type for the worker nodes being ready
+	WorkerNodesReady = "WorkerNodesReady"
+	// ClusterVersionSync is the condition type for the cluster version being in sync
+	ClusterVersionSync = "ClusterVersionSync"
+)
+
 var kubernetesShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"get", "inspect"},
@@ -149,6 +158,36 @@ If you wish to use a custom format, the available fields are:
 					owLB.AppendData("DNS Name", fmt.Sprintf("%s.lb.civo.com", lb.ID))
 				}
 				owLB.WriteTable()
+			}
+
+			if kubernetesCluster.Conditions != nil {
+				fmt.Println()
+				ow.WriteHeader("Conditions")
+				owCond := utility.NewOutputWriter()
+				conditionFound := false
+				for _, cond := range kubernetesCluster.Conditions {
+					if cond.Type == ControlPlaneReady {
+						owCond.StartLine()
+						owCond.AppendDataWithLabel("message", "Control Plane is accessible", "Message")
+						owCond.AppendDataWithLabel("status", string(cond.Status), "Status")
+						conditionFound = true
+					}
+					if cond.Type == WorkerNodesReady {
+						owCond.StartLine()
+						owCond.AppendDataWithLabel("message", "Worker nodes from all pools are ready", "Message")
+						owCond.AppendDataWithLabel("status", string(cond.Status), "Status")
+						conditionFound = true
+					}
+					if cond.Type == ClusterVersionSync {
+						owCond.StartLine()
+						owCond.AppendDataWithLabel("message", "Cluster is on desired version", "Message")
+						owCond.AppendDataWithLabel("status", string(cond.Status), "Status")
+						conditionFound = true
+					}
+				}
+				if conditionFound {
+					owCond.WriteTable()
+				}
 			}
 
 			if len(kubernetesCluster.Instances) > 0 {

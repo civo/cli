@@ -30,16 +30,16 @@ func (a byLen) Swap(i, j int) {
 // OutputWriter is for printing structured data in various
 // tabular formats
 //
-//   ow := utility.NewOutputWriter()
-//   ow.StartLine()
-//   ow.AppendData("ID", instance.ID)
+//	ow := utility.NewOutputWriter()
+//	ow.StartLine()
+//	ow.AppendData("ID", instance.ID)
 //
-//   # Then one of:
-//   ow.WriteSingleObjectJSON()
-//   ow.WriteMultipleObjectsJSON()
-//   ow.WriteCustomOutput(common.OutputFields)
-//   ow.WriteKeyValues()
-//   ow.WriteTable()
+//	# Then one of:
+//	ow.WriteSingleObjectJSON()
+//	ow.WriteMultipleObjectsJSON()
+//	ow.WriteCustomOutput(common.OutputFields)
+//	ow.WriteKeyValues()
+//	ow.WriteTable()
 type OutputWriter struct {
 	Keys       []string
 	Labels     []string
@@ -203,6 +203,7 @@ func (ow *OutputWriter) WriteTable() {
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 		table.SetAutoWrapText(false)
 		table.SetAutoFormatHeaders(false)
+		table.SetRowLine(true)
 	} else {
 		table.SetBorder(false)
 	}
