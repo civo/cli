@@ -13,15 +13,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	// ControlPlaneReady is the condition type for the control plane being ready
-	ControlPlaneReady = "ControlPlaneReady"
-	// WorkerNodesReady is the condition type for the worker nodes being ready
-	WorkerNodesReady = "WorkerNodesReady"
-	// ClusterVersionSync is the condition type for the cluster version being in sync
-	ClusterVersionSync = "ClusterVersionSync"
-)
-
 var kubernetesShowCmd = &cobra.Command{
 	Use:     "show",
 	Aliases: []string{"get", "inspect"},
