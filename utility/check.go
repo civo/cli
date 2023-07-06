@@ -181,6 +181,12 @@ func CheckAvailability(resource string, regionSet string) (bool, string, error) 
 		}
 	}
 
+	if resource == "kfaas" {
+		if defaultRegion.Features.KFaaS && !defaultRegion.OutOfCapacity {
+			return true, "", nil
+		}
+	}
+
 	return false, defaultRegion.Code, nil
 }
 
