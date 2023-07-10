@@ -14,7 +14,7 @@ import (
 
 var dbSizeCmd = &cobra.Command{
 	Use:     "size",
-	Example: `civo db size"`,
+	Example: "civo db size ls",
 	Aliases: []string{"sizes", "all"},
 	Short:   "List Database node sizes",
 	Long:    `List all currently available Database node sizes.`,

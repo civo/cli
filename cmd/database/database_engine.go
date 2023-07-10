@@ -11,7 +11,7 @@ import (
 
 var dbEngineCmd = &cobra.Command{
 	Use:     "engine",
-	Example: `civo db engine"`,
+	Example: "civo db engine ls",
 	Aliases: []string{"engines", "all", "software", "softwares"},
 	Short:   "List Database engines",
 	Long:    `List all currently available Database engines.`,
