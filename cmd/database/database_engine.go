@@ -40,7 +40,7 @@ var dbEngineCmd = &cobra.Command{
 			for _, v := range version {
 				ow.AppendDataWithLabel("version", v.SoftwareVersion, "Version")
 				if v.Default {
-					ow.AppendDataWithLabel("default", v.SoftwareVersion, "Default")
+					ow.AppendDataWithLabel("default", v.SoftwareVersion, "Default Version")
 				}
 			}
 		}
