@@ -50,10 +50,10 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 			os.Exit(1)
 		}
 
-		var networkMap map[string]string
+		networkMap := make(map[string]string, 0)
 		var network civogo.Network
 		for _, network = range networks {
-			networkMap = map[string]string{network.ID: network.Label}
+			networkMap[network.ID] = network.Label
 		}
 		ow := utility.NewOutputWriter()
 		for _, firewall := range firewalls {
@@ -62,7 +62,7 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 
 			ow.AppendDataWithLabel("id", firewall.ID, "ID")
 			ow.AppendDataWithLabel("name", firewall.Name, "Name")
-			ow.AppendDataWithLabel("network", networkMap[network.Label], "Network")
+			ow.AppendDataWithLabel("network", networkMap[network.ID], "Network")
 			ow.AppendDataWithLabel("rules_count", strconv.Itoa(firewall.RulesCount), "Total rules")
 			ow.AppendDataWithLabel("instances_count", strconv.Itoa(firewall.InstanceCount), "Total Instances")
 			ow.AppendDataWithLabel("clusters_count", strconv.Itoa(firewall.ClusterCount), "Total Clusters")
