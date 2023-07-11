@@ -138,6 +138,8 @@ func init() {
 	kubernetesNodePoolInstanceDeleteCmd.MarkFlagRequired("instance-id")
 	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolInstanceListCmd)
 	kubernetesNodePoolInstanceListCmd.Flags().StringVarP(&nodePoolID, "node-pool-id", "p", "", "the ID of the node pool.")
+
+	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolListCmd)
 }
 
 func getKubernetesList(value string) []string {
