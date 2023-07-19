@@ -13,8 +13,9 @@ import (
 
 // Config describes the configuration for Civo's CLI
 type Config struct {
-	APIKeys map[string]string `json:"apikeys"`
-	Meta    Metadata          `json:"meta"`
+	APIKeys          map[string]string         `json:"apikeys"`
+	Meta             Metadata                  `json:"meta"`
+	RegionToFeatures map[string]civogo.Feature `json:"region_to_features"`
 }
 
 // Metadata describes the metadata for Civo's CLI
@@ -96,8 +97,37 @@ func loadConfig(filename string) {
 		Current.Meta.CurrentAPIKey = "tempKey"
 	}
 
+	if Current.Meta.CurrentAPIKey != "" && Current.RegionToFeatures == nil {
+		Current.RegionToFeatures, err = regionsToFeature()
+		if err != nil {
+			fmt.Printf("Error getting supported regions to feature %s \n", err)
+			os.Exit(1)
+		}
+
+		dataBytes, err := json.Marshal(Current)
+		if err != nil {
+			fmt.Printf("Error parsing JSON %s \n", err)
+			os.Exit(1)
+		}
+
+		err = os.WriteFile(filename, dataBytes, 0600)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}
+
 	if time.Since(Current.Meta.LatestReleaseCheck) > (24 * time.Hour) {
 		Current.Meta.LatestReleaseCheck = time.Now()
+
+		if Current.Meta.CurrentAPIKey != "" {
+			Current.RegionToFeatures, err = regionsToFeature()
+			if err != nil {
+				fmt.Printf("Error getting supported regions to feature %s \n", err)
+				os.Exit(1)
+			}
+		}
+
 		dataBytes, err := json.Marshal(Current)
 		if err != nil {
 			fmt.Printf("Error parsing JSON %s \n", err)
@@ -150,7 +180,6 @@ func SaveConfig() {
 }
 
 func checkConfigFile(filename string) error {
-	file, err := os.Stat(filename)
 	curr := Config{APIKeys: map[string]string{}}
 	curr.Meta = Metadata{
 		Admin:           false,
@@ -159,11 +188,21 @@ func checkConfigFile(filename string) error {
 		LastCmdExecuted: time.Now(),
 	}
 
+	if Current.Meta.CurrentAPIKey != "" {
+		var err error
+		curr.RegionToFeatures, err = regionsToFeature()
+		if err != nil {
+			return err
+		}
+	}
+
 	fileContend, jsonErr := json.Marshal(curr)
 	if jsonErr != nil {
 		fmt.Printf("Error parsing the JSON")
 		os.Exit(1)
 	}
+
+	file, err := os.Stat(filename)
 	if os.IsNotExist(err) {
 		_, err := os.Create(filename)
 		if err != nil {
@@ -192,6 +231,28 @@ func checkConfigFile(filename string) error {
 	}
 
 	return nil
+}
+
+// regionsToFeature get the region to supported features map
+func regionsToFeature() (map[string]civogo.Feature, error) {
+	regionsToFeature := map[string]civogo.Feature{}
+	client, err := CivoAPIClient()
+	if err != nil {
+		fmt.Printf("Creating the connection to Civo's API failed with %s", err)
+		return regionsToFeature, err
+	}
+
+	regions, err := client.ListRegions()
+	if err != nil {
+		fmt.Printf("Unable to list regions: %s", err)
+		return regionsToFeature, err
+	}
+
+	for _, region := range regions {
+		regionsToFeature[region.Code] = region.Features
+	}
+
+	return regionsToFeature, nil
 }
 
 // DefaultAPIKey returns the current default API key
