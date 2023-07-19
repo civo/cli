@@ -14,6 +14,7 @@ import (
 
 var targetNodesPoolSize, nodePoolName string
 var numTargetNodesPool int
+var publicIpNodePool bool
 
 var kubernetesNodePoolCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -62,7 +63,18 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		newPool = append(newPool, civogo.KubernetesClusterPoolConfig{ID: poolID, Count: numTargetNodesPool, Size: targetNodesPoolSize})
+		kcpc := civogo.KubernetesClusterPoolConfig{ID: poolID, Count: numTargetNodesPool, Size: targetNodesPoolSize}
+		if publicIpNodePool {
+			if config.Current.RegionToFeatures != nil {
+				if !config.Current.RegionToFeatures[client.Region].PublicIPNodePools {
+					utility.Error("The region \"%s\" does not support \"Public IP Node Pools\" feature", client.Region)
+					os.Exit(1)
+				}
+			}
+			kcpc.PublicIPNodePool = publicIpNodePool
+		}
+
+		newPool = append(newPool, kcpc)
 
 		configKubernetes := &civogo.KubernetesClusterConfig{
 			Pools: newPool,
