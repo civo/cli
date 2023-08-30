@@ -195,7 +195,7 @@ The civo cli have multiple global options, that you can use, like this:
 
 #### Introduction
 
-In order to use the command-line tool, you will need to authenticate yourself to the Civo API using a special key. You can find an automatically-generated API key or regenerate a new key at [https://www.civo.com/api](https://www.civo.com/api).
+In order to use the command-line tool, you will need to authenticate yourself to the Civo API using a special key. You can find an automatically-generated API key or regenerate a new key at [https://www.civo.com/api](https://www.civo.com/api). The CLI have a global env variable call `CIVO_TOKEN` if this is set, the CLI will use this token instead of the one in the config file. This is useful for scripting situations or CI/CD pipelines. When you set the `CIVO_TOKEN` you will see a new apikey entry with the name `tempKey` in the `civo apikey list` command.
 
 #### Adding a current API Key to your account
 

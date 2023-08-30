@@ -91,9 +91,8 @@ func loadConfig(filename string) {
 		Current.APIKeys = map[string]string{}
 	}
 
-	checkEnvVarSet, found := os.LookupEnv("CIVO_TOKEN")
-	if found {
-		Current.APIKeys = map[string]string{"tempKey": checkEnvVarSet}
+	if token, found := os.LookupEnv("CIVO_TOKEN"); found && token != "" {
+		Current.APIKeys["tempKey"] = token
 		Current.Meta.CurrentAPIKey = "tempKey"
 	}
 
