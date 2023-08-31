@@ -52,6 +52,7 @@ var dbListCmd = &cobra.Command{
 				ow.AppendDataWithLabel("password", db.Password, "Password")
 				ow.AppendDataWithLabel("firewall_id", db.FirewallID, "Firewall ID")
 				ow.AppendDataWithLabel("network_id", db.NetworkID, "Network ID")
+				ow.AppendDataWithLabel("id", db.ID, "ID")
 			}
 		}
 
