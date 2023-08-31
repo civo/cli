@@ -34,6 +34,7 @@ func init() {
 	DBCmd.AddCommand(dbCredentialCmd)
 	DBCmd.AddCommand(dbSizeCmd)
 	DBCmd.AddCommand(dbEngineCmd)
+	DBCmd.AddCommand(dbBackupCmd)
 
 	dbCredentialCmd.Flags().BoolVarP(&connectionString, "connection-string", "c", false, "show the connection string for the database")
 
