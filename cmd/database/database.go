@@ -35,6 +35,7 @@ func init() {
 	DBCmd.AddCommand(dbSizeCmd)
 	DBCmd.AddCommand(dbEngineCmd)
 	DBCmd.AddCommand(dbBackupCmd)
+	DBCmd.AddCommand(dbRestoreCmd)
 
 	dbCredentialCmd.Flags().BoolVarP(&connectionString, "connection-string", "c", false, "show the connection string for the database")
 
@@ -49,4 +50,7 @@ func init() {
 	dbUpdateCmd.Flags().IntVarP(&nodes, "nodes", "", 0, "the number of nodes for the database")
 	dbUpdateCmd.Flags().StringVarP(&firewallID, "firewall", "", "", "the firewall to use for the database")
 	dbUpdateCmd.Flags().StringVarP(&updatedName, "name", "n", "", "the new name for the database")
+
+	dbRestoreCmd.Flags().StringVarP(&backup, "backup", "b", "", "the backup name which you can restore database")
+	dbRestoreCmd.MarkFlagRequired("backup")
 }
