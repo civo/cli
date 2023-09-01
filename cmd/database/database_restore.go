@@ -44,6 +44,7 @@ var dbRestoreCmd = &cobra.Command{
 			config := &civogo.RestoreDatabaseRequest{
 				Software: db.Software,
 				Backup:   backup,
+				Region:   client.Region,
 			}
 			_, err = client.RestoreDatabase(db.ID, config)
 			if err != nil {
