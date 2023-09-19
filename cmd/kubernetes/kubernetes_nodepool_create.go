@@ -46,11 +46,6 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		newPool := []civogo.KubernetesClusterPoolConfig{}
-		for _, v := range kubernetesFindCluster.Pools {
-			newPool = append(newPool, civogo.KubernetesClusterPoolConfig{ID: v.ID, Count: v.Count, Size: v.Size})
-		}
-
 		var poolID string
 		if nodePoolName != "" {
 			poolID = nodePoolName
@@ -63,7 +58,7 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		kcpc := civogo.KubernetesClusterPoolConfig{ID: poolID, Count: numTargetNodesPool, Size: targetNodesPoolSize}
+		poolConfig := civogo.KubernetesClusterPoolConfig{ID: poolID, Count: numTargetNodesPool, Size: targetNodesPoolSize}
 		if publicIpNodePool {
 			if config.Current.RegionToFeatures != nil {
 				if !config.Current.RegionToFeatures[client.Region].PublicIPNodePools {
@@ -71,16 +66,10 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			kcpc.PublicIPNodePool = publicIpNodePool
+			poolConfig.PublicIPNodePool = publicIpNodePool
 		}
 
-		newPool = append(newPool, kcpc)
-
-		configKubernetes := &civogo.KubernetesClusterConfig{
-			Pools: newPool,
-		}
-
-		kubernetesCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)
+		kubernetesCluster, err := client.CreateKubernetesPool(kubernetesFindCluster.ID, &poolConfig)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
