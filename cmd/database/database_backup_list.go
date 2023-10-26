@@ -49,14 +49,14 @@ var dbBackupListCmd = &cobra.Command{
 		ow.StartLine()
 		ow.AppendDataWithLabel("database_id", utility.TrimID(backups.DatabaseID), "Database ID")
 		ow.AppendDataWithLabel("database_name", backups.DatabaseName, "Database Name")
-		ow.AppendDataWithLabel("name", backups.Name, "Backup Name")
-		ow.AppendDataWithLabel("schedule", backups.Schedule, "Schedule")
-		ow.AppendDataWithLabel("count", fmt.Sprintf("%d", backups.Count), "Count")
+		ow.AppendDataWithLabel("name", backups.Scheduled.Name, "Backup Name")
+		ow.AppendDataWithLabel("schedule", backups.Scheduled.Schedule, "Schedule")
+		ow.AppendDataWithLabel("count", fmt.Sprintf("%d", backups.Scheduled.Count), "Count")
 
 		bk := ""
-		for i, backup := range backups.Backups {
+		for i, backup := range backups.Scheduled.Backups {
 			bk += backup
-			if i < len(backups.Backups)-1 {
+			if i < len(backups.Scheduled.Backups)-1 {
 				bk += "\n"
 			}
 		}

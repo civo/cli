@@ -69,8 +69,8 @@ var dbBackupUpdateCmd = &cobra.Command{
 			"database_id":   bk.DatabaseID,
 			"database_name": bk.DatabaseName,
 			"software":      bk.Software,
-			"name":          bk.Name,
-			"schedule":      bk.Schedule,
+			"name":          bk.Scheduled.Name,
+			"schedule":      bk.Scheduled.Schedule,
 			"count":         fmt.Sprintf("%d", count),
 		})
 		switch common.OutputFormat {
@@ -79,7 +79,7 @@ var dbBackupUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Database backup (%s) for database %s has been update\n", utility.Green(bk.Name), utility.Green(bk.DatabaseName))
+			fmt.Printf("Database backup (%s) for database %s has been update\n", utility.Green(bk.Scheduled.Name), utility.Green(bk.DatabaseName))
 		}
 	},
 }
