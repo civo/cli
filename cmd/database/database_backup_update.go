@@ -14,7 +14,7 @@ import (
 var dbBackupUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"modify", "change"},
-	Short:   "Update a database backup",
+	Short:   "Update a scheduled database backup",
 	Example: "civo database backup update <DATABASE-NAME/ID> --name <NEW_BACKUP-NAME> --schedule <SCHEDULE> --count <COUNT>",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
