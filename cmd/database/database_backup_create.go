@@ -16,7 +16,7 @@ var dbBackupCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
 	Example: `Scheduled: civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --schedule <SCHEDULE> --count <COUNT>\n
-	Manual: civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --manual`,
+	Manual: civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --type manual`,
 	Short: "Create a new database backup",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -46,7 +46,7 @@ var dbBackupCreateCmd = &cobra.Command{
 		}
 
 		backupCreateConfig := civogo.DatabaseBackupCreateRequest{}
-		if !manual {
+		if backupType != "manual" {
 			if common.RegionSet != "" {
 				client.Region = common.RegionSet
 			}
@@ -73,7 +73,7 @@ var dbBackupCreateCmd = &cobra.Command{
 
 		} else {
 			backupCreateConfig.Name = name
-			backupCreateConfig.IsManual = manual
+			backupCreateConfig.Type = backupType
 		}
 
 		backupCreateConfig.Region = client.Region
@@ -84,7 +84,7 @@ var dbBackupCreateCmd = &cobra.Command{
 		}
 
 		ow := &utility.OutputWriter{}
-		if !manual {
+		if backupType != "manual" {
 			ow = utility.NewOutputWriterWithMap(map[string]string{
 				"database_id":   bk.DatabaseID,
 				"database_name": bk.DatabaseName,
@@ -98,7 +98,7 @@ var dbBackupCreateCmd = &cobra.Command{
 				"database_id":   bk.DatabaseID,
 				"database_name": bk.DatabaseName,
 				"software":      bk.Software,
-				"name":          bk.Scheduled.Name,
+				"name":          name,
 			})
 		}
 
@@ -108,7 +108,7 @@ var dbBackupCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Database backup (%s) for database %s has been created\n", utility.Green(bk.Scheduled.Name), utility.Green(bk.DatabaseName))
+			fmt.Printf("Database backup (%s) for database %s has been created\n", utility.Green(name), utility.Green(bk.DatabaseName))
 		}
 	},
 }

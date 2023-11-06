@@ -51,13 +51,16 @@ var dbBackupListCmd = &cobra.Command{
 		osbk := utility.NewOutputWriter()
 		mbk := ""
 		sbk := ""
+		isConfiguredScheduled := false
+		isConfiguredManual := false
 
 		odb.StartLine()
 		odb.AppendDataWithLabel("database_id", utility.TrimID(backups.DatabaseID), "Database ID")
 		odb.AppendDataWithLabel("database_name", backups.DatabaseName, "Database Name")
 		odb.AppendDataWithLabel("software", backups.Software, "Software")
 
-		if backups.Scheduled.Schedule != "" {
+		if backups.Scheduled != nil {
+			isConfiguredScheduled = true
 			osbk.AppendDataWithLabel("name", backups.Scheduled.Name, "Backup Name")
 			osbk.AppendDataWithLabel("schedule", backups.Scheduled.Schedule, "Schedule")
 			osbk.AppendDataWithLabel("count", fmt.Sprintf("%d", backups.Scheduled.Count), "Count")
@@ -67,6 +70,7 @@ var dbBackupListCmd = &cobra.Command{
 		}
 
 		if backups.Manual != nil {
+			isConfiguredManual = true
 			for i, m := range backups.Manual {
 				if i < len(backups.Manual)-1 {
 					mbk += m.Backup + ", "
@@ -94,9 +98,13 @@ var dbBackupListCmd = &cobra.Command{
 		case "custom":
 			odb.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Println("Scheduled Backups:")
+			if isConfiguredScheduled {
+				fmt.Println("Scheduled Backups:")
+			}
 			osbk.WriteTable()
-			fmt.Println("Manual Backups:")
+			if isConfiguredManual {
+				fmt.Println("Manual Backups:")
+			}
 			ombk.WriteTable()
 		}
 	},
