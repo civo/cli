@@ -33,7 +33,7 @@ func init() {
 	dbBackupCreateCmd.Flags().StringVarP(&name, "name", "n", "", "name of the database backup")
 	dbBackupCreateCmd.Flags().StringVarP(&schedule, "schedule", "s", "", "schedule of the database backup in the form of cronjob")
 	dbBackupCreateCmd.Flags().IntVarP(&count, "count", "c", 1, "number of backups to keep")
-	dbBackupCreateCmd.Flags().StringVarP(&backupType, "type", "t", "scheduled", "set the type of database backup manul/scheduled")
+	dbBackupCreateCmd.Flags().StringVarP(&backupType, "type", "t", "scheduled", "set the type of database backup manual/scheduled")
 
 	dbBackupCreateCmd.MarkFlagRequired("name")
 
