@@ -15,9 +15,10 @@ import (
 var dbBackupCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
-	Example: "civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --schedule <SCHEDULE> --count <COUNT>",
-	Short:   "Create a new database backup",
-	Args:    cobra.MinimumNArgs(1),
+	Example: `Scheduled: civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --schedule <SCHEDULE> --count <COUNT>\n
+	Manual: civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --type manual`,
+	Short: "Create a new database backup",
+	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -38,60 +39,76 @@ var dbBackupCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
-
-		if count <= 0 {
-			utility.Error("Count must be greater than zero, you have given: %d", count)
-			os.Exit(1)
-		}
-
-		if schedule == "" {
-			utility.Error("Schedule must be specified")
-			os.Exit(1)
-		}
-
-		gron := gronx.New()
-		if !gron.IsValid(schedule) {
-			utility.Error("Invalid schedule, you have given: %s", schedule)
-			os.Exit(1)
-		}
-
 		db, err := client.FindDatabase(args[0])
 		if err != nil {
 			utility.Error("Database %s", err)
 			os.Exit(1)
 		}
 
-		backupCreateConfig := civogo.DatabaseBackupCreateRequest{
-			Name:     name,
-			Schedule: schedule,
-			Count:    int32(count),
-			Region:   client.Region,
+		backupCreateConfig := civogo.DatabaseBackupCreateRequest{}
+		if backupType != "manual" {
+			if common.RegionSet != "" {
+				client.Region = common.RegionSet
+			}
+
+			if count <= 0 {
+				utility.Error("Count must be greater than zero, you have given: %d", count)
+				os.Exit(1)
+			}
+
+			if schedule == "" {
+				utility.Error("Schedule must be specified")
+				os.Exit(1)
+			}
+
+			gron := gronx.New()
+			if !gron.IsValid(schedule) {
+				utility.Error("Invalid schedule, you have given: %s", schedule)
+				os.Exit(1)
+			}
+
+			backupCreateConfig.Name = name
+			backupCreateConfig.Schedule = schedule
+			backupCreateConfig.Count = int32(count)
+
+		} else {
+			backupCreateConfig.Name = name
+			backupCreateConfig.Type = backupType
 		}
 
+		backupCreateConfig.Region = client.Region
 		bk, err := client.CreateDatabaseBackup(db.ID, &backupCreateConfig)
 		if err != nil {
 			utility.Error("Error creating database %s", err)
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{
-			"database_id":   bk.DatabaseID,
-			"database_name": bk.DatabaseName,
-			"software":      bk.Software,
-			"name":          bk.Scheduled.Name,
-			"schedule":      bk.Scheduled.Schedule,
-			"count":         fmt.Sprintf("%d", count),
-		})
+		ow := &utility.OutputWriter{}
+		if backupType != "manual" {
+			ow = utility.NewOutputWriterWithMap(map[string]string{
+				"database_id":   bk.DatabaseID,
+				"database_name": bk.DatabaseName,
+				"software":      bk.Software,
+				"name":          bk.Scheduled.Name,
+				"schedule":      bk.Scheduled.Schedule,
+				"count":         fmt.Sprintf("%d", count),
+			})
+		} else {
+			ow = utility.NewOutputWriterWithMap(map[string]string{
+				"database_id":   bk.DatabaseID,
+				"database_name": bk.DatabaseName,
+				"software":      bk.Software,
+				"name":          name,
+			})
+		}
+
 		switch common.OutputFormat {
 		case "json":
 			ow.WriteSingleObjectJSON(common.PrettySet)
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Database backup (%s) for database %s has been created\n", utility.Green(bk.Scheduled.Name), utility.Green(bk.DatabaseName))
+			fmt.Printf("Database backup (%s) for database %s has been created\n", utility.Green(name), utility.Green(bk.DatabaseName))
 		}
 	},
 }
