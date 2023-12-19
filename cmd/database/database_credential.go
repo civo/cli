@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -43,20 +44,28 @@ var dbCredentialCmd = &cobra.Command{
 		ow := utility.NewOutputWriter()
 
 		if !connectionString {
-			ow.StartLine()
-			fmt.Println()
-			ow.AppendDataWithLabel("id", db.ID, "ID")
-			ow.AppendDataWithLabel("name", db.Name, "Name")
-			ow.AppendDataWithLabel("host", fmt.Sprintf("%s:%d", db.PublicIPv4, db.Port), "Host")
-			ow.AppendDataWithLabel("username", db.Username, "Username")
-			ow.AppendDataWithLabel("password", db.Password, "Password")
+			for _, userInfo := range db.DatabaseUserInfo {
 
-			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
-				ow.AppendDataWithLabel("firewall_id", db.FirewallID, "Firewall ID")
-				ow.AppendDataWithLabel("network_id", db.NetworkID, "Network ID")
+				ow.StartLine()
+				fmt.Println()
+				ow.AppendDataWithLabel("database_id", utility.TrimID(db.ID), "Database ID")
+				ow.AppendDataWithLabel("name", db.Name, "Name")
+				ow.AppendDataWithLabel("host", db.PublicIPv4, "Host")
+				ow.AppendDataWithLabel("port", fmt.Sprintf("%d", userInfo.Port), "Port")
+				ow.AppendDataWithLabel("username", userInfo.Username, "Username")
+				ow.AppendDataWithLabel("password", userInfo.Password, "Password")
+
+				if common.OutputFormat == "json" || common.OutputFormat == "custom" {
+					ow.AppendDataWithLabel("firewall_id", db.FirewallID, "Firewall ID")
+					ow.AppendDataWithLabel("network_id", db.NetworkID, "Network ID")
+					ow.AppendDataWithLabel("database_id", db.ID, "Database ID")
+
+				}
 			}
 		} else {
-			fmt.Printf("mysql://%s:%s@%s:%d\n", db.Username, db.Password, db.PublicIPv4, db.Port)
+			for _, user := range db.DatabaseUserInfo {
+				fmt.Printf("%s://%s:%s@%s:%d\n", strings.ToLower(db.Software), user.Username, user.Password, db.PublicIPv4, user.Port)
+			}
 		}
 
 		switch common.OutputFormat {
@@ -65,7 +74,7 @@ var dbCredentialCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			ow.WriteKeyValues()
+			ow.WriteTable()
 		}
 	},
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -39,6 +40,11 @@ var dbShowCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		ports := []string{}
+		for _, user := range db.DatabaseUserInfo {
+			ports = append(ports, fmt.Sprintf("%d", user.Port))
+		}
+
 		ow := utility.NewOutputWriter()
 
 		ow.StartLine()
@@ -50,7 +56,8 @@ var dbShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("nodes", strconv.Itoa(db.Nodes), "Nodes")
 		ow.AppendDataWithLabel("software", db.Software, "Software")
 		ow.AppendDataWithLabel("software_version", db.SoftwareVersion, "Software Version")
-		ow.AppendDataWithLabel("host", fmt.Sprintf("%s:%d", db.PublicIPv4, db.Port), "Host")
+		ow.AppendDataWithLabel("host", db.PublicIPv4, "Host")
+		ow.AppendDataWithLabel("port", strings.Join(ports, ","), "Port")
 
 		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 			ow.AppendDataWithLabel("firewall_id", db.FirewallID, "Firewall ID")
