@@ -36,9 +36,13 @@ func GithubClient() *github.Client {
 func CheckVersionUpdate() {
 	ghClient := GithubClient()
 	res, skip := VersionCheck(ghClient)
-	if !skip {
-		if res.TagName != nil && *res.TagName != VersionCli {
-			fmt.Printf("A newer version (%s) is available, please upgrade with \"civo update\"\n", *res.TagName)
+
+	// Check if the version is different from the one in the binary
+	if res.TagName != nil && *res.TagName != fmt.Sprintf("v%s", VersionCli) {
+		if !skip {
+			if res.TagName != nil && *res.TagName != VersionCli {
+				fmt.Printf("A newer version (%s) is available, please upgrade with \"civo update\"\n", *res.TagName)
+			}
 		}
 	}
 }
