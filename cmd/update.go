@@ -11,11 +11,11 @@ import (
 	"github.com/civo/cli/utility"
 	"github.com/kierdavis/ansi"
 
+	gogithub "github.com/google/go-github/v57/github"
 	"github.com/spf13/cobra"
 	"github.com/tj/go-update"
 	"github.com/tj/go-update/progress"
 	"github.com/tj/go-update/stores/github"
-	gogithub "github.com/google/go-github/v57/github"
 )
 
 var (
