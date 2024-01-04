@@ -11,6 +11,7 @@ import (
 	"github.com/civo/cli/utility"
 	"github.com/kierdavis/ansi"
 
+	gogithub "github.com/google/go-github/v57/github"
 	"github.com/spf13/cobra"
 	"github.com/tj/go-update"
 	"github.com/tj/go-update/progress"
@@ -39,7 +40,7 @@ var (
 			// fetch the new releases
 			releases, err := m.LatestReleases()
 			if err != nil {
-				if common.IsGHError(err) != nil {
+				if _, ok := err.(*gogithub.AbuseRateLimitError); ok {
 					os.Exit(1)
 				}
 				utility.Error("error fetching releases: %s", err)

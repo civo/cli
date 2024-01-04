@@ -270,9 +270,9 @@ func CivoAPIClient() (*civogo.Client, error) {
 	}
 
 	var version string
-	res, skip := common.VersionCheck()
+	res, skip := common.VersionCheck(common.GithubClient())
 	if !skip {
-		version = res.Current
+		version = *res.TagName
 	} else {
 		version = "0.0.0"
 	}
