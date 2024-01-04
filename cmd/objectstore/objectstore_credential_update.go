@@ -12,7 +12,6 @@ import (
 )
 
 var credAccessKey, credSecretAccessKey string
-var credSuspended bool
 
 var objectStoreCredentialUpdateCmd = &cobra.Command{
 	Use:     "update",

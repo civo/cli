@@ -51,7 +51,7 @@ func IssueMessage() {
 
 // VersionCheck checks if there is a new version of the CLI
 func VersionCheck(client *github.Client) (res *github.RepositoryRelease, skip bool) {
-		// Get the last release from GitHub API
+	// Get the last release from GitHub API
 	release, _, err := client.Repositories.GetLatestRelease(context.Background(), "civo", "cli")
 	if _, ok := err.(*github.AbuseRateLimitError); ok {
 		fmt.Printf("hit secondary rate limit try again in %s minute", err.(*github.AbuseRateLimitError).RetryAfter)

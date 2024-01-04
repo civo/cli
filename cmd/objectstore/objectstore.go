@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var credentialSize int
 var accessKey, secretAccessKey string
 
 //ObjectStoreCmd manages Civo Object Store

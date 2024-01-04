@@ -38,6 +38,7 @@ var objectStoreShowCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		// Get the credentials for the object store
 		var creds *civogo.ObjectStoreCredential
 		if objectStore.OwnerInfo.Name != "" {
 			creds, err = client.FindObjectStoreCredential(objectStore.OwnerInfo.Name)
@@ -45,6 +46,13 @@ var objectStoreShowCmd = &cobra.Command{
 				utility.Error("%s", err)
 				os.Exit(1)
 			}
+		}
+
+		// Get the stats for the object store
+		stats, err := client.GetObjectStoreStats(objectStore.ID)
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
 		}
 
 		ow := utility.NewOutputWriter()
@@ -58,6 +66,7 @@ var objectStoreShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("region", client.Region, "Region")
 		ow.AppendDataWithLabel("accesskey", creds.AccessKeyID, "Access Key")
 		ow.AppendDataWithLabel("status", objectStore.Status, "Status")
+		ow.AppendDataWithLabel("stats", fmt.Sprintf("Objects: %d, Size: %s MB, Size Used: %d", stats.NumObjects, strconv.Itoa(objectStore.MaxSize), stats.SizeKBUtilised), "Stats")
 
 		switch common.OutputFormat {
 		case "json":
