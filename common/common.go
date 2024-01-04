@@ -1,14 +1,11 @@
 package common
 
 import (
+	"context"
 	"fmt"
-	"net/http"
-	"strings"
 
-	"github.com/google/go-github/github"
-	"github.com/pkg/errors"
+	"github.com/google/go-github/v57/github"
 	"github.com/savioxavier/termlink"
-	"github.com/tcnksm/go-latest"
 )
 
 var (
@@ -30,60 +27,35 @@ var (
 	DateCli = "unknown"
 )
 
+// GithubClient Create a Github client
+func GithubClient() *github.Client {
+	return github.NewClient(nil)
+}
+
 // CheckVersionUpdate checks if there's an update to be done
 func CheckVersionUpdate() {
-	res, skip := VersionCheck()
+	ghClient := GithubClient()
+	res, skip := VersionCheck(ghClient)
 	if !skip {
-		if res.Outdated {
-			fmt.Printf("A newer version (v%s) is available, please upgrade with \"civo update\"\n", res.Current)
+		if res.TagName != nil && *res.TagName != VersionCli {
+			fmt.Printf("A newer version (%s) is available, please upgrade with \"civo update\"\n", *res.TagName)
 		}
 	}
 }
 
 // IssueMessage is the message to be displayed when an error is returned
 func IssueMessage() {
-	gitIssueLink := termlink.ColorLink("GitHub issue", "https://github.com/civo/cli/issues", "italic green")
+	gitIssueLink := termlink.ColorLink("GitHub issue", "https://github.com/civo/cli/issues", "green")
 	fmt.Printf("Please check if you are using the latest version of CLI and retry the command \nIf you are still facing issues, please report it on our community slack or open a %s \n", gitIssueLink)
 }
 
 // VersionCheck checks if there is a new version of the CLI
-func VersionCheck() (res *latest.CheckResponse, skip bool) {
-	githubTag := &latest.GithubTag{
-		Owner:             "civo",
-		Repository:        "cli",
-		FixVersionStrFunc: latest.DeleteFrontV(),
-	}
-	res, err := latest.Check(githubTag, strings.Replace(VersionCli, "v", "", 1))
-	if err != nil {
-		if IsGHError(err) != nil {
-			return nil, true
-		}
-		fmt.Printf("Checking for a newer version failed with %s \n", err)
+func VersionCheck(client *github.Client) (res *github.RepositoryRelease, skip bool) {
+		// Get the last release from GitHub API
+	release, _, err := client.Repositories.GetLatestRelease(context.Background(), "civo", "cli")
+	if _, ok := err.(*github.AbuseRateLimitError); ok {
+		fmt.Printf("hit secondary rate limit try again in %s minute", err.(*github.AbuseRateLimitError).RetryAfter)
 		return nil, true
 	}
-	return res, false
-}
-
-// IsGHError checks if any error from github is returned
-func IsGHError(err error) error {
-	ghErr, ok := err.(*github.RateLimitError)
-	if ok {
-		if ghErr.Response.StatusCode >= 400 && ghErr.Response.StatusCode < 500 {
-			return errors.Wrap(err, `Failed to query the GitHub API for updates.
-			This is most likely due to GitHub rate-limiting on unauthenticated requests.
-			To have the civo-cli make authenticated requests please:
-			  1. Generate a token at https://github.com/settings/tokens
-			  2. Set the token by either adding it to your ~/.gitconfig
-				 setting the GITHUB_TOKEN environment variable.
-			Instructions for generating a token can be found at:
-			https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
-			We call the github releases API to look for new releases.
-			More information about that API can be found here: https://developer.github.com/v3/repos/releases/`)
-		}
-		if ghErr.Response.StatusCode == http.StatusUnauthorized {
-			return errors.Wrap(err, "Your Github token is invalid. Check the [github] section in ~/.gitconfig")
-		}
-		return errors.Wrap(err, "error finding latest release")
-	}
-	return nil
+	return release, false
 }

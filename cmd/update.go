@@ -15,6 +15,7 @@ import (
 	"github.com/tj/go-update"
 	"github.com/tj/go-update/progress"
 	"github.com/tj/go-update/stores/github"
+	gogithub "github.com/google/go-github/v57/github"
 )
 
 var (
@@ -39,7 +40,7 @@ var (
 			// fetch the new releases
 			releases, err := m.LatestReleases()
 			if err != nil {
-				if common.IsGHError(err) != nil {
+				if _, ok := err.(*gogithub.AbuseRateLimitError); ok {
 					os.Exit(1)
 				}
 				utility.Error("error fetching releases: %s", err)
