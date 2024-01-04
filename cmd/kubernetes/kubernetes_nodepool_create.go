@@ -58,7 +58,7 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		poolConfig := civogo.KubernetesClusterPoolConfig{ID: poolID, Count: numTargetNodesPool, Size: targetNodesPoolSize}
+		poolConfig := civogo.KubernetesClusterPoolUpdateConfig{ID: poolID, Count: numTargetNodesPool, Size: targetNodesPoolSize}
 		if publicIpNodePool {
 			if config.Current.RegionToFeatures != nil {
 				if !config.Current.RegionToFeatures[client.Region].PublicIPNodePools {
@@ -69,13 +69,13 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 			poolConfig.PublicIPNodePool = publicIpNodePool
 		}
 
-		kubernetesCluster, err := client.CreateKubernetesPool(kubernetesFindCluster.ID, &poolConfig)
+		kubernetesCluster, err := client.CreateKubernetesClusterPool(kubernetesFindCluster.ID, &poolConfig)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"id": kubernetesCluster.ID, "name": kubernetesCluster.Name, "pool_id": poolID[:6]})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": kubernetesCluster.ID, "name": kubernetesFindCluster.Name, "pool_id": poolID[:6]})
 
 		switch common.OutputFormat {
 		case "json":
@@ -83,7 +83,7 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The pool (%s) was added to the cluster (%s)\n", utility.Green(poolID), utility.Green(kubernetesCluster.Name))
+			fmt.Printf("The pool (%s) was added to the cluster (%s)\n", utility.Green(poolID), utility.Green(kubernetesFindCluster.Name))
 		}
 	},
 }

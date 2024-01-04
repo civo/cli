@@ -14,7 +14,7 @@ import (
 var dbBackupUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"modify", "change"},
-	Short:   "Update a database backup",
+	Short:   "Update a scheduled database backup",
 	Example: "civo database backup update <DATABASE-NAME/ID> --name <NEW_BACKUP-NAME> --schedule <SCHEDULE> --count <COUNT>",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -69,8 +69,8 @@ var dbBackupUpdateCmd = &cobra.Command{
 			"database_id":   bk.DatabaseID,
 			"database_name": bk.DatabaseName,
 			"software":      bk.Software,
-			"name":          bk.Name,
-			"schedule":      bk.Schedule,
+			"name":          bk.Scheduled.Name,
+			"schedule":      bk.Scheduled.Schedule,
 			"count":         fmt.Sprintf("%d", count),
 		})
 		switch common.OutputFormat {
@@ -79,7 +79,7 @@ var dbBackupUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Database backup (%s) for database %s has been update\n", utility.Green(bk.Name), utility.Green(bk.DatabaseName))
+			fmt.Printf("Database backup (%s) for database %s has been update\n", utility.Green(bk.Scheduled.Name), utility.Green(bk.DatabaseName))
 		}
 	},
 }

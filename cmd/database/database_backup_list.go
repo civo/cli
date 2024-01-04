@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -45,34 +46,66 @@ var dbBackupListCmd = &cobra.Command{
 			return
 		}
 
-		ow := utility.NewOutputWriter()
-		ow.StartLine()
-		ow.AppendDataWithLabel("database_id", utility.TrimID(backups.DatabaseID), "Database ID")
-		ow.AppendDataWithLabel("database_name", backups.DatabaseName, "Database Name")
-		ow.AppendDataWithLabel("name", backups.Name, "Backup Name")
-		ow.AppendDataWithLabel("schedule", backups.Schedule, "Schedule")
-		ow.AppendDataWithLabel("count", fmt.Sprintf("%d", backups.Count), "Count")
+		odb := utility.NewOutputWriter()
+		ombk := utility.NewOutputWriter()
+		osbk := utility.NewOutputWriter()
+		mbk := ""
+		sbk := ""
+		isConfiguredScheduled := false
+		isConfiguredManual := false
 
-		bk := ""
-		for i, backup := range backups.Backups {
-			bk += backup
-			if i < len(backups.Backups)-1 {
-				bk += "\n"
-			}
+		odb.StartLine()
+		odb.AppendDataWithLabel("database_id", utility.TrimID(backups.DatabaseID), "Database ID")
+		odb.AppendDataWithLabel("database_name", backups.DatabaseName, "Database Name")
+		odb.AppendDataWithLabel("software", backups.Software, "Software")
+
+		if backups.Scheduled != nil {
+			isConfiguredScheduled = true
+			osbk.AppendDataWithLabel("name", backups.Scheduled.Name, "Backup Name")
+			osbk.AppendDataWithLabel("schedule", backups.Scheduled.Schedule, "Schedule")
+			osbk.AppendDataWithLabel("count", fmt.Sprintf("%d", backups.Scheduled.Count), "Count")
+
+			sbk = strings.TrimSuffix(strings.Join(backups.Scheduled.Backups, ","), ",")
+			osbk.AppendDataWithLabel("backups", sbk, "Backups")
 		}
-		ow.AppendDataWithLabel("backups", bk, "Backups")
+
+		if backups.Manual != nil {
+			isConfiguredManual = true
+			for i, m := range backups.Manual {
+				if i < len(backups.Manual)-1 {
+					mbk += m.Backup + ", "
+				} else {
+					mbk += m.Backup
+				}
+			}
+			ombk.AppendDataWithLabel("backups", mbk, "Backups")
+		}
 
 		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
-			ow.AppendDataWithLabel("software", backups.Software, "Software")
+			odb.AppendDataWithLabel("database_id", utility.TrimID(backups.DatabaseID), "Database ID")
+			odb.AppendDataWithLabel("database_name", backups.DatabaseName, "Database Name")
+			odb.AppendDataWithLabel("software", backups.Software, "Software")
+			odb.AppendDataWithLabel("schedule_backup_name", backups.Scheduled.Name, "Schedule Backup Name")
+			odb.AppendDataWithLabel("schedule", backups.Scheduled.Schedule, "Schedule")
+			odb.AppendDataWithLabel("count", fmt.Sprintf("%d", backups.Scheduled.Count), "Count")
+			odb.AppendDataWithLabel("scheduled_backups", sbk, "Schedule Backups")
+			odb.AppendDataWithLabel("manual_backups", mbk, "Manual Backups")
 		}
 
 		switch common.OutputFormat {
 		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
+			odb.WriteMultipleObjectsJSON(common.PrettySet)
 		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
+			odb.WriteCustomOutput(common.OutputFields)
 		default:
-			ow.WriteTable()
+			if isConfiguredScheduled {
+				fmt.Println("Scheduled Backups:")
+			}
+			osbk.WriteTable()
+			if isConfiguredManual {
+				fmt.Println("Manual Backups:")
+			}
+			ombk.WriteTable()
 		}
 	},
 }
