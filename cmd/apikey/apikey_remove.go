@@ -23,6 +23,12 @@ var apikeyRemoveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		// Check if the requested API key is the current one
+		if index == config.Current.Meta.CurrentAPIKey {
+			utility.Warning("The API key %q is the current one, please change it before removing it", args[0])
+			os.Exit(1)
+		}
+
 		if utility.UserConfirmedDeletion("api key", common.DefaultYes, args[0]) {
 			numKeys := len(config.Current.APIKeys)
 			delete(config.Current.APIKeys, index)
