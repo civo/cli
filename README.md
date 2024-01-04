@@ -361,7 +361,7 @@ BrbXNW2RUYLe
 If an instance has a public IP address configured, you can display it using `civo instance public-ip ID/hostname`:
 
 ```sh
-$ civo instance public-ip api-demo.test -o custom -f public_ip
+$ civo instance show api-demo.test -o custom -f public_ip
 74.220.21.246
 ```
 
