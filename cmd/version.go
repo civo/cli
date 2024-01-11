@@ -8,6 +8,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const logo = `
+  _____  _                  _____ ___      _____ 
+/ ____| (_)               / ____| | |      |_ _|
+| |      _ __   __  ___   | |     | |       | |  
+| |     | |\ \ / / / _ \  | |     | |       | |  
+| |____ | | \ V / | (_) | | |____ | |____  _| |_ 
+ \_____||_|  \_/   \___/   \_____||______||_____|
+`
+
 var (
 	quiet   bool
 	verbose bool
@@ -18,6 +27,7 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			switch {
 			case verbose:
+				fmt.Printf(logo)
 				fmt.Printf("Client version: v%s\n", common.VersionCli)
 				fmt.Printf("Go version (client): %s\n", runtime.Version())
 				fmt.Printf("Build date (client): %s\n", common.DateCli)
