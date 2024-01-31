@@ -32,17 +32,17 @@ The restore process allows you to recover your database from a previously create
 ## Create MySQL and PostgreSQL database
 
 ```bash
-❯ ./civo --config staging.civo.json database create postgres-demo --size g3.db.medium --software PostgreSQL --version 14
+❯ civo database create postgres-demo --size g3.db.medium --software PostgreSQL --version 14
 Database (postgres-demo) with ID 65dd8173-f754-4c6c-b50a-7ddb6d5446c5 has been created
 ```
 
 ```bash
-❯ ./civo --config staging.civo.json database create mysql-demo --size g3.db.medium --software MySQL --version 8.0
+❯ civo database create mysql-demo --size g3.db.medium --software MySQL --version 8.0
 Database (mysql-demo) with ID 0d328d59-98c3-4f68-8025-5b1633a1c287 has been created
 ```
 
 ```bash
-❯ ./civo --config staging.civo.json database ls
+❯ civo database ls
 +--------+---------------+--------------+-------+------------+------------------+--------------+------+--------+
 | ID     | Name          | Size         | Nodes | Software   | Software Version | Host         | Port | Status |
 +--------+---------------+--------------+-------+------------+------------------+--------------+------+--------+
@@ -56,8 +56,8 @@ To get the credentials for a database, use `civo db credential <name/ID>`
 ### List database backups
 
 ```bash
-❯ ./civo --config staging.civo.json database backups ls postgres-demo
-❯ ./civo --config staging.civo.json database backups ls mysql-demo
+❯ civo database backups ls postgres-demo
+❯ civo database backups ls mysql-demo
 ```
 
 ## PostgreSQL
@@ -65,7 +65,7 @@ To get the credentials for a database, use `civo db credential <name/ID>`
 ### Create Scheduled Backup
 
 ```bash
-❯ ./civo --config staging.civo.json database backups create postgres-demo --name every10minutes --schedule "*/10 * * * *"
+❯ civo database backups create postgres-demo --name every10minutes --schedule "*/10 * * * *"
 Database backup (every10minutes) for database postgr-b697-c429d7 has been created
 ```
 
@@ -83,13 +83,13 @@ Scheduled backup
 ### Create Manual Backup
 
 ```bash
-❯ ./civo --config staging.civo.json database backups create postgres-demo
+❯ civo database backups create postgres-demo
 ```
 
 ### List
 
 ```bash
-❯ ./civo --config staging.civo.json database backups ls postgres-demo
+❯ civo database backups ls postgres-demo
 Scheduled backup
 +-------------+---------------+------------+--------------+----------------+------------------+
 | Database ID | Database Name | Software   | Schedule     | Backup Name    | Backup           |
@@ -107,7 +107,7 @@ Manual backups
 ### Restore from scheduled
 
 ```bash
-❯ ./civo --config staging.civo.json database restore postgres-demo --name restorefromscheduledbackup --backup 20240131-102006F
+❯ civo database restore postgres-demo --name restorefromscheduledbackup --backup 20240131-102006F
 Warning: Are you sure you want to restore db postgres-demo from 20240131-102006F backup (y/N) ? y
 Restoring database postgres-demo from from backup 20240131-102006F
 ```
@@ -115,7 +115,7 @@ Restoring database postgres-demo from from backup 20240131-102006F
 ### Restore from manual
 
 ```bash
-❯ ./civo --config staging.civo.json database restore postgres-demo --name restorefromscheduledbackup --backup 20240131-095615F
+❯ civo database restore postgres-demo --name restorefromscheduledbackup --backup 20240131-095615F
 Warning: Are you sure you want to restore db postgres-demo from 20240131-095615F backup (y/N) ? y
 Restoring database postgres-demo from from backup 20240131-095615F
 ```
@@ -125,14 +125,14 @@ Restoring database postgres-demo from from backup 20240131-095615F
 ### Create
 
 ```bash
-❯ ./civo --config staging.civo.json database backups create mysql-demo --name firstbackup --type manual
+❯ civo database backups create mysql-demo --name firstbackup --type manual
 Database backup (firstbackup) for database mysql-demo has been created
 ```
 
 ### List backup
 
 ```bash
-❯ ./civo --config staging.civo.json database backups ls mysql-demo
+❯ civo database backups ls mysql-demo
 Manual backups
 +-------------+---------------+-----------+-------------+----------+--------+
 | Database ID | Database Name | Backup ID | Backup Name | Software | Status |
@@ -144,7 +144,7 @@ Manual backups
 ### Restore
 
 ```bash
-❯ ./civo --config staging.civo.json database restore mysql-demo --name restorefirstbackup --backup firstbackup
+❯ civo database restore mysql-demo --name restorefirstbackup --backup firstbackup
 Warning: Are you sure you want to restore db mysql-demo from firstbackup backup (y/N) ? y
 Restoring database mysql-demo from from backup firstbackup
 ```
