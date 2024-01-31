@@ -20,6 +20,7 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 - [Domains and Domain Records](#domains-and-domain-records)
 - [Firewalls](#firewalls)
 - [Networks](#networks)
+- [Database Backup and Restore](./doc/DTABASE_BACKUP_RESTORE.md)
 - [Object Stores](#object-stores)
 - [Object Store Credentials](#object-store-credentials)
 - [Load Balancers](#load-balancers)
@@ -37,7 +38,7 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 
 ## Set-up
 
-Civo CLI is built with Go and distributed as binary files, available for multiple operating systems and downloadable from https://github.com/civo/cli/releases.
+Civo CLI is built with Go and distributed as binary files, available for multiple operating systems and downloadable from <https://github.com/civo/cli/releases>.
 
 ### Installing on macOS
 
@@ -59,38 +60,44 @@ curl -sL https://civo.com/get | sh
 Civo CLI is available to download on windows via Chocolatey and Scoop
 
 For installing via Chocolatey you need [Chocolatey](https://chocolatey.org/install) package manager installed on your PC.
-- run the following command after confirming Chocolatey on your PC 
+
+- run the following command after confirming Chocolatey on your PC
+
  ```
  choco install civo-cli
- ``` 
+ ```
+
  and it will install Civo CLI on your PC.
 
 For installing via Scoop you need [Scoop](https://scoop.sh/) installed as a package manager, then:
-- add the extras bucket with 
+
+- add the extras bucket with
+
 ```
 scoop bucket add extras
 ```
-- install civo with 
+
+- install civo with
+
 ```
 scoop install civo
 ```
 
 You will also, of course, need a Civo account, for which you can [register here](https://www.civo.com/signup).
 
-
 ### Installing on Linux
 
 For Linux Civo CLI can be installed by various methods.
 
-* Install via the direct shell script:
+- Install via the direct shell script:
 
 ```sh
 curl -sL https://civo.com/get | sh
 ```
 
-* Install via the brew package manager, as shown in the above instructions for MacOS.
+- Install via the brew package manager, as shown in the above instructions for MacOS.
 
-* Install via wget, specifying the [release version](https://github.com/civo/cli/releases) you want.
+- Install via wget, specifying the [release version](https://github.com/civo/cli/releases) you want.
 
 ***Note that the version in the example below may not be the latest. Specify the version based on the latest available if you are using this method.***
 
@@ -101,8 +108,7 @@ chmod +x civo
 mv ./civo /usr/local/bin/
 ```
 
-* You can also build the binary, but make sure you have go installed,
-
+- You can also build the binary, but make sure you have go installed,
 
 ```sh
 git clone https://github.com/civo/cli.git
@@ -112,10 +118,10 @@ cd ..
 cp -r cli $HOME
 export PATH="$HOME/cli:$PATH"
 ```
+
 With this, we have installed the Civo CLI successfully. Check it is working by running any of the following commands.
 
 **Note:** For the first time when you are running, make sure you set your current region. Check [Region](#region) for more information.
-
 
 ### Running the Civo CLI tool and getting help
 
@@ -152,6 +158,7 @@ docker run -it --rm -v $HOME/.civo.json:/.civo.json -v $HOME/.kube/config:/root/
 To make usage easier, an alias is recommended.  Here's an example how to set one to the same command as would be used if installed directly on the system, and using the Docker image:
 
 Ubuntu etc:
+
 ```sh
 alias civo="docker run -it --rm -v $HOME/.civo.json:/.civo.json civo/cli:latest"
 # Maybe put the above line in ~/.bash_profile or ~/.zshrc
@@ -162,6 +169,7 @@ civo k8s list
 ```
 
 For Fedora users:
+
 ```sh
 alias civo="docker run -it --rm -v $HOME/.civo.json:/.civo.json:Z -v $HOME/.kube/config:$HOME/.kube/config:Z civo/cli:latest"
 ```
@@ -340,6 +348,7 @@ $ civo size ls
 +----------------+-------------+------------+-----+-------+-----+------------+
 
 ````
+
 #### Viewing the Default User Password For an Instance
 
 You can view the default user's password for an instance by running `civo instance password ID/hostname`
@@ -366,7 +375,6 @@ $ civo instance show api-demo.test -o custom -f public_ip
 ```
 
 The above example uses `-o` and `-f` to display only the IP address in the output.
-
 
 #### Setting Firewalls
 
@@ -553,6 +561,7 @@ $ civo kubernetes list
 | 5604340f-caa3-4ac1-adb7-40c863fe5639 | falling-sunset | NYC1   |     2 |     1 | ACTIVE |
 +--------------------------------------+----------------+--------+-------+-------+--------+
 ```
+
 #### Listing kubernetes sizes
 
 You can list all kubernetes sizes by running `civo kubernetes size`.
@@ -587,29 +596,29 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
 -t, --network string               the name of the network to use in the creation (default "default")
 -n, --nodes int                    the number of nodes to create (the master also acts as a node). (default 3)
 -r, --remove-applications string   optional, remove default application names shown by running  'civo kubernetes applications ls'
-	--save                         save the config
+ --save                         save the config
 -s, --size string                  the size of nodes to create. (default "g4s.kube.medium")
-	--switch                       switch context to newly-created cluster
+ --switch                       switch context to newly-created cluster
 -v, --version string               the k3s version to use on the cluster. Defaults to the latest. Example - 'civo k3s create --version 1.21.2+k3s1' (default "latest")
 -w, --wait                         a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE
 ```
 
-*Note* 
-* The '--create-firewall' will open the ports 80,443 and 6443 in the firewall if '--firewall-rules' is not used.
-* The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
-* The '--firewall-rules' flag need to be used with '--create-firewall'.
-* The '--firewall-rules' flag can accept:
-    * You can pass 'all' to open all ports.
-    * An optional end port using 'start_port-end_port' format (e.g. 8000-8100)
-    * An optional CIDR notation (e.g. 0.0.0.0/0)
-    * When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
-    * When a CIDR notation is provided without slash and number segment, it will default to /32
-    * Within a rule, you can use comma separator for multiple ports to have same CIDR notation
-    * To separate between rules, you can use semicolon symbol and wrap everything in double quotes (see below)
-    So the following would all be valid:
-    * "80,443,6443:0.0.0.0/0;8080:1.2.3.4" (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
-    * "80,443,6443;6000-6500:4.4.4.4/24" (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
+*Note*
 
+- The '--create-firewall' will open the ports 80,443 and 6443 in the firewall if '--firewall-rules' is not used.
+- The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
+- The '--firewall-rules' flag need to be used with '--create-firewall'.
+- The '--firewall-rules' flag can accept:
+  - You can pass 'all' to open all ports.
+  - An optional end port using 'start_port-end_port' format (e.g. 8000-8100)
+  - An optional CIDR notation (e.g. 0.0.0.0/0)
+  - When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
+  - When a CIDR notation is provided without slash and number segment, it will default to /32
+  - Within a rule, you can use comma separator for multiple ports to have same CIDR notation
+  - To separate between rules, you can use semicolon symbol and wrap everything in double quotes (see below)
+    So the following would all be valid:
+  - "80,443,6443:0.0.0.0/0;8080:1.2.3.4" (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
+  - "80,443,6443;6000-6500:4.4.4.4/24" (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
 
 ```sh
 $ civo kubernetes create my-first-cluster
@@ -999,23 +1008,23 @@ To get an up-to-date list of available applications on the Marketplace, run `civ
 | Wordpress                    | 5.6.2            | management   | 5GB, 10GB, 20GB                                                                            | mariadb:5GB               |
 +------------------------------+------------------+--------------+--------------------------------------------------------------------------------------------+---------------------------+
 ```
+
 #### Show Applications details when is installed in the cluster
 
 This option will be allow you to see the post-install instruction of every app installed in the cluster
 
 ```sh
-$ civo kubernetes application show Traefik apps-demo-cluster
+civo kubernetes application show Traefik apps-demo-cluster
 ```
 
 the first parameter is for the name of the app and the second is the name of the cluster
-
 
 #### Installing Applications Onto a New Cluster
 
 To specify applications to install onto a new cluster, list them at cluster creation by specifying their `name` from the list above:
 
 ```sh
-$ civo kubernetes create apps-demo-cluster --nodes=2  --applications=Redis,Linkerd
+civo kubernetes create apps-demo-cluster --nodes=2  --applications=Redis,Linkerd
 ```
 
 Now, if you take a look at the cluster's details, you will see the newly-installed applications listed:
@@ -1053,7 +1062,7 @@ Installed marketplace applications:
 **Note:** Applications like `metrics-server` are installed by default on any new cluster you create. If you don't need to install the default applications, use the `--remove-applications` flag as below:
 
 ```sh
-$ civo kubernetes create apps-demo-cluster --nodes=2 --applications=Redis,Linkerd --remove-applications=metrics-server
+civo kubernetes create apps-demo-cluster --nodes=2 --applications=Redis,Linkerd --remove-applications=metrics-server
 ```
 
 #### Installing Applications to an Existing Cluster
@@ -1100,6 +1109,7 @@ Created a domain called civoclidemo.xyz with ID 418181b2-fcd2-46a2-ba7f-c843c331
 You can then proceed to add DNS records to this domain.
 
 #### List Domain Names
+
 To see your created domains, call `civo domain list`:
 
 ```sh
@@ -1137,6 +1147,7 @@ Created a record www1 for civoclidemo.xyz with a TTL of 600 seconds and with a p
 ```
 
 #### Listing DNS Records
+
 You can get an overview of all records you have created for a particular domain by requesting `civo domain record list domain.name`:
 
 ```sh
@@ -1147,7 +1158,9 @@ $ civo domain record list civoclidemo.xyz
 | 4e181dde-bde8-4744-8984-067f957a7d59 | A    | www.civoclidemo.xyz | 192.168.1.1 | 1000 | 0        |
 +--------------------------------------+------+---------------------+-------------+------+----------+
 ```
+
 #### Deleting a DNS Record
+
 You can remove a particular DNS record from a domain you own by requesting `civo domain record remove record_id`. This immediately removes the associated record, so use with caution:
 
 ```sh
@@ -1162,6 +1175,7 @@ The domain record called www with ID 4e181dde-bde8-4744-8984-067f957a7d59 was de
 You can configure custom firewall rules for your instances using the Firewall component of Civo CLI. These are freely configurable, however customers should be careful to not lock out their own access to their instances. By default, all ports are closed for custom firewalls.
 
 Firewalls can be configured with rules, and they can be made to apply to your chosen instance(s) with subsequent commands.
+
 #### Configuring a New Firewall
 
 To create a new Firewall, use `civo firewall create new_firewall_name`:
@@ -1170,7 +1184,9 @@ To create a new Firewall, use `civo firewall create new_firewall_name`:
 $ civo firewall create civocli_demo
 Created a firewall called civocli_demo with ID ab2a25d7-edd4-4ecd-95c4-58cb6bc402de
 ```
+
 You can also create a firewall without any default rules by using the flag `-r` or `--create-rules` set to `false`. In both cases, the usage is like:
+
 ```bash
 civo firewall create new_firewall_name --create-rules=false
 
@@ -1264,7 +1280,9 @@ Create a private network called cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa
 ```
 
 #### Listing Networks
+
 To list all the networks you can run `civo network ls`
+
 ```sh
 $ civo network ls
 +--------------------------------------+----------+--------+---------+
@@ -1285,12 +1303,12 @@ $ civo network remove 74b69006-ea59-46a0-96c4-63f5bfa290e1
 Removed the network cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa290e1
 ```
 
-
 ## Object Stores
 
 #### Introduction
 
 Object stores are S3-compatible data storage structures on Civo. Through creating object stores in your account, you can manage unstructured data within the size limits of each object store and subject to your quota.
+
 #### Listing Object Stores
 
 You can run `civo objectstore ls` to get the list of all object stores in your account.
@@ -1341,7 +1359,7 @@ The Object Store (cli-demo) has been deleted
 
 #### Introduction
 
-Access to object stores is controlled by credentials management. When a new object store is created, a default administrative set of credentials is created with it. You can create other credentials for object stores you create, and export credential information for use in applications. 
+Access to object stores is controlled by credentials management. When a new object store is created, a default administrative set of credentials is created with it. You can create other credentials for object stores you create, and export credential information for use in applications.
 
 #### Listing Object Store Credentials
 
@@ -1393,7 +1411,6 @@ $ civo objectstore credential delete cli-demo-fa5d-7de9b2
 Warning: Are you sure you want to delete the cli-demo-fa5d-7de9b2 Object Store Credential (y/N) ? y
 The Object Store Credential (cli-demo-fa5d-7de9b2) has been deleted
 ```
-
 
 ## Quota
 
@@ -1490,6 +1507,7 @@ $ civo sshkeys ls
 #### Removing a SSH Key
 
 You can delete a SSH key by calling `remove` for it by ID:
+
 ```sh
 $ civo ssh remove 531d0998-4152-410a-af20-0cccb1c7c73b
 Removed SSH key cli-demo with ID 531d0998-4152-410a-af20-0cccb1c7c73b
@@ -1500,7 +1518,6 @@ Removed SSH key cli-demo with ID 531d0998-4152-410a-af20-0cccb1c7c73b
 #### Introduction
 
 Civo instances are built from a disk image. Currently there centos, debian and ubuntu are supported.In order to create an instance the diskimage ID is needed that can be found by running `civo diskimage ls`
-
 
 #### Listing Available Disk Images
 
@@ -1516,7 +1533,6 @@ $ civo diskimage ls
 | d927ad2f-5073-4ed6-b2eb-b8e61aef29a8 | ubuntu-focal  |   20.04 | available | ubuntu       |
 +--------------------------------------+---------------+---------+-----------+--------------+
 ```
-
 
 ## Volumes
 
@@ -1590,11 +1606,13 @@ The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 w
 If a Kubernetes volume is showing with a status of `dangling` it can be deleted to release the quota and prevent further billing by running `civo volume delete <VOLUME-NAME> --region <REGION-NAME>`.
 
 ## Teams
+
 Teams are a grouping of users, each member of a team having one or more permissions, or roles. When a user logs in, they don't have to select which team to use - only which account they want to act within. The permissions available are the total set of permissions they have across the teams in that account, combined.
 
 #### List all teams
 
 You can run `civo teams ls` to get the list of all teams
+
 ```sh
 $ civo teams ls
 +--------------------------------------+------------------+
@@ -1612,6 +1630,7 @@ $ civo teams ls
 #### Create a new team
 
 To create a new team in your account, the cmd you need to run is `civo teams create <NEW-TEAM-NAME>` and a new team will be created with the given name.
+
 ```sh
 $ civo teams create Community
 Created a team called Community with team ID 475a087b-bec8-4a66-ac14-95bc09bd8d1e
@@ -1620,6 +1639,7 @@ Created a team called Community with team ID 475a087b-bec8-4a66-ac14-95bc09bd8d1
 #### Rename a team
 
 To rename a team, you need to run the cmd `civo teams rename <OLD-TEAM-NAME> <NEW-TEAM-NAME>`
+
 ```sh
 $ civo teams rename Community Advocacy
 The team with ID 475a087b-bec8-4a66-ac14-95bc09bd8d1e was renamed to Advocacy
@@ -1628,19 +1648,21 @@ The team with ID 475a087b-bec8-4a66-ac14-95bc09bd8d1e was renamed to Advocacy
 #### Delete a team
 
 To delete a team, you need to run the cmd `civo teams delete <TEAM-NAME>`
+
 ```sh
 $ civo teams delete Advocacy
 Warning: Are you sure you want to delete the Advocacy team  (y/N) ? y
 The team (Advocacy) has been deleted
-``` 
-
+```
 
 ## Permissions
+
 Each member of a team is assigned one or more permissions, or roles. The permissions available are the total set of permissions they have across the teams in that account, combined.
 
 #### List all permissions
 
 You have to run the cmd `civo permissions ls` to list down all the available permissions.
+
 ```sh
 $ civo permissions ls
 +-------------------------+----------------------------+------------------------------------------------------------------------------------------------+
@@ -1707,11 +1729,13 @@ $ civo permissions ls
 ```
 
 ## Region
+
 As Civo grows, more regions for your instances will become available. You can run `civo region ls` to list the regions available. Block storage (Volumes) is region-specific, so if you configure an instance in one region, any volumes you wish to attach to that instance would have to be in the same region.
 
 #### List all region
 
 You can run `civo region ls` to get the list of all region
+
 ```sh
 civo region ls
 +------+-------------+----------------+---------+
@@ -1726,10 +1750,12 @@ civo region ls
 #### Change region
 
 To change the region the only cmd you need run is `civo region current <REGION-CODE>` and you will see a message like this:
+
 ```sh
  civo region current NYC1
 
 ```
+
 The default region was set to (New York 1) NYC1
 
 #### Use region in non-interactive mode
@@ -1814,19 +1840,21 @@ compinit
 ```
 
 To set the civo completion code for zsh to auto-load on start up yo can run this command.
+
 ```bash
 civo completion zsh > "${fpath[1]}/_civo"
 ```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/civo/cli.
+Bug reports and pull requests are welcome on GitHub at <https://github.com/civo/cli>.
 
 ## License
 
 The code is available as open source under the terms of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0).
 
 ## Thanks to all the contributors ❤
+
  <a href = "https://github.com/civo/cli/graphs/contributors">
    <img src = "https://contrib.rocks/image?repo=civo/cli"/>
  </a>
