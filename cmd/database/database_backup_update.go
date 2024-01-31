@@ -30,8 +30,8 @@ var dbBackupUpdateCmd = &cobra.Command{
 			client.Region = common.RegionSet
 		}
 
-		if schedule == "" && count == 0 && name == "" {
-			utility.Error("Schedule, name or count must be specified")
+		if schedule == "" && name == "" {
+			utility.Error("Schedule, name  must be specified")
 			os.Exit(1)
 		}
 

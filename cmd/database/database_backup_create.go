@@ -15,7 +15,7 @@ import (
 var dbBackupCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
-	Example: `Scheduled: civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --schedule <SCHEDULE> --count <COUNT>\n
+	Example: `Scheduled: civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --schedule <SCHEDULE>\n
 	Manual: civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --type manual`,
 	Short: "Create a new database backup",
 	Args:  cobra.MinimumNArgs(1),
@@ -51,11 +51,6 @@ var dbBackupCreateCmd = &cobra.Command{
 				client.Region = common.RegionSet
 			}
 
-			if count <= 0 {
-				utility.Error("Count must be greater than zero, you have given: %d", count)
-				os.Exit(1)
-			}
-
 			if schedule == "" {
 				utility.Error("Schedule must be specified")
 				os.Exit(1)
@@ -69,8 +64,6 @@ var dbBackupCreateCmd = &cobra.Command{
 
 			backupCreateConfig.Name = name
 			backupCreateConfig.Schedule = schedule
-			backupCreateConfig.Count = int32(count)
-
 		} else {
 			backupCreateConfig.Name = name
 			backupCreateConfig.Type = backupType
