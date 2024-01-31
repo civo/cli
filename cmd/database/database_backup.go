@@ -40,5 +40,4 @@ func init() {
 	// Update cmd options
 	dbBackupUpdateCmd.Flags().StringVarP(&name, "name", "n", "", "name of the database backup")
 	dbBackupUpdateCmd.Flags().StringVarP(&schedule, "schedule", "s", "", "schedule of the database backup in the form of cronjob")
-	dbBackupUpdateCmd.Flags().IntVarP(&count, "count", "c", 0, "number of backups to keep")
 }

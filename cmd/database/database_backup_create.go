@@ -89,9 +89,8 @@ var dbBackupCreateCmd = &cobra.Command{
 				"database_id":   bk.DatabaseID,
 				"database_name": bk.DatabaseName,
 				"software":      bk.Software,
-				"name":          bk.Scheduled.Name,
-				"schedule":      bk.Scheduled.Schedule,
-				"count":         fmt.Sprintf("%d", count),
+				"name":          bk.Name,
+				"schedule":      bk.Schedule,
 			})
 		} else {
 			ow = utility.NewOutputWriterWithMap(map[string]string{
