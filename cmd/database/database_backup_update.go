@@ -15,7 +15,7 @@ var dbBackupUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"modify", "change"},
 	Short:   "Update a scheduled database backup",
-	Example: "civo database backup update <DATABASE-NAME/ID> --name <NEW_BACKUP-NAME> --schedule <SCHEDULE> --count <COUNT>",
+	Example: "civo database backup update <DATABASE-NAME/ID> --name <NEW_BACKUP-NAME> --schedule <SCHEDULE>",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -30,8 +30,8 @@ var dbBackupUpdateCmd = &cobra.Command{
 			client.Region = common.RegionSet
 		}
 
-		if schedule == "" && count == 0 && name == "" {
-			utility.Error("Schedule, name or count must be specified")
+		if schedule == "" && name == "" {
+			utility.Error("Schedule, name  must be specified")
 			os.Exit(1)
 		}
 
@@ -47,9 +47,6 @@ var dbBackupUpdateCmd = &cobra.Command{
 
 		if schedule != "" {
 			backupUpdateConfig.Schedule = schedule
-		}
-		if count >= 0 {
-			backupUpdateConfig.Count = int32(count)
 		}
 		if name != "" {
 			backupUpdateConfig.Name = name
@@ -69,9 +66,8 @@ var dbBackupUpdateCmd = &cobra.Command{
 			"database_id":   bk.DatabaseID,
 			"database_name": bk.DatabaseName,
 			"software":      bk.Software,
-			"name":          bk.Scheduled.Name,
-			"schedule":      bk.Scheduled.Schedule,
-			"count":         fmt.Sprintf("%d", count),
+			"backup_name":   bk.Name,
+			"schedule":      bk.Schedule,
 		})
 		switch common.OutputFormat {
 		case "json":
@@ -79,7 +75,7 @@ var dbBackupUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Database backup (%s) for database %s has been update\n", utility.Green(bk.Scheduled.Name), utility.Green(bk.DatabaseName))
+			fmt.Printf("Database backup (%s) for database %s has been update\n", utility.Green(bk.Name), utility.Green(bk.DatabaseName))
 		}
 	},
 }

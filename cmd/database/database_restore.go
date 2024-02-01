@@ -13,13 +13,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var backup string
+var (
+	backup      string
+	restoreName string
+)
 
 var dbRestoreCmd = &cobra.Command{
 	Use:     "restore",
 	Aliases: []string{"reset", "restores"},
 	Short:   "Restore a database",
-	Example: "civo db restore <DATABASE-NAME/ID> --backup <BACKUP-NAME>",
+	Example: "civo db restore <DATABASE-NAME/ID> --name <RESTORE-NAME> --backup <BACKUP-NAME>",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -43,6 +46,7 @@ var dbRestoreCmd = &cobra.Command{
 		if utility.UserConfirmedRestore(db.Name, common.DefaultYes, backup) {
 			config := &civogo.RestoreDatabaseRequest{
 				Software: db.Software,
+				Name:     restoreName,
 				Backup:   backup,
 				Region:   client.Region,
 			}

@@ -52,5 +52,7 @@ func init() {
 	dbUpdateCmd.Flags().StringVarP(&updatedName, "name", "n", "", "the new name for the database")
 
 	dbRestoreCmd.Flags().StringVarP(&backup, "backup", "b", "", "the backup name which you can restore database")
+	dbRestoreCmd.Flags().StringVarP(&restoreName, "name", "n", "", "name of the restore")
 	dbRestoreCmd.MarkFlagRequired("backup")
+	dbRestoreCmd.MarkFlagRequired("name")
 }
