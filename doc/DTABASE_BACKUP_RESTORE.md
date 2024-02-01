@@ -69,6 +69,13 @@ To get the credentials for a database, use `civo db credential <name/ID>`
 Database backup (every10minutes) for database postgr-b697-c429d7 has been created
 ```
 
+### Create Manual Backup
+
+```bash
+❯ civo  database backups create  postgres-dem --name firstbackup --type manual
+Database backup (firstbackup) for database postgres-demo has been created
+```
+
 ### List backup
 
 ```bash
