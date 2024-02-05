@@ -61,5 +61,8 @@ func VersionCheck(client *github.Client) (res *github.RepositoryRelease, skip bo
 		fmt.Printf("hit secondary rate limit try again in %s minute", err.(*github.AbuseRateLimitError).RetryAfter)
 		return nil, true
 	}
+	if err != nil {
+		return nil, true
+  }
 	return release, false
 }
