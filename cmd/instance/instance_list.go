@@ -58,6 +58,11 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
+		if len(instances) == 0 {
+			utility.Info("No instances found in the region: %s", client.Region)
+			os.Exit(1)
+		}
+
 		ow := utility.NewOutputWriter()
 		for _, instance := range instances {
 			ow.StartLine()
