@@ -22,10 +22,6 @@ var dbVersionListCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
-
 		dbVersions, err := client.ListDBVersions()
 		if err != nil {
 			utility.Error("%s", err)
