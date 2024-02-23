@@ -14,7 +14,6 @@ var dbVersionListCmd = &cobra.Command{
 	Example: `civo db versions`,
 	Short:   "List all the available database versions",
 	Run: func(cmd *cobra.Command, args []string) {
-		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
 		if err != nil {
