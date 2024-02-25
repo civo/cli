@@ -65,6 +65,7 @@ func init() {
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialCreateCmd)
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialUpdateCmd)
 	objectStoreCredentialCmd.AddCommand(objectStoreCredentialDeleteCmd)
+	objectStoreCredentialCmd.AddCommand(objectStoreCredentialFindCmd)
 
 	//Flags for credential create command
 	objectStoreCredentialCreateCmd.Flags().BoolVarP(&waitOS, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the credential to be ready")
