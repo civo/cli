@@ -15,8 +15,8 @@ import (
 var dbBackupCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
-	Example: `Scheduled: civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --schedule <SCHEDULE>\n
-	Manual: civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --type manual`,
+	Example: `	Scheduled: civo database backup create <DATABASE-NAME/ID> --name <BACKUP-NAME> --schedule <SCHEDULE>
+	Manual:    civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --type manual`,
 	Short: "Create a new database backup",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -36,6 +36,11 @@ var dbBackupCreateCmd = &cobra.Command{
 		client, err := config.CivoAPIClient()
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
+			os.Exit(1)
+		}
+
+		if name == "" {
+			utility.Error("Name must be specified")
 			os.Exit(1)
 		}
 
@@ -91,6 +96,7 @@ var dbBackupCreateCmd = &cobra.Command{
 				"database_name": bk.DatabaseName,
 				"software":      bk.Software,
 				"name":          name,
+				"id":            bk.ID,
 			})
 		}
 

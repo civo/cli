@@ -61,14 +61,14 @@ func postgresScheduledBackups(backups *civogo.PaginatedDatabaseBackup) {
 		}
 		printMsg = true
 		ow.StartLine()
+		ow.AppendDataWithLabel("name", bk.Name, "Name")
+		ow.AppendDataWithLabel("schedule", bk.Schedule, "Schedule")
+
 		ow.AppendDataWithLabel("database_id", utility.TrimID(bk.DatabaseID), "Database ID")
 		ow.AppendDataWithLabel("database_name", bk.DatabaseName, "Database Name")
 
 		ow.AppendDataWithLabel("software", bk.Software, "Software")
-		ow.AppendDataWithLabel("schedule", bk.Schedule, "Schedule")
-		ow.AppendDataWithLabel("backup_name", bk.Name, "Backup Name")
-
-		ow.AppendDataWithLabel("backup", bk.Backup, "Backup")
+		ow.AppendDataWithLabel("status", bk.Status, "Status")
 
 		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 			ow.AppendDataWithLabel("database_id", bk.DatabaseID, "Database ID")
@@ -97,13 +97,17 @@ func postgresManualBackups(backups *civogo.PaginatedDatabaseBackup) {
 		}
 		printMsg = true
 		ow.StartLine()
+		ow.AppendDataWithLabel("id", utility.TrimID(bk.ID), "ID")
+		ow.AppendDataWithLabel("name", bk.Name, "Name")
+
 		ow.AppendDataWithLabel("database_id", utility.TrimID(bk.DatabaseID), "Database ID")
 		ow.AppendDataWithLabel("database_name", bk.DatabaseName, "Database Name")
 
 		ow.AppendDataWithLabel("software", bk.Software, "Software")
-		ow.AppendDataWithLabel("backup", bk.Backup, "Backup")
+		ow.AppendDataWithLabel("status", bk.Status, "Status")
 
 		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
+			ow.AppendDataWithLabel("id", bk.ID, "ID")
 			ow.AppendDataWithLabel("database_id", bk.DatabaseID, "Database ID")
 		}
 	}
@@ -127,18 +131,18 @@ func mysqlBackups(backups *civogo.PaginatedDatabaseBackup) {
 	for _, bk := range backups.Items {
 		printMsg = true
 		ow.StartLine()
+		ow.AppendDataWithLabel("id", utility.TrimID(bk.ID), "ID")
+		ow.AppendDataWithLabel("name", bk.Name, "Name")
+
 		ow.AppendDataWithLabel("database_id", utility.TrimID(bk.DatabaseID), "Database ID")
 		ow.AppendDataWithLabel("database_name", bk.DatabaseName, "Database Name")
 
-		ow.AppendDataWithLabel("backup_id", utility.TrimID(bk.ID), "Backup ID")
-		ow.AppendDataWithLabel("backup_name", bk.Name, "Backup Name")
 		ow.AppendDataWithLabel("software", bk.Software, "Software")
 		ow.AppendDataWithLabel("status", bk.Status, "Status")
 
 		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 			ow.AppendDataWithLabel("id", bk.ID, "ID")
 			ow.AppendDataWithLabel("database_id", bk.DatabaseID, "Database ID")
-			ow.AppendDataWithLabel("database_name", bk.DatabaseName, "Database Name")
 		}
 	}
 

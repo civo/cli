@@ -43,16 +43,21 @@ var dbRestoreCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		bk, err := client.GetDatabaseBackup(args[0], backup)
+		if err != nil {
+			utility.Error("Database backup %s", err)
+			os.Exit(1)
+		}
+
 		if utility.UserConfirmedRestore(db.Name, common.DefaultYes, backup) {
 			config := &civogo.RestoreDatabaseRequest{
-				Software: db.Software,
-				Name:     restoreName,
-				Backup:   backup,
-				Region:   client.Region,
+				Name:   restoreName,
+				Backup: bk.Name,
+				Region: client.Region,
 			}
 			_, err = client.RestoreDatabase(db.ID, config)
 			if err != nil {
-				utility.Error("%s", err)
+				utility.Error("Failed to restore %s", err)
 				os.Exit(1)
 			}
 			ow := utility.NewOutputWriter()
