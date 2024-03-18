@@ -27,6 +27,8 @@ func init() {
 	dbBackupCmd.AddCommand(dbBackupCreateCmd)
 	dbBackupCmd.AddCommand(dbBackupListCmd)
 	dbBackupCmd.AddCommand(dbBackupUpdateCmd)
+	dbBackupCmd.AddCommand(dbBackupShowCmd)
+	dbBackupCmd.AddCommand(dbBackupDeleteCmd)
 
 	// Create cmd options
 	dbBackupCreateCmd.Flags().StringVarP(&name, "name", "n", "", "name of the database backup")

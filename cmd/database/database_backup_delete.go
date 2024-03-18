@@ -16,11 +16,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var dbDeleteCmd = &cobra.Command{
+var backupList []utility.ObjecteList
+var dbBackupDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"rm", "remove", "destroy"},
-	Short:   "Delete a database",
-	Example: "civo db delete <DATABASE-NAME>",
+	Short:   "Delete a manual database backup",
+	Example: "civo database backup delete <DATABASE-NAME/ID> <BACKUP-NAME/ID>",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -35,8 +36,8 @@ var dbDeleteCmd = &cobra.Command{
 			client.Region = common.RegionSet
 		}
 
-		if len(args) == 1 {
-			db, err := client.FindDatabase(args[0])
+		if len(args) == 2 {
+			bk, err := client.FindDatabaseBackup(args[0], args[1])
 			if err != nil {
 				if errors.Is(err, civogo.ZeroMatchesError) {
 					utility.Error("sorry there is no %s Database in your account", utility.Red(args[0]))
@@ -47,12 +48,15 @@ var dbDeleteCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			backupList = append(backupList, utility.ObjecteList{ID: db.ID, Name: db.Name})
+			backupList = append(backupList, utility.ObjecteList{ID: bk.ID, Name: bk.Name})
 		} else {
-			for _, v := range args {
-				db, err := client.FindDatabase(v)
+			for idx, v := range args {
+				if idx == 0 {
+					continue
+				}
+				bk, err := client.FindDatabaseBackup(args[0], v)
 				if err == nil {
-					backupList = append(backupList, utility.ObjecteList{ID: db.ID, Name: db.Name})
+					backupList = append(backupList, utility.ObjecteList{ID: bk.ID, Name: bk.Name})
 				}
 			}
 		}
@@ -62,17 +66,17 @@ var dbDeleteCmd = &cobra.Command{
 			dbNameList = append(dbNameList, v.Name)
 		}
 
-		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(backupList), "Database"), common.DefaultYes, strings.Join(dbNameList, ", ")) {
+		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(backupList), "Database Backup"), common.DefaultYes, strings.Join(dbNameList, ", ")) {
 
 			for _, v := range backupList {
-				db, err := client.FindDatabase(v.ID)
+				db, err := client.FindDatabaseBackup(args[0], v.ID)
 				if err != nil {
 					utility.Error("%s", err)
 					os.Exit(1)
 				}
-				_, err = client.DeleteDatabase(db.ID)
+				_, err = client.DeleteDatabaseBackup(args[0], db.ID)
 				if err != nil {
-					utility.Error("Error deleting the Database: %s", err)
+					utility.Error("Error deleting the Database backup: %s", err)
 					os.Exit(1)
 				}
 			}
@@ -82,7 +86,7 @@ var dbDeleteCmd = &cobra.Command{
 			for _, v := range backupList {
 				ow.StartLine()
 				ow.AppendDataWithLabel("id", v.ID, "ID")
-				ow.AppendDataWithLabel("database", v.Name, "Database")
+				ow.AppendDataWithLabel("backup", v.Name, "Backup")
 			}
 
 			switch common.OutputFormat {
@@ -95,7 +99,7 @@ var dbDeleteCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(backupList), "database"), utility.Green(strings.Join(dbNameList, ", ")))
+				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(backupList), "database backup"), utility.Green(strings.Join(dbNameList, ", ")))
 			}
 		} else {
 			fmt.Println("Operation aborted")

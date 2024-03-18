@@ -15,7 +15,7 @@ var dbBackupUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"modify", "change"},
 	Short:   "Update a scheduled database backup",
-	Example: "civo database backup update <DATABASE-NAME/ID> --name <NEW_BACKUP-NAME> --schedule <SCHEDULE>",
+	Example: "civo database backup update <DATABASE-NAME/ID> --name <NEW-BACKUP-NAME> --schedule <SCHEDULE>",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
