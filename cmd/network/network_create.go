@@ -2,12 +2,18 @@ package network
 
 import (
 	"fmt"
+	"github.com/civo/civogo"
 	"os"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
+)
+
+var (
+	cidrV4        string
+	nameserversV4 []string
 )
 
 var networkCreateCmd = &cobra.Command{
@@ -28,7 +34,13 @@ var networkCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		network, err := client.NewNetwork(args[0])
+		networkConfig := civogo.NetworkConfig{
+			Label:         args[0],
+			CIDRv4:        cidrV4,
+			NameserversV4: nameserversV4,
+		}
+
+		network, err := client.CreateNetwork(networkConfig)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
