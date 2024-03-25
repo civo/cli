@@ -25,4 +25,7 @@ func init() {
 	NetworkCmd.AddCommand(networkCreateCmd)
 	NetworkCmd.AddCommand(networkUpdateCmd)
 	NetworkCmd.AddCommand(networkRemoveCmd)
+
+	networkCreateCmd.Flags().StringVarP(&cidrV4, "cidr-v4", "", "", "Custom IPv4 CIDR")
+	networkCreateCmd.Flags().StringSliceVarP(&nameserversV4, "nameservers-v4", "", nil, "Custom list of IPv4 nameservers (up to three, comma-separated)")
 }
