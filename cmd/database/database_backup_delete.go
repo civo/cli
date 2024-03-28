@@ -22,7 +22,7 @@ var dbBackupDeleteCmd = &cobra.Command{
 	Aliases: []string{"rm", "remove", "destroy"},
 	Short:   "Delete a manual database backup",
 	Example: "civo database backup delete <DATABASE-NAME/ID> <BACKUP-NAME/ID>",
-	Args:    cobra.MinimumNArgs(1),
+	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
