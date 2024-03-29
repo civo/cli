@@ -14,14 +14,6 @@ import (
 var (
 	cidrV4        string
 	nameserversV4 []string
-
-	// VLAN-related variables
-	vlanID                int
-	vlanCIDRV4            string
-	vlanGatewayIPv4       string
-	vlanHardwareAddr      string
-	vlanAllocationStartV4 string
-	vlanAllocationEndV4   string
 )
 
 var networkCreateCmd = &cobra.Command{
@@ -46,21 +38,6 @@ var networkCreateCmd = &cobra.Command{
 			Label:         args[0],
 			CIDRv4:        cidrV4,
 			NameserversV4: nameserversV4,
-		}
-
-		vlanConnectConfig := &civogo.VLANConnectConfig{
-			VlanID:                vlanID,
-			HardwareAddr:          vlanHardwareAddr,
-			CIDRv4:                vlanCIDRV4,
-			GatewayIPv4:           vlanGatewayIPv4,
-			AllocationPoolV4Start: vlanAllocationStartV4,
-			AllocationPoolV4End:   vlanAllocationEndV4,
-		}
-
-		// Conditionally add VLAN configuration
-		// Assuming VLAN ID of 0 is invalid and indicates no VLAN config provided
-		if vlanID != 0 {
-			networkConfig.VLanConfig = vlanConnectConfig
 		}
 
 		network, err := client.CreateNetwork(networkConfig)
