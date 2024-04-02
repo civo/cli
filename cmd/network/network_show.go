@@ -2,7 +2,6 @@ package network
 
 import (
 	"fmt"
-	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
@@ -29,38 +28,47 @@ var networkShowCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		fmt.Println("Network Details:")
 		ow := utility.NewOutputWriter()
 		ow.StartLine()
-		ow.AppendDataWithLabel("id", network.ID, "ID")
-		ow.AppendDataWithLabel("name", network.Name, "Name")
-		ow.AppendDataWithLabel("default", utility.BoolToYesNo(network.Default), "Default")
-		ow.AppendDataWithLabel("cidr", network.CIDR, "CIDR")
-		ow.AppendDataWithLabel("status", network.Status, "Status")
-		ow.AppendDataWithLabel("ipv4_enabled", utility.BoolToYesNo(network.IPv4Enabled), "IPv4 Enabled")
-		ow.AppendDataWithLabel("ipv6_enabled", utility.BoolToYesNo(network.IPv6Enabled), "IPv6 Enabled")
-		if len(network.NameserversV4) > 0 {
-			ow.AppendDataWithLabel("nameservers_v4", utility.SliceToString(network.NameserversV4), "Nameservers IPv4")
-		}
-		if len(network.NameserversV6) > 0 {
-			ow.AppendDataWithLabel("nameservers_v6", utility.SliceToString(network.NameserversV6), "Nameservers IPv6")
-		}
-		// Add VLAN details if available
+		ow.AppendData("ID", network.ID)
+		ow.AppendData("Name", network.Name)
+		ow.AppendData("Default", utility.BoolToYesNo(network.Default))
+		ow.AppendData("CIDR", network.CIDR)
+		ow.AppendData("Status", network.Status)
+		ow.AppendData("IPv4 Enabled", utility.BoolToYesNo(network.IPv4Enabled))
+		ow.AppendData("IPv6 Enabled", utility.BoolToYesNo(network.IPv6Enabled))
+		ow.WriteTable()
+
+		// Conditional VLAN Details
 		if network.VLAN.VlanID != 0 {
-			ow.AppendDataWithLabel("vlan_id", fmt.Sprintf("%d", network.VLAN.VlanID), "VLAN ID")
-			ow.AppendDataWithLabel("hardware_addr", network.VLAN.HardwareAddr, "Hardware Address")
-			ow.AppendDataWithLabel("cidr_v4", network.VLAN.CIDRv4, "VLAN CIDRv4")
-			ow.AppendDataWithLabel("gateway_ipv4", network.VLAN.GatewayIPv4, "Gateway IPv4")
-			ow.AppendDataWithLabel("allocation_pool_v4_start", network.VLAN.AllocationPoolV4Start, "Allocation Pool Start IPv4")
-			ow.AppendDataWithLabel("allocation_pool_v4_end", network.VLAN.AllocationPoolV4End, "Allocation Pool End IPv4")
+			fmt.Println("\nVLAN Details:")
+			ow = utility.NewOutputWriter() // Reset for a new section
+			ow.StartLine()
+			ow.AppendData("VLAN ID", fmt.Sprintf("%d", network.VLAN.VlanID))
+			ow.AppendData("Hardware Address", network.VLAN.HardwareAddr)
+			ow.AppendData("CIDRv4", network.VLAN.CIDRv4)
+			ow.AppendData("Gateway IPv4", network.VLAN.GatewayIPv4)
+			ow.AppendData("Allocation Pool IPv4 Start", network.VLAN.AllocationPoolV4Start)
+			ow.AppendData("Allocation Pool IPv4 End", network.VLAN.AllocationPoolV4End)
+			ow.WriteTable()
+		} else {
+			fmt.Println("No VLAN Configuration")
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteSingleObjectJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
+		// Nameserver Details
+		if len(network.NameserversV4) > 0 || len(network.NameserversV6) > 0 {
+			fmt.Println("\nNameserver Details:")
+			ow = utility.NewOutputWriter()
+			ow.StartLine()
+			if len(network.NameserversV4) > 0 {
+				ow.AppendData("Nameservers IPv4", utility.SliceToString(network.NameserversV4))
+			}
+			if len(network.NameserversV6) > 0 {
+				ow.AppendData("Nameservers IPv6", utility.SliceToString(network.NameserversV6))
+			}
 			ow.WriteTable()
 		}
+
 	},
 }
