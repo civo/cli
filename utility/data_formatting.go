@@ -27,3 +27,16 @@ func GetStringMap(s string) map[string]string {
 
 	return m
 }
+
+// SliceToString converts a slice of strings to a single string, with elements separated by a comma and a space.
+func SliceToString(slice []string) string {
+	if len(slice) == 0 {
+		return ""
+	}
+	result := slice[0]
+	for _, element := range slice[1:] {
+		result += ", " + element
+	}
+
+	return result
+}
