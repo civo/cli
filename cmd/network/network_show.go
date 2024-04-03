@@ -28,47 +28,38 @@ var networkShowCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		// Display Core Network Details
 		fmt.Println("Network Details:")
-		ow := utility.NewOutputWriter()
-		ow.StartLine()
-		ow.AppendData("ID", network.ID)
-		ow.AppendData("Name", network.Name)
-		ow.AppendData("Default", utility.BoolToYesNo(network.Default))
-		ow.AppendData("CIDR", network.CIDR)
-		ow.AppendData("Status", network.Status)
-		ow.AppendData("IPv4 Enabled", utility.BoolToYesNo(network.IPv4Enabled))
-		ow.AppendData("IPv6 Enabled", utility.BoolToYesNo(network.IPv6Enabled))
-		ow.WriteTable()
+		fmt.Printf("ID: %s\n", network.ID)
+		fmt.Printf("Name: %s\n", network.Name)
+		fmt.Printf("Default: %s\n", utility.BoolToYesNo(network.Default))
+		fmt.Printf("CIDR: %s\n", network.CIDR)
+		fmt.Printf("Status: %s\n", network.Status)
+		fmt.Printf("IPv4 Enabled: %s\n", utility.BoolToYesNo(network.IPv4Enabled))
+		fmt.Printf("IPv6 Enabled: %s\n", utility.BoolToYesNo(network.IPv6Enabled))
 
 		// Conditional VLAN Details
 		if network.VLAN.VlanID != 0 {
 			fmt.Println("\nVLAN Details:")
-			ow = utility.NewOutputWriter() // Reset for a new section
-			ow.StartLine()
-			ow.AppendData("VLAN ID", fmt.Sprintf("%d", network.VLAN.VlanID))
-			ow.AppendData("Hardware Address", network.VLAN.HardwareAddr)
-			ow.AppendData("CIDRv4", network.VLAN.CIDRv4)
-			ow.AppendData("Gateway IPv4", network.VLAN.GatewayIPv4)
-			ow.AppendData("Allocation Pool IPv4 Start", network.VLAN.AllocationPoolV4Start)
-			ow.AppendData("Allocation Pool IPv4 End", network.VLAN.AllocationPoolV4End)
-			ow.WriteTable()
+			fmt.Printf("VLAN ID: %d\n", network.VLAN.VlanID)
+			fmt.Printf("Hardware Address: %s\n", network.VLAN.HardwareAddr)
+			fmt.Printf("CIDRv4: %s\n", network.VLAN.CIDRv4)
+			fmt.Printf("Gateway IPv4: %s\n", network.VLAN.GatewayIPv4)
+			fmt.Printf("Allocation Pool IPv4 Start: %s\n", network.VLAN.AllocationPoolV4Start)
+			fmt.Printf("Allocation Pool IPv4 End: %s\n", network.VLAN.AllocationPoolV4End)
 		} else {
-			fmt.Println("No VLAN Configuration")
+			fmt.Println("\nNo VLAN Configuration")
 		}
 
 		// Nameserver Details
 		if len(network.NameserversV4) > 0 || len(network.NameserversV6) > 0 {
 			fmt.Println("\nNameserver Details:")
-			ow = utility.NewOutputWriter()
-			ow.StartLine()
 			if len(network.NameserversV4) > 0 {
-				ow.AppendData("Nameservers IPv4", utility.SliceToString(network.NameserversV4))
+				fmt.Printf("Nameservers IPv4: %s\n", utility.SliceToString(network.NameserversV4))
 			}
 			if len(network.NameserversV6) > 0 {
-				ow.AppendData("Nameservers IPv6", utility.SliceToString(network.NameserversV6))
+				fmt.Printf("Nameservers IPv6: %s\n", utility.SliceToString(network.NameserversV6))
 			}
-			ow.WriteTable()
 		}
-
 	},
 }
