@@ -2,6 +2,7 @@ package firewall
 
 import (
 	"fmt"
+	"net"
 	"strings"
 
 	"github.com/civo/civogo"
@@ -37,6 +38,12 @@ var firewallRuleCreateCmd = &cobra.Command{
 		firewall, err := client.FindFirewall(args[0])
 		if err != nil {
 			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
+		// Validate CIDR input
+		if err := validateCIDRs(cidr); err != nil {
+			utility.Error(err.Error())
 			os.Exit(1)
 		}
 
@@ -97,4 +104,17 @@ var firewallRuleCreateCmd = &cobra.Command{
 			}
 		}
 	},
+}
+
+// validateCIDRs checks if each CIDR in a comma-separated list is valid
+func validateCIDRs(cidrs string) error {
+	for _, cidr := range strings.Split(cidrs, ",") {
+		if cidr = strings.TrimSpace(cidr); cidr == "" {
+			continue
+		}
+		if _, _, err := net.ParseCIDR(cidr); err != nil {
+			return fmt.Errorf("invalid CIDR address '%s': %s", cidr, err)
+		}
+	}
+	return nil
 }
