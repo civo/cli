@@ -43,13 +43,6 @@ var kfcListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("dashboard_url", kfc.DashboardURL, "Dashboard URL")
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
-		}
+		ow.FinishAndPrintOutput()
 	},
 }

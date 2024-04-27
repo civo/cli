@@ -6,6 +6,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/civo/cli/common"
+	"github.com/civo/cli/config"
 	"os"
 	"regexp"
 	"sort"
@@ -279,4 +281,21 @@ func prettyprint(b []byte) ([]byte, error) {
 	var out bytes.Buffer
 	err := json.Indent(&out, b, "", "  ")
 	return out.Bytes(), err
+}
+
+func (ow *OutputWriter) FinishAndPrintOutput() {
+	ow.finishExistingLine()
+	if len(ow.Values) == 0 {
+		region := config.Current.Meta.DefaultRegion // Ensure this fetches the correct current region.
+		fmt.Fprintf(os.Stderr, "No resources found in region %s. For a list of regions use the command 'civo region ls'\n", region)
+	} else {
+		switch common.OutputFormat {
+		case "json":
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
+		case "custom":
+			ow.WriteCustomOutput(common.OutputFields)
+		default:
+			ow.WriteTable()
+		}
+	}
 }

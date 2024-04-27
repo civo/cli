@@ -61,14 +61,6 @@ var dbListCmd = &cobra.Command{
 			}
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
-			fmt.Println("To get the credentials for a database, use `civo db credential <name/ID>`")
-		}
+		ow.FinishAndPrintOutput()
 	},
 }

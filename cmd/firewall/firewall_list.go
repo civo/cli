@@ -69,13 +69,6 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 			ow.AppendDataWithLabel("loadbalancer_count", strconv.Itoa(firewall.LoadBalancerCount), "Total LoadBalancer")
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
-		}
+		ow.FinishAndPrintOutput()
 	},
 }
