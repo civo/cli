@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 
@@ -42,13 +41,6 @@ Example: civo domain ls -o custom -f "ID: Name"`,
 			ow.AppendDataWithLabel("name", domain.Name, "Name")
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
-		}
+		ow.FinishAndPrintOutput()
 	},
 }

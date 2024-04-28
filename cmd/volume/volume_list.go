@@ -143,13 +143,6 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 			ow.AppendDataWithLabel("status", volume.Status, "Status")
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
-		}
+		ow.FinishAndPrintOutput()
 	},
 }
