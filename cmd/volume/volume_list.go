@@ -3,6 +3,7 @@ package volume
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 
 	"github.com/civo/civogo"
@@ -78,6 +79,11 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 		}
 
 		ow := utility.NewOutputWriter()
+
+		// Sort volumes by name
+		sort.Slice(volumes, func(i, j int) bool {
+			return volumes[i].Name < volumes[j].Name
+		})
 
 		utility.Info("Volumes with status 'dangling' mean they are attached to a cluster that no longer exists. You can attach them to an instance, or delete them if they are no longer needed.")
 		for _, volume := range volumes {
