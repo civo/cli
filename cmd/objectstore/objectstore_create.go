@@ -23,9 +23,21 @@ var objectStoreCreateCmd = &cobra.Command{
 	Example: "civo objectstore create OBJECTSTORE_NAME --size SIZE",
 	Short:   "Create a new Object Store",
 	Long:    "Bucket size should be in Gigabytes (GB) and must be a multiple of 500, starting from 500.\n",
-	Args:    cobra.MinimumNArgs(1),
+	Args:    cobra.MinimumNArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
+
+		var objectStoreName string
+		if len(args) > 0 {
+			if utility.ValidNameLength(args[0]) {
+				utility.Warning("the bucket name cannot be longer than 63 characters")
+				os.Exit(1)
+			}
+			objectStoreName = args[0]
+
+		} else {
+			objectStoreName = utility.RandomName()
+		}
 
 		check, region, err := utility.CheckAvailability("object_store", common.RegionSet)
 		if err != nil {
@@ -75,7 +87,7 @@ var objectStoreCreateCmd = &cobra.Command{
 				os.Exit(1)
 			}
 			store, err = client.NewObjectStore(&civogo.CreateObjectStoreRequest{
-				Name:        args[0],
+				Name:        objectStoreName,
 				MaxSizeGB:   bucketSize,
 				AccessKeyID: credential.AccessKeyID,
 				Region:      client.Region,
@@ -86,7 +98,7 @@ var objectStoreCreateCmd = &cobra.Command{
 			}
 		} else {
 			store, err = client.NewObjectStore(&civogo.CreateObjectStoreRequest{
-				Name:      args[0],
+				Name:      objectStoreName,
 				MaxSizeGB: bucketSize,
 				Region:    client.Region,
 			})
@@ -121,7 +133,7 @@ var objectStoreCreateCmd = &cobra.Command{
 			executionTime = utility.TrackTime(startTime)
 		}
 
-		objectStore, err := client.FindObjectStore(args[0])
+		objectStore, err := client.FindObjectStore(objectStoreName)
 		if err != nil {
 			utility.Error("ObjectStore %s", err)
 			os.Exit(1)
