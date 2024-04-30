@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
@@ -87,45 +88,51 @@ var dbCreateCmd = &cobra.Command{
 
 		dbVersions, err := client.ListDBVersions()
 		if err != nil {
-			utility.Error("Unable to list database versions %s", err)
+			utility.Error("Failed to fetch database versions: %s", err)
 			os.Exit(1)
 		}
 
-		if software == "" {
-			software = "MySQL"
-		}
-
-		if softwareVersion == "" && software == "MySQL" {
-			softwareVersion = "8.0"
-		}
-
-		if software == "PostgreSQL" && softwareVersion == "" {
-			softwareVersion = "14"
-		}
-
+		software = strings.ToLower(software)
 		softwareIsValid := false
 		softwareVersionIsValid := false
-		if software != "" {
-			for swName, version := range dbVersions {
-				if swName == software {
+
+		validSoftwares := map[string][]string{
+			"mysql":      {"mysql", "my", "sql"},
+			"postgresql": {"postgresql", "psql"},
+		}
+
+		apiSoftwareNames := map[string]string{
+			"mysql":      "MySQL",
+			"postgresql": "PostgreSQL",
+		}
+
+		canonicalSoftwareName := ""
+		for swName, aliases := range validSoftwares {
+			for _, alias := range aliases {
+				if alias == software {
 					softwareIsValid = true
-					for i, v := range version {
-						if v.SoftwareVersion == version[i].SoftwareVersion {
+					canonicalSoftwareName = apiSoftwareNames[swName]
+					for _, v := range dbVersions[canonicalSoftwareName] {
+						if v.SoftwareVersion == softwareVersion {
 							softwareVersionIsValid = true
+							break
 						}
 					}
 				}
-
 			}
 		}
 
 		if !softwareIsValid {
-			utility.Error("The provided software name is not valid. Make sure you use correct capitalization (e.g. MySQL, PostgreSQL)")
+			utility.Error("The provided software name is not valid. Make sure you use correct capitalization (e.g., MySQL, PostgreSQL)")
 			os.Exit(1)
 		}
 
 		if !softwareVersionIsValid {
-			utility.Error("The provided software version is not valid")
+			if softwareVersion == "" {
+				utility.Error(fmt.Sprintf("No version specified for %s. Please provide a version using --version flag. For example, civo database create db-psql --software psql --version 14.", canonicalSoftwareName))
+			} else {
+				utility.Error("The provided software version is not valid. Please check the available versions for the specified software.")
+			}
 			os.Exit(1)
 		}
 
@@ -136,7 +143,7 @@ var dbCreateCmd = &cobra.Command{
 			Nodes:           nodes,
 			FirewallID:      firewallID,
 			FirewallRules:   rulesFirewall,
-			Software:        software,
+			Software:        canonicalSoftwareName,
 			SoftwareVersion: softwareVersion,
 			Region:          client.Region,
 		}
