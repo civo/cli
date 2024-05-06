@@ -18,7 +18,7 @@ import (
 )
 
 var wait bool
-var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, firewall string
+var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, privateIPv4, firewall string
 var script string
 var skipShebangCheck bool
 
@@ -27,7 +27,7 @@ var instanceCreateCmd = &cobra.Command{
 	Aliases: []string{"new", "add"},
 	Short:   "Create a new instance",
 	Example: "civo instance create HOSTNAME [flags]",
-	Long: `You can create an instance with a hostname argument, as well as any other options you provide. 
+	Long: `You can create an instance with a hostname argument, as well as any other options you provide.
 If you don't provide a hostname, it will be automatically generated.
 If you wish to use a custom format, the available fields are:
 	* id
@@ -141,6 +141,11 @@ If you wish to use a custom format, the available fields are:
 
 		if publicip != "" {
 			config.PublicIPRequired = publicip
+		}
+
+		// Set private_ipv4 if provided
+		if privateIPv4 != "" {
+			config.PrivateIPv4 = privateIPv4
 		}
 
 		if initialuser != "" {
