@@ -97,7 +97,7 @@ var dbCreateCmd = &cobra.Command{
 		softwareVersionIsValid := false
 
 		validSoftwares := map[string][]string{
-			"mysql":      {"mysql", "my", "sql"},
+			"mysql":      {"mysql"},
 			"postgresql": {"postgresql", "psql"},
 		}
 
