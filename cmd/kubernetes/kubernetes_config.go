@@ -3,6 +3,7 @@ package kubernetes
 import (
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -26,8 +27,7 @@ Notes:
 `
 
 var saveConfig, switchConfig, overwriteConfig bool
-var localPathConfig string
-var defaultKubeConfigPath = "/.kube/config"
+var localPathConfig, defaultKubeConfigPath string
 
 var kubernetesConfigCmd = &cobra.Command{
 	Use:     "config",
@@ -64,6 +64,12 @@ If you wish to use a custom format, the available fields are:
 		if !kube.Ready {
 			utility.Error("The cluster isn't ready yet, so the KUBECONFIG isn't available.")
 			os.Exit(1)
+		}
+
+		if runtime.GOOS == "windows" {
+			defaultKubeConfigPath = os.Getenv("USERPROFILE") + "\\.kube\\config"
+		} else {
+			defaultKubeConfigPath = os.Getenv("HOME") + "/.kube/config"
 		}
 
 		if localPathConfig == "" { // Check if -p or --local-path argument was not provided
