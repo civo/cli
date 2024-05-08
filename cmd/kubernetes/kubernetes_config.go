@@ -27,6 +27,7 @@ Notes:
 
 var saveConfig, switchConfig, overwriteConfig bool
 var localPathConfig string
+var defaultKubeConfigPath = "/.kube/config"
 
 var kubernetesConfigCmd = &cobra.Command{
 	Use:     "config",
@@ -65,8 +66,12 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if os.Getenv("KUBECONFIG") != "" {
-			localPathConfig = os.Getenv("KUBECONFIG")
+		if localPathConfig == "" { // Check if -p or --local-path argument was not provided
+			if os.Getenv("KUBECONFIG") != "" {
+				localPathConfig = os.Getenv("KUBECONFIG")
+			} else {
+				localPathConfig = defaultKubeConfigPath
+			}
 		}
 
 		if saveConfig {
