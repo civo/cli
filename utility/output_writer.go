@@ -90,6 +90,7 @@ func (ow *OutputWriter) StartLine() {
 func (ow *OutputWriter) finishExistingLine() {
 	if len(ow.TempValues) > 0 {
 		ow.Values = append(ow.Values, ow.TempValues)
+		ow.TempValues = nil
 	}
 }
 
