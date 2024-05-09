@@ -90,6 +90,7 @@ func (ow *OutputWriter) StartLine() {
 func (ow *OutputWriter) finishExistingLine() {
 	if len(ow.TempValues) > 0 {
 		ow.Values = append(ow.Values, ow.TempValues)
+		ow.TempValues = nil
 	}
 }
 
@@ -197,9 +198,8 @@ func (ow *OutputWriter) WriteKeyValues() {
 // WriteTable prints multiple objects stored in the OutputWriter
 // in tabular format
 func (ow *OutputWriter) WriteTable() {
-	ow.finishExistingLine()
-
 	table := tablewriter.NewWriter(os.Stdout)
+	ow.finishExistingLine()
 	if len(ow.Keys) > 0 {
 		table.SetHeader(ow.Labels)
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)

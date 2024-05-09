@@ -45,8 +45,8 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriter()
 		for _, cluster := range kubernetesClusters.Items {
+			ow := utility.NewOutputWriter() // Create a new OutputWriter instance for each cluster
 			ow.StartLine()
 
 			ow.AppendDataWithLabel("id", cluster.ID, "ID")
@@ -74,8 +74,8 @@ If you wish to use a custom format, the available fields are:
 			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 				ow.AppendDataWithLabel("status", cluster.Status, "Status")
 			}
-		}
 
-		ow.FinishAndPrintOutput()
+			ow.FinishAndPrintOutput() // Ensure output is finished and printed at the end of each loop iteration
+		}
 	},
 }
