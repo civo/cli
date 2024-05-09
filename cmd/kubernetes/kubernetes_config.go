@@ -3,6 +3,7 @@ package kubernetes
 import (
 	"fmt"
 	"os"
+	"runtime"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -26,7 +27,7 @@ Notes:
 `
 
 var saveConfig, switchConfig, overwriteConfig bool
-var localPathConfig string
+var localPathConfig, defaultKubeConfigPath string
 
 var kubernetesConfigCmd = &cobra.Command{
 	Use:     "config",
@@ -65,8 +66,18 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if os.Getenv("KUBECONFIG") != "" {
-			localPathConfig = os.Getenv("KUBECONFIG")
+		if runtime.GOOS == "windows" {
+			defaultKubeConfigPath = os.Getenv("USERPROFILE") + "\\.kube\\config"
+		} else {
+			defaultKubeConfigPath = os.Getenv("HOME") + "/.kube/config"
+		}
+
+		if localPathConfig == "" { // Check if -p or --local-path argument was not provided
+			if os.Getenv("KUBECONFIG") != "" {
+				localPathConfig = os.Getenv("KUBECONFIG")
+			} else {
+				localPathConfig = defaultKubeConfigPath
+			}
 		}
 
 		if saveConfig {

@@ -176,7 +176,7 @@ func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested s
 	return requested, nil
 }
 
-// RequestedSplit is a function to split all app requested to be install
+// RequestedSplit is a function to split all app requested to be installed
 func RequestedSplit(appList []civogo.KubernetesMarketplaceApplication, requested string) string {
 	allsplit := strings.Split(requested, ",")
 	allApp := []string{}
