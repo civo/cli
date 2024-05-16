@@ -123,13 +123,13 @@ var dbCreateCmd = &cobra.Command{
 		}
 
 		if !softwareIsValid {
-			utility.Error("The provided software name is not valid. Make sure you use correct capitalization (e.g., MySQL, PostgreSQL)")
+			utility.Error("The provided software name is not valid. Make sure you use correct capitalization (eg: MySQL, PostgreSQL)")
 			os.Exit(1)
 		}
 
 		if !softwareVersionIsValid {
 			if softwareVersion == "" {
-				utility.Error(fmt.Sprintf("No version specified for %s. Please provide a version using --version flag. For example, civo database create db-psql --software psql --version 14.", canonicalSoftwareName))
+				utility.Error(fmt.Sprintf("No version specified for %s. Please provide a version using --version flag. For example, civo database create db-psql --software psql --version 14", canonicalSoftwareName))
 			} else {
 				utility.Error("The provided software version is not valid. Please check the available versions for the specified software.")
 			}
