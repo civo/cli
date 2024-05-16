@@ -264,7 +264,12 @@ func DefaultAPIKey() string {
 
 // CivoAPIClient returns a civogo client using the current default API key
 func CivoAPIClient() (*civogo.Client, error) {
-	cliClient, err := civogo.NewClientWithURL(DefaultAPIKey(), Current.Meta.URL, Current.Meta.DefaultRegion)
+	apiKey := DefaultAPIKey()
+	if apiKey == "" {
+		fmt.Printf("Error: Creating the connection to Civo's API failed because no API key is supplied. This is required to authenticate requests. Please go to https://dashboard.civo.com/security to obtain your API key, then save it using the command 'civo apikey save YOUR_API_KEY'.\n")
+		return nil, fmt.Errorf("no API Key supplied, this is required")
+	}
+	cliClient, err := civogo.NewClientWithURL(apiKey, Current.Meta.URL, Current.Meta.DefaultRegion)
 	if err != nil {
 		return nil, err
 	}
