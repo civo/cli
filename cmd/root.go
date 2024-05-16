@@ -160,6 +160,4 @@ func init() {
 	rootCmd.AddCommand(teams.TeamsCmd)
 	rootCmd.AddCommand(volume.VolumeCmd)
 
-	// Add warning if the region is empty, for the user with the old config
-	config.ReadConfig()
 }
