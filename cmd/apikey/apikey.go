@@ -50,4 +50,5 @@ func init() {
 
 	// Flags for "civo apikey save" command
 	apikeySaveCmd.Flags().BoolVar(&loadAPIKeyFromEnv, "load-from-env", false, "When set, the name and key will be taken from environment variables (see notes above)")
+	apikeyRemoveCmd.Flags().BoolVar(&forceFlag, "force", false, "Force removal of the current API key without confirmation")
 }
