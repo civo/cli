@@ -120,7 +120,7 @@ var dbCreateCmd = &cobra.Command{
 		}
 
 		if !softwareIsValid {
-			utility.Error("The provided software name is not valid. valid options are mysql, psql or postgresql")
+			utility.Error("The provided software name is not valid. Make sure you use correct capitalization (e.g. MySQL, PostgreSQL)")
 			os.Exit(1)
 		}
 
