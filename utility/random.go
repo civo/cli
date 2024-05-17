@@ -1,6 +1,7 @@
 package utility
 
 import (
+	"github.com/google/uuid"
 	"math/rand"
 	"time"
 )
@@ -40,9 +41,14 @@ var nouns = [...]string{
 	"shore", "cavern", "gorge", "spring", "arrow", "heap",
 }
 
-// RandomName generates a Heroku-style random name for instances/clusters/etc
+// RandomName generates a Heroku-style random name for instances/clusters/etc and appends a short UUID
 func RandomName() string {
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UnixNano()) // Seed the random number generator
 
-	return adjectives[rand.Intn(len(adjectives))] + "-" + nouns[rand.Intn(len(nouns))]
+	// Generate a random adjective and noun combination
+	name := adjectives[rand.Intn(len(adjectives))] + "-" + nouns[rand.Intn(len(nouns))]
+
+	// Generate a UUID and truncate it to the first 8 characters
+	shortUUID := uuid.New().String()[:8]
+	return name + "-" + shortUUID
 }
