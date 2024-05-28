@@ -2,8 +2,9 @@ package network
 
 import (
 	"fmt"
-	"github.com/civo/civogo"
 	"os"
+
+	"github.com/civo/civogo"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -19,7 +20,7 @@ var (
 	vlanID                int
 	vlanCIDRV4            string
 	vlanGatewayIPv4       string
-	vlanHardwareAddr      string
+	vlanPhysicalInterface string
 	vlanAllocationStartV4 string
 	vlanAllocationEndV4   string
 )
@@ -50,7 +51,7 @@ var networkConnectCmd = &cobra.Command{
 
 		vlanConnectConfig := &civogo.VLANConnectConfig{
 			VlanID:                vlanID,
-			HardwareAddr:          vlanHardwareAddr,
+			PhysicalInterface:     vlanPhysicalInterface,
 			CIDRv4:                vlanCIDRV4,
 			GatewayIPv4:           vlanGatewayIPv4,
 			AllocationPoolV4Start: vlanAllocationStartV4,

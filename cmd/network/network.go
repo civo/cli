@@ -35,7 +35,7 @@ func init() {
 	networkConnectCmd.Flags().IntVar(&vlanID, "vlan-id", 0, "VLAN ID to connect")
 	networkConnectCmd.Flags().StringVar(&vlanCIDRV4, "cidr-v4", "", "CIDR v4 of the VLAN")
 	networkConnectCmd.Flags().StringVar(&vlanGatewayIPv4, "gateway-ipv4", "", "Gateway IPv4 address for the VLAN")
-	networkConnectCmd.Flags().StringVar(&vlanHardwareAddr, "hardware-addr", "", "Hardware address for the VLAN connection")
+	networkConnectCmd.Flags().StringVar(&vlanPhysicalInterface, "physical-interface", "eth0", "Physical interface for the VLAN connection")
 	networkConnectCmd.Flags().StringVar(&vlanAllocationStartV4, "allocation-pool-v4-start", "", "Start of the IPv4 allocation pool for the VLAN")
 	networkConnectCmd.Flags().StringVar(&vlanAllocationEndV4, "allocation-pool-v4-end", "", "End of the IPv4 allocation pool for the VLAN")
 }
