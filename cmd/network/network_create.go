@@ -38,6 +38,7 @@ var networkCreateCmd = &cobra.Command{
 			Label:         args[0],
 			CIDRv4:        cidrV4,
 			NameserversV4: nameserversV4,
+			Region:        client.Region,
 		}
 
 		network, err := client.CreateNetwork(networkConfig)

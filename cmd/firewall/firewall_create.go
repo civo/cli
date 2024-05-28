@@ -51,6 +51,7 @@ var firewallCreateCmd = &cobra.Command{
 			Name:        args[0],
 			NetworkID:   defaultNetwork.ID,
 			CreateRules: &createRules,
+			Region:      client.Region,
 		})
 		if err != nil {
 			utility.Error("%s", err)

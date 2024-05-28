@@ -85,6 +85,7 @@ var kfcCreateCmd = &cobra.Command{
 			NetworkID:  network.ID,
 			Size:       size,
 			FirewallID: firewallID,
+			Region:     client.Region,
 		}
 
 		kfc, err := client.CreateKfCluster(kfCluster)
