@@ -2,10 +2,11 @@ package network
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var networkShowCmd = &cobra.Command{
@@ -42,7 +43,7 @@ var networkShowCmd = &cobra.Command{
 		if network.VlanID != 0 {
 			fmt.Println("\nVLAN Details:")
 			fmt.Printf("VLAN ID: %d\n", network.VlanID)
-			fmt.Printf("Hardware Address: %s\n", network.HardwareAddr)
+			fmt.Printf("Hardware Address: %s\n", network.PhysicalInterface)
 			fmt.Printf("Gateway IPv4: %s\n", network.GatewayIPv4)
 			fmt.Printf("Allocation Pool IPv4 Start: %s\n", network.AllocationPoolV4Start)
 			fmt.Printf("Allocation Pool IPv4 End: %s\n", network.AllocationPoolV4End)
