@@ -54,6 +54,7 @@ var firewallRuleCreateCmd = &cobra.Command{
 			Cidr:       strings.Split(cidr, ","),
 			Label:      label,
 			Action:     action,
+			Region:     client.Region,
 		}
 
 		// Check the rule address, if the input is different
