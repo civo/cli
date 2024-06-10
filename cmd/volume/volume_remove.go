@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -18,6 +19,7 @@ var volumeRemoveCmdExamples = []string{
 	"civo volume rm VOLUME_ID",
 }
 
+var volumesList []utility.ObjecteList
 var volumeRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -28,43 +30,75 @@ var volumeRemoveCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
 		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
+		}
 
-		volume, err := client.FindVolume(args[0])
-		if err != nil {
-			if errors.Is(err, civogo.ZeroMatchesError) {
-				utility.Error("sorry there is no %s volume in your account", utility.Red(args[0]))
-				os.Exit(1)
+		if len(args) == 1 {
+			volume, err := client.FindVolume(args[0])
+			if err != nil {
+				if errors.Is(err, civogo.ZeroMatchesError) {
+					utility.Error("sorry there is no %s volume in your account", utility.Red(args[0]))
+					os.Exit(1)
+				}
+				if errors.Is(err, civogo.MultipleMatchesError) {
+					utility.Error("sorry we found more than one volume with that value in your account")
+					os.Exit(1)
+				}
 			}
-			if errors.Is(err, civogo.MultipleMatchesError) {
-				utility.Error("sorry we found more than one volume with that value in your account")
-				os.Exit(1)
+			volumesList = append(volumesList, utility.ObjecteList{ID: volume.ID, Name: volume.Name})
+		} else {
+			for _, v := range args {
+				volume, err := client.FindVolume(v)
+				if err == nil {
+					volumesList = append(volumesList, utility.ObjecteList{ID: volume.ID, Name: volume.Name})
+				}
 			}
 		}
 
-		if utility.UserConfirmedDeletion("volume", common.DefaultYes, volume.Name) {
+		volumeNameList := []string{}
+		for _, v := range volumesList {
+			volumeNameList = append(volumeNameList, v.Name)
+		}
 
-			_, err = client.DeleteVolume(volume.ID)
-			if err != nil {
-				utility.Error("error deleting the volume: %s", err)
-				os.Exit(1)
+		if utility.UserConfirmedDeletion(pluralize.Pluralize(len(volumesList), "Volume"), common.DefaultYes, strings.Join(volumeNameList, ", ")) {
+
+			for _, v := range volumesList {
+				vol, err := client.FindVolume(v.ID)
+				if err != nil {
+					utility.Error("%s", err)
+					os.Exit(1)
+				}
+				_, err = client.DeleteVolume(vol.ID)
+				if err != nil {
+					utility.Error("Error deleting the Volume: %s", err)
+					os.Exit(1)
+				}
 			}
 
-			ow := utility.NewOutputWriterWithMap(map[string]string{"id": volume.ID, "name": volume.Name})
+			ow := utility.NewOutputWriter()
+
+			for _, volume := range volumesList {
+				ow.StartLine()
+				ow.AppendDataWithLabel("id", volume.ID, "ID")
+				ow.AppendDataWithLabel("volume", volume.Name, "Volume")
+			}
 
 			switch common.OutputFormat {
 			case "json":
-				ow.WriteSingleObjectJSON(common.PrettySet)
+				if len(volumesList) == 1 {
+					ow.WriteSingleObjectJSON(common.PrettySet)
+				} else {
+					ow.WriteMultipleObjectsJSON(common.PrettySet)
+				}
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The volume called %s with ID %s was deleted\n", utility.Green(volume.Name), utility.Green(volume.ID))
+				fmt.Printf("The %s (%s) have been deleted\n", pluralize.Pluralize(len(volumesList), "volume"), utility.Green(strings.Join(volumeNameList, ", ")))
 			}
 		} else {
 			fmt.Println("Operation aborted.")
