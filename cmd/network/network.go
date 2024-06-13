@@ -30,6 +30,7 @@ func init() {
 
 	networkCreateCmd.Flags().StringVarP(&cidrV4, "cidr-v4", "", "", "Custom IPv4 CIDR")
 	networkCreateCmd.Flags().StringSliceVarP(&nameserversV4, "nameservers-v4", "", nil, "Custom list of IPv4 nameservers (up to three, comma-separated)")
+	networkCreateCmd.Flags().BoolVarP(&createDefaultFirewall, "create-default-firewall", "", false, "Create a default firewall for the network")
 
 	// Flag binding for networkConnectCmd
 	networkConnectCmd.Flags().IntVar(&vlanID, "vlan-id", 0, "VLAN ID to connect")
