@@ -64,8 +64,7 @@ var networkCreateCmd = &cobra.Command{
 			firewall, err := client.NewFirewall(&civogo.FirewallConfig{
 				Name:      fmt.Sprintf("%s - Default", network.Label),
 				NetworkID: network.ID,
-				// CreateRules: &createRules,
-				Region: client.Region,
+				Region:    client.Region,
 			})
 			if err != nil {
 				utility.Error("%s", err)
