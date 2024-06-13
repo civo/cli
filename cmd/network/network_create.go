@@ -2,8 +2,9 @@ package network
 
 import (
 	"fmt"
-	"github.com/civo/civogo"
 	"os"
+
+	"github.com/civo/civogo"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -12,14 +13,15 @@ import (
 )
 
 var (
-	cidrV4        string
-	nameserversV4 []string
+	cidrV4                string
+	nameserversV4         []string
+	createDefaultFirewall bool
 )
 
 var networkCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
-	Example: "civo network create NAME",
+	Example: "civo network create NAME [flags]",
 	Short:   "Create a new network",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -56,6 +58,19 @@ var networkCreateCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			fmt.Printf("Created a network called %s with ID %s\n", utility.Green(network.Label), utility.Green(network.ID))
+		}
+
+		if createDefaultFirewall {
+			firewall, err := client.NewFirewall(&civogo.FirewallConfig{
+				Name:      fmt.Sprintf("%s - Default", network.Label),
+				NetworkID: network.ID,
+				Region:    client.Region,
+			})
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+			fmt.Printf("Created a default firewall %s\n", utility.Green(firewall.Name))
 		}
 	},
 }
