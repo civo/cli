@@ -11,7 +11,7 @@ func TestWriteCustomOutput(t *testing.T) {
 }
 
 // TestExampleFWriteCustomOutput shows how to use the WriteCustomOutput function
-func TestExampleFWriteCustomOutput() {
+func TestExampleFWriteCustomOutput(t *testing.T) {
 	ow := NewOutputWriter()
 	// Write 3 lines and assert correct result
 	ow.StartLine()
