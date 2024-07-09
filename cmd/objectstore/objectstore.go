@@ -45,10 +45,11 @@ func init() {
 	ObjectStoreCmd.AddCommand(objectStoreCredentialCmd)
 
 	//Flags for create cmd
-	objectStoreCreateCmd.Flags().Int64VarP(&bucketSize, "size", "s", 500, "Size of the Object store")
+	objectStoreCreateCmd.Flags().Int64VarP(&bucketSize, "size", "s", 500, "Size of the Object store in GB (minimum: 500)")
 	objectStoreCreateCmd.Flags().StringVarP(&owner, "owner-name", "n", "", "Name of Owner of the Object store. You can reference name of any civo object store credential created before")
 	objectStoreCreateCmd.Flags().StringVarP(&owner, "owner-access-key", "a", "", "Access Key ID of Owner of the Object store. You can reference name of any civo object store credential created before")
 	objectStoreCreateCmd.Flags().BoolVarP(&waitOS, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the Object Store to be ready")
+	objectStoreCreateCmd.Flags().BoolVarP(&yesFlag, "yes", "y", false, "Automatically agree to any confirmation prompts")
 
 	//Flags for update cmd
 	objectStoreUpdateCmd.Flags().Int64VarP(&bucketSize, "size", "s", 500, "Size of the object store")
