@@ -139,8 +139,9 @@ If you wish to use a custom format, the available fields are:
 			}
 		}
 
+		// Set public ipv4 if provided
 		if publicip != "" {
-			config.PublicIPRequired = publicip
+			config.ReservedIPv4 = publicip
 		}
 
 		// Set private_ipv4 if provided
