@@ -18,7 +18,7 @@ import (
 )
 
 var wait bool
-var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, privateIPv4, firewall string
+var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, privateIPv4, reservedIPv4, firewall string
 var script string
 var skipShebangCheck bool
 
@@ -141,7 +141,12 @@ If you wish to use a custom format, the available fields are:
 
 		// Set public ipv4 if provided
 		if publicip != "" {
-			config.ReservedIPv4 = publicip
+			config.PublicIPRequired = publicip
+		}
+
+		// Set reserved ip if provided
+		if reservedIPv4 != "" {
+			config.ReservedIPv4 = reservedIPv4
 		}
 
 		// Set private_ipv4 if provided
