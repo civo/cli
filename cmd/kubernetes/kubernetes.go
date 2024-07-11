@@ -83,9 +83,9 @@ func init() {
 	kubernetesConfigCmd.Flags().BoolVarP(&overwriteConfig, "overwrite", "w", false, "overwrite the kubeconfig file")
 	kubernetesConfigCmd.Flags().StringVarP(&localPathConfig, "local-path", "p", fmt.Sprintf("%s/.kube/config", home), "local path to save the kubeconfig file")
 
-	kubernetesCreateCmd.Flags().StringVarP(&targetNodesSize, "size", "s", "g4s.kube.medium", "the size of nodes to create. You can list available kubernetes sizes by `civo size list -s kubernetes`")
+	kubernetesCreateCmd.Flags().StringVarP(&targetNodesSize, "size", "s", "g4s.kube.xsmall", "the size of nodes to create. You can list available kubernetes sizes by `civo size list -s kubernetes`")
 	kubernetesCreateCmd.Flags().StringVarP(&networkID, "network", "t", "default", "the name of the network to use in the creation")
-	kubernetesCreateCmd.Flags().IntVarP(&numTargetNodes, "nodes", "n", 3, "the number of nodes to create (the master also acts as a node).")
+	kubernetesCreateCmd.Flags().IntVarP(&numTargetNodes, "nodes", "n", 2, "the number of nodes to create (the master also acts as a node).")
 	kubernetesCreateCmd.Flags().StringVarP(&kubernetesVersion, "version", "v", "latest", "the k3s version to use on the cluster. Defaults to the latest. Example - 'civo k3s create --version 1.21.2+k3s1'")
 	kubernetesCreateCmd.Flags().StringVarP(&applications, "applications", "a", "", "optional, use names shown by running 'civo kubernetes applications ls'")
 	kubernetesCreateCmd.Flags().StringVarP(&removeapplications, "remove-applications", "r", "", "optional, remove default application names shown by running  'civo kubernetes applications ls'")
