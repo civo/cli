@@ -8,32 +8,32 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 
 ## Table of contents
 
-- [Introduction](#introduction)
-- [Global Options](#global-options)
-- [Set-Up](#set-up)
-- [Version/Updating CLI](#update)
-- [Docker Usage](#docker-usage)
-- [API Keys](#api-keys)
-- [Instances](#instances)
-- [Kubernetes clusters](#kubernetes-clusters)
-- [Kubernetes applications](#kubernetes-applications)
-- [Domains and Domain Records](#domains-and-domain-records)
-- [Firewalls](#firewalls)
-- [Networks](#networks)
-- [Object Stores](#object-stores)
-- [Object Store Credentials](#object-store-credentials)
-- [Load Balancers](#load-balancers)
-- [Quota](#quota)
-- [Sizes](#sizes)
-- [SSH Keys](#ssh-keys)
-- [DiskImages](#disk-image)
-- [Volumes](#volumes)
-- [Teams](#teams)
-- [Permissions](#permissions)
-- [Region](#region)
-- [Enabling shell autocompletion](#enabling-shell-autocompletion)
-- [Contributing](#contributing)
-- [License](#license)
+-   [Introduction](#introduction)
+-   [Global Options](#global-options)
+-   [Set-Up](#set-up)
+-   [Version/Updating CLI](#update)
+-   [Docker Usage](#docker-usage)
+-   [API Keys](#api-keys)
+-   [Instances](#instances)
+-   [Kubernetes clusters](#kubernetes-clusters)
+-   [Kubernetes applications](#kubernetes-applications)
+-   [Domains and Domain Records](#domains-and-domain-records)
+-   [Firewalls](#firewalls)
+-   [Networks](#networks)
+-   [Object Stores](#object-stores)
+-   [Object Store Credentials](#object-store-credentials)
+-   [Load Balancers](#load-balancers)
+-   [Quota](#quota)
+-   [Sizes](#sizes)
+-   [SSH Keys](#ssh-keys)
+-   [DiskImages](#disk-image)
+-   [Volumes](#volumes)
+-   [Teams](#teams)
+-   [Permissions](#permissions)
+-   [Region](#region)
+-   [Enabling shell autocompletion](#enabling-shell-autocompletion)
+-   [Contributing](#contributing)
+-   [License](#license)
 
 ## Set-up
 
@@ -59,40 +59,46 @@ curl -sL https://civo.com/get | sh
 Civo CLI is available to download on windows via Chocolatey and Scoop
 
 For installing via Chocolatey you need [Chocolatey](https://chocolatey.org/install) package manager installed on your PC.
-- run the following command after confirming Chocolatey on your PC 
- ```
- choco install civo-cli
- ``` 
- and it will install Civo CLI on your PC.
+
+-   run the following command after confirming Chocolatey on your PC
+
+```
+choco install civo-cli
+```
+
+and it will install Civo CLI on your PC.
 
 For installing via Scoop you need [Scoop](https://scoop.sh/) installed as a package manager, then:
-- add the extras bucket with 
+
+-   add the extras bucket with
+
 ```
 scoop bucket add extras
 ```
-- install civo with 
+
+-   install civo with
+
 ```
 scoop install civo
 ```
 
 You will also, of course, need a Civo account, for which you can [register here](https://www.civo.com/signup).
 
-
 ### Installing on Linux
 
 For Linux Civo CLI can be installed by various methods.
 
-* Install via the direct shell script:
+-   Install via the direct shell script:
 
 ```sh
 curl -sL https://civo.com/get | sh
 ```
 
-* Install via the brew package manager, as shown in the above instructions for MacOS.
+-   Install via the brew package manager, as shown in the above instructions for MacOS.
 
-* Install via wget, specifying the [release version](https://github.com/civo/cli/releases) you want.
+-   Install via wget, specifying the [release version](https://github.com/civo/cli/releases) you want.
 
-***Note that the version in the example below may not be the latest. Specify the version based on the latest available if you are using this method.***
+**_Note that the version in the example below may not be the latest. Specify the version based on the latest available if you are using this method._**
 
 ```
 wget https://github.com/civo/cli/releases/download/v1.0.40/civo-1.0.40-linux-amd64.tar.gz
@@ -101,8 +107,7 @@ chmod +x civo
 mv ./civo /usr/local/bin/
 ```
 
-* You can also build the binary, but make sure you have go installed,
-
+-   You can also build the binary, but make sure you have go installed,
 
 ```sh
 git clone https://github.com/civo/cli.git
@@ -112,10 +117,10 @@ cd ..
 cp -r cli $HOME
 export PATH="$HOME/cli:$PATH"
 ```
+
 With this, we have installed the Civo CLI successfully. Check it is working by running any of the following commands.
 
 **Note:** For the first time when you are running, make sure you set your current region. Check [Region](#region) for more information.
-
 
 ### Running the Civo CLI tool and getting help
 
@@ -149,9 +154,10 @@ touch $HOME/.kube/config
 docker run -it --rm -v $HOME/.civo.json:/.civo.json -v $HOME/.kube/config:/root/.kube/config civo/cli:latest
 ```
 
-To make usage easier, an alias is recommended.  Here's an example how to set one to the same command as would be used if installed directly on the system, and using the Docker image:
+To make usage easier, an alias is recommended. Here's an example how to set one to the same command as would be used if installed directly on the system, and using the Docker image:
 
 Ubuntu etc:
+
 ```sh
 alias civo="docker run -it --rm -v $HOME/.civo.json:/.civo.json civo/cli:latest"
 # Maybe put the above line in ~/.bash_profile or ~/.zshrc
@@ -162,6 +168,7 @@ civo k8s list
 ```
 
 For Fedora users:
+
 ```sh
 alias civo="docker run -it --rm -v $HOME/.civo.json:/.civo.json:Z -v $HOME/.kube/config:$HOME/.kube/config:Z civo/cli:latest"
 ```
@@ -282,14 +289,14 @@ $ civo instance show api-demo.test
         SSD disk : 25
           Region : LON1
       Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
-   
+
    ID : ubuntu-bionic
-     Snapshot ID : 
+     Snapshot ID :
     Initial User : demo-user
 Initial Password : demo-user
-         SSH Key : 
+         SSH Key :
      Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
-            Tags : 
+            Tags :
       Created At : Mon, 01 Jan 0001 00:00:00 UTC
       Private IP : 192.168.1.7
        Public IP : 74.220.21.246
@@ -300,41 +307,170 @@ Initial Password : demo-user
 You will be able to see the instance's details by running `civo instance show api-demo.test` as above.
 
 #### Disk images and instance sizes
+
 You can view the Disk images by running `civo diskimage ls`
+
 ```sh
-$ civo diskimage ls 
-+--------------------------------------+---------------+---------+-----------+--------------+
-| ID                                   | Name          | Version | State     | Distribution |
-+--------------------------------------+---------------+---------+-----------+--------------+
-| 4921b107-964f-417c-bf63-c92fcf41ccbd | centos-7      |       7 | available | centos       |
-| a4204155-a876-43fa-b4d6-ea2af8774560 | debian-10     |      10 | available | debian       |
-| 9b661c46-ac4f-46e1-9f3d-aaacde9b4fec | debian-9      |       9 | available | debian       |
-| 12745392-15c7-4140-925d-441fe7ae57fd | ubuntu-bionic |   18.04 | available | ubuntu       |
-| d927ad2f-5073-4ed6-b2eb-b8e61aef29a8 | ubuntu-focal  |   20.04 | available | ubuntu       |
-+--------------------------------------+---------------+---------+-----------+--------------+
+$ civo diskimage ls
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| ID                                   | Name            | Version        | State     | Distribution |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 9b661c46-ac4f-46e1-9f3d-aaacde9b4fec | debian-9        |              9 | available | debian       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| d927ad2f-5073-4ed6-b2eb-b8e61aef29a8 | ubuntu-focal    |          20.04 | available | ubuntu       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| a4204155-a876-43fa-b4d6-ea2af8774560 | debian-10       |             10 | available | debian       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| eda67ea0-4282-4945-9b7b-d3e1cba1d987 | ubuntu-jammy    |          22.04 | available | ubuntu       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 170db96f-8458-44aa-83ca-0c31fb81a835 | rocky-9-1       |            9.1 | available | rocky        |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 25fbbd96-d5ec-4d08-9c75-a5e154dabf9b | debian-11       |             11 | available | debian       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 21613daa-a66b-44fc-87f5-b6db566d8f91 | ubuntu-cuda11-8 | 22.04-cuda11-8 | available | ubuntu       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| ffb6fd93-cb06-4e8d-8058-46003b78e2ff | talos-v1.2.8    | 1.25.5         | available | talos        |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 9a16a77e-1a1f-45c8-87fd-6d1a19eeaac9 | talos-v1.5.0    | 1.27.0         | available | talos        |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 13232803-0928-4634-9ab8-476bff29ef1b | ubuntu-cuda12-2 | 22.04-cuda12-2 | available | ubuntu       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
 ```
+
 You can view the instance sizes list by running `civo size ls`
 
 ```sh
-$ civo size ls 
-+----------------+-------------+------------+-----+-------+-----+------------+
-| Name           | Description | Type       | CPU | RAM   | SSD | Selectable |
-+----------------+-------------+------------+-----+-------+-----+------------+
-| g3.xsmall      | Extra Small | Instance   |   1 |  1024 |  25 | Yes        |
-| g3.small       | Small       | Instance   |   1 |  2048 |  25 | Yes        |
-| g3.medium      | Medium      | Instance   |   2 |  4096 |  50 | Yes        |
-| g3.large       | Large       | Instance   |   4 |  8192 | 100 | Yes        |
-| g3.xlarge      | Extra Large | Instance   |   6 | 16384 | 150 | Yes        |
-| g3.2xlarge     | 2X Large    | Instance   |   8 | 32768 | 200 | Yes        |
-| g3.k3s.xsmall  | Extra Small | Kubernetes |   1 |  1024 |  15 | Yes        |
-| g3.k3s.small   | Small       | Kubernetes |   1 |  2048 |  15 | Yes        |
-| g3.k3s.medium  | Medium      | Kubernetes |   2 |  4096 |  15 | Yes        |
-| g3.k3s.large   | Large       | Kubernetes |   4 |  8192 |  15 | Yes        |
-| g3.k3s.xlarge  | Extra Large | Kubernetes |   6 | 16384 |  15 | Yes        |
-| g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 | 32768 |  15 | Yes        |
-+----------------+-------------+------------+-----+-------+-----+------------+
+$ civo size ls
++--------------------+--------------------------------+------------+-----+---------+-----+
+| Name               | Description                    | Type       | CPU | RAM     | SSD |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.xsmall          | Extra Small                    | Instance   |   1 |    1024 |  25 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.small           | Small                          | Instance   |   1 |    2048 |  25 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.medium          | Medium                         | Instance   |   2 |    4096 |  50 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.large           | Large                          | Instance   |   4 |    8192 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.xlarge          | Extra Large                    | Instance   |   6 |   16384 | 150 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.2xlarge         | 2X Large                       | Instance   |   8 |   32768 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.xsmall    | Extra Small - Standard         | Kubernetes |   1 |    1024 |  30 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.small     | Small - Standard               | Kubernetes |   1 |    2048 |  40 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.medium    | Medium - Standard              | Kubernetes |   2 |    4096 |  50 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.large     | Large - Standard               | Kubernetes |   4 |    8192 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.small     | Small - Performance            | Kubernetes |   4 |   16384 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.medium    | Medium - Performance           | Kubernetes |   8 |   32768 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.large     | Large - Performance            | Kubernetes |  16 |   65536 | 120 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.xlarge    | Extra Large - Performance      | Kubernetes |  32 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.small     | Small - CPU optimized          | Kubernetes |   8 |   16384 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.medium    | Medium - CPU optimized         | Kubernetes |  16 |   32768 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.large     | Large - CPU optimized          | Kubernetes |  32 |   65536 | 120 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.xlarge    | Extra Large - CPU optimized    | Kubernetes |  64 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.small     | Small - RAM optimized          | Kubernetes |   2 |   16384 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.medium    | Medium - RAM optimized         | Kubernetes |   4 |   32768 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.large     | Large - RAM optimized          | Kubernetes |   8 |   65536 | 120 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.xlarge    | Extra Large - RAM optimized    | Kubernetes |  16 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.xsmall       | Extra Small                    | Database   |   1 |    2048 |  20 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.small        | Small                          | Database   |   2 |    4096 |  40 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.medium       | Medium                         | Database   |   4 |    8192 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.large        | Large                          | Database   |   6 |   16384 | 160 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.xlarge       | Extra Large                    | Database   |   8 |   32768 | 320 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.2xlarge      | Double Extra Large             | Database   |  10 |   65536 | 640 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.kf.small        | Small - CPU optimized          | KfCluster  |   4 |   16384 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.kf.medium       | Medium - CPU optimized         | KfCluster  |   8 |   32768 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.kf.large        | Large - CPU optimized          | KfCluster  |  16 |   65536 | 120 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.kf.xlarge       | Extra Large - CPU optimized    | KfCluster  |  32 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.xsmall         | xSmall - Standard              | Instance   |   1 |    1024 |  25 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.small          | Small - Standard               | Instance   |   1 |    2048 |  25 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.medium         | Medium - Standard              | Instance   |   2 |    4096 |  50 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.large          | Large - Standard               | Instance   |   4 |    8192 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.xlarge         | Extra Large - Standard         | Instance   |   6 |   16384 | 150 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.2xlarge        | 2X Large - Standard            | Instance   |   8 |   32768 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.small     | Small - Nvidia A100 80GB       | Kubernetes |  12 |  131072 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.medium    | Medium - Nvidia A100 80GB      | Kubernetes |  24 |  262144 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.large     | Large - Nvidia A100 80GB       | Kubernetes |  48 |  524288 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.xlarge    | Extra Large - Nvidia A100 80GB | Kubernetes |  96 | 1048576 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.small          | Small - Nvidia A100 80GB       | Instance   |  12 |  131072 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.medium         | Medium - Nvidia A100 80GB      | Instance   |  24 |  262144 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.large          | Large - Nvidia A100 80GB       | Instance   |  48 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.xlarge         | Extra Large - Nvidia A100 80GB | Instance   |  96 | 1048576 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.small       | Small - Nvidia A100 40GB       | Instance   |   8 |   65536 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.medium      | Medium - Nvidia A100 40GB      | Instance   |  16 |  131072 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.large       | Large - Nvidia A100 40GB       | Instance   |  32 |  262133 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.xlarge      | Extra Large - Nvidia A100 40GB | Instance   |  64 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.small  | Small - Nvidia A100 40GB       | Kubernetes |   8 |   65536 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.medium | Medium - Nvidia A100 40GB      | Kubernetes |  16 |  131072 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.large  | Large - Nvidia A100 40GB       | Kubernetes |  32 |  262133 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.xlarge | Extra Large - Nvidia A100 40GB | Kubernetes |  64 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.x1      | Small - Nvidia L40S 40GB       | Instance   |  12 |  131072 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.x2      | Medium - Nvidia L40S 40GB      | Instance   |  24 |  262133 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.x4      | Large - Nvidia L40S 40GB       | Instance   |  48 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.x8      | Extra Large - Nvidia L40S 40GB | Instance   |  96 | 1048576 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x1 | Small - Nvidia L40S 40GB       | Kubernetes |  12 |  131072 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x2 | Medium - Nvidia L40S 40GB      | Kubernetes |  24 |  262133 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x4 | Large - Nvidia L40S 40GB       | Kubernetes |  48 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x8 | Extra Large - Nvidia L40S 40GB | Kubernetes |  96 | 1048576 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
 
-````
+```
+
 #### Viewing the Default User Password For an Instance
 
 You can view the default user's password for an instance by running `civo instance password ID/hostname`
@@ -361,7 +497,6 @@ $ civo instance public-ip api-demo.test -o custom -f public_ip
 ```
 
 The above example uses `-o` and `-f` to display only the IP address in the output.
-
 
 #### Setting Firewalls
 
@@ -447,10 +582,10 @@ $ civo instance show api-demo.test
           Region : LON1
       Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
    Disk image ID : ubuntu-bionic
-     Snapshot ID : 
+     Snapshot ID :
     Initial User : demo-user
 Initial Password : demo-user
-         SSH Key : 
+         SSH Key :
      Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
             Tags : ubuntu demo
       Created At : Mon, 01 Jan 0001 00:00:00 UTC
@@ -479,12 +614,12 @@ $ civo instance show api-demo-renamed.test
           Region : LON1
       Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
    Disk image ID : ubuntu-bionic
-     Snapshot ID : 
+     Snapshot ID :
     Initial User : demo-user
 Initial Password : demo-user
-         SSH Key : 
+         SSH Key :
      Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
-            Tags : 
+            Tags :
       Created At : Mon, 01 Jan 0001 00:00:00 UTC
       Private IP : 192.168.1.7
        Public IP : 74.220.21.246
@@ -494,7 +629,7 @@ Initial Password : demo-user
 Hello, world!
 ```
 
-You can leave out either the ``--name`` or `--notes` switch if you only want to update one of the fields.
+You can leave out either the `--name` or `--notes` switch if you only want to update one of the fields.
 
 #### Upgrading (Resizing) an Instance
 
@@ -513,10 +648,10 @@ $ civo instance show api-demo-renamed.test
           Region : LON1
       Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
    Disk image ID : ubuntu-bionic
-     Snapshot ID : 
+     Snapshot ID :
     Initial User : demo-user
 Initial Password : demo-user
-         SSH Key : 
+         SSH Key :
      Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
             Tags : ubuntu, demo
       Created At : Mon, 01 Jan 0001 00:00:00 UTC
@@ -548,22 +683,72 @@ $ civo kubernetes list
 | 5604340f-caa3-4ac1-adb7-40c863fe5639 | falling-sunset | NYC1   |     2 |     1 | ACTIVE |
 +--------------------------------------+----------------+--------+-------+-------+--------+
 ```
+
 #### Listing kubernetes sizes
 
 You can list all kubernetes sizes by running `civo kubernetes size`.
 
 ```sh
 $ civo kubernetes size
-+----------------+-------------+------------+-----------+--------+--------+------------+
-| Name           | Description | Type       | CPU Cores | RAM MB | SSD GB | Selectable |
-+----------------+-------------+------------+-----------+--------+--------+------------+
-| g3.k3s.xsmall  | Extra Small | Kubernetes |         1 |  1024  |     15 | Yes        |
-| g3.k3s.small   | Small       | Kubernetes |         1 |  2048  |     15 | Yes        |
-| g3.k3s.medium  | Medium      | Kubernetes |         2 |  4096  |     15 | Yes        |
-| g3.k3s.large   | Large       | Kubernetes |         4 |  8192  |     15 | Yes        |
-| g3.k3s.xlarge  | Extra Large | Kubernetes |         6 | 16384  |     15 | Yes        |
-| g3.k3s.2xlarge | 2X Large    | Kubernetes |         8 | 32768  |     15 | Yes        |
-+----------------+-------------+------------+-----------+----------+-----+------------+
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| Name               | Description                    | Type       | CPU Cores | RAM MB  | SSD GB | Selectable |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4s.kube.xsmall    | Extra Small - Standard         | Kubernetes |         1 |    1024 |     30 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4s.kube.small     | Small - Standard               | Kubernetes |         1 |    2048 |     40 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4s.kube.medium    | Medium - Standard              | Kubernetes |         2 |    4096 |     50 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4s.kube.large     | Large - Standard               | Kubernetes |         4 |    8192 |     60 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4p.kube.small     | Small - Performance            | Kubernetes |         4 |   16384 |     60 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4p.kube.medium    | Medium - Performance           | Kubernetes |         8 |   32768 |     80 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4p.kube.large     | Large - Performance            | Kubernetes |        16 |   65536 |    120 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4p.kube.xlarge    | Extra Large - Performance      | Kubernetes |        32 |  131072 |    180 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4c.kube.small     | Small - CPU optimized          | Kubernetes |         8 |   16384 |     60 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4c.kube.medium    | Medium - CPU optimized         | Kubernetes |        16 |   32768 |     80 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4c.kube.large     | Large - CPU optimized          | Kubernetes |        32 |   65536 |    120 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4c.kube.xlarge    | Extra Large - CPU optimized    | Kubernetes |        64 |  131072 |    180 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4m.kube.small     | Small - RAM optimized          | Kubernetes |         2 |   16384 |     60 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4m.kube.medium    | Medium - RAM optimized         | Kubernetes |         4 |   32768 |     80 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4m.kube.large     | Large - RAM optimized          | Kubernetes |         8 |   65536 |    120 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4m.kube.xlarge    | Extra Large - RAM optimized    | Kubernetes |        16 |  131072 |    180 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4g.kube.small     | Small - Nvidia A100 80GB       | Kubernetes |        12 |  131072 |    100 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4g.kube.medium    | Medium - Nvidia A100 80GB      | Kubernetes |        24 |  262144 |    100 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4g.kube.large     | Large - Nvidia A100 80GB       | Kubernetes |        48 |  524288 |    100 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4g.kube.xlarge    | Extra Large - Nvidia A100 80GB | Kubernetes |        96 | 1048576 |    100 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4g.40.kube.small  | Small - Nvidia A100 40GB       | Kubernetes |         8 |   65536 |    200 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4g.40.kube.medium | Medium - Nvidia A100 40GB      | Kubernetes |        16 |  131072 |    400 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4g.40.kube.large  | Large - Nvidia A100 40GB       | Kubernetes |        32 |  262133 |    400 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| g4g.40.kube.xlarge | Extra Large - Nvidia A100 40GB | Kubernetes |        64 |  524288 |    400 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x1 | Small - Nvidia L40S 40GB       | Kubernetes |        12 |  131072 |    200 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x2 | Medium - Nvidia L40S 40GB      | Kubernetes |        24 |  262133 |    200 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x4 | Large - Nvidia L40S 40GB       | Kubernetes |        48 |  524288 |    400 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x8 | Extra Large - Nvidia L40S 40GB | Kubernetes |        96 | 1048576 |    400 | Yes        |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
 
 ```
 
@@ -589,22 +774,22 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
 -w, --wait                         a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE
 ```
 
-*Note* 
-* The '--create-firewall' will open the ports 80,443 and 6443 in the firewall if '--firewall-rules' is not used.
-* The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
-* The '--firewall-rules' flag need to be used with '--create-firewall'.
-* The '--firewall-rules' flag can accept:
-    * You can pass 'all' to open all ports.
-    * An optional end port using 'start_port-end_port' format (e.g. 8000-8100)
-    * An optional CIDR notation (e.g. 0.0.0.0/0)
-    * When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
-    * When a CIDR notation is provided without slash and number segment, it will default to /32
-    * Within a rule, you can use comma separator for multiple ports to have same CIDR notation
-    * To separate between rules, you can use semicolon symbol and wrap everything in double quotes (see below)
-    So the following would all be valid:
-    * "80,443,6443:0.0.0.0/0;8080:1.2.3.4" (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
-    * "80,443,6443;6000-6500:4.4.4.4/24" (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
+_Note_
 
+-   The '--create-firewall' will open the ports 80,443 and 6443 in the firewall if '--firewall-rules' is not used.
+-   The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
+-   The '--firewall-rules' flag need to be used with '--create-firewall'.
+-   The '--firewall-rules' flag can accept:
+    -   You can pass 'all' to open all ports.
+    -   An optional end port using 'start_port-end_port' format (e.g. 8000-8100)
+    -   An optional CIDR notation (e.g. 0.0.0.0/0)
+    -   When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
+    -   When a CIDR notation is provided without slash and number segment, it will default to /32
+    -   Within a rule, you can use comma separator for multiple ports to have same CIDR notation
+    -   To separate between rules, you can use semicolon symbol and wrap everything in double quotes (see below)
+        So the following would all be valid:
+    -   "80,443,6443:0.0.0.0/0;8080:1.2.3.4" (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
+    -   "80,443,6443;6000-6500:4.4.4.4/24" (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
 
 ```sh
 $ civo kubernetes create my-first-cluster
@@ -646,7 +831,7 @@ $ civo k8s recycle my-first-cluster --node=k3s-my-first-cluster-5ae1561e-node-po
 The node (k3s-my-first-cluster-5ae1561e-node-pool-a56f) was recycled
 ```
 
-*Note:* When a node is recycled, it is fully deleted. The recycle command does not [drain](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/) a node, it simply deletes it before building a new node and attaching it to a cluster. It is intended for scenarios where the node itself develops an issue and must be replaced with a new one.
+_Note:_ When a node is recycled, it is fully deleted. The recycle command does not [drain](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/) a node, it simply deletes it before building a new node and attaching it to a cluster. It is intended for scenarios where the node itself develops an issue and must be replaced with a new one.
 
 #### Viewing or Saving the cluster configuration
 
@@ -659,7 +844,7 @@ civo kubernetes config my-first-cluster -s
 Saved config to ~/.kube/config
 ```
 
-If you already have a `~/.kube/config` file, any cluster configuration that is saved will be *overwritten* unless you also pass the `--merge` option. If you have multiple cluster configurations,  merging allows you to switch contexts at will. If you prefer to save the configuration in another place, just use the parameter `--local-path` or `-p` and the path. If you use `--switch` the cli will automatically change the kubernetes context to the new cluster.
+If you already have a `~/.kube/config` file, any cluster configuration that is saved will be _overwritten_ unless you also pass the `--merge` option. If you have multiple cluster configurations, merging allows you to switch contexts at will. If you prefer to save the configuration in another place, just use the parameter `--local-path` or `-p` and the path. If you use `--switch` the cli will automatically change the kubernetes context to the new cluster.
 
 ```sh
 civo kubernetes config my-first-cluster -s --merge
@@ -709,37 +894,225 @@ You can install applications from the [Applications Marketplace](https://github.
 To get an up-to-date list of available applications on the Marketplace, run `civo kubernetes apps list`. At the time of writing, the list looked like this:
 
 ```text
-+---------------------------+-------------+--------------+-----------------+-----------------------------+
-| Name                      | Version     | Category     | Plans           | Dependencies                |
-+---------------------------+-------------+--------------+-----------------+-----------------------------+
-| cert-manager              | v0.11.0     | architecture |                 | Helm                        |
-| docker-registry           | ALPHA       | architecture |                 | Helm, cert-manager, Traefik |
-| haproxy                   | 1.4.6       | architecture |                 |                             |
-| Helm                      | 2.16.5      | management   |                 |                             |
-| Jenkins                   | 2.190.1     | ci_cd        | 5GB, 10GB, 20GB | Longhorn                    |
-| KubeDB                    | v0.12.0-r1  | database     |                 | Longhorn                    |
-| Kubeless                  | 1.0.5       | architecture |                 |                             |
-| kubernetes-dashboard      | v2.0.0      | management   |                 |                             |
-| Linkerd                   | 2.5.0       | architecture |                 |                             |
-| Longhorn                  | 0.7.0       | storage      |                 |                             |
-| Maesh                     | Latest      | architecture |                 | Helm                        |
-| MariaDB                   | 10.4.7      | database     | 5GB, 10GB, 20GB | Longhorn                    |
-| metrics-server            | (default)   | architecture |                 |                             |
-| MinIO                     | 2019-08-29  | storage      | 5GB, 10GB, 20GB | Longhorn                    |
-| MongoDB                   | 4.2.0       | database     | 5GB, 10GB, 20GB | Longhorn                    |
-| OpenFaaS                  | 0.18.0      | architecture |                 | Helm                        |
-| Portainer                 | beta        | management   |                 |                             |
-| PostgreSQL                |        11.5 | database     | 5GB, 10GB, 20GB | Longhorn                    |
-| prometheus-operator       | 0.35.0      | monitoring   |                 |                             |
-| Rancher                   | v2.3.0      | management   |                 |                             |
-| Redis                     |         3.2 | database     |                 |                             |
-| sealed-secrets            | v0.12.4     | architecture |                 |                             |
-| Selenium                  | 3.141.59-r1 | ci_cd        |                 |                             |
-| system-upgrade-controller | v0.6.2      | architecture |                 |                             |
-| Tekton                    | v0.14.0     | ci_cd        |                 |                             |
-| Traefik                   | (default)   | architecture |                 |                             |
-+---------------------------+-------------+--------------+-----------------+-----------------------------+
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| Name                        | Version           | Category     | Plans                                                                                      | Dependencies                      |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| acorn                       | 0.7.1             | management   | Disabled Auto-TLS, Enabled Auto-TLS                                                        |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| ambassador-edge-stack       | 3.8.0             | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| apisix-ingress-controller   | 1.6.0             | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| argo-rollouts               | v1.4.1            | ci_cd        |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| argo-workflows              | v3.0.3            | ci_cd        |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| argocd                      | v2.11.4           | ci_cd        |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| aspnet                      | 5.0.5             | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| atmo                        | 0.2.2             | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| bitwarden-passwordless-dev  | 1.0.74            | management   |                                                                                            | cert-manager                      |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| bitwarden-unified           | 2024.1.0          | management   |                                                                                            | cert-manager                      |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| blackbox-exporter           | 5.8.2             | monitoring   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| cerbos                      | 0.34.0            | security     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| cert-manager                | v1.15.1           | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| chaos-mesh                  | (default)         | ci_cd        |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| civo-cluster-autoscaler     | v1.25.0           | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| code-server                 | 3.11.1            | management   | 1GB, 2GB, 5GB                                                                              | cert-manager                      |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| dapr                        | 1.11.0            | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| devtron                     |                   | ci_cd        |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| dynamic-pv-scaler           | 0.1.0             | storage      |                                                                                            | prometheus-operator               |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| edp                         | 3.8.1             | ci_cd        | GitHub, GitLab                                                                             | argocd, tekton, traefik2-nodeport |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| enroute-onestep             | 0.8.0             | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| epinio                      | v1.11.1           | management   |                                                                                            | cert-manager                      |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| falco                       |              0.27 | security     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| ferretdb                    | 1.22.0            | database     | 5GB, 10GB, 20GB                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| flagsmith                   | 0.39.0            | ci_cd        |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| flux                        | Latest            | ci_cd        |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| gatekeeper                  | 3.4.0             | security     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| ghost                       | 5.87.1            | management   | 5GB, 10GB, 15GB                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| gimlet                      | v0.17.2           | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| gitea                       | 1.12.5            | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| gitlab                      | 16.2.3            | management   | Community edition, Enterprise edition                                                      | cert-manager                      |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| gloo-edge                   | latest            | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| haproxy                     |               1.5 | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| helm                        | 2.16.5            | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| istio                       | multiple          | architecture | Istio Latest, Istio v1.10.1, Istio v1.9.5, Istio v1.8.6                                    |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| jenkins                     | 2.452.2           | ci_cd        | 5GB, 10GB, 20GB                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| joomla                      |               5.2 | management   | 5GB, 10GB, 20GB                                                                            | mariadb:5GB, cert-manager         |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kafka                       | 2.7.0             | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| keda                        | 2.14.0            | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| keptn                       | 0.8.7             | ci_cd        |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| ketch                       | 0.7.0             | management   |                                                                                            | cert-manager                      |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| keycloak                    | 25.0.1            | security     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kong-ingress-controller     | 3.0.1             | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kriten                      | 4.0.1             | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kube-hunter                 | latest            | security     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kubeclarity                 | Latest            | security     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kubefirst                   | v2.4.6            | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kubeflow                    | 1.6.0-rc.1        | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kubenav                     | 3.1.0             | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kubernetes-dashboard        | v2.4.0            | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kubernetes-external-secrets | 0.9.14            | security     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kubesphere                  | v3.4.1            | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kubevela                    | 1.0.1             | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kubevious                   | v1.0.3            | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kubewarden                  | v1.14.0           | security     |                                                                                            | cert-manager                      |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| kyverno                     | 1.8.2             | security     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| linkerd                     | Latest            | architecture | Linkerd Minimal, Linkerd & Jaeger, Linkerd with Dashboard, Linkerd with Dashboard & Jaeger |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| litmuschaos                 | 2.0.0             | ci_cd        |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| loki                        | v2.9.11           | monitoring   |                                                                                            | prometheus-operator               |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| longhorn                    | 1.3.2             | storage      |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| maesh                       | v1.4.5            | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| mariadb                     | 11.4.2            | database     | 5GB, 10GB, 20GB                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| metrics-server              | (default)         | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| minio                       | 2019-08-29        | storage      | 5GB, 10GB, 20GB                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| mongodb                     | 4.2.12            | database     | 5GB, 10GB, 20GB                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| netdata                     | Latest            | monitoring   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| neuvector                   | latest            | security     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| nextcloud                   | 29.0.3            | management   | 5GB, 10GB, 20GB                                                                            | mariadb:5GB, cert-manager         |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| nexus3                      | 3.30.1            | ci_cd        |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| nginx                       | latest            | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| ngrok-ingress-controller    | 0.12.1            | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| nodered                     | 1.2.7             | architecture | 5GB, 10GB, 20GB                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| openfaas                    | 0.18.0            | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| openobserve                 | v0.8.1            | monitoring   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| otomi                       | 1.0.0             | management   |                                                                                            | metrics-server                    |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| paralus                     | 0.2.3             | security     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| parca                       | v0.15.0           | monitoring   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| percona-mysql               | 1.11.0            | database     | 10GB, 20GB, 50GB                                                                           |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| permission-manager          | 1.6.0             | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| pmm                         | 2.36.0            | monitoring   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| polaris                     | 7.3.2             | security     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| portainer                   | 2.16.2            | management   | Community edition, Business edition                                                        |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| postgresql                  |              16.3 | database     | 5GB, 10GB, 20GB                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| projectsveltos              | v0.29.1           | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| prometheus-operator         | 0.38.1            | monitoring   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| pyroscope                   | 0.2.5             | monitoring   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| rabbitmq                    | 3.13.4-management | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| rancher                     | 2.8.5             | management   |                                                                                            | cert-manager                      |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| redis                       | 7.2-alpine        | database     |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| rekor                       | 0.2.2             | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| reloader                    | v0.0.125          | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| rqlite                      | 8.26.6            | database     | 1GB, 5GB, 10GB, 3Replicas                                                                  |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| sealed-secrets              | v0.26.2           | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| selenium                    |                 4 | ci_cd        |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| shipa                       | 1.7.2             | management   |                                                                                            | cert-manager                      |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| siglens-oss                 | 0.1.22            | monitoring   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| spinkube                    | v0.1.0            | management   |                                                                                            | cert-manager                      |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| system-upgrade-controller   | v0.6.2            | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| tekton                      | v0.50.5           | ci_cd        |                                                                                            | metrics-server                    |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| traefik2-loadbalancer       | 2.11.0            | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| traefik2-nodeport           | 2.9.4             | architecture |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| unifi-controller            | stable-6          | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| uptime-kuma                 | 1.23.3            | monitoring   | 1GB, 2GB                                                                                   |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| vault                       | 0.24.0            | security     | Standalone, Dev, High-Availability                                                         |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| volcano                     | v1.9.0            | management   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| weavescope                  | v1.13.2           | monitoring   |                                                                                            |                                   |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
+| wordpress                   | 5.6.2             | management   | 5GB, 10GB, 20GB                                                                            | mariadb:5GB                       |
++-----------------------------+-------------------+--------------+--------------------------------------------------------------------------------------------+-----------------------------------+
 ```
+
 #### Show Applications details when is installed in the cluster
 
 This option will be allow you to see the post-install instruction of every app installed in the cluster
@@ -749,7 +1122,6 @@ $ civo kubernetes application show Traefik apps-demo-cluster
 ```
 
 the first parameter is for the name of the app and the second is the name of the cluster
-
 
 #### Installing Applications Onto a New Cluster
 
@@ -825,11 +1197,11 @@ We host reverse DNS for all instances automatically. If you'd like to manage for
 
 This section is effectively split in to two parts: 1) Managing domain names themselves, and 2) Managing records within those domain names.
 
-We don't offer registration of domains names, this is purely for hosting the DNS. If you're looking to buy a domain name, we recommend  [LCN.com](https://www.lcn.com/)  for their excellent friendly support and very competitive prices.
+We don't offer registration of domains names, this is purely for hosting the DNS. If you're looking to buy a domain name, we recommend [LCN.com](https://www.lcn.com/) for their excellent friendly support and very competitive prices.
 
 #### Set Up a New Domain
 
-Any user can add a domain name (that has been registered elsewhere) to be managed by Civo.com. You should adjust the nameservers of your domain (through your registrar) to point to  `ns0.civo.com`  and  `ns1.civo.com`.
+Any user can add a domain name (that has been registered elsewhere) to be managed by Civo.com. You should adjust the nameservers of your domain (through your registrar) to point to `ns0.civo.com` and `ns1.civo.com`.
 
 The command to set up a new domain is `civo domain create domainname`:
 
@@ -841,6 +1213,7 @@ Created a domain called civoclidemo.xyz with ID 418181b2-fcd2-46a2-ba7f-c843c331
 You can then proceed to add DNS records to this domain.
 
 #### List Domain Names
+
 To see your created domains, call `civo domain list`:
 
 ```sh
@@ -878,6 +1251,7 @@ Created a record www1 for civoclidemo.xyz with a TTL of 600 seconds and with a p
 ```
 
 #### Listing DNS Records
+
 You can get an overview of all records you have created for a particular domain by requesting `civo domain record list domain.name`:
 
 ```sh
@@ -888,7 +1262,9 @@ $ civo domain record list civoclidemo.xyz
 | 4e181dde-bde8-4744-8984-067f957a7d59 | A    | www.civoclidemo.xyz | 192.168.1.1 | 1000 | 0        |
 +--------------------------------------+------+---------------------+-------------+------+----------+
 ```
+
 #### Deleting a DNS Record
+
 You can remove a particular DNS record from a domain you own by requesting `civo domain record remove record_id`. This immediately removes the associated record, so use with caution:
 
 ```sh
@@ -903,6 +1279,7 @@ The domain record called www with ID 4e181dde-bde8-4744-8984-067f957a7d59 was de
 You can configure custom firewall rules for your instances using the Firewall component of Civo CLI. These are freely configurable, however customers should be careful to not lock out their own access to their instances. By default, all ports are closed for custom firewalls.
 
 Firewalls can be configured with rules, and they can be made to apply to your chosen instance(s) with subsequent commands.
+
 #### Configuring a New Firewall
 
 To create a new Firewall, use `civo firewall create new_firewall_name`:
@@ -911,7 +1288,9 @@ To create a new Firewall, use `civo firewall create new_firewall_name`:
 $ civo firewall create civocli_demo
 Created a firewall called civocli_demo with ID ab2a25d7-edd4-4ecd-95c4-58cb6bc402de
 ```
+
 You can also create a firewall without any default rules by using the flag `-r` or `--create-rules` set to `false`. In both cases, the usage is like:
+
 ```bash
 civo firewall create new_firewall_name --create-rules=false
 
@@ -1005,7 +1384,9 @@ Create a private network called cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa
 ```
 
 #### Listing Networks
+
 To list all the networks you can run `civo network ls`
+
 ```sh
 $ civo network ls
 +--------------------------------------+----------+--------+---------+
@@ -1026,12 +1407,12 @@ $ civo network remove 74b69006-ea59-46a0-96c4-63f5bfa290e1
 Removed the network cli-demo with ID 74b69006-ea59-46a0-96c4-63f5bfa290e1
 ```
 
-
 ## Object Stores
 
 #### Introduction
 
 Object stores are S3-compatible data storage structures on Civo. Through creating object stores in your account, you can manage unstructured data within the size limits of each object store and subject to your quota.
+
 #### Listing Object Stores
 
 You can run `civo objectstore ls` to get the list of all object stores in your account.
@@ -1064,7 +1445,7 @@ Provided you have room in your Civo quota, you can update the size of an object 
 ```console
 $ civo objectstore update cli-demo --size=1000
 
-The Object Store with ID 699e42a7-918b-42f7-ac22-fb9869e835ad was updated to size: 1000 GB 
+The Object Store with ID 699e42a7-918b-42f7-ac22-fb9869e835ad was updated to size: 1000 GB
 ```
 
 #### Deleting Object Stores
@@ -1072,7 +1453,7 @@ The Object Store with ID 699e42a7-918b-42f7-ac22-fb9869e835ad was updated to siz
 You can delete an object store by running `civo objectstore delete` with the object store name.
 
 ```console
-$ civo objectstore delete cli-demo 
+$ civo objectstore delete cli-demo
 
 Warning: Are you sure you want to delete the cli-demo Object Store (y/N) ? y
 The Object Store (cli-demo) has been deleted
@@ -1082,7 +1463,7 @@ The Object Store (cli-demo) has been deleted
 
 #### Introduction
 
-Access to object stores is controlled by credentials management. When a new object store is created, a default administrative set of credentials is created with it. You can create other credentials for object stores you create, and export credential information for use in applications. 
+Access to object stores is controlled by credentials management. When a new object store is created, a default administrative set of credentials is created with it. You can create other credentials for object stores you create, and export credential information for use in applications.
 
 #### Listing Object Store Credentials
 
@@ -1135,7 +1516,6 @@ Warning: Are you sure you want to delete the cli-demo-fa5d-7de9b2 Object Store C
 The Object Store Credential (cli-demo-fa5d-7de9b2) has been deleted
 ```
 
-
 ## Quota
 
 All customers joining Civo will have a default quota applied to their account. The quota has nothing to do with charges or payments, but with the limits on the amount of simultaneous resources you can use. You can view the state of your quota at any time by running `civo quota show`. Here is my current quota usage at the time of writing:
@@ -1168,22 +1548,133 @@ Civo instances come in a variety of sizes depending on your need and budget. You
 
 ```sh
 $ civo sizes list
-+----------------+-------------+------------+-----+----------+-----------+------------+
-| Name           | Description | Type       | CPU | RAM (MB) | Disk (GB) | Selectable |
-+----------------+-------------+------------+-----+----------+-----------+------------+
-| g3.xsmall      | Extra Small | Instance   |   1 |     1024 |        25 | Yes        |
-| g3.small       | Small       | Instance   |   1 |     2048 |        25 | Yes        |
-| g3.medium      | Medium      | Instance   |   2 |     4096 |        50 | Yes        |
-| g3.large       | Large       | Instance   |   4 |     8192 |       100 | Yes        |
-| g3.xlarge      | Extra Large | Instance   |   6 |    16384 |       150 | Yes        |
-| g3.2xlarge     | 2X Large    | Instance   |   8 |    32768 |       200 | Yes        |
-| g3.k3s.xsmall  | Extra Small | Kubernetes |   1 |     1024 |        25 | Yes        |
-| g3.k3s.small   | Small       | Kubernetes |   1 |     2048 |        25 | Yes        |
-| g3.k3s.medium  | Medium      | Kubernetes |   2 |     4096 |        25 | Yes        |
-| g3.k3s.large   | Large       | Kubernetes |   4 |     8192 |        25 | Yes        |
-| g3.k3s.xlarge  | Extra Large | Kubernetes |   6 |    16384 |        25 | Yes        |
-| g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 |    32768 |        10 | Yes        |
-+----------------+-------------+------------+-----+----------+-----------+------------+
++--------------------+--------------------------------+------------+-----+---------+-----+
+| Name               | Description                    | Type       | CPU | RAM     | SSD |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.xsmall          | Extra Small                    | Instance   |   1 |    1024 |  25 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.small           | Small                          | Instance   |   1 |    2048 |  25 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.medium          | Medium                         | Instance   |   2 |    4096 |  50 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.large           | Large                          | Instance   |   4 |    8192 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.xlarge          | Extra Large                    | Instance   |   6 |   16384 | 150 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.2xlarge         | 2X Large                       | Instance   |   8 |   32768 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.xsmall    | Extra Small - Standard         | Kubernetes |   1 |    1024 |  30 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.small     | Small - Standard               | Kubernetes |   1 |    2048 |  40 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.medium    | Medium - Standard              | Kubernetes |   2 |    4096 |  50 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.large     | Large - Standard               | Kubernetes |   4 |    8192 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.small     | Small - Performance            | Kubernetes |   4 |   16384 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.medium    | Medium - Performance           | Kubernetes |   8 |   32768 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.large     | Large - Performance            | Kubernetes |  16 |   65536 | 120 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.xlarge    | Extra Large - Performance      | Kubernetes |  32 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.small     | Small - CPU optimized          | Kubernetes |   8 |   16384 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.medium    | Medium - CPU optimized         | Kubernetes |  16 |   32768 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.large     | Large - CPU optimized          | Kubernetes |  32 |   65536 | 120 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.xlarge    | Extra Large - CPU optimized    | Kubernetes |  64 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.small     | Small - RAM optimized          | Kubernetes |   2 |   16384 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.medium    | Medium - RAM optimized         | Kubernetes |   4 |   32768 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.large     | Large - RAM optimized          | Kubernetes |   8 |   65536 | 120 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.xlarge    | Extra Large - RAM optimized    | Kubernetes |  16 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.xsmall       | Extra Small                    | Database   |   1 |    2048 |  20 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.small        | Small                          | Database   |   2 |    4096 |  40 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.medium       | Medium                         | Database   |   4 |    8192 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.large        | Large                          | Database   |   6 |   16384 | 160 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.xlarge       | Extra Large                    | Database   |   8 |   32768 | 320 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.db.2xlarge      | Double Extra Large             | Database   |  10 |   65536 | 640 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.kf.small        | Small - CPU optimized          | KfCluster  |   4 |   16384 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.kf.medium       | Medium - CPU optimized         | KfCluster  |   8 |   32768 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.kf.large        | Large - CPU optimized          | KfCluster  |  16 |   65536 | 120 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g3.kf.xlarge       | Extra Large - CPU optimized    | KfCluster  |  32 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.xsmall         | xSmall - Standard              | Instance   |   1 |    1024 |  25 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.small          | Small - Standard               | Instance   |   1 |    2048 |  25 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.medium         | Medium - Standard              | Instance   |   2 |    4096 |  50 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.large          | Large - Standard               | Instance   |   4 |    8192 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.xlarge         | Extra Large - Standard         | Instance   |   6 |   16384 | 150 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.2xlarge        | 2X Large - Standard            | Instance   |   8 |   32768 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.small     | Small - Nvidia A100 80GB       | Kubernetes |  12 |  131072 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.medium    | Medium - Nvidia A100 80GB      | Kubernetes |  24 |  262144 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.large     | Large - Nvidia A100 80GB       | Kubernetes |  48 |  524288 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.xlarge    | Extra Large - Nvidia A100 80GB | Kubernetes |  96 | 1048576 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.small          | Small - Nvidia A100 80GB       | Instance   |  12 |  131072 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.medium         | Medium - Nvidia A100 80GB      | Instance   |  24 |  262144 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.large          | Large - Nvidia A100 80GB       | Instance   |  48 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.xlarge         | Extra Large - Nvidia A100 80GB | Instance   |  96 | 1048576 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.small       | Small - Nvidia A100 40GB       | Instance   |   8 |   65536 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.medium      | Medium - Nvidia A100 40GB      | Instance   |  16 |  131072 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.large       | Large - Nvidia A100 40GB       | Instance   |  32 |  262133 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.xlarge      | Extra Large - Nvidia A100 40GB | Instance   |  64 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.small  | Small - Nvidia A100 40GB       | Kubernetes |   8 |   65536 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.medium | Medium - Nvidia A100 40GB      | Kubernetes |  16 |  131072 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.large  | Large - Nvidia A100 40GB       | Kubernetes |  32 |  262133 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.xlarge | Extra Large - Nvidia A100 40GB | Kubernetes |  64 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.x1      | Small - Nvidia L40S 40GB       | Instance   |  12 |  131072 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.x2      | Medium - Nvidia L40S 40GB      | Instance   |  24 |  262133 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.x4      | Large - Nvidia L40S 40GB       | Instance   |  48 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.x8      | Extra Large - Nvidia L40S 40GB | Instance   |  96 | 1048576 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x1 | Small - Nvidia L40S 40GB       | Kubernetes |  12 |  131072 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x2 | Medium - Nvidia L40S 40GB      | Kubernetes |  24 |  262133 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x4 | Large - Nvidia L40S 40GB       | Kubernetes |  48 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x8 | Extra Large - Nvidia L40S 40GB | Kubernetes |  96 | 1048576 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
 ```
 
 This command is useful for getting the name of the instance type if you do not remember it - you will need to specify the instance size name when creating an instance using the CLI tool.
@@ -1192,16 +1683,65 @@ Also you can use `--filter` to filter the result by the type, the avalible optio
 
 ```sh
 $ civo sizes list --filter kubernetes
-+----------------+-------------+------------+-----+----------+-----------+------------+
-| Name           | Description | Type       | CPU | RAM (MB) | Disk (GB) | Selectable |
-+----------------+-------------+------------+-----+----------+-----------+------------+
-| g3.k3s.xsmall  | Extra Small | Kubernetes |   1 |     1024 |        25 | Yes        |
-| g3.k3s.small   | Small       | Kubernetes |   1 |     2048 |        25 | Yes        |
-| g3.k3s.medium  | Medium      | Kubernetes |   2 |     4096 |        25 | Yes        |
-| g3.k3s.large   | Large       | Kubernetes |   4 |     8192 |        25 | Yes        |
-| g3.k3s.xlarge  | Extra Large | Kubernetes |   6 |    16384 |        25 | Yes        |
-| g3.k3s.2xlarge | 2X Large    | Kubernetes |   8 |    32768 |        10 | Yes        |
-+----------------+-------------+------------+-----+----------+-----------+------------+
++--------------------+--------------------------------+------------+-----+---------+-----+
+| Name               | Description                    | Type       | CPU | RAM     | SSD |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.xsmall    | Extra Small - Standard         | Kubernetes |   1 |    1024 |  30 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.small     | Small - Standard               | Kubernetes |   1 |    2048 |  40 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.medium    | Medium - Standard              | Kubernetes |   2 |    4096 |  50 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4s.kube.large     | Large - Standard               | Kubernetes |   4 |    8192 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.small     | Small - Performance            | Kubernetes |   4 |   16384 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.medium    | Medium - Performance           | Kubernetes |   8 |   32768 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.large     | Large - Performance            | Kubernetes |  16 |   65536 | 120 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4p.kube.xlarge    | Extra Large - Performance      | Kubernetes |  32 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.small     | Small - CPU optimized          | Kubernetes |   8 |   16384 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.medium    | Medium - CPU optimized         | Kubernetes |  16 |   32768 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.large     | Large - CPU optimized          | Kubernetes |  32 |   65536 | 120 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.xlarge    | Extra Large - CPU optimized    | Kubernetes |  64 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.small     | Small - RAM optimized          | Kubernetes |   2 |   16384 |  60 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.medium    | Medium - RAM optimized         | Kubernetes |   4 |   32768 |  80 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.large     | Large - RAM optimized          | Kubernetes |   8 |   65536 | 120 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4m.kube.xlarge    | Extra Large - RAM optimized    | Kubernetes |  16 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.small     | Small - Nvidia A100 80GB       | Kubernetes |  12 |  131072 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.medium    | Medium - Nvidia A100 80GB      | Kubernetes |  24 |  262144 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.large     | Large - Nvidia A100 80GB       | Kubernetes |  48 |  524288 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.kube.xlarge    | Extra Large - Nvidia A100 80GB | Kubernetes |  96 | 1048576 | 100 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.small  | Small - Nvidia A100 40GB       | Kubernetes |   8 |   65536 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.medium | Medium - Nvidia A100 40GB      | Kubernetes |  16 |  131072 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.large  | Large - Nvidia A100 40GB       | Kubernetes |  32 |  262133 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| g4g.40.kube.xlarge | Extra Large - Nvidia A100 40GB | Kubernetes |  64 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x1 | Small - Nvidia L40S 40GB       | Kubernetes |  12 |  131072 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x2 | Medium - Nvidia L40S 40GB      | Kubernetes |  24 |  262133 | 200 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x4 | Large - Nvidia L40S 40GB       | Kubernetes |  48 |  524288 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
+| an.g1.l40s.kube.x8 | Extra Large - Nvidia L40S 40GB | Kubernetes |  96 | 1048576 | 400 |
++--------------------+--------------------------------+------------+-----+---------+-----+
 ```
 
 ## SSH Keys
@@ -1231,6 +1771,7 @@ $ civo sshkeys ls
 #### Removing a SSH Key
 
 You can delete a SSH key by calling `remove` for it by ID:
+
 ```sh
 $ civo ssh remove 531d0998-4152-410a-af20-0cccb1c7c73b
 Removed SSH key cli-demo with ID 531d0998-4152-410a-af20-0cccb1c7c73b
@@ -1242,22 +1783,34 @@ Removed SSH key cli-demo with ID 531d0998-4152-410a-af20-0cccb1c7c73b
 
 Civo instances are built from a disk image. Currently there centos, debian and ubuntu are supported.In order to create an instance the diskimage ID is needed that can be found by running `civo diskimage ls`
 
-
 #### Listing Available Disk Images
 
 ```sh
 $ civo diskimage ls
-+--------------------------------------+---------------+---------+-----------+--------------+
-| ID                                   | Name          | Version | State     | Distribution |
-+--------------------------------------+---------------+---------+-----------+--------------+
-| 4921b107-964f-417c-bf63-c92fcf41ccbd | centos-7      |       7 | available | centos       |
-| a4204155-a876-43fa-b4d6-ea2af8774560 | debian-10     |      10 | available | debian       |
-| 9b661c46-ac4f-46e1-9f3d-aaacde9b4fec | debian-9      |       9 | available | debian       |
-| 12745392-15c7-4140-925d-441fe7ae57fd | ubuntu-bionic |   18.04 | available | ubuntu       |
-| d927ad2f-5073-4ed6-b2eb-b8e61aef29a8 | ubuntu-focal  |   20.04 | available | ubuntu       |
-+--------------------------------------+---------------+---------+-----------+--------------+
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| ID                                   | Name            | Version        | State     | Distribution |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 21613daa-a66b-44fc-87f5-b6db566d8f91 | ubuntu-cuda11-8 | 22.04-cuda11-8 | available | ubuntu       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| a4204155-a876-43fa-b4d6-ea2af8774560 | debian-10       |             10 | available | debian       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| eda67ea0-4282-4945-9b7b-d3e1cba1d987 | ubuntu-jammy    |          22.04 | available | ubuntu       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| d927ad2f-5073-4ed6-b2eb-b8e61aef29a8 | ubuntu-focal    |          20.04 | available | ubuntu       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 13232803-0928-4634-9ab8-476bff29ef1b | ubuntu-cuda12-2 | 22.04-cuda12-2 | available | ubuntu       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| ffb6fd93-cb06-4e8d-8058-46003b78e2ff | talos-v1.2.8    | 1.25.5         | available | talos        |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 9a16a77e-1a1f-45c8-87fd-6d1a19eeaac9 | talos-v1.5.0    | 1.27.0         | available | talos        |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 25fbbd96-d5ec-4d08-9c75-a5e154dabf9b | debian-11       |             11 | available | debian       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 170db96f-8458-44aa-83ca-0c31fb81a835 | rocky-9-1       |            9.1 | available | rocky        |
++--------------------------------------+-----------------+----------------+-----------+--------------+
+| 9b661c46-ac4f-46e1-9f3d-aaacde9b4fec | debian-9        |              9 | available | debian       |
++--------------------------------------+-----------------+----------------+-----------+--------------+
 ```
-
 
 ## Volumes
 
@@ -1331,11 +1884,13 @@ The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 w
 If a Kubernetes volume is showing with a status of `dangling` it can be deleted to release the quota and prevent further billing by running `civo volume delete <VOLUME-NAME> --region <REGION-NAME>`.
 
 ## Teams
+
 Teams are a grouping of users, each member of a team having one or more permissions, or roles. When a user logs in, they don't have to select which team to use - only which account they want to act within. The permissions available are the total set of permissions they have across the teams in that account, combined.
 
 #### List all teams
 
 You can run `civo teams ls` to get the list of all teams
+
 ```sh
 $ civo teams ls
 +--------------------------------------+------------------+
@@ -1353,6 +1908,7 @@ $ civo teams ls
 #### Create a new team
 
 To create a new team in your account, the cmd you need to run is `civo teams create <NEW-TEAM-NAME>` and a new team will be created with the given name.
+
 ```sh
 $ civo teams create Community
 Created a team called Community with team ID 475a087b-bec8-4a66-ac14-95bc09bd8d1e
@@ -1361,6 +1917,7 @@ Created a team called Community with team ID 475a087b-bec8-4a66-ac14-95bc09bd8d1
 #### Rename a team
 
 To rename a team, you need to run the cmd `civo teams rename <OLD-TEAM-NAME> <NEW-TEAM-NAME>`
+
 ```sh
 $ civo teams rename Community Advocacy
 The team with ID 475a087b-bec8-4a66-ac14-95bc09bd8d1e was renamed to Advocacy
@@ -1369,19 +1926,21 @@ The team with ID 475a087b-bec8-4a66-ac14-95bc09bd8d1e was renamed to Advocacy
 #### Delete a team
 
 To delete a team, you need to run the cmd `civo teams delete <TEAM-NAME>`
+
 ```sh
 $ civo teams delete Advocacy
 Warning: Are you sure you want to delete the Advocacy team  (y/N) ? y
 The team (Advocacy) has been deleted
-``` 
-
+```
 
 ## Permissions
+
 Each member of a team is assigned one or more permissions, or roles. The permissions available are the total set of permissions they have across the teams in that account, combined.
 
 #### List all permissions
 
 You have to run the cmd `civo permissions ls` to list down all the available permissions.
+
 ```sh
 $ civo permissions ls
 +-------------------------+----------------------------+------------------------------------------------------------------------------------------------+
@@ -1448,29 +2007,39 @@ $ civo permissions ls
 ```
 
 ## Region
+
 As Civo grows, more regions for your instances will become available. You can run `civo region ls` to list the regions available. Block storage (Volumes) is region-specific, so if you configure an instance in one region, any volumes you wish to attach to that instance would have to be in the same region.
 
 #### List all region
 
 You can run `civo region ls` to get the list of all region
+
 ```sh
 civo region ls
-+------+-------------+----------------+---------+
-| Code | Name        | Country        | Current |
-+------+-------------+----------------+---------+
-| FRA1 | Frankfurt 1 | Germany        |         |
-| LON1 | London 1    | United Kingdom | <=====  |
-| NYC1 | New York 1  | United States  |         |
-+------+-------------+----------------+---------+
++--------+--------+----------------+---------+
+| Code   | Name   | Country        | Current |
++--------+--------+----------------+---------+
+| nyc1   | nyc1   | United States  |         |
++--------+--------+----------------+---------+
+| phx1   | phx1   | United States  |         |
++--------+--------+----------------+---------+
+| dg-exm | dg-exm | United Kingdom |         |
++--------+--------+----------------+---------+
+| fra1   | fra1   | Germany        |         |
++--------+--------+----------------+---------+
+| lon1   | lon1   | United Kingdom | <=====  |
++--------+--------+----------------+---------+
 ```
 
 #### Change region
 
 To change the region the only cmd you need run is `civo region current <REGION-CODE>` and you will see a message like this:
+
 ```sh
  civo region current NYC1
 
 ```
+
 The default region was set to (New York 1) NYC1
 
 #### Use region in non-interactive mode
@@ -1509,13 +2078,13 @@ Reload your shell and verify that bash-completion is correctly installed by typi
 
 You now need to ensure that the civo completion script gets sourced in all your shell sessions. There are two ways in which you can do this:
 
-- Source the completion script in your `~/.bashrc` file:
+-   Source the completion script in your `~/.bashrc` file:
 
     ```shell
     echo 'source <(civo completion bash)' >>~/.bashrc
     ```
 
-- Add the completion script to the `/etc/bash_completion.d` directory:
+-   Add the completion script to the `/etc/bash_completion.d` directory:
 
     ```shell
     civo completion bash >/etc/bash_completion.d/civo
@@ -1555,6 +2124,7 @@ compinit
 ```
 
 To set the civo completion code for zsh to auto-load on start up yo can run this command.
+
 ```bash
 civo completion zsh > "${fpath[1]}/_civo"
 ```
@@ -1568,6 +2138,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/civo/c
 The code is available as open source under the terms of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0).
 
 ## Thanks to all the contributors ❤
+
  <a href = "https://github.com/civo/cli/graphs/contributors">
    <img src = "https://contrib.rocks/image?repo=civo/cli"/>
  </a>
