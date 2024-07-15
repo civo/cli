@@ -74,13 +74,6 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendData("Backends", strings.Join(backendList, ", "))
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
-		}
+		ow.FinishAndPrintOutput()
 	},
 }

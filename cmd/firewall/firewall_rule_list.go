@@ -71,13 +71,6 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("label", firewallRule.Label, "Label")
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
-		}
+		ow.FinishAndPrintOutput()
 	},
 }

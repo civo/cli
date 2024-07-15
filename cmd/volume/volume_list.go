@@ -3,6 +3,7 @@ package volume
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 
 	"github.com/civo/civogo"
@@ -79,7 +80,23 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 
 		ow := utility.NewOutputWriter()
 
-		utility.Info("Volumes with status 'dangling' mean they are attached to a cluster that no longer exists. You can attach them to an instance, or delete them if they are no longer needed.")
+		// Sort volumes by name
+		sort.Slice(volumes, func(i, j int) bool {
+			return volumes[i].Name < volumes[j].Name
+		})
+
+		hasDanglingVolumes := false
+		for _, volume := range volumes {
+			if volume.Status == "dangling" {
+				hasDanglingVolumes = true
+				break
+			}
+		}
+
+		if hasDanglingVolumes {
+			utility.Info("Volumes with status 'dangling' mean they are attached to a cluster that no longer exists. You can attach them to an instance, or delete them if they are no longer needed.")
+		}
+
 		for _, volume := range volumes {
 			ow.StartLine()
 			ow.AppendDataWithLabel("id", volume.ID, "ID")
@@ -107,7 +124,7 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 					}
 				}
 				if cluster != nil {
-					ow.AppendDataWithLabel("cluster_id", cluster.Name, "Cluster")
+					ow.AppendDataWithLabel("cluster_id", cluster.ID, "Cluster")
 				} else {
 					ow.AppendDataWithLabel("cluster_id", "", "Cluster")
 					volume.Status = "dangling"
@@ -143,13 +160,6 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 			ow.AppendDataWithLabel("status", volume.Status, "Status")
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
-		}
+		ow.FinishAndPrintOutput()
 	},
 }

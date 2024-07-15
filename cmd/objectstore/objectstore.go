@@ -6,10 +6,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var credentialSize int
 var accessKey, secretAccessKey string
 
-//ObjectStoreCmd manages Civo Object Store
+// ObjectStoreCmd manages Civo Object Store
 var ObjectStoreCmd = &cobra.Command{
 	Use:     "objectstore",
 	Aliases: []string{"bucket", "buckets", "object", "objects"},

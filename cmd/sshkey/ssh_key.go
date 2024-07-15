@@ -24,6 +24,8 @@ func init() {
 	SSHKeyCmd.AddCommand(sshKeyListCmd)
 	SSHKeyCmd.AddCommand(sshKeyCreateCmd)
 	SSHKeyCmd.AddCommand(sshKeyRemoveCmd)
+	SSHKeyCmd.AddCommand(sshKeyFindCmd)
+	SSHKeyCmd.AddCommand(sshKeyUpdateCmd)
 
 	sshKeyCreateCmd.Flags().StringVarP(&keyCreate, "key", "k", "", "The path of the key")
 	sshKeyCreateCmd.MarkFlagRequired("key")

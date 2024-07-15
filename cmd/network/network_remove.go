@@ -83,6 +83,8 @@ var networkRemoveCmd = &cobra.Command{
 						utility.Error(errMessage)
 						os.Exit(1)
 					}
+					utility.Error("Error deleting the Network: %s", err)
+					os.Exit(1)
 				}
 			}
 

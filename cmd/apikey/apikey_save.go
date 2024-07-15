@@ -65,7 +65,7 @@ var apikeySaveCmd = &cobra.Command{
 
 			name, err = reader.ReadString('\n')
 			if err != nil {
-				utility.Error("Error reading name", err)
+				utility.Error("Error reading name %v", err)
 				os.Exit(1)
 			}
 			if runtime.GOOS == "windows" {
@@ -76,7 +76,7 @@ var apikeySaveCmd = &cobra.Command{
 			fmt.Printf("Enter the API key: ")
 			apikeyBytes, err := term.ReadPassword(int(syscall.Stdin))
 			if err != nil {
-				utility.Error("Error reading api key", err)
+				utility.Error("Error reading api key %v", err)
 				os.Exit(1)
 			}
 			apiKey = string(apikeyBytes)

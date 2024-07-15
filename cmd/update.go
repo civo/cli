@@ -11,6 +11,7 @@ import (
 	"github.com/civo/cli/utility"
 	"github.com/kierdavis/ansi"
 
+	gogithub "github.com/google/go-github/v57/github"
 	"github.com/spf13/cobra"
 	"github.com/tj/go-update"
 	"github.com/tj/go-update/progress"
@@ -39,9 +40,7 @@ var (
 			// fetch the new releases
 			releases, err := m.LatestReleases()
 			if err != nil {
-				if common.IsGHRatelimitError(err) {
-					options := "1. Wait a few minutes and try again\n 2. Try switching to a different network (e.g. mobile data, VPN, etc)\n 3. Download latest CLI from https://github.com/civo/cli/releases"
-					fmt.Println("You have reached the github rate limit:\n " + options)
+				if _, ok := err.(*gogithub.AbuseRateLimitError); ok {
 					os.Exit(1)
 				}
 				utility.Error("error fetching releases: %s", err)

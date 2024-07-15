@@ -10,10 +10,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	// ControlPlaneReady is the condition type for the control plane being ready
+	ControlPlaneReady = "ControlPlaneReady"
+	// WorkerNodesReady is the condition type for the worker nodes being ready
+	WorkerNodesReady = "WorkerNodesReady"
+	// ClusterVersionSync is the condition type for the cluster version being in sync
+	ClusterVersionSync = "ClusterVersionSync"
+)
+
 // KubernetesCmd manages Civo Kubernetes Clusters
 var KubernetesCmd = &cobra.Command{
 	Use:     "kubernetes",
-	Aliases: []string{"k3s", "k8s", "kube"},
+	Aliases: []string{"k3s", "k8s", "kube", "talos"},
 	Short:   "Details of Civo Kubernetes clusters",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := cmd.Help()
@@ -70,12 +79,11 @@ func init() {
 	}
 
 	kubernetesConfigCmd.Flags().BoolVarP(&saveConfig, "save", "s", false, "save the config")
-	kubernetesConfigCmd.Flags().BoolVarP(&switchConfig, "switch", "i", false, "switch context to newly-created cluster (needs --merge flag)")
-	kubernetesConfigCmd.Flags().BoolVarP(&mergeConfig, "merge", "m", false, "merge the config with existing kubeconfig if it already exists")
+	kubernetesConfigCmd.Flags().BoolVarP(&switchConfig, "switch", "i", false, "switch context to newly-created cluster")
 	kubernetesConfigCmd.Flags().BoolVarP(&overwriteConfig, "overwrite", "w", false, "overwrite the kubeconfig file")
 	kubernetesConfigCmd.Flags().StringVarP(&localPathConfig, "local-path", "p", fmt.Sprintf("%s/.kube/config", home), "local path to save the kubeconfig file")
 
-	kubernetesCreateCmd.Flags().StringVarP(&targetNodesSize, "size", "s", "g4s.kube.medium", "the size of nodes to create.")
+	kubernetesCreateCmd.Flags().StringVarP(&targetNodesSize, "size", "s", "g4s.kube.medium", "the size of nodes to create. You can list available kubernetes sizes by `civo size list -s kubernetes`")
 	kubernetesCreateCmd.Flags().StringVarP(&networkID, "network", "t", "default", "the name of the network to use in the creation")
 	kubernetesCreateCmd.Flags().IntVarP(&numTargetNodes, "nodes", "n", 3, "the number of nodes to create (the master also acts as a node).")
 	kubernetesCreateCmd.Flags().StringVarP(&kubernetesVersion, "version", "v", "latest", "the k3s version to use on the cluster. Defaults to the latest. Example - 'civo k3s create --version 1.21.2+k3s1'")
@@ -89,6 +97,7 @@ func init() {
 	kubernetesCreateCmd.Flags().StringVarP(&rulesFirewall, "firewall-rules", "u", "default", "optional, can be used if the --create-firewall flag is set, semicolon-separated list of ports to open")
 	kubernetesCreateCmd.Flags().BoolVarP(&createFirewall, "create-firewall", "c", false, "optional, create a firewall for the cluster with all open ports")
 	kubernetesCreateCmd.Flags().StringVarP(&cniPlugin, "cni-plugin", "p", "flannel", "optional, possible options: flannel,cilium.")
+	kubernetesCreateCmd.Flags().StringVarP(&clusterType, "cluster-type", "", "k3s", "optional, possible options: k3s,talos.")
 
 	kubernetesRenameCmd.Flags().StringVarP(&kubernetesNewName, "name", "n", "", "the new name for the cluster.")
 
@@ -115,12 +124,24 @@ func init() {
 	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolCreateCmd)
 	kubernetesNodePoolCreateCmd.Flags().StringVarP(&targetNodesPoolSize, "size", "s", "g4s.kube.medium", "the size of nodes to create.")
 	kubernetesNodePoolCreateCmd.Flags().IntVarP(&numTargetNodesPool, "nodes", "n", 3, "the number of nodes to create for the pool.")
+	kubernetesNodePoolCreateCmd.Flags().StringVarP(&nodePoolName, "name", "", "", "the name of the node pool.")
+	kubernetesNodePoolCreateCmd.Flags().BoolVarP(&publicIpNodePool, "public-ip", "p", false, "assign public IP address for each node in the pool. Note: only applicable for private/supported regions")
+	kubernetesNodePoolCreateCmd.Flags().MarkHidden("public-ip")
 
 	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolDeleteCmd)
 	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolScaleCmd)
 	kubernetesNodePoolScaleCmd.Flags().IntVarP(&numTargetNodesPoolScale, "nodes", "n", 3, "the number of nodes to scale for the pool.")
 	kubernetesNodePoolScaleCmd.MarkFlagRequired("nodes")
 
+	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolInstanceDeleteCmd)
+	kubernetesNodePoolInstanceDeleteCmd.Flags().StringVarP(&nodePoolID, "node-pool-id", "p", "", "the ID of the node pool.")
+	kubernetesNodePoolInstanceDeleteCmd.MarkFlagRequired("node-pool-id")
+	kubernetesNodePoolInstanceDeleteCmd.Flags().StringVarP(&instanceID, "instance-id", "i", "", "the ID of the instance.")
+	kubernetesNodePoolInstanceDeleteCmd.MarkFlagRequired("instance-id")
+	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolInstanceListCmd)
+	kubernetesNodePoolInstanceListCmd.Flags().StringVarP(&nodePoolID, "node-pool-id", "p", "", "the ID of the node pool.")
+
+	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolListCmd)
 }
 
 func getKubernetesList(value string) []string {

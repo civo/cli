@@ -157,6 +157,36 @@ func CheckAvailability(resource string, regionSet string) (bool, string, error) 
 		}
 	}
 
+	if resource == "object_store" {
+		if defaultRegion.Features.ObjectStore && !defaultRegion.OutOfCapacity {
+			return true, "", nil
+		}
+	}
+
+	if resource == "loadbalancer" {
+		if defaultRegion.Features.LoadBalancer && !defaultRegion.OutOfCapacity {
+			return true, "", nil
+		}
+	}
+
+	if resource == "dbaas" {
+		if defaultRegion.Features.DBaaS && !defaultRegion.OutOfCapacity {
+			return true, "", nil
+		}
+	}
+
+	if resource == "volume" {
+		if defaultRegion.Features.Volume && !defaultRegion.OutOfCapacity {
+			return true, "", nil
+		}
+	}
+
+	if resource == "kfaas" {
+		if defaultRegion.Features.KFaaS && !defaultRegion.OutOfCapacity {
+			return true, "", nil
+		}
+	}
+
 	return false, defaultRegion.Code, nil
 }
 

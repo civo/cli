@@ -21,7 +21,8 @@ If you wish to use a custom format, the available fields are:
 	* label
 	* region
 	* default
-	* status`,
+	* status
+	* vlan_id (only if VLAN is enabled)`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -49,15 +50,12 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("region", client.Region, "Region")
 			ow.AppendDataWithLabel("default", strconv.FormatBool(network.Default), "Default")
 			ow.AppendDataWithLabel("status", network.Status, "Status")
+			// Check if VLAN is enabled
+			if network.VlanID != 0 { // 0 means not set/enabled
+				ow.AppendDataWithLabel("vlan_id", strconv.Itoa(network.VlanID), "VLAN ID")
+			}
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
-		}
+		ow.FinishAndPrintOutput()
 	},
 }

@@ -3,7 +3,6 @@ package apikey
 import (
 	"errors"
 	"fmt"
-	"strings"
 
 	"github.com/civo/cli/config"
 	"github.com/spf13/cobra"
@@ -29,7 +28,7 @@ between them when required.`,
 func apiKeyFind(search string) (string, error) {
 	var result string
 	for key, value := range config.Current.APIKeys {
-		if strings.Contains(key, search) || strings.Contains(value, search) {
+		if key == search || value == search {
 			result = key
 		}
 	}
@@ -51,4 +50,5 @@ func init() {
 
 	// Flags for "civo apikey save" command
 	apikeySaveCmd.Flags().BoolVar(&loadAPIKeyFromEnv, "load-from-env", false, "When set, the name and key will be taken from environment variables (see notes above)")
+	apikeyRemoveCmd.Flags().BoolVar(&forceFlag, "force", false, "Force removal of the current API key without confirmation")
 }

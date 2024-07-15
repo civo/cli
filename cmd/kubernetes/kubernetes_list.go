@@ -51,24 +51,31 @@ If you wish to use a custom format, the available fields are:
 
 			ow.AppendDataWithLabel("id", cluster.ID, "ID")
 			ow.AppendDataWithLabel("name", cluster.Name, "Name")
-			ow.AppendDataWithLabel("region", client.Region, "Region")
+			ow.AppendDataWithLabel("cluster_type", cluster.ClusterType, "Cluster-Type")
 			ow.AppendDataWithLabel("nodes", strconv.Itoa(len(cluster.Instances)), "Nodes")
 			ow.AppendDataWithLabel("pools", strconv.Itoa(len(cluster.Pools)), "Pools")
-			ow.AppendDataWithLabel("status", utility.ColorStatus(cluster.Status), "Status")
+
+			if cluster.Conditions != nil {
+				conditions := ""
+				for _, condition := range cluster.Conditions {
+					if condition.Type == ControlPlaneReady {
+						conditions += "Control Plane Accessible: " + string(condition.Status) + "\n"
+					}
+					if condition.Type == WorkerNodesReady {
+						conditions += "All Workers Up: " + string(condition.Status) + "\n"
+					}
+					if condition.Type == ClusterVersionSync {
+						conditions += "Cluster On Desired Version: " + string(condition.Status) + "\n"
+					}
+				}
+				ow.AppendDataWithLabel("conditions", conditions, "Conditions")
+			}
 
 			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 				ow.AppendDataWithLabel("status", cluster.Status, "Status")
 			}
-
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
-		}
+		ow.FinishAndPrintOutput()
 	},
 }

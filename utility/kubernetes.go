@@ -58,11 +58,11 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, switchContext bo
 	var cmd *exec.Cmd
 
 	if osResult == "windows" {
-		os.Setenv("KUBECONFIG", fmt.Sprintf("%s;%s", localKubeconfigPath, file.Name()))
+		os.Setenv("KUBECONFIG", fmt.Sprintf("%s;%s", file.Name(), localKubeconfigPath))
 		cmd = exec.Command("powershell", "kubectl", "config", "view", "--merge", "--flatten")
 	} else {
 		// Append KUBECONFIGS in ENV Vars
-		appendKubeConfigENV := fmt.Sprintf("KUBECONFIG=%s:%s", localKubeconfigPath, file.Name())
+		appendKubeConfigENV := fmt.Sprintf("KUBECONFIG=%s:%s", file.Name(), localKubeconfigPath)
 		cmd = exec.Command("kubectl", "config", "view", "--merge", "--flatten")
 		cmd.Env = append(os.Environ(), appendKubeConfigENV)
 	}
@@ -176,7 +176,7 @@ func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested s
 	return requested, nil
 }
 
-// RequestedSplit is a function to split all app requested to be install
+// RequestedSplit is a function to split all app requested to be installed
 func RequestedSplit(appList []civogo.KubernetesMarketplaceApplication, requested string) string {
 	allsplit := strings.Split(requested, ",")
 	allApp := []string{}
@@ -280,13 +280,24 @@ func UpdateNodePool(s []civogo.KubernetesClusterPoolConfig, id string, count int
 	return s
 }
 
-// CheckSize is a utility function to check thesize an return the size in the right format
-func CheckSize(size string) string {
+// TrimID is a utility function to trim the ID to 6 characters
+func TrimID(id string) string {
+	if len(id) > 6 {
+		return id[:6]
+	}
+	return id
+}
+
+// SizeType is a utility function to to return the type of the size given it's name.
+// Possible types(case-sensitive) : Instance, Database, Kubernetes
+func SizeType(size string) string {
 	switch {
 	case strings.Contains(size, ".db."):
 		return "Database"
 	case strings.Contains(size, ".k3s.") || strings.Contains(size, ".kube."):
 		return "Kubernetes"
+	case strings.Contains(size, ".kf."):
+		return "KfCluster"
 	default:
 		return "Instance"
 	}

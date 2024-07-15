@@ -6,6 +6,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/civo/cli/common"
+	"github.com/civo/cli/config"
 	"os"
 	"regexp"
 	"sort"
@@ -30,16 +32,16 @@ func (a byLen) Swap(i, j int) {
 // OutputWriter is for printing structured data in various
 // tabular formats
 //
-//   ow := utility.NewOutputWriter()
-//   ow.StartLine()
-//   ow.AppendData("ID", instance.ID)
+//	ow := utility.NewOutputWriter()
+//	ow.StartLine()
+//	ow.AppendData("ID", instance.ID)
 //
-//   # Then one of:
-//   ow.WriteSingleObjectJSON()
-//   ow.WriteMultipleObjectsJSON()
-//   ow.WriteCustomOutput(common.OutputFields)
-//   ow.WriteKeyValues()
-//   ow.WriteTable()
+//	# Then one of:
+//	ow.WriteSingleObjectJSON()
+//	ow.WriteMultipleObjectsJSON()
+//	ow.WriteCustomOutput(common.OutputFields)
+//	ow.WriteKeyValues()
+//	ow.WriteTable()
 type OutputWriter struct {
 	Keys       []string
 	Labels     []string
@@ -88,6 +90,7 @@ func (ow *OutputWriter) StartLine() {
 func (ow *OutputWriter) finishExistingLine() {
 	if len(ow.TempValues) > 0 {
 		ow.Values = append(ow.Values, ow.TempValues)
+		ow.TempValues = nil
 	}
 }
 
@@ -203,6 +206,7 @@ func (ow *OutputWriter) WriteTable() {
 		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 		table.SetAutoWrapText(false)
 		table.SetAutoFormatHeaders(false)
+		table.SetRowLine(true)
 	} else {
 		table.SetBorder(false)
 	}
@@ -278,4 +282,26 @@ func prettyprint(b []byte) ([]byte, error) {
 	var out bytes.Buffer
 	err := json.Indent(&out, b, "", "  ")
 	return out.Bytes(), err
+}
+
+func (ow *OutputWriter) FinishAndPrintOutput() {
+	ow.finishExistingLine()
+	if len(ow.Values) == 0 {
+		var region string
+		if common.RegionSet != "" {
+			region = common.RegionSet
+		} else {
+			region = config.Current.Meta.DefaultRegion
+		}
+		fmt.Fprintf(os.Stderr, "No resources found in region %s. For a list of regions use the command 'civo region ls'\n", region)
+	} else {
+		switch common.OutputFormat {
+		case "json":
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
+		case "custom":
+			ow.WriteCustomOutput(common.OutputFields)
+		default:
+			ow.WriteTable()
+		}
+	}
 }

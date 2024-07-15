@@ -8,36 +8,37 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 
 ## Table of contents
 
--   [Introduction](#introduction)
--   [Global Options](#global-options)
--   [Set-Up](#set-up)
--   [Version/Updating CLI](#update)
--   [Docker Usage](#docker-usage)
--   [API Keys](#api-keys)
--   [Instances](#instances)
--   [Kubernetes clusters](#kubernetes-clusters)
--   [Kubernetes applications](#kubernetes-applications)
--   [Domains and Domain Records](#domains-and-domain-records)
--   [Firewalls](#firewalls)
--   [Networks](#networks)
--   [Object Stores](#object-stores)
--   [Object Store Credentials](#object-store-credentials)
--   [Load Balancers](#load-balancers)
--   [Quota](#quota)
--   [Sizes](#sizes)
--   [SSH Keys](#ssh-keys)
--   [DiskImages](#disk-image)
--   [Volumes](#volumes)
--   [Teams](#teams)
--   [Permissions](#permissions)
--   [Region](#region)
--   [Enabling shell autocompletion](#enabling-shell-autocompletion)
--   [Contributing](#contributing)
--   [License](#license)
+- [Introduction](#introduction)
+- [Global Options](#global-options)
+- [Set-Up](#set-up)
+- [Version/Updating CLI](#update)
+- [Docker Usage](#docker-usage)
+- [API Keys](#api-keys)
+- [Instances](#instances)
+- [Kubernetes clusters](#kubernetes-clusters)
+- [Kubernetes applications](#kubernetes-applications)
+- [Domains and Domain Records](#domains-and-domain-records)
+- [Firewalls](#firewalls)
+- [Networks](#networks)
+- [Database Backup and Restore](./doc/DTABASE_BACKUP_RESTORE.md)
+- [Object Stores](#object-stores)
+- [Object Store Credentials](#object-store-credentials)
+- [Load Balancers](#load-balancers)
+- [Quota](#quota)
+- [Sizes](#sizes)
+- [SSH Keys](#ssh-keys)
+- [DiskImages](#disk-image)
+- [Volumes](#volumes)
+- [Teams](#teams)
+- [Permissions](#permissions)
+- [Region](#region)
+- [Enabling shell autocompletion](#enabling-shell-autocompletion)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Set-up
 
-Civo CLI is built with Go and distributed as binary files, available for multiple operating systems and downloadable from https://github.com/civo/cli/releases.
+Civo CLI is built with Go and distributed as binary files, available for multiple operating systems and downloadable from <https://github.com/civo/cli/releases>.
 
 ### Installing on macOS
 
@@ -60,23 +61,23 @@ Civo CLI is available to download on windows via Chocolatey and Scoop
 
 For installing via Chocolatey you need [Chocolatey](https://chocolatey.org/install) package manager installed on your PC.
 
--   run the following command after confirming Chocolatey on your PC
+- run the following command after confirming Chocolatey on your PC
 
-```
-choco install civo-cli
-```
+ ```
+ choco install civo-cli
+ ```
 
-and it will install Civo CLI on your PC.
+ and it will install Civo CLI on your PC.
 
 For installing via Scoop you need [Scoop](https://scoop.sh/) installed as a package manager, then:
 
--   add the extras bucket with
+- add the extras bucket with
 
 ```
 scoop bucket add extras
 ```
 
--   install civo with
+- install civo with
 
 ```
 scoop install civo
@@ -88,15 +89,15 @@ You will also, of course, need a Civo account, for which you can [register here]
 
 For Linux Civo CLI can be installed by various methods.
 
--   Install via the direct shell script:
+- Install via the direct shell script:
 
 ```sh
 curl -sL https://civo.com/get | sh
 ```
 
--   Install via the brew package manager, as shown in the above instructions for MacOS.
+- Install via the brew package manager, as shown in the above instructions for MacOS.
 
--   Install via wget, specifying the [release version](https://github.com/civo/cli/releases) you want.
+- Install via wget, specifying the [release version](https://github.com/civo/cli/releases) you want.
 
 **_Note that the version in the example below may not be the latest. Specify the version based on the latest available if you are using this method._**
 
@@ -202,7 +203,7 @@ The civo cli have multiple global options, that you can use, like this:
 
 #### Introduction
 
-In order to use the command-line tool, you will need to authenticate yourself to the Civo API using a special key. You can find an automatically-generated API key or regenerate a new key at [https://www.civo.com/api](https://www.civo.com/api).
+In order to use the command-line tool, you will need to authenticate yourself to the Civo API using a special key. You can find an automatically-generated API key or regenerate a new key at [https://www.civo.com/api](https://www.civo.com/api). The CLI have a global env variable call `CIVO_TOKEN` if this is set, the CLI will use this token instead of the one in the config file. This is useful for scripting situations or CI/CD pipelines. When you set the `CIVO_TOKEN` you will see a new apikey entry with the name `tempKey` in the `civo apikey list` command.
 
 #### Adding a current API Key to your account
 
@@ -259,7 +260,7 @@ You can create an instance by running `civo instance create` with a hostname par
 
 ```sh
 Options:
-  -t, --diskimage string     the instance's disk image (from 'civo diskimage ls' command)
+  -t, --diskimage string     the instance's disk image name (from 'civo diskimage ls' command)
   -l, --firewall string      the instance's firewall you can use the Name or the ID
   -h, --help                 help for create
   -s, --hostname string      the instance's hostname
@@ -276,7 +277,7 @@ Options:
 Example usage:
 
 ```sh
-$ civo instance create --hostname=api-demo.test --size g3.small  --diskimage=12745392-15c7-4140-925d-441fe7ae57fd --initialuser=demo-user
+$ civo instance create --hostname=api-demo.test --size g3.small  --diskimage=ubuntu-focal --initialuser=demo-user
   The instance api-demo.test has been created
 
 $ civo instance show api-demo.test
@@ -492,7 +493,7 @@ BrbXNW2RUYLe
 If an instance has a public IP address configured, you can display it using `civo instance public-ip ID/hostname`:
 
 ```sh
-$ civo instance public-ip api-demo.test -o custom -f public_ip
+$ civo instance show api-demo.test -o custom -f public_ip
 74.220.21.246
 ```
 
@@ -767,29 +768,29 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
 -t, --network string               the name of the network to use in the creation (default "default")
 -n, --nodes int                    the number of nodes to create (the master also acts as a node). (default 3)
 -r, --remove-applications string   optional, remove default application names shown by running  'civo kubernetes applications ls'
-	--save                         save the config
+ --save                         save the config
 -s, --size string                  the size of nodes to create. (default "g4s.kube.medium")
-	--switch                       switch context to newly-created cluster
+ --switch                       switch context to newly-created cluster
 -v, --version string               the k3s version to use on the cluster. Defaults to the latest. Example - 'civo k3s create --version 1.21.2+k3s1' (default "latest")
 -w, --wait                         a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE
 ```
 
-_Note_
+*Note*
 
--   The '--create-firewall' will open the ports 80,443 and 6443 in the firewall if '--firewall-rules' is not used.
--   The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
--   The '--firewall-rules' flag need to be used with '--create-firewall'.
--   The '--firewall-rules' flag can accept:
-    -   You can pass 'all' to open all ports.
-    -   An optional end port using 'start_port-end_port' format (e.g. 8000-8100)
-    -   An optional CIDR notation (e.g. 0.0.0.0/0)
-    -   When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
-    -   When a CIDR notation is provided without slash and number segment, it will default to /32
-    -   Within a rule, you can use comma separator for multiple ports to have same CIDR notation
-    -   To separate between rules, you can use semicolon symbol and wrap everything in double quotes (see below)
-        So the following would all be valid:
-    -   "80,443,6443:0.0.0.0/0;8080:1.2.3.4" (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
-    -   "80,443,6443;6000-6500:4.4.4.4/24" (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
+- The '--create-firewall' will open the ports 80,443 and 6443 in the firewall if '--firewall-rules' is not used.
+- The '--create-firewall' and '--existing-firewall' flags are mutually exclusive. You can't use them together.
+- The '--firewall-rules' flag need to be used with '--create-firewall'.
+- The '--firewall-rules' flag can accept:
+  - You can pass 'all' to open all ports.
+  - An optional end port using 'start_port-end_port' format (e.g. 8000-8100)
+  - An optional CIDR notation (e.g. 0.0.0.0/0)
+  - When no CIDR notation is provided, the port will get 0.0.0.0/0 (open to public) as default CIDR notation
+  - When a CIDR notation is provided without slash and number segment, it will default to /32
+  - Within a rule, you can use comma separator for multiple ports to have same CIDR notation
+  - To separate between rules, you can use semicolon symbol and wrap everything in double quotes (see below)
+    So the following would all be valid:
+  - "80,443,6443:0.0.0.0/0;8080:1.2.3.4" (open 80,443,6443 to public and 8080 just for 1.2.3.4/32)
+  - "80,443,6443;6000-6500:4.4.4.4/24" (open 80,443,6443 to public and 6000 to 6500 just for 4.4.4.4/24)
 
 ```sh
 $ civo kubernetes create my-first-cluster
@@ -1118,7 +1119,7 @@ To get an up-to-date list of available applications on the Marketplace, run `civ
 This option will be allow you to see the post-install instruction of every app installed in the cluster
 
 ```sh
-$ civo kubernetes application show Traefik apps-demo-cluster
+civo kubernetes application show Traefik apps-demo-cluster
 ```
 
 the first parameter is for the name of the app and the second is the name of the cluster
@@ -1128,7 +1129,7 @@ the first parameter is for the name of the app and the second is the name of the
 To specify applications to install onto a new cluster, list them at cluster creation by specifying their `name` from the list above:
 
 ```sh
-$ civo kubernetes create apps-demo-cluster --nodes=2  --applications=Redis,Linkerd
+civo kubernetes create apps-demo-cluster --nodes=2  --applications=Redis,Linkerd
 ```
 
 Now, if you take a look at the cluster's details, you will see the newly-installed applications listed:
@@ -1166,7 +1167,7 @@ Installed marketplace applications:
 **Note:** Applications like `metrics-server` are installed by default on any new cluster you create. If you don't need to install the default applications, use the `--remove-applications` flag as below:
 
 ```sh
-$ civo kubernetes create apps-demo-cluster --nodes=2 --applications=Redis,Linkerd --remove-applications=metrics-server
+civo kubernetes create apps-demo-cluster --nodes=2 --applications=Redis,Linkerd --remove-applications=metrics-server
 ```
 
 #### Installing Applications to an Existing Cluster
@@ -2131,7 +2132,7 @@ civo completion zsh > "${fpath[1]}/_civo"
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/civo/cli.
+Bug reports and pull requests are welcome on GitHub at <https://github.com/civo/cli>.
 
 ## License
 

@@ -71,7 +71,11 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 					fmt.Println("--------------- Uninstall script ---------------")
 					fmt.Println(string(output))
 					fmt.Println("--------------- Uninstall output ---------------")
-					fmt.Println(b.String())
+					if strings.Contains(b.String(), "command not found") {
+						fmt.Printf("Uninstall script for application %s not found \n", appName)
+					} else {
+						fmt.Println(b.String())
+					}
 					os.Exit(1)
 				} else {
 					utility.Error("Failed to uninstall application %s because of %s\n", appName, err.Error())

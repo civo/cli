@@ -12,8 +12,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var targetNodesPoolSize string
+var targetNodesPoolSize, nodePoolName string
 var numTargetNodesPool int
+var publicIpNodePool bool
 
 var kubernetesNodePoolCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -45,25 +46,36 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		newPool := []civogo.KubernetesClusterPoolConfig{}
-		for _, v := range kubernetesFindCluster.Pools {
-			newPool = append(newPool, civogo.KubernetesClusterPoolConfig{ID: v.ID, Count: v.Count, Size: v.Size})
+		var poolID string
+		if nodePoolName != "" {
+			poolID = nodePoolName
+		} else {
+			poolID = uuid.NewString()
 		}
 
-		poolID := uuid.NewString()
-		newPool = append(newPool, civogo.KubernetesClusterPoolConfig{ID: poolID, Count: numTargetNodesPool, Size: targetNodesPoolSize})
-
-		configKubernetes := &civogo.KubernetesClusterConfig{
-			Pools: newPool,
+		if len(poolID) > 63 {
+			utility.Error("The pool name must be less than 64 characters")
+			os.Exit(1)
 		}
 
-		kubernetesCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)
+		poolConfig := civogo.KubernetesClusterPoolUpdateConfig{ID: poolID, Count: numTargetNodesPool, Size: targetNodesPoolSize}
+		if publicIpNodePool {
+			if config.Current.RegionToFeatures != nil {
+				if !config.Current.RegionToFeatures[client.Region].PublicIPNodePools {
+					utility.Error("The region \"%s\" does not support \"Public IP Node Pools\" feature", client.Region)
+					os.Exit(1)
+				}
+			}
+			poolConfig.PublicIPNodePool = publicIpNodePool
+		}
+
+		kubernetesCluster, err := client.CreateKubernetesClusterPool(kubernetesFindCluster.ID, &poolConfig)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"id": kubernetesCluster.ID, "name": kubernetesCluster.Name, "pool_id": poolID[:6]})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": kubernetesCluster.ID, "name": kubernetesFindCluster.Name, "pool_id": poolID[:6]})
 
 		switch common.OutputFormat {
 		case "json":
@@ -71,7 +83,7 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The pool (%s) was added to the cluster (%s)\n", utility.Green(poolID), utility.Green(kubernetesCluster.Name))
+			fmt.Printf("The pool (%s) was added to the cluster (%s)\n", utility.Green(poolID), utility.Green(kubernetesFindCluster.Name))
 		}
 	},
 }

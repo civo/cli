@@ -40,7 +40,6 @@ $(BINARY_WINDOWS): buildprep
 buildprep:
 	git fetch --tags -f
 	mkdir -p dest
-	# $(eval VERSION_CLI=$(shell git describe --tags | cut -d "v" -f 2 | cut -d "-" -f 1))
 	$(eval VERSION_CLI=$(shell git describe --tags | cut -d "v" -f 2 | cut -d "-" -f 1))
 	$(eval COMMIT_CLI=$(shell git log --format="%H" -n 1))
 

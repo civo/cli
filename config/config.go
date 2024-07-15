@@ -8,14 +8,14 @@ import (
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
-	"github.com/gookit/color"
 	"github.com/mitchellh/go-homedir"
 )
 
 // Config describes the configuration for Civo's CLI
 type Config struct {
-	APIKeys map[string]string `json:"apikeys"`
-	Meta    Metadata          `json:"meta"`
+	APIKeys          map[string]string         `json:"apikeys"`
+	Meta             Metadata                  `json:"meta"`
+	RegionToFeatures map[string]civogo.Feature `json:"region_to_features"`
 }
 
 // Metadata describes the metadata for Civo's CLI
@@ -91,14 +91,18 @@ func loadConfig(filename string) {
 		Current.APIKeys = map[string]string{}
 	}
 
-	checkEnvVarSet, found := os.LookupEnv("CIVO_TOKEN")
-	if found {
-		Current.APIKeys = map[string]string{"tempKey": checkEnvVarSet}
+	if token, found := os.LookupEnv("CIVO_TOKEN"); found && token != "" {
+		Current.APIKeys["tempKey"] = token
 		Current.Meta.CurrentAPIKey = "tempKey"
 	}
 
-	if time.Since(Current.Meta.LatestReleaseCheck) > (24 * time.Hour) {
-		Current.Meta.LatestReleaseCheck = time.Now()
+	if Current.Meta.CurrentAPIKey != "" && Current.RegionToFeatures == nil {
+		Current.RegionToFeatures, err = regionsToFeature()
+		if err != nil {
+			fmt.Printf("Error getting supported regions to feature %s \n", err)
+			os.Exit(1)
+		}
+
 		dataBytes, err := json.Marshal(Current)
 		if err != nil {
 			fmt.Printf("Error parsing JSON %s \n", err)
@@ -110,13 +114,31 @@ func loadConfig(filename string) {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		res, skip := common.VersionCheck()
-		if !skip {
-			if res.Outdated {
-				msg := "A newer version (v%s) is available, please upgrade with \"civo update\"\n"
-				fmt.Fprintf(os.Stderr, "%s: %s", color.Red.Sprintf("IMPORTANT"), fmt.Sprintf(msg, res.Current))
+	}
+
+	if time.Since(Current.Meta.LatestReleaseCheck) > (24 * time.Hour) {
+		Current.Meta.LatestReleaseCheck = time.Now()
+
+		if Current.Meta.CurrentAPIKey != "" {
+			Current.RegionToFeatures, err = regionsToFeature()
+			if err != nil {
+				fmt.Printf("Error getting supported regions to feature %s \n", err)
+				os.Exit(1)
 			}
 		}
+
+		dataBytes, err := json.Marshal(Current)
+		if err != nil {
+			fmt.Printf("Error parsing JSON %s \n", err)
+			os.Exit(1)
+		}
+
+		err = os.WriteFile(filename, dataBytes, 0600)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		common.CheckVersionUpdate()
 	}
 
 }
@@ -157,7 +179,6 @@ func SaveConfig() {
 }
 
 func checkConfigFile(filename string) error {
-	file, err := os.Stat(filename)
 	curr := Config{APIKeys: map[string]string{}}
 	curr.Meta = Metadata{
 		Admin:           false,
@@ -166,11 +187,21 @@ func checkConfigFile(filename string) error {
 		LastCmdExecuted: time.Now(),
 	}
 
+	if Current.Meta.CurrentAPIKey != "" {
+		var err error
+		curr.RegionToFeatures, err = regionsToFeature()
+		if err != nil {
+			return err
+		}
+	}
+
 	fileContend, jsonErr := json.Marshal(curr)
 	if jsonErr != nil {
 		fmt.Printf("Error parsing the JSON")
 		os.Exit(1)
 	}
+
+	file, err := os.Stat(filename)
 	if os.IsNotExist(err) {
 		_, err := os.Create(filename)
 		if err != nil {
@@ -201,6 +232,28 @@ func checkConfigFile(filename string) error {
 	return nil
 }
 
+// regionsToFeature get the region to supported features map
+func regionsToFeature() (map[string]civogo.Feature, error) {
+	regionsToFeature := map[string]civogo.Feature{}
+	client, err := CivoAPIClient()
+	if err != nil {
+		fmt.Printf("Creating the connection to Civo's API failed with %s", err)
+		return regionsToFeature, err
+	}
+
+	regions, err := client.ListRegions()
+	if err != nil {
+		fmt.Printf("Unable to list regions: %s", err)
+		return regionsToFeature, err
+	}
+
+	for _, region := range regions {
+		regionsToFeature[region.Code] = region.Features
+	}
+
+	return regionsToFeature, nil
+}
+
 // DefaultAPIKey returns the current default API key
 func DefaultAPIKey() string {
 	if Current.Meta.CurrentAPIKey != "" {
@@ -211,15 +264,20 @@ func DefaultAPIKey() string {
 
 // CivoAPIClient returns a civogo client using the current default API key
 func CivoAPIClient() (*civogo.Client, error) {
-	cliClient, err := civogo.NewClientWithURL(DefaultAPIKey(), Current.Meta.URL, Current.Meta.DefaultRegion)
+	apiKey := DefaultAPIKey()
+	if apiKey == "" {
+		fmt.Printf("Error: Creating the connection to Civo's API failed because no API key is supplied. This is required to authenticate requests. Please go to https://dashboard.civo.com/security to obtain your API key, then save it using the command 'civo apikey save YOUR_API_KEY'.\n")
+		return nil, fmt.Errorf("no API Key supplied, this is required")
+	}
+	cliClient, err := civogo.NewClientWithURL(apiKey, Current.Meta.URL, Current.Meta.DefaultRegion)
 	if err != nil {
 		return nil, err
 	}
 
 	var version string
-	res, skip := common.VersionCheck()
+	res, skip := common.VersionCheck(common.GithubClient())
 	if !skip {
-		version = res.Current
+		version = *res.TagName
 	} else {
 		version = "0.0.0"
 	}

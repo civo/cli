@@ -18,7 +18,7 @@ import (
 var numTargetNodes int
 var rulesFirewall string
 var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes, createFirewall bool
-var kubernetesVersion, targetNodesSize, clusterName, applications, removeapplications, networkID, existingFirewall, cniPlugin string
+var kubernetesVersion, targetNodesSize, clusterName, clusterType, applications, removeapplications, networkID, existingFirewall, cniPlugin string
 var kubernetesCluster *civogo.KubernetesCluster
 
 var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
@@ -128,6 +128,7 @@ var kubernetesCreateCmd = &cobra.Command{
 		}
 		configKubernetes := &civogo.KubernetesClusterConfig{
 			Name:            clusterName,
+			ClusterType:     clusterType,
 			NumTargetNodes:  numTargetNodes,
 			TargetNodesSize: targetNodesSize,
 			NetworkID:       network.ID,
@@ -279,20 +280,25 @@ var kubernetesCreateCmd = &cobra.Command{
 
 // InstallApps returns the list of applications to install
 func InstallApps(defaultApps []string, apps, removeApps string) []string {
-	var iApps []string
+	var appsToInstall []string
+
 	if apps != "" {
-		iApps = strings.Split(apps, ",")
+		appsToInstall = strings.Split(apps, ",")
+		appsToInstall = append(appsToInstall, defaultApps...)
+	} else {
+		appsToInstall = defaultApps
 	}
-	iApps = append(defaultApps, iApps...)
 
 	if removeApps != "" {
-		for i, v := range iApps {
-			for _, v2 := range strings.Split(removeApps, ",") {
-				if v == v2 {
-					iApps = append(iApps[:i], iApps[i+1:]...)
+		appsToRemove := strings.Split(removeApps, ",")
+		for _, appToRemove := range appsToRemove {
+			for i, app := range appsToInstall {
+				if app == appToRemove {
+					appsToInstall = append(appsToInstall[:i], appsToInstall[i+1:]...)
 				}
 			}
 		}
 	}
-	return iApps
+
+	return appsToInstall
 }

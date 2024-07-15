@@ -1,11 +1,11 @@
 package common
 
 import (
+	"context"
 	"fmt"
-	"strings"
 
-	"github.com/google/go-github/github"
-	"github.com/tcnksm/go-latest"
+	"github.com/google/go-github/v57/github"
+	"github.com/savioxavier/termlink"
 )
 
 var (
@@ -27,26 +27,43 @@ var (
 	DateCli = "unknown"
 )
 
-// VersionCheck checks if there is a new version of the CLI
-func VersionCheck() (res *latest.CheckResponse, skip bool) {
-	githubTag := &latest.GithubTag{
-		Owner:             "civo",
-		Repository:        "cli",
-		FixVersionStrFunc: latest.DeleteFrontV(),
-	}
-	res, err := latest.Check(githubTag, strings.Replace(VersionCli, "v", "", 1))
-	if err != nil {
-		if IsGHRatelimitError(err) {
-			return nil, true
-		}
-		fmt.Printf("Checking for a newer version failed with %s \n", err)
-		return nil, true
-	}
-	return res, false
+// GithubClient Create a Github client
+func GithubClient() *github.Client {
+	return github.NewClient(nil)
 }
 
-// IsGHRatelimitError checks if the error is a github rate limit error
-func IsGHRatelimitError(err error) bool {
-	_, ok := err.(*github.RateLimitError)
-	return ok
+// CheckVersionUpdate checks if there's an update to be done
+func CheckVersionUpdate() {
+	ghClient := GithubClient()
+	res, skip := VersionCheck(ghClient)
+	if skip {
+		return
+	}
+
+	// Check if the version is different from the one in the binary
+	if res.TagName != nil && *res.TagName != fmt.Sprintf("v%s", VersionCli) {
+		if res.TagName != nil && *res.TagName != VersionCli {
+			fmt.Printf("A newer version (%s) is available, please upgrade with \"civo update\"\n", *res.TagName)
+		}
+	}
+}
+
+// IssueMessage is the message to be displayed when an error is returned
+func IssueMessage() {
+	gitIssueLink := termlink.ColorLink("GitHub issue", "https://github.com/civo/cli/issues", "green")
+	fmt.Printf("Please check if you are using the latest version of CLI and retry the command \nIf you are still facing issues, please report it on our community slack or open a %s \n", gitIssueLink)
+}
+
+// VersionCheck checks if there is a new version of the CLI
+func VersionCheck(client *github.Client) (res *github.RepositoryRelease, skip bool) {
+	// Get the last release from GitHub API
+	release, _, err := client.Repositories.GetLatestRelease(context.Background(), "civo", "cli")
+	if _, ok := err.(*github.AbuseRateLimitError); ok {
+		fmt.Printf("hit secondary rate limit try again in %s minute", err.(*github.AbuseRateLimitError).RetryAfter)
+		return nil, true
+	}
+	if err != nil {
+		return nil, true
+	}
+	return release, false
 }

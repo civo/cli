@@ -5,11 +5,13 @@ import (
 	"os"
 
 	"github.com/civo/cli/cmd/apikey"
+	"github.com/civo/cli/cmd/database"
 	"github.com/civo/cli/cmd/diskimage"
 	"github.com/civo/cli/cmd/domain"
 	"github.com/civo/cli/cmd/firewall"
 	"github.com/civo/cli/cmd/instance"
 	"github.com/civo/cli/cmd/ip"
+	"github.com/civo/cli/cmd/kfcluster"
 	"github.com/civo/cli/cmd/kubernetes"
 	"github.com/civo/cli/cmd/loadbalancer"
 	"github.com/civo/cli/cmd/network"
@@ -137,14 +139,16 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&common.DefaultYes, "yes", "y", false, "Automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively")
 	rootCmd.PersistentFlags().StringVarP(&common.RegionSet, "region", "", "", "Choose the region to connect to, if you use this option it will use it over the default region")
 	rootCmd.PersistentFlags().BoolVarP(&common.PrettySet, "pretty", "", false, "Print pretty the json output")
-	rootCmd.PersistentFlags().BoolVarP(&version, "version", "", false, "Print the version of the CLI")
+	rootCmd.Flags().BoolVarP(&version, "version", "v", false, "Print the version of the CLI")
 
 	rootCmd.AddCommand(apikey.APIKeyCmd)
+	rootCmd.AddCommand(database.DBCmd)
 	rootCmd.AddCommand(diskimage.DiskImageCmd)
 	rootCmd.AddCommand(domain.DomainCmd)
 	rootCmd.AddCommand(firewall.FirewallCmd)
 	rootCmd.AddCommand(instance.InstanceCmd)
 	rootCmd.AddCommand(ip.IPCmd)
+	rootCmd.AddCommand(kfcluster.KFClusterCmd)
 	rootCmd.AddCommand(kubernetes.KubernetesCmd)
 	rootCmd.AddCommand(loadbalancer.LoadBalancerCmd)
 	rootCmd.AddCommand(network.NetworkCmd)
@@ -156,6 +160,4 @@ func init() {
 	rootCmd.AddCommand(teams.TeamsCmd)
 	rootCmd.AddCommand(volume.VolumeCmd)
 
-	// Add warning if the region is empty, for the user with the old config
-	config.ReadConfig()
 }

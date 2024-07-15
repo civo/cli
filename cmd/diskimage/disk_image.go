@@ -22,4 +22,5 @@ var DiskImageCmd = &cobra.Command{
 
 func init() {
 	DiskImageCmd.AddCommand(diskImageListCmd)
+	DiskImageCmd.AddCommand(diskImageFindCmd)
 }
