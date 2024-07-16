@@ -142,6 +142,11 @@ func init() {
 	kubernetesNodePoolInstanceListCmd.Flags().StringVarP(&nodePoolID, "node-pool-id", "p", "", "the ID of the node pool.")
 
 	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolListCmd)
+
+	// Define the flags for the kubernetesRemoveCmd
+	kubernetesRemoveCmd.Flags().BoolVar(&deleteVolumes, "delete-volumes", false, "Delete dependent volumes")
+	kubernetesRemoveCmd.Flags().BoolVar(&keepFirewalls, "keep-firewalls", false, "Keep dependent firewalls")
+	kubernetesRemoveCmd.Flags().BoolVar(&keepKubeconfig, "keep-kubeconfig", false, "Keep kubeconfig")
 }
 
 func getKubernetesList(value string) []string {
