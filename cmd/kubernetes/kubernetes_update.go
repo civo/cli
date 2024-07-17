@@ -16,7 +16,7 @@ var firewall string
 var kubernetesUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"edit"},
-	Short:   "Update a Kubernetes cluster",
+	Short:   "Update the configuration of your Civo Kubernetes cluster",
 	Example: "civo kubernetes update CLUSTER_NAME --firewall FIREWALL_ID/NAME",
 	Args:    cobra.MinimumNArgs(1),
 	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
