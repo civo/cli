@@ -142,6 +142,11 @@ func init() {
 	kubernetesNodePoolInstanceListCmd.Flags().StringVarP(&nodePoolID, "node-pool-id", "p", "", "the ID of the node pool.")
 
 	kubernetesNodePoolCmd.AddCommand(kubernetesNodePoolListCmd)
+
+	// Kubernetes Update
+	KubernetesCmd.AddCommand(kubernetesUpdateCmd)
+	kubernetesUpdateCmd.Flags().StringVarP(&firewall, "firewall", "", "", "the Name or ID of the firewall.")
+	kubernetesUpdateCmd.MarkFlagRequired("firewall") // At present, only the firewall can be updated, this can be changed to not required if more options are added in the future.
 }
 
 func getKubernetesList(value string) []string {
