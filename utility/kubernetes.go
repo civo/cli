@@ -2,7 +2,6 @@ package utility
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -41,7 +40,7 @@ func ObtainKubeConfig(KubeconfigFilename string, civoConfig string, merge bool, 
 
 func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, switchContext bool, clusterName string) ([]byte, error) {
 	// Create a temporary kubeconfig to store the config of the newly create k3s cluster
-	file, err := ioutil.TempFile(os.TempDir(), "civo-temp-*")
+	file, err := os.CreateTemp(os.TempDir(), "civo-temp-*")
 	if err != nil {
 		return nil, fmt.Errorf("could not generate a temporary file to store the kuebeconfig: %s", err)
 	}
@@ -119,7 +118,7 @@ func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bo
 		defer file.Close()
 	}
 
-	writeErr := ioutil.WriteFile(path, data, 0600)
+	writeErr := os.WriteFile(path, data, 0600)
 	if writeErr != nil {
 		return writeErr
 	}

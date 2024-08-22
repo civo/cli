@@ -2,7 +2,6 @@ package sshkey
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -27,7 +26,7 @@ var sshKeyCreateCmd = &cobra.Command{
 		}
 
 		// reading the file
-		data, err := ioutil.ReadFile(keyCreate)
+		data, err := os.ReadFile(keyCreate)
 		if err != nil {
 			utility.Error("Reading the SSH key file failed with %s", err)
 			os.Exit(1)
