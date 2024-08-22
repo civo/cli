@@ -55,7 +55,6 @@ func init() {
 	instanceCreateCmd.Flags().StringVarP(&tags, "tags", "g", "", "the instance's tags")
 	instanceCreateCmd.Flags().StringVarP(&privateIPv4, "private_ipv4", "", "", "Private IPv4 address")
 	instanceCreateCmd.Flags().StringVarP(&reservedIPv4, "reservedip", "", "", "Reserved IPv4 address")
-	instanceCreateCmd.Flags().StringVarP(&tags, "region", "e", "", "the region code identifier to have your instance built in")
 	instanceCreateCmd.Flags().StringVar(&script, "script", "", "path to a script that will be uploaded to /usr/local/bin/civo-user-init-script on your instance, read/write/executable only by root and then will be executed at the end of the cloud initialization")
 	instanceCreateCmd.Flags().BoolVar(&skipShebangCheck, "skip-shebang-check", false, "skip the shebang line check when passing a user init script")
 
