@@ -58,18 +58,13 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		poolConfig := civogo.KubernetesClusterPoolUpdateConfig{ID: poolID, Count: numTargetNodesPool, Size: targetNodesPoolSize}
-		if publicIpNodePool {
-			if config.Current.RegionToFeatures != nil {
-				if !config.Current.RegionToFeatures[client.Region].PublicIPNodePools {
-					utility.Error("The region \"%s\" does not support \"Public IP Node Pools\" feature", client.Region)
-					os.Exit(1)
-				}
-			}
-			poolConfig.PublicIPNodePool = publicIpNodePool
-		}
-
-		kubernetesCluster, err := client.CreateKubernetesClusterPool(kubernetesFindCluster.ID, &poolConfig)
+		kubernetesCluster, err := client.CreateKubernetesClusterPool(kubernetesFindCluster.ID, &civogo.KubernetesClusterPoolConfig{
+			Region:           client.Region,
+			ID:               poolID,
+			Count:            numTargetNodesPool,
+			Size:             targetNodesPoolSize,
+			PublicIPNodePool: publicIpNodePool,
+		})
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)

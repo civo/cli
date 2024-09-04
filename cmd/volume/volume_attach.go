@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/briandowns/spinner"
+	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -61,7 +62,10 @@ var volumeAttachCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		_, err = client.AttachVolume(volume.ID, instance.ID)
+		_, err = client.AttachVolume(volume.ID, civogo.VolumeAttachConfig{
+			InstanceID: instance.ID,
+			Region:     client.Region,
+		})
 		if err != nil {
 			utility.Error("error attaching the volume: %s", err)
 			os.Exit(1)
