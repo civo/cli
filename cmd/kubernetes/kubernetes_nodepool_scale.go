@@ -51,10 +51,11 @@ var kubernetesNodePoolScaleCmd = &cobra.Command{
 		}
 
 		nodePoolFound := false
-		for _, pool := range kubernetesFindCluster.Pools {
+		for _, pool := range kubernetesFindCluster.RequiredPools {
 			if strings.Contains(pool.ID, nodePoolID) {
 				nodePoolID = pool.ID
 				nodePoolFound = true
+				break
 			}
 		}
 
@@ -63,24 +64,17 @@ var kubernetesNodePoolScaleCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		nodePool := []civogo.KubernetesClusterPoolConfig{}
-		for _, v := range kubernetesFindCluster.Pools {
-			nodePool = append(nodePool, civogo.KubernetesClusterPoolConfig{ID: v.ID, Count: v.Count, Size: v.Size})
-		}
-
-		nodePool = utility.UpdateNodePool(nodePool, nodePoolID, numTargetNodesPoolScale)
-
-		configKubernetes := &civogo.KubernetesClusterConfig{
-			Pools: nodePool,
-		}
-
-		kubernetesCluster, err := client.UpdateKubernetesCluster(kubernetesFindCluster.ID, configKubernetes)
+		_, err = client.UpdateKubernetesClusterPool(kubernetesFindCluster.ID, nodePoolID, &civogo.KubernetesClusterPoolUpdateConfig{
+			ID:     nodePoolID,
+			Count:  &numTargetNodesPoolScale,
+			Region: client.Region,
+		})
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"id": kubernetesCluster.ID, "name": kubernetesCluster.Name, "pool_id": nodePoolID})
+		ow := utility.NewOutputWriterWithMap(map[string]string{"id": kubernetesFindCluster.ID, "name": kubernetesFindCluster.Name, "pool_id": nodePoolID})
 
 		switch common.OutputFormat {
 		case "json":
@@ -88,7 +82,7 @@ var kubernetesNodePoolScaleCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The pool (%s) was scaled to (%s) in the cluster (%s)\n", utility.Green(nodePoolID), utility.Green(strconv.Itoa(numTargetNodesPoolScale)), utility.Green(kubernetesCluster.Name))
+			fmt.Printf("The pool (%s) was scaled to (%s) in the cluster (%s)\n", utility.Green(nodePoolID), utility.Green(strconv.Itoa(numTargetNodesPoolScale)), utility.Green(kubernetesFindCluster.Name))
 		}
 	},
 }
