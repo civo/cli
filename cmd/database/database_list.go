@@ -53,6 +53,7 @@ var dbListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("host", db.PublicIPv4, "Host")
 			ow.AppendDataWithLabel("port", strings.Join(ports, ","), "Port")
 			ow.AppendDataWithLabel("status", db.Status, "Status")
+			ow.AppendDataWithLabel("private_ipv4", db.PrivateIPv4, "Private IPv4")
 
 			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 				ow.AppendDataWithLabel("firewall_id", db.FirewallID, "Firewall ID")
