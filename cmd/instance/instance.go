@@ -57,6 +57,7 @@ func init() {
 	instanceCreateCmd.Flags().StringVarP(&reservedIPv4, "reservedip", "", "", "Reserved IPv4 address")
 	instanceCreateCmd.Flags().StringVar(&script, "script", "", "path to a script that will be uploaded to /usr/local/bin/civo-user-init-script on your instance, read/write/executable only by root and then will be executed at the end of the cloud initialization")
 	instanceCreateCmd.Flags().BoolVar(&skipShebangCheck, "skip-shebang-check", false, "skip the shebang line check when passing a user init script")
+	instanceCreateCmd.Flags().StringSliceVarP(&volumes, "volumes", "v", []string{}, "List of volumes to attach at boot")
 
 	instanceStopCmd.Flags().BoolVarP(&waitStop, "wait", "w", false, "wait until the instance's is stoped")
 }

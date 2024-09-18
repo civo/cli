@@ -38,6 +38,7 @@ func init() {
 	volumeResizeCmd.MarkFlagRequired("size-gb")
 
 	volumeAttachCmd.Flags().BoolVarP(&waitVolumeAttach, "wait", "w", false, "wait until the volume is attached")
+	volumeAttachCmd.Flags().BoolVarP(&attachAtBoot, "attach-at-boot", "a", false, "Attach the volume at boot to instance")
 
 	volumeDetachCmd.Flags().BoolVarP(&waitVolumeDetach, "wait", "w", false, "wait until the volume is detached")
 }
