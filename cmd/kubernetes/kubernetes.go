@@ -100,7 +100,6 @@ func init() {
 	kubernetesCreateCmd.Flags().StringVarP(&clusterType, "cluster-type", "", "k3s", "optional, possible options: k3s,talos.")
 
 	kubernetesRenameCmd.Flags().StringVarP(&kubernetesNewName, "name", "n", "", "the new name for the cluster.")
-	kubernetesRemoveCmd.Flags().BoolVar(&keepConfig, "keep-config", false, "Keep the kubectl config after deleting the cluster")
 
 	kubernetesUpgradeCmd.Flags().StringVarP(&kubernetesNewVersion, "version", "v", "", "change the version of the cluster.")
 	kubernetesUpgradeCmd.MarkFlagRequired("version")
