@@ -21,11 +21,11 @@ If you wish to use a custom format, the available fields are:
 	* id
 	* name
 	* algorithm
-	* pulic_ip
+	* public_ip
 	* state
 	* private_ip
 	* firewall_id
-	* cluter_id
+	* cluster_id
 	* external_traffic_policy
 	* session_affinity
 	* session_affinity_config_timeout`,
