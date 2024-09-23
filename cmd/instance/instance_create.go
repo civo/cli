@@ -261,7 +261,7 @@ If you wish to use a custom format, the available fields are:
 
 		if len(volumes) > 0 {
 			for _, volume := range volumes {
-				config.AttachedVolume = append(config.AttachedVolume, civogo.AttachedVolume{
+				config.AttachedVolumes = append(config.AttachedVolumes, civogo.AttachedVolume{
 					ID: volume,
 				})
 			}
