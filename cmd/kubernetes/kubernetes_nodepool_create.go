@@ -58,8 +58,6 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-<<<<<<< HEAD
-=======
 		poolConfig := civogo.KubernetesClusterPoolUpdateConfig{ID: poolID, Count: &numTargetNodesPool, Size: targetNodesPoolSize}
 		if publicIpNodePool {
 			if config.Current.RegionToFeatures != nil {
@@ -71,7 +69,6 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 			poolConfig.PublicIPNodePool = publicIpNodePool
 		}
 
->>>>>>> 7380023 (fix plural on volume_attachments)
 		kubernetesCluster, err := client.CreateKubernetesClusterPool(kubernetesFindCluster.ID, &civogo.KubernetesClusterPoolConfig{
 			Region:           client.Region,
 			ID:               poolID,
