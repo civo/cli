@@ -15,6 +15,7 @@ import (
 )
 
 var waitVolumeAttach bool
+var attachAtBoot bool
 
 var volumeAttachCmdExamples = []string{
 	"civo volume attach VOLUME_NAME INSTANCE_HOSTNAME",
@@ -62,10 +63,15 @@ var volumeAttachCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		_, err = client.AttachVolume(volume.ID, civogo.VolumeAttachConfig{
+		cfg := civogo.VolumeAttachConfig{
 			InstanceID: instance.ID,
 			Region:     client.Region,
-		})
+		}
+		if attachAtBoot {
+			cfg.AttachAtBoot = true
+		}
+
+		_, err = client.AttachVolume(volume.ID, cfg)
 		if err != nil {
 			utility.Error("error attaching the volume: %s", err)
 			os.Exit(1)
@@ -91,6 +97,11 @@ var volumeAttachCmd = &cobra.Command{
 					time.Sleep(2 * time.Second)
 				}
 			}
+		}
+
+		if attachAtBoot {
+			out := utility.Yellow(fmt.Sprintf("To use the volume %s you need reboot the instance %s once the volume is in attaching/detaching state", volume.Name, instance.Hostname))
+			fmt.Println(out)
 		}
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"id": volume.ID, "name": volume.Name})

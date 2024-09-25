@@ -21,6 +21,7 @@ var wait bool
 var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, privateIPv4, reservedIPv4, firewall string
 var script string
 var skipShebangCheck bool
+var volumes []string
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -256,6 +257,14 @@ If you wish to use a custom format, the available fields are:
 
 		if tags != "" {
 			config.Tags = strings.Split(tags, ",")
+		}
+
+		if len(volumes) > 0 {
+			for _, volume := range volumes {
+				config.AttachedVolumes = append(config.AttachedVolumes, civogo.AttachedVolume{
+					ID: volume,
+				})
+			}
 		}
 
 		var executionTime, publicIP string
