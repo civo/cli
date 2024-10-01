@@ -3,6 +3,7 @@ package instance
 import (
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/browser"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 	"os"
@@ -48,7 +49,7 @@ var instanceVncCmd = &cobra.Command{
 		utility.Info("Opening VNC in your default browser...")
 
 		// Open VNC in the browser
-		err = utility.OpenInBrowser(vnc.URI)
+		err = browser.OpenInBrowser(vnc.URI)
 		if err != nil {
 			utility.Error("Failed to open VNC URL in the browser: %s", err)
 		} else {
