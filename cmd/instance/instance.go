@@ -38,6 +38,7 @@ func init() {
 	InstanceCmd.AddCommand(instancePublicIPCmd)
 	InstanceCmd.AddCommand(instancePasswordCmd)
 	InstanceCmd.AddCommand(instanceTagCmd)
+	InstanceCmd.AddCommand(instanceVncCmd)
 
 	instanceUpdateCmd.Flags().StringVarP(&notes, "notes", "n", "", "notes stored against the instance")
 	instanceUpdateCmd.Flags().StringVarP(&reverseDNS, "reverse-dns", "r", "", "the reverse DNS entry for the instance")
