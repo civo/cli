@@ -69,6 +69,7 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
 		ow.AppendDataWithLabel("status", utility.ColorStatus(instance.Status), "Status")
 		ow.AppendDataWithLabel("size", instance.Size, "Size")
+		ow.AppendDataWithLabel("volume-type", instance.VolumeType, "Volume Type")
 		ow.AppendDataWithLabel("cpu_cores", strconv.Itoa(instance.CPUCores), "Cpu Cores")
 		ow.AppendDataWithLabel("ram_mb", strconv.Itoa(instance.RAMMegabytes), "Ram")
 		ow.AppendDataWithLabel("disk_gb", strconv.Itoa(instance.DiskGigabytes), "SSD disk")
