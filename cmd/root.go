@@ -22,6 +22,7 @@ import (
 	"github.com/civo/cli/cmd/sshkey"
 	"github.com/civo/cli/cmd/teams"
 	"github.com/civo/cli/cmd/volume"
+	"github.com/civo/cli/cmd/volumetype"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -159,5 +160,6 @@ func init() {
 	rootCmd.AddCommand(sshkey.SSHKeyCmd)
 	rootCmd.AddCommand(teams.TeamsCmd)
 	rootCmd.AddCommand(volume.VolumeCmd)
+	rootCmd.AddCommand(volumetype.VolumeTypeCmd)
 
 }
