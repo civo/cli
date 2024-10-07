@@ -18,7 +18,7 @@ import (
 )
 
 var wait bool
-var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, privateIPv4, reservedIPv4, firewall string
+var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, privateIPv4, reservedIPv4, firewall, volumetype string
 var script string
 var skipShebangCheck bool
 var volumes []string
@@ -148,6 +148,13 @@ If you wish to use a custom format, the available fields are:
 		// Set reserved ip if provided
 		if reservedIPv4 != "" {
 			config.ReservedIPv4 = reservedIPv4
+		}
+
+		if volumetype != "" {
+			if !validateAndSetVolumeType(client, volumetype, config) {
+				utility.Error("The provided volume type is not valid")
+				os.Exit(1)
+			}
 		}
 
 		// Set private_ipv4 if provided
@@ -346,4 +353,24 @@ If you wish to use a custom format, the available fields are:
 			}
 		}
 	},
+}
+
+// Helper function to validate volume type and set it in config
+func validateAndSetVolumeType(client *civogo.Client, volumetype string, config *civogo.InstanceConfig) bool {
+	// Fetch volume types from Civo API
+	volumeTypes, err := client.ListVolumeTypes()
+	if err != nil {
+		utility.Error("Unable to list volume types %s", err)
+		os.Exit(1)
+	}
+
+	// Check if the provided volume type is valid
+	for _, v := range volumeTypes {
+		if v.Name == volumetype {
+			config.VolumeType = v.Name
+			return true // Volume type is valid
+		}
+	}
+
+	return false // Volume type is not valid
 }
