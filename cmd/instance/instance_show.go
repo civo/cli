@@ -94,7 +94,7 @@ If you wish to use a custom format, the available fields are:
 			}
 
 			// Join the volume IDs into a single string with spaces separating them
-			ow.AppendDataWithLabel("attached_volumes", strings.Join(volumeIDs, ", "), "Attached Volumes")
+			ow.AppendDataWithLabel("attached_volumes", strings.Join(volumeIDs, ", "), "Attached Volume IDs")
 		}
 
 		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
