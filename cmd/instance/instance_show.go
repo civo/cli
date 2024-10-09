@@ -84,6 +84,19 @@ If you wish to use a custom format, the available fields are:
 		ow.AppendDataWithLabel("created_at", instance.CreatedAt.Format(time.RFC1123), "Created At")
 		ow.AppendDataWithLabel("private_ip", instance.PrivateIP, "Private IP")
 
+		if len(instance.AttachedVolumes) > 0 {
+			// Correctly declare the slice of strings for volume IDs
+			volumeIDs := []string{}
+
+			// Iterate over attached volumes and collect their IDs
+			for _, volume := range instance.AttachedVolumes {
+				volumeIDs = append(volumeIDs, volume.ID)
+			}
+
+			// Join the volume IDs into a single string with spaces separating them
+			ow.AppendDataWithLabel("attached_volumes", strings.Join(volumeIDs, ", "), "Attached Volume IDs")
+		}
+
 		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 			ow.AppendDataWithLabel("public_ip", instance.PublicIP, "Public IP")
 			ow.AppendDataWithLabel("notes", instance.Notes, "notes")
