@@ -22,6 +22,8 @@ If you wish to use a custom format, the available fields are:
 * key
 `,
 	Run: func(cmd *cobra.Command, args []string) {
+		config.LoadConfig(config.GetConfigFilename())
+
 		keys := make([]string, 0, len(config.Current.APIKeys))
 		for k := range config.Current.APIKeys {
 			keys = append(keys, k)

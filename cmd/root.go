@@ -44,6 +44,11 @@ as instances and Kubernetes clusters at Civo.com.`,
 			cmd.Help()
 		}
 	},
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		if cmd.Parent().Use != "apikey" {
+			config.ReadConfig()
+		}
+	},
 }
 
 // completionCmd represents the completion command
@@ -126,8 +131,6 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(config.ReadConfig)
-
 	rootCmd.AddCommand(completionCmd)
 	completionCmd.AddCommand(completionBashCmd)
 	completionCmd.AddCommand(completionZshCmd)

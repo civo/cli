@@ -110,6 +110,17 @@ var apikeySaveCmd = &cobra.Command{
 			apiKey = apiKeyEnv
 		}
 
+		if config.Current.APIKeys == nil {
+			filename := config.GetConfigFilename()
+			err := config.CheckConfigFile(filename)
+			if err != nil {
+				fmt.Println(err.Error())
+				os.Exit(1)
+			}
+
+			config.ProcessConfig(filename)
+		}
+
 		config.Current.APIKeys[name] = apiKey
 		if config.Current.Meta.DefaultRegion == "" {
 			client, err := civogo.NewClientWithURL(apiKey, config.Current.Meta.URL, "")

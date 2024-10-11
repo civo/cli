@@ -19,6 +19,8 @@ var apikeyRemoveCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(1),
 	Example: "civo apikey remove NAME",
 	Run: func(cmd *cobra.Command, args []string) {
+		config.LoadConfig(config.GetConfigFilename())
+
 		index, err := apiKeyFind(args[0])
 		if err != nil {
 			utility.Error("Unable to find the API key %s", err.Error())
@@ -49,6 +51,5 @@ var apikeyRemoveCmd = &cobra.Command{
 		} else {
 			fmt.Println("Operation aborted.")
 		}
-
 	},
 }
