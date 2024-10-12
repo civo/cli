@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"strings"
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
@@ -15,6 +17,7 @@ import (
 )
 
 var kuberneteList []utility.ObjecteList
+var keepConfig bool
 var kubernetesRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -89,6 +92,13 @@ var kubernetesRemoveCmd = &cobra.Command{
 					utility.Error("error deleting the kubernetes cluster: %s", err)
 					os.Exit(1)
 				}
+
+				if !keepConfig {
+					err = removeKubectlConfig(v.Name)
+					if err != nil {
+						utility.Warning("Failed to remove kubectl config for cluster %s: %s", v.Name, err)
+					}
+				}
 			}
 
 			ow := utility.NewOutputWriter()
@@ -114,4 +124,28 @@ var kubernetesRemoveCmd = &cobra.Command{
 			fmt.Println("Operation aborted.")
 		}
 	},
+}
+
+func removeKubectlConfig(clusterName string) error {
+	kubeConfigPath := os.Getenv("KUBECONFIG")
+	if kubeConfigPath == "" {
+		kubeConfigPath = filepath.Join(os.Getenv("HOME"), ".kube", "config")
+	}
+
+	cmd := exec.Command("kubectl", "config", "delete-context", clusterName)
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to delete context: %w", err)
+	}
+
+	cmd = exec.Command("kubectl", "config", "delete-cluster", clusterName)
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to delete cluster: %w", err)
+	}
+
+	cmd = exec.Command("kubectl", "config", "unset", fmt.Sprintf("users.%s", clusterName))
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to unset user: %w", err)
+	}
+
+	return nil
 }
