@@ -112,7 +112,7 @@ var objectStoreCreateCmd = &cobra.Command{
 		if waitOS {
 			startTime := utility.StartTime()
 			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond, spinner.WithWriter(os.Stderr))
 			s.Prefix = fmt.Sprintf("Creating an Object Store with maxSize %d, called %s... ", store.MaxSize, store.Name)
 			s.Start()
 
