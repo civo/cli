@@ -225,7 +225,7 @@ var kubernetesCreateCmd = &cobra.Command{
 
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Prefix = fmt.Sprintf("Creating a %s node k3s cluster of %s instances called %s... ", strconv.Itoa(kubernetesCluster.NumTargetNode), kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
+			s.Prefix = fmt.Sprintf("Creating a %s node %v cluster of %s instances called %s... ", strconv.Itoa(kubernetesCluster.NumTargetNode), clusterType, kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
 			s.Start()
 
 			for stillCreating {
