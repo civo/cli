@@ -65,6 +65,10 @@ var domainRecordCreateCmd = &cobra.Command{
 			newRecordConfig.Type = civogo.DNSRecordTypeSRV
 		}
 
+		if recordType == "NS" || recordType == "nameserver" {
+			newRecordConfig.Type = "NS" // TODO (giornetta): change this to civogo.DNSRecordTypeNS
+		}
+
 		record, err := client.CreateDNSRecord(domain.ID, newRecordConfig)
 		if err != nil {
 			utility.Error("%s", err)
