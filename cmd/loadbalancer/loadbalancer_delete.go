@@ -1,8 +1,9 @@
-package cmd
+package loadbalancer
 
 import (
 	"errors"
 	"fmt"
+	"github.com/civo/cli/common"
 	"os"
 
 	"github.com/civo/civogo"
@@ -14,7 +15,7 @@ import (
 var loadBalancerRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
-	Example: "civo loadbalancer rm NAME",
+	Example: "civo loadbalancer rm ID/name",
 	Short:   "Remove a load balancer",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

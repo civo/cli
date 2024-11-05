@@ -2,13 +2,11 @@ package loadbalancer
 
 import (
 	"fmt"
-	"os"
-	"strings"
-
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var loadBalancerShowCmd = &cobra.Command{
@@ -46,43 +44,68 @@ If you wish to use a custom format, the available fields are:
 
 		lb, err := client.GetLoadBalancer(args[0])
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("Failed to retrieve load balancer: %s", err)
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriter()
-		ow.StartLine()
+		// Display Core Load Balancer Details
+		fmt.Printf("ID: %s\n", lb.ID)
+		fmt.Printf("Name: %s\n", lb.Name)
+		fmt.Printf("Algorithm: %s\n", lb.Algorithm)
+		fmt.Printf("Public IP: %s\n", lb.PublicIP)
+		fmt.Printf("Private IP: %s\n", lb.PrivateIP)
+		fmt.Printf("Firewall ID: %s\n", lb.FirewallID)
+		fmt.Printf("Cluster ID: %s\n", lb.ClusterID)
+		fmt.Printf("State: %s\n", lb.State)
+		fmt.Printf("DNS Entry: %s.lb.civo.com\n", lb.ID)
 
-		ow.AppendDataWithLabel("id", lb.ID, "ID")
-		ow.AppendDataWithLabel("name", lb.Name, "Name")
-		ow.AppendDataWithLabel("algorithm", lb.Algorithm, "Algorithm")
-		ow.AppendDataWithLabel("public_ip", lb.PublicIP, "Public IP")
-		ow.AppendDataWithLabel("state", lb.State, "State")
-		ow.AppendDataWithLabel("dns_entry", fmt.Sprintf("%s.lb.civo.com", lb.ID), "DNS Entry")
+		// Session and Traffic Policies
+		fmt.Println("\nPolicies:")
+		fmt.Printf("External Traffic Policy: %s\n", lb.ExternalTrafficPolicy)
+		fmt.Printf("Session Affinity: %s\n", lb.SessionAffinity)
+		fmt.Printf("Session Affinity Config Timeout: %d\n", lb.SessionAffinityConfigTimeout)
+		fmt.Printf("Enable Proxy Protocol: %s\n", lb.EnableProxyProtocol)
 
-		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
-			ow.AppendDataWithLabel("private_ip", lb.PrivateIP, "Private IP")
-			ow.AppendDataWithLabel("firewall_id", lb.FirewallID, "Firewall ID")
-			ow.AppendDataWithLabel("cluster_id", lb.ClusterID, "Cluster ID")
-			ow.AppendDataWithLabel("external_traffic_policy", lb.ExternalTrafficPolicy, "External Traffic Policy")
-			ow.AppendDataWithLabel("session_affinity", lb.SessionAffinity, "Session Affinity")
-			ow.AppendDataWithLabel("session_affinity_config_timeout", string(lb.SessionAffinityConfigTimeout), "Session Affinity ConfigT imeout")
+		// Reserved IP Information
+		if lb.ReservedIPID != "" || lb.ReservedIP != "" || lb.ReservedIPName != "" {
+			fmt.Println("\nReserved IP Details:")
+			fmt.Printf("Reserved IP ID: %s\n", lb.ReservedIPID)
+			fmt.Printf("Reserved IP Name: %s\n", lb.ReservedIPName)
+			fmt.Printf("Reserved IP: %s\n", lb.ReservedIP)
+		} else {
+			fmt.Println("\nNo Reserved IP Configuration")
 		}
 
-		var backendList []string
-		for _, backend := range lb.Backends {
-			backendList = append(backendList, backend.IP)
+		// Options if available
+		if lb.Options != nil {
+			fmt.Println("\nLoad Balancer Options:")
+			fmt.Printf("Server Timeout: %s\n", lb.Options.ServerTimeout)
+			fmt.Printf("Client Timeout: %s\n", lb.Options.ClientTimeout)
 		}
 
-		ow.AppendData("Backends", strings.Join(backendList, ", "))
-
-		switch common.OutputFormat {
-		case "json":
-			ow.ToJSON(lb, common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
+		// Display Backends
+		if len(lb.Backends) > 0 {
+			fmt.Println("\nBackends:")
+			for _, backend := range lb.Backends {
+				fmt.Printf("- IP: %s, Protocol: %s, Source Port: %d, Target Port: %d\n",
+					backend.IP, backend.Protocol, backend.SourcePort, backend.TargetPort)
+			}
+		} else {
+			fmt.Println("\nNo Backends Configured")
 		}
+
+		// Display Instance Pools
+		if len(lb.InstancePool) > 0 {
+			fmt.Println("\nInstance Pools:")
+			for _, pool := range lb.InstancePool {
+				fmt.Printf(" - Tags: %s, Protocol: %s, Source Port: %d, Target Port: %d, Health Check Port: %d, Health Check Path: %s\n",
+					pool.Tags, pool.Protocol, pool.SourcePort, pool.TargetPort, pool.HealthCheck.Port, pool.HealthCheck.Path)
+			}
+		} else {
+			fmt.Println("\nNo Instance Pools Configured")
+		}
+
+		// Max Concurrent Requests
+		fmt.Printf("\nMax Concurrent Requests: %d\n", lb.MaxConcurrentRequests)
 	},
 }
