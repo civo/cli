@@ -50,7 +50,7 @@ func init() {
 		Flags for domain record create cmd
 	*/
 	domainRecordCreateCmd.Flags().StringVarP(&recordName, "name", "n", "", "the name of the record")
-	domainRecordCreateCmd.Flags().StringVarP(&recordType, "type", "e", "", "type of the record (A, CNAME, TXT, SRV, MX)")
+	domainRecordCreateCmd.Flags().StringVarP(&recordType, "type", "e", "", "type of the record (A, CNAME, TXT, SRV, MX, NS)")
 	domainRecordCreateCmd.Flags().StringVarP(&recordValue, "value", "v", "", "the value of the record")
 	domainRecordCreateCmd.Flags().IntVarP(&recordTTL, "ttl", "t", 600, "The TTL of the record")
 	domainRecordCreateCmd.Flags().IntVarP(&recordPriority, "priority", "p", 0, "the priority of record only for SRV and MX record")

@@ -45,24 +45,28 @@ var domainRecordCreateCmd = &cobra.Command{
 		// Sanitace the record type
 		recordType = strings.ReplaceAll(recordType, " ", "")
 
-		if recordType == "A" || recordType == "alias" {
+		if recordType == "A" || recordType == "a" || recordType == "alias" {
 			newRecordConfig.Type = civogo.DNSRecordTypeA
 		}
 
-		if recordType == "CNAME" || recordType == "canonical" {
+		if recordType == "CNAME" || recordType == "cname" || recordType == "canonical" {
 			newRecordConfig.Type = civogo.DNSRecordTypeCName
 		}
 
-		if recordType == "MX" || recordType == "mail" {
+		if recordType == "MX" || recordType == "mx" || recordType == "mail" {
 			newRecordConfig.Type = civogo.DNSRecordTypeMX
 		}
 
-		if recordType == "TXT" || recordType == "text" {
+		if recordType == "TXT" || recordType == "txt" || recordType == "text" {
 			newRecordConfig.Type = civogo.DNSRecordTypeTXT
 		}
 
-		if recordType == "SRV" || recordType == "service" {
+		if recordType == "SRV" || recordType == "srv" || recordType == "service" {
 			newRecordConfig.Type = civogo.DNSRecordTypeSRV
+		}
+
+		if recordType == "NS" || recordType == "ns" || recordType == "nameserver" {
+			newRecordConfig.Type = civogo.DNSRecordTypeNS
 		}
 
 		record, err := client.CreateDNSRecord(domain.ID, newRecordConfig)
