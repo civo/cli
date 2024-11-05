@@ -47,6 +47,8 @@ func init() {
 	APIKeyCmd.AddCommand(apikeyRemoveCmd)
 	APIKeyCmd.AddCommand(apikeyCurrentCmd)
 	APIKeyCmd.AddCommand(apikeyShowCmd)
+	APIKeyCmd.AddCommand(apikeyAddCmd)
+    APIKeyCmd.AddCommand(apikeyUpdateCmd)
 
 	// Flags for "civo apikey save" command
 	apikeySaveCmd.Flags().BoolVar(&loadAPIKeyFromEnv, "load-from-env", false, "When set, the name and key will be taken from environment variables (see notes above)")
