@@ -48,6 +48,20 @@ func runLoadBalancerCreate(args []string) {
 	setLoadBalancerNetwork(client, configLoadBalancer)
 	setLoadBalancerOptions(configLoadBalancer)
 
+	// Validation: Ensure at least one of lbBackends or lbInstancePools is provided
+	if len(lbBackends) == 0 && len(lbInstancePools) == 0 {
+		utility.Error(`
+Error: You must provide at least one backend or instance pool for the load balancer.
+
+Example with backends:
+  civo loadbalancer create my-loadbalancer --backend "ip:10.0.0.1,source-port:80,target-port:8080,protocol:http" --backend "ip:10.0.0.2,source-port:80,target-port:8080,protocol:http"
+
+Example with instance pools:
+  civo loadbalancer create my-loadbalancer --instance-pool "tags:web,source-port:80,target-port:8080,protocol:http" --instance-pool "tags:db,source-port:80,target-port:3306,protocol:tcp"
+`)
+		os.Exit(1)
+	}
+
 	if len(lbBackends) > 0 {
 		err := setLoadBalancerBackends(configLoadBalancer)
 		if err != nil {
@@ -231,7 +245,7 @@ func setLoadBalancerBackends(configLoadBalancer *civogo.LoadBalancerConfig) erro
 
 			configLoadBalancerBackend = append(configLoadBalancerBackend, backendConfig)
 		} else {
-			return fmt.Errorf("each backend must specify an 'ip' field.")
+			return fmt.Errorf("each backend must specify an 'ip' field")
 		}
 	}
 
