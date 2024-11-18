@@ -7,6 +7,7 @@ import (
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
+	"net"
 	"os"
 	"strconv"
 	"strings"
@@ -23,7 +24,7 @@ var loadBalancerCreateCmd = &cobra.Command{
 	Example: `civo loadbalancer create my-loadbalancer \
     --network default \
     --create-firewall "80;443" \
-    --algorithm "round-robin" \
+    --algorithm "round_robin" \
     --session-affinity "ClientIP" \
     --session-affinity-config-timeout 10800 \
     --external-traffic-policy "Local" \
@@ -61,6 +62,8 @@ Example with instance pools:
 `)
 		os.Exit(1)
 	}
+
+	validateLoadBalancerCreation()
 
 	if len(lbBackends) > 0 {
 		err := setLoadBalancerBackends(configLoadBalancer)
@@ -195,58 +198,51 @@ func setLoadBalancerBackends(configLoadBalancer *civogo.LoadBalancerConfig) erro
 	var configLoadBalancerBackend []civogo.LoadBalancerBackendConfig
 
 	for _, backend := range lbBackends {
-		// Replace semicolons with colons to match GetStringMap's expected format
+		// Replace semicolons with colons to match expected format
 		backend = strings.ReplaceAll(backend, ";", ":")
 
-		// Ensure that backend is non-empty
-		if backend == "" {
-			return fmt.Errorf("backend configuration cannot be empty")
+		// Parse backend string into a key-value map
+		data, err := parseBackendString(backend)
+		if err != nil {
+			return fmt.Errorf("invalid backend entry: %s", err)
 		}
 
-		data, _ := SetStringMap(backend)
-
-		// Check if 'ip' is provided
-		if ip, ok := data["ip"]; ok {
-			backendConfig := civogo.LoadBalancerBackendConfig{
-				IP: ip,
-			}
-
-			// Parse source-port
-			if sourcePort, ok := data["source-port"]; ok {
-				if port, err := strconv.Atoi(sourcePort); err == nil {
-					backendConfig.SourcePort = int32(port)
-				} else {
-					return fmt.Errorf("invalid source-port: %s", err)
-				}
-			}
-
-			// Parse target-port
-			if targetPort, ok := data["target-port"]; ok {
-				if port, err := strconv.Atoi(targetPort); err == nil {
-					backendConfig.TargetPort = int32(port)
-				} else {
-					return fmt.Errorf("invalid target-port: %s", err)
-				}
-			}
-
-			// Parse protocol
-			if protocol, ok := data["protocol"]; ok {
-				backendConfig.Protocol = protocol
-			}
-
-			// Parse health-check-port
-			if healthCheckPort, ok := data["health-check-port"]; ok {
-				if port, err := strconv.Atoi(healthCheckPort); err == nil {
-					backendConfig.HealthCheckPort = int32(port)
-				} else {
-					return fmt.Errorf("invalid health-check-port: %s", err)
-				}
-			}
-
-			configLoadBalancerBackend = append(configLoadBalancerBackend, backendConfig)
-		} else {
+		// Validate required fields and convert them
+		ip, ipExists := data["ip"]
+		if !ipExists {
 			return fmt.Errorf("each backend must specify an 'ip' field")
 		}
+		if err := validateIPAddress(ip); err != nil {
+			return fmt.Errorf("invalid IP format in backend configuration: %s", err)
+		}
+
+		sourcePort, err := getIntField(data, "source-port")
+		if err != nil {
+			return fmt.Errorf("source-port error: %s", err)
+		}
+
+		targetPort, err := getIntField(data, "target-port")
+		if err != nil {
+			return fmt.Errorf("target-port error: %s", err)
+		}
+
+		healthCheckPort, err := getIntField(data, "health-check-port")
+		if err != nil {
+			return fmt.Errorf("health-check-port error: %s", err)
+		}
+
+		protocol := data["protocol"]
+
+		// Construct backend config
+		backendConfig := civogo.LoadBalancerBackendConfig{
+			IP:              ip,
+			SourcePort:      int32(sourcePort),
+			TargetPort:      int32(targetPort),
+			HealthCheckPort: int32(healthCheckPort),
+			Protocol:        protocol,
+		}
+
+		configLoadBalancerBackend = append(configLoadBalancerBackend, backendConfig)
 	}
 
 	configLoadBalancer.Backends = configLoadBalancerBackend
@@ -333,4 +329,53 @@ func outputLoadBalancer(loadBalancer *civogo.LoadBalancer) {
 	default:
 		fmt.Printf("Created a new load balancer with name %s and ID %s\n", utility.Green(loadBalancer.Name), utility.Green(loadBalancer.ID))
 	}
+}
+
+func validateSessionAffinity() {
+	if lbSessionAffinity != "" && lbSessionAffinityConfigTimeout == 0 {
+		utility.Error(`
+Error: A session affinity timeout must be set when session affinity is enabled.
+
+Example:
+civo loadbalancer create my-loadbalancer --session-affinity "ClientIP" --session-affinity-config-timeout 10800
+`)
+		os.Exit(1)
+	}
+}
+
+func validateIPAddress(ip string) error {
+	if net.ParseIP(ip) == nil {
+		return fmt.Errorf("invalid IP address format: %s", ip)
+	}
+	return nil
+}
+
+func validateLoadBalancerCreation() {
+	validateSessionAffinity()
+}
+
+// Helper functions for parsing and error handling
+func parseBackendString(backend string) (map[string]string, error) {
+	data := make(map[string]string)
+	fields := strings.Split(backend, ",")
+	for _, field := range fields {
+		keyValue := strings.SplitN(field, ":", 2)
+		if len(keyValue) != 2 {
+			return nil, fmt.Errorf("invalid key-value pair in backend configuration: %s", field)
+		}
+		data[keyValue[0]] = keyValue[1]
+	}
+	return data, nil
+}
+
+func getIntField(data map[string]string, key string) (int, error) {
+	value, exists := data[key]
+	if !exists {
+		return 0, fmt.Errorf("missing required field '%s'", key)
+	}
+	intValue, err := strconv.Atoi(value)
+	if err != nil {
+		return 0, fmt.Errorf("invalid integer value for '%s': %s", key, value)
+	}
+	return intValue, nil
 }
