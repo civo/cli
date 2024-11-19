@@ -37,17 +37,6 @@ var loadBalancerCreateCmd = &cobra.Command{
 }
 
 func runLoadBalancerCreate(args []string) {
-	utility.EnsureCurrentRegion()
-
-	check, region, err := utility.CheckAvailability("iaas", common.RegionSet)
-	handleAvailabilityCheck(check, region, err)
-
-	client := getCivoClient()
-	configLoadBalancer := &civogo.LoadBalancerConfig{}
-
-	setLoadBalancerName(configLoadBalancer, args)
-	setLoadBalancerNetwork(client, configLoadBalancer)
-	setLoadBalancerOptions(configLoadBalancer)
 
 	// Validation: Ensure at least one of lbBackends or lbInstancePools is provided
 	if len(lbBackends) == 0 && len(lbInstancePools) == 0 {
@@ -64,6 +53,18 @@ Example with instance pools:
 	}
 
 	validateLoadBalancerCreation()
+
+	utility.EnsureCurrentRegion()
+
+	check, region, err := utility.CheckAvailability("iaas", common.RegionSet)
+	handleAvailabilityCheck(check, region, err)
+
+	client := getCivoClient()
+	configLoadBalancer := &civogo.LoadBalancerConfig{}
+
+	setLoadBalancerName(configLoadBalancer, args)
+	setLoadBalancerNetwork(client, configLoadBalancer)
+	setLoadBalancerOptions(configLoadBalancer)
 
 	if len(lbBackends) > 0 {
 		err := setLoadBalancerBackends(configLoadBalancer)
