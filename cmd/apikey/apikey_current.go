@@ -15,6 +15,8 @@ var apikeyCurrentCmd = &cobra.Command{
 	Short:   "Set the current API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		config.LoadConfig(config.GetConfigFilename())
+
 		index, err := apiKeyFind(args[0])
 		if err != nil {
 			utility.Error("Unable find the API key %s", err.Error())
@@ -26,6 +28,5 @@ var apikeyCurrentCmd = &cobra.Command{
 			config.SaveConfig()
 			fmt.Printf("Set the default API Key to be %s\n", utility.Green(index))
 		}
-
 	},
 }

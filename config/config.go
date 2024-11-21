@@ -37,26 +37,44 @@ var Filename string
 
 // ReadConfig reads in config file and ENV variables if set.
 func ReadConfig() {
-	filename, found := os.LookupEnv("CIVO_CONFIG")
-	if found {
-		Filename = filename
-	}
-
-	if Filename != "" {
-		loadConfig(Filename)
+	filename := GetConfigFilename()
+	if filename != "" {
+		LoadConfig(filename)
+		ProcessConfig(filename)
 	} else {
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		loadConfig(fmt.Sprintf("%s/%s", home, ".civo.json"))
+		fmt.Println("No configuration file found")
+		os.Exit(1)
 	}
 }
 
-func loadConfig(filename string) {
+// Function to retrieve the config filename from environment variable or default
+func GetConfigFilename() string {
+	if filename, found := os.LookupEnv("CIVO_CONFIG"); found {
+		return filename
+	}
+
+	homeDir := getHomeDir()
+	if homeDir != "" {
+		return fmt.Sprintf("%s/%s", homeDir, ".civo.json")
+	}
+
+	return ""
+}
+
+// Function to get the home directory of the current user
+func getHomeDir() string {
+	home, err := homedir.Dir()
+	if err != nil {
+		fmt.Println("Error retrieving home directory:", err)
+		os.Exit(1)
+	}
+
+	return home
+}
+
+func LoadConfig(filename string) {
 	var err error
-	err = checkConfigFile(filename)
+	err = CheckConfigFile(filename)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
@@ -87,6 +105,9 @@ func loadConfig(filename string) {
 			os.Exit(1)
 		}
 	}
+}
+
+func ProcessConfig(filename string) {
 	if Current.APIKeys == nil {
 		Current.APIKeys = map[string]string{}
 	}
@@ -97,11 +118,13 @@ func loadConfig(filename string) {
 	}
 
 	if Current.Meta.CurrentAPIKey != "" && Current.RegionToFeatures == nil {
-		Current.RegionToFeatures, err = regionsToFeature()
+		regionstoFeature, err := regionsToFeature()
 		if err != nil {
 			fmt.Printf("Error getting supported regions to feature %s \n", err)
 			os.Exit(1)
 		}
+
+		Current.RegionToFeatures = regionstoFeature
 
 		dataBytes, err := json.Marshal(Current)
 		if err != nil {
@@ -120,11 +143,13 @@ func loadConfig(filename string) {
 		Current.Meta.LatestReleaseCheck = time.Now()
 
 		if Current.Meta.CurrentAPIKey != "" {
-			Current.RegionToFeatures, err = regionsToFeature()
+			regionFeatures, err := regionsToFeature()
 			if err != nil {
 				fmt.Printf("Error getting supported regions to feature %s \n", err)
 				os.Exit(1)
 			}
+
+			Current.RegionToFeatures = regionFeatures
 		}
 
 		dataBytes, err := json.Marshal(Current)
@@ -140,7 +165,6 @@ func loadConfig(filename string) {
 		}
 		common.CheckVersionUpdate()
 	}
-
 }
 
 // SaveConfig saves the current configuration back out to a JSON file in
@@ -178,7 +202,7 @@ func SaveConfig() {
 
 }
 
-func checkConfigFile(filename string) error {
+func CheckConfigFile(filename string) error {
 	curr := Config{APIKeys: map[string]string{}}
 	curr.Meta = Metadata{
 		Admin:           false,
@@ -187,7 +211,8 @@ func checkConfigFile(filename string) error {
 		LastCmdExecuted: time.Now(),
 	}
 
-	if Current.Meta.CurrentAPIKey != "" {
+	currApiKey := Current.Meta.CurrentAPIKey
+	if currApiKey != "" {
 		var err error
 		curr.RegionToFeatures, err = regionsToFeature()
 		if err != nil {
@@ -227,6 +252,11 @@ func checkConfigFile(filename string) error {
 	if err := os.Chmod(filename, 0600); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
+	}
+
+	Current = curr
+	if currApiKey != "" {
+		Current.Meta.CurrentAPIKey = currApiKey
 	}
 
 	return nil
