@@ -59,8 +59,15 @@ Example with instance pools:
 	check, region, err := utility.CheckAvailability("iaas", common.RegionSet)
 	handleAvailabilityCheck(check, region, err)
 
-	client := getCivoClient()
-	configLoadBalancer := &civogo.LoadBalancerConfig{}
+	client, err := config.CivoAPIClient()
+	if common.RegionSet != "" {
+		client.Region = common.RegionSet
+	}
+	if err != nil {
+		utility.Error("Creating the connection to Civo's API failed with %s", err)
+		os.Exit(1)
+	}
+	configLoadBalancer := &civogo.LoadBalancerConfig{Region: client.Region}
 
 	setLoadBalancerName(configLoadBalancer, args)
 	setLoadBalancerNetwork(client, configLoadBalancer)
@@ -199,8 +206,8 @@ func setLoadBalancerBackends(configLoadBalancer *civogo.LoadBalancerConfig) erro
 	var configLoadBalancerBackend []civogo.LoadBalancerBackendConfig
 
 	for _, backend := range lbBackends {
-		// Replace semicolons with colons to match expected format
-		backend = strings.ReplaceAll(backend, ";", ":")
+		// Replace pipes with commas to match expected format
+		backend = strings.ReplaceAll(backend, "|", ",")
 
 		// Parse backend string into a key-value map
 		data, err := parseBackendString(backend)
@@ -254,15 +261,11 @@ func setLoadBalancerInstancePools(configLoadBalancer *civogo.LoadBalancerConfig)
 	var configLoadBalancerInstancePools []civogo.LoadBalancerInstancePoolConfig
 
 	for _, pool := range lbInstancePools {
-		// Replace semicolons with colons for consistency with GetStringMap's expected format
-		pool = strings.ReplaceAll(pool, ";", ":")
-
-		// Ensure that pool is non-empty
-		if pool == "" {
-			return fmt.Errorf("instance pool configuration cannot be empty")
+		// Parse the pool string using parseInstancePool
+		data, err := parseInstancePool(pool)
+		if err != nil {
+			return fmt.Errorf("failed to parse instance pool: %v\nInput was: %q", err, pool)
 		}
-
-		data, _ := SetStringMap(pool)
 
 		instancePoolConfig := civogo.LoadBalancerInstancePoolConfig{}
 
@@ -312,9 +315,11 @@ func setLoadBalancerInstancePools(configLoadBalancer *civogo.LoadBalancerConfig)
 			instancePoolConfig.HealthCheck.Path = healthCheckPath
 		}
 
+		// Append the parsed configuration
 		configLoadBalancerInstancePools = append(configLoadBalancerInstancePools, instancePoolConfig)
 	}
 
+	// Assign the parsed instance pools to the load balancer configuration
 	configLoadBalancer.InstancePools = configLoadBalancerInstancePools
 	return nil
 }
@@ -367,6 +372,33 @@ func parseBackendString(backend string) (map[string]string, error) {
 		data[keyValue[0]] = keyValue[1]
 	}
 	return data, nil
+}
+
+func parseInstancePool(input string) (map[string]string, error) {
+	// Split the input by "|"
+	entries := strings.Split(input, "|")
+	result := make(map[string]string)
+
+	for _, entry := range entries {
+		// Split each entry into key and value by the first "="
+		parts := strings.SplitN(entry, "=", 2)
+		if len(parts) != 2 {
+			return nil, fmt.Errorf("invalid field format: %s", entry)
+		}
+
+		key := strings.TrimSpace(parts[0])
+		value := strings.TrimSpace(parts[1])
+
+		// Ensure key and value are non-empty
+		if key == "" || value == "" {
+			return nil, fmt.Errorf("key or value missing in field: %s", entry)
+		}
+
+		// Assign to result map
+		result[key] = value
+	}
+
+	return result, nil
 }
 
 func getIntField(data map[string]string, key string) (int, error) {

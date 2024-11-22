@@ -87,8 +87,8 @@ If you wish to use a custom format, the available fields are:
 		if len(lb.Backends) > 0 {
 			fmt.Println("\nBackends:")
 			for _, backend := range lb.Backends {
-				fmt.Printf("- IP: %s, Protocol: %s, Source Port: %d, Target Port: %d\n",
-					backend.IP, backend.Protocol, backend.SourcePort, backend.TargetPort)
+				fmt.Printf("- IP: %s, Protocol: %s, Source Port: %d, Target Port: %d, Health Check Port: %d\n",
+					backend.IP, backend.Protocol, backend.SourcePort, backend.TargetPort, backend.HealthCheckPort)
 			}
 		} else {
 			fmt.Println("\nNo Backends Configured")

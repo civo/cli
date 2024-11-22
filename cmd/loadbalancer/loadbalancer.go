@@ -21,6 +21,15 @@ var LoadBalancerCmd = &cobra.Command{
 }
 
 func init() {
+	lbBackendExample := `Define backend configurations for the load balancer.
+Use this format:
+--backend "ip=10.0.0.1|protocol=http|source-port=80|target-port=8080|health-check-port=8080"
+Each field is separated by '|'`
+
+	lbInstancePoolExample := `Define instance pool configurations for the load balancer.
+Use this format:
+--instance-pool "tags=web,db|names=frontend,backend|protocol=http|source-port=80|target-port=8080|health-check.port=8080|health-check.path=/health"
+Each field is separated by '|'`
 
 	LoadBalancerCmd.AddCommand(loadBalancerListCmd)
 	LoadBalancerCmd.AddCommand(loadBalancerShowCmd)
@@ -38,8 +47,8 @@ func init() {
 	loadBalancerCreateCmd.Flags().IntVarP(&lbSessionAffinityConfigTimeout, "session-affinity-config-timeout", "t", 0, "optional, Specify the session affinity config timeout for the load balancer")
 	loadBalancerCreateCmd.Flags().StringVarP(&lbExistingFirewall, "existing-firewall", "v", "", "optional, ID of existing firewall to use")
 	loadBalancerCreateCmd.Flags().StringVarP(&lbCreateFirewall, "create-firewall", "c", "", "optional, semicolon-separated list of ports to open - leave blank for default (80;443) or you can use \"all\"")
-	loadBalancerCreateCmd.Flags().StringArrayVar(&lbBackends, "backend", []string{}, "Define backend configuration (e.g., 'ip=10.0.0.1;source-port=80;target-port=8080;protocol=http;health-check-port=8080')")
-	loadBalancerCreateCmd.Flags().StringSliceVar(&lbInstancePools, "instance-pool", []string{}, "Instance pool configurations for the load balancer")
+	loadBalancerCreateCmd.Flags().StringArrayVar(&lbBackends, "backend", []string{}, lbBackendExample)
+	loadBalancerCreateCmd.Flags().StringSliceVar(&lbInstancePools, "instance-pool", []string{}, lbInstancePoolExample)
 
 	// Balancer update subcommand
 	loadBalancerUpdateCmd.Flags().StringVarP(&lbNameUpdate, "name", "", "", "New name of the load balancer to be update")
