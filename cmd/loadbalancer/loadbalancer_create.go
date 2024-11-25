@@ -26,10 +26,10 @@ var loadBalancerCreateCmd = &cobra.Command{
     --create-firewall "80;443" \
     --algorithm "round_robin" \
     --session-affinity "ClientIP" \
-    --session-affinity-config-timeout 10800 \
+    --session-affinity-config-timeout 10800 TCP
     --external-traffic-policy "Local" \
-    --backend "ip:10.0.0.1,source-port:80,target-port:8080,protocol:http,health-check-port:8080,protocol:TCP" \
-    --backend "ip:10.0.0.2,source-port:80,target-port:8080,protocol:http,health-check-port:8080,protocol:TCP"`,
+    --backend "ip:10.0.0.1|source-port:80|target-port:8080|protocol:TCP|health-check-port:8080 \
+    --backend "ip:10.0.0.2|source-port:80|target-port:8080|protocol:TCP|health-check-port:8080`,
 	Short: "Create a new load balancer",
 	Run: func(cmd *cobra.Command, args []string) {
 		runLoadBalancerCreate(args)
