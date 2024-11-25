@@ -49,7 +49,7 @@ var loadBalancerUpdateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		configLoadBalancer := &civogo.LoadBalancerUpdateConfig{}
+		configLoadBalancer := &civogo.LoadBalancerUpdateConfig{Region: client.Region}
 
 		if lbNameUpdate != "" {
 			configLoadBalancer.Name = lbNameUpdate
@@ -156,7 +156,7 @@ var loadBalancerUpdateCmd = &cobra.Command{
 
 		loadBalancerUpdate, err := client.UpdateLoadBalancer(loadBalancer.ID, configLoadBalancer)
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("error while updating the LB: %s", err)
 			os.Exit(1)
 		}
 

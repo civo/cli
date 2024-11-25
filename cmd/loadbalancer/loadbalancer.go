@@ -28,8 +28,20 @@ Each field is separated by '|'`
 
 	lbInstancePoolExample := `Define instance pool configurations for the load balancer.
 Use this format:
---instance-pool "tags=web,db|names=frontend,backend|protocol=http|source-port=80|target-port=8080|health-check.port=8080|health-check.path=/health"
+--instance-pool "tags=web,db|names=frontend,backend|protocol=TCP|source-port=80|target-port=8080|health-check.port=8080|health-check.path=/health"
 Each field is separated by '|'`
+
+	lbUpdateBackendExample := `Update backend configurations for the load balancer.
+Use this format:
+--backends "ip=10.0.0.1;protocol=http;source-port=80;target-port=8080;health-check-port=8080"
+Each field is separated by ';'.
+If you need multiple backends, use the flag multiple times.`
+
+	lbUpdateInstancePoolExample := `Update instance pool configurations for the load balancer.
+Use this format:
+--instance-pools "tags=web,db;names=frontend,backend;protocol=TCP;source-port=80;target-port=8080;health-check.port=8080;health-check.path=/health"
+Each field is separated by ';'.
+If you need multiple instance pools, use the flag multiple times.`
 
 	LoadBalancerCmd.AddCommand(loadBalancerListCmd)
 	LoadBalancerCmd.AddCommand(loadBalancerShowCmd)
@@ -51,8 +63,8 @@ Each field is separated by '|'`
 	loadBalancerCreateCmd.Flags().StringSliceVar(&lbInstancePools, "instance-pool", []string{}, lbInstancePoolExample)
 
 	// Balancer update subcommand
-	loadBalancerUpdateCmd.Flags().StringVarP(&lbNameUpdate, "name", "", "", "New name of the load balancer to be update")
-	loadBalancerUpdateCmd.Flags().StringVarP(&lbAlgorithmUpdate, "algorithm", "a", "", "<round_robin | least_connections> - LoadBalancing algorithm to distribute traffic")
-	loadBalancerUpdateCmd.Flags().StringArrayVarP(&lbBackendsUpdate, "backends", "b", []string{}, "Specify a backend instance to associate with the load balancer. Takes ip, protocol(optional), source-port, target-port and health-check-port(optional) in the format --backend=ip:instance-ip,protocol:HTTP|TCP,source-port:80,target-port:31579,health-check-port:31580")
-	loadBalancerUpdateCmd.Flags().StringArrayVarP(&lbInstancePoolsUpdate, "instance-pools", "i", []string{}, "Specify instance pool configurations. Takes tags, names, protocol, source-port, target-port, health-check.port, health-check.path in the format 'tags=tag1,tag2;names=name1,name2;protocol=http;source-port=80;target-port=8080;health-check.port=8080;health-check.path=/health'")
+	loadBalancerUpdateCmd.Flags().StringVarP(&lbNameUpdate, "name", "", "", "New name of the load balancer to update (optional)")
+	loadBalancerUpdateCmd.Flags().StringVarP(&lbAlgorithmUpdate, "algorithm", "a", "", "<round_robin | least_connections> - LoadBalancing algorithm to distribute traffic (optional)")
+	loadBalancerUpdateCmd.Flags().StringArrayVarP(&lbBackendsUpdate, "backends", "b", []string{}, lbUpdateBackendExample)
+	loadBalancerUpdateCmd.Flags().StringArrayVarP(&lbInstancePoolsUpdate, "instance-pools", "i", []string{}, lbUpdateInstancePoolExample)
 }
