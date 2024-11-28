@@ -44,10 +44,10 @@ func runLoadBalancerCreate(args []string) {
 Error: You must provide at least one backend or instance pool for the load balancer.
 
 Example with backends:
-  civo loadbalancer create my-loadbalancer --backend "ip:10.0.0.1,source-port:80,target-port:8080,protocol:http,health-check-port:8080,protocol:TCP"
+  civo loadbalancer create my-loadbalancer --backend "ip:10.0.0.1|source-port:80|target-port:8080|protocol:TCP|health-check-port:8080"
 
 Example with instance pools:
-  civo loadbalancer create my-loadbalancer --instance-pool "tags:web,source-port:80,target-port:8080,protocol:http" --instance-pool "tags:db,source-port:80,target-port:3306,protocol:tcp"
+  civo loadbalancer create my-loadbalancer --instance-pool "tags=web|names=frontend|protocol=http|source-port=80|target-port=8080|health-check.port=8080|health-check.path=/health"
 `)
 		os.Exit(1)
 	}
