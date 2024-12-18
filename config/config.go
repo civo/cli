@@ -87,7 +87,6 @@ func loadConfig(filename string) {
 
 	// Skip API initialization if the flag is set
 	if !SkipAPIInitialization {
-		fmt.Println("HIII CURRENT META")
 		if Current.Meta.CurrentAPIKey != "" && Current.RegionToFeatures == nil {
 			Current.RegionToFeatures, err = regionsToFeature()
 			if err != nil {
