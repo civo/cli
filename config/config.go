@@ -11,6 +11,9 @@ import (
 	"github.com/mitchellh/go-homedir"
 )
 
+// SkipAPIInitialization can be set to true to bypass API-related initialization
+var SkipAPIInitialization bool
+
 // Config describes the configuration for Civo's CLI
 type Config struct {
 	APIKeys          map[string]string         `json:"apikeys"`
@@ -71,21 +74,7 @@ func loadConfig(filename string) {
 	jsonParser := json.NewDecoder(configFile)
 	err = jsonParser.Decode(&Current)
 	if err != nil {
-		Current.Meta.Admin = false
-		Current.Meta.DefaultRegion = "LON1"
-		Current.Meta.URL = "https://api.civo.com"
-		Current.Meta.LastCmdExecuted = time.Now()
-
-		fileContend, jsonErr := json.Marshal(Current)
-		if jsonErr != nil {
-			fmt.Printf("Error parsing the JSON")
-			os.Exit(1)
-		}
-		err = os.WriteFile(filename, fileContend, 0600)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		initializeDefaultConfig(filename)
 	}
 	if Current.APIKeys == nil {
 		Current.APIKeys = map[string]string{}
@@ -96,51 +85,58 @@ func loadConfig(filename string) {
 		Current.Meta.CurrentAPIKey = "tempKey"
 	}
 
-	if Current.Meta.CurrentAPIKey != "" && Current.RegionToFeatures == nil {
-		Current.RegionToFeatures, err = regionsToFeature()
-		if err != nil {
-			fmt.Printf("Error getting supported regions to feature %s \n", err)
-			os.Exit(1)
-		}
-
-		dataBytes, err := json.Marshal(Current)
-		if err != nil {
-			fmt.Printf("Error parsing JSON %s \n", err)
-			os.Exit(1)
-		}
-
-		err = os.WriteFile(filename, dataBytes, 0600)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-	}
-
-	if time.Since(Current.Meta.LatestReleaseCheck) > (24 * time.Hour) {
-		Current.Meta.LatestReleaseCheck = time.Now()
-
-		if Current.Meta.CurrentAPIKey != "" {
+	// Skip API initialization if the flag is set
+	if !SkipAPIInitialization {
+		fmt.Println("HIII CURRENT META")
+		if Current.Meta.CurrentAPIKey != "" && Current.RegionToFeatures == nil {
 			Current.RegionToFeatures, err = regionsToFeature()
 			if err != nil {
-				fmt.Printf("Error getting supported regions to feature %s \n", err)
+				fmt.Printf("Error getting supported regions to feature: %s\n", err)
 				os.Exit(1)
 			}
+
+			saveUpdatedConfig(filename)
 		}
 
-		dataBytes, err := json.Marshal(Current)
-		if err != nil {
-			fmt.Printf("Error parsing JSON %s \n", err)
-			os.Exit(1)
-		}
+		if time.Since(Current.Meta.LatestReleaseCheck) > (24 * time.Hour) {
+			Current.Meta.LatestReleaseCheck = time.Now()
 
-		err = os.WriteFile(filename, dataBytes, 0600)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			if Current.Meta.CurrentAPIKey != "" {
+				Current.RegionToFeatures, err = regionsToFeature()
+				if err != nil {
+					fmt.Printf("Error getting supported regions to feature: %s\n", err)
+					os.Exit(1)
+				}
+			}
+
+			saveUpdatedConfig(filename)
+			common.CheckVersionUpdate()
 		}
-		common.CheckVersionUpdate()
+	}
+}
+
+func saveUpdatedConfig(filename string) {
+	// Marshal the Current configuration into JSON
+	dataBytes, err := json.Marshal(Current)
+	if err != nil {
+		fmt.Printf("Error serializing configuration to JSON: %s\n", err)
+		os.Exit(1)
 	}
 
+	// Write the JSON data to the specified configuration file
+	err = os.WriteFile(filename, dataBytes, 0600)
+	if err != nil {
+		fmt.Printf("Error writing configuration to file '%s': %s\n", filename, err)
+		os.Exit(1)
+	}
+
+	// Set file permissions to be read-write for the owner only
+	if err := os.Chmod(filename, 0600); err != nil {
+		fmt.Printf("Error setting file permissions for '%s': %s\n", filename, err)
+		os.Exit(1)
+	}
+
+	fmt.Println("Configuration successfully updated.")
 }
 
 // SaveConfig saves the current configuration back out to a JSON file in
@@ -290,4 +286,40 @@ func CivoAPIClient() (*civogo.Client, error) {
 	cliClient.SetUserAgent(cliComponent)
 
 	return cliClient, nil
+}
+
+func initializeDefaultConfig(filename string) {
+	// Set up a default configuration
+	Current = Config{
+		APIKeys: make(map[string]string), // Initialize an empty API keys map
+		Meta: Metadata{
+			Admin:           false,
+			DefaultRegion:   "LON1", // Set a default region
+			URL:             "https://api.civo.com",
+			LastCmdExecuted: time.Now(), // Set the current time for the last executed command
+		},
+		RegionToFeatures: make(map[string]civogo.Feature), // Initialize an empty map for regions to features
+	}
+
+	// Marshal the default configuration to JSON
+	dataBytes, err := json.Marshal(Current)
+	if err != nil {
+		fmt.Printf("Error creating default configuration: %s\n", err)
+		os.Exit(1)
+	}
+
+	// Write the default configuration to the file
+	err = os.WriteFile(filename, dataBytes, 0600)
+	if err != nil {
+		fmt.Printf("Error saving default configuration to file '%s': %s\n", filename, err)
+		os.Exit(1)
+	}
+
+	// Set secure file permissions
+	if err := os.Chmod(filename, 0600); err != nil {
+		fmt.Printf("Error setting file permissions for '%s': %s\n", filename, err)
+		os.Exit(1)
+	}
+
+	fmt.Println("Default configuration initialized and saved.")
 }
