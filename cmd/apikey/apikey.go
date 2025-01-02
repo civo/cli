@@ -42,6 +42,8 @@ func apiKeyFind(search string) (string, error) {
 
 func init() {
 
+	config.SkipAPIInitialization = true
+
 	APIKeyCmd.AddCommand(apikeyListCmd)
 	APIKeyCmd.AddCommand(apikeySaveCmd)
 	APIKeyCmd.AddCommand(apikeyRemoveCmd)
