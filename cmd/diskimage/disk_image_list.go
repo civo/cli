@@ -2,6 +2,7 @@ package diskimage
 
 import (
 	"os"
+	"sort"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -60,6 +61,11 @@ Example: civo diskimage ls -o=custom -f=id,name`,
 				Distribution: v.Distribution,
 			})
 		}
+
+		// Sort the diskImageList by Name
+		sort.Slice(diskImageList, func(i, j int) bool {
+			return diskImageList[i].Name < diskImageList[j].Name
+		})
 
 		ow := utility.NewOutputWriter()
 
