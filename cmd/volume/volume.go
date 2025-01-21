@@ -24,7 +24,7 @@ func init() {
 	VolumeCmd.AddCommand(volumeCreateCmd)
 	VolumeCmd.AddCommand(volumeListCmd)
 	VolumeCmd.AddCommand(volumeRemoveCmd)
-	VolumeCmd.AddCommand(volumeResizeCmd)
+	// volumeCmd.AddCommand(volumeResizeCmd)
 	VolumeCmd.AddCommand(volumeAttachCmd)
 	VolumeCmd.AddCommand(volumeDetachCmd)
 
