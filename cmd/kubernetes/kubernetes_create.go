@@ -79,6 +79,12 @@ var kubernetesCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		if saveConfigKubernetes {
+			switchConfigKubernetes = true
+			mergeConfigKubernetes = true
+			waitKubernetes = true
+		}
+
 		if !waitKubernetes {
 			if saveConfigKubernetes || switchConfigKubernetes || mergeConfigKubernetes {
 				utility.Error("you can't use --save, --switch or --merge without --wait")
