@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/briandowns/spinner"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -39,6 +42,26 @@ var dbCredentialCmd = &cobra.Command{
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
+		}
+
+		// Add check for database status
+		if db.Status == "Pending" {
+			fmt.Printf("The DB %s is currently being provisioned, please wait...\n", utility.Green(db.Name))
+
+			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+			s.Writer = os.Stderr
+			s.Prefix = fmt.Sprintf("Waiting for database (%s)... ", db.Name)
+			s.Start()
+
+			for db.Status == "Pending" {
+				db, err = client.FindDatabase(args[0])
+				if err != nil {
+					utility.Error("%s", err)
+					os.Exit(1)
+				}
+				time.Sleep(2 * time.Second)
+			}
+			s.Stop()
 		}
 
 		connStr := strings.ToLower(db.Software) + "://" + db.DatabaseUserInfo[0].Username + ":" + db.DatabaseUserInfo[0].Password + "@" + db.PublicIPv4 + ":" + fmt.Sprintf("%d", db.DatabaseUserInfo[0].Port)
