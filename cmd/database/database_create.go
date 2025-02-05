@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -13,6 +15,8 @@ import (
 )
 
 var rulesFirewall string
+var waitDatabase bool
+
 var dbCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
@@ -154,6 +158,34 @@ var dbCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		var executionTime string
+
+		if waitDatabase {
+			startTime := utility.StartTime()
+
+			stillCreating := true
+			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+			s.Writer = os.Stderr
+			s.Prefix = fmt.Sprintf("Create a database called %s ", db.Name)
+			s.Start()
+
+			for stillCreating {
+				databaseCheck, err := client.FindDatabase(db.ID)
+				if err != nil {
+					utility.Error("Database %s", err)
+					os.Exit(1)
+				}
+				if databaseCheck.Status == "Ready" {
+					stillCreating = false
+					s.Stop()
+				} else {
+					time.Sleep(2 * time.Second)
+				}
+			}
+
+			executionTime = utility.TrackTime(startTime)
+		}
+
 		ow := utility.NewOutputWriterWithMap(map[string]string{"id": db.ID, "name": db.Name})
 		switch common.OutputFormat {
 		case "json":
@@ -161,7 +193,11 @@ var dbCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Database (%s) with ID %s has been created\n", utility.Green(db.Name), db.ID)
+			if executionTime != "" {
+				fmt.Printf("Database %s (%s) has been created in %s\n", utility.Green(db.Name), db.ID, executionTime)
+			} else {
+				fmt.Printf("Database (%s) with ID %s has been created\n", utility.Green(db.Name), db.ID)
+			}
 		}
 	},
 }
