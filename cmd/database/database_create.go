@@ -22,7 +22,7 @@ var dbCreateCmd = &cobra.Command{
 	Aliases: []string{"new", "add"},
 	Example: "civo db create <DATABASE-NAME> --size <SIZE> --software <SOFTWARE_NAME> --version <SOFTWARE_VERSION>",
 	Short:   "Create a new database",
-	Args:    cobra.MinimumNArgs(1),
+	Args:    cobra.MinimumNArgs(0), // Change from 1 to 0 to make the name argument optional
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -133,15 +133,26 @@ var dbCreateCmd = &cobra.Command{
 
 		if !softwareVersionIsValid {
 			if softwareVersion == "" {
-				utility.Error(fmt.Sprintf("No version specified for %s. Please provide a version using --version flag. For example, civo database create db-psql --software psql --version 14", canonicalSoftwareName))
+				utility.Error("No version specified for %s. Please provide a version using --version flag. For example, civo database create db-psql --software psql --version 14", canonicalSoftwareName)
 			} else {
-				utility.Error("The provided software version is not valid. Please check the available versions for the specified software.")
+				utility.Error("The provided software version is not valid. Please check the available versions for the specified software")
 			}
 			os.Exit(1)
 		}
 
+		var dbName string
+		if len(args) > 0 {
+			if utility.ValidNameLength(args[0]) {
+				utility.Warning("the database name cannot be longer than 63 characters")
+				os.Exit(1)
+			}
+			dbName = args[0]
+		} else {
+			dbName = utility.RandomName()
+		}
+
 		configDB := civogo.CreateDatabaseRequest{
-			Name:            args[0],
+			Name:            dbName,
 			Size:            size,
 			NetworkID:       network.ID,
 			Nodes:           nodes,
