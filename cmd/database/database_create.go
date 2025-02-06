@@ -135,7 +135,7 @@ var dbCreateCmd = &cobra.Command{
 			if softwareVersion == "" {
 				utility.Error("No version specified for %s. Please provide a version using --version flag. For example, civo database create db-psql --software psql --version 14", canonicalSoftwareName)
 			} else {
-				utility.Error("The provided software version is not valid. Please check the available versions for the specified software")
+				utility.Error("The provided software version is not valid. Please check the available versions by typing civo db engine")
 			}
 			os.Exit(1)
 		}
