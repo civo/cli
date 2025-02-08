@@ -15,6 +15,7 @@ import (
 )
 
 var kuberneteList []utility.ObjecteList
+var removeKubernetesConfig bool
 var kubernetesRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -85,6 +86,9 @@ var kubernetesRemoveCmd = &cobra.Command{
 
 			for _, v := range kuberneteList {
 				_, err = client.DeleteKubernetesCluster(v.ID)
+				if removeKubernetesConfig {
+					utility.RemoveClusterConfig(v.Name)
+				}
 				if err != nil {
 					utility.Error("error deleting the kubernetes cluster: %s", err)
 					os.Exit(1)

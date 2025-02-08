@@ -91,8 +91,6 @@ func init() {
 	kubernetesCreateCmd.Flags().StringVarP(&removeapplications, "remove-applications", "r", "", "optional, remove default application names shown by running  'civo kubernetes applications ls'")
 	kubernetesCreateCmd.Flags().BoolVarP(&waitKubernetes, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE")
 	kubernetesCreateCmd.Flags().BoolVarP(&saveConfigKubernetes, "save", "", false, "save the config")
-	kubernetesCreateCmd.Flags().BoolVarP(&mergeConfigKubernetes, "merge", "m", false, "merge the config with existing kubeconfig if it already exists.")
-	kubernetesCreateCmd.Flags().BoolVarP(&switchConfigKubernetes, "switch", "", false, "switch context to newly-created cluster")
 	kubernetesCreateCmd.Flags().StringVarP(&existingFirewall, "existing-firewall", "e", "", "optional, ID of existing firewall to use")
 	kubernetesCreateCmd.Flags().StringVarP(&rulesFirewall, "firewall-rules", "u", "default", "optional, can be used if the --create-firewall flag is set, semicolon-separated list of ports to open")
 	kubernetesCreateCmd.Flags().BoolVarP(&createFirewall, "create-firewall", "c", false, "optional, create a firewall for the cluster with all open ports")
@@ -147,6 +145,8 @@ func init() {
 	KubernetesCmd.AddCommand(kubernetesUpdateCmd)
 	kubernetesUpdateCmd.Flags().StringVarP(&firewall, "firewall", "", "", "the Name or ID of the firewall.")
 	kubernetesUpdateCmd.MarkFlagRequired("firewall") // At present, only the firewall can be updated, this can be changed to not required if more options are added in the future.
+
+	kubernetesRemoveCmd.Flags().BoolVarP(&removeKubernetesConfig, "remove", "r", false, "remove the cluster configuration from kubeconfig if found")
 }
 
 func getKubernetesList(value string) []string {

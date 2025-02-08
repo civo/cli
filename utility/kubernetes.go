@@ -86,6 +86,76 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, switchContext bo
 	return data, nil
 }
 
+// Removes kubeconfig context of particular cluster if found
+func RemoveClusterConfig(clusterName string) error {
+	isWindows := CheckOS() == "windows"
+	var clustersList *exec.Cmd
+	if isWindows {
+		clustersList = exec.Command("powershell", "kubectl", "config", "get-clusters")
+	} else {
+		clustersList = exec.Command("kubectl", "config", "get-clusters")
+	}
+	output, err := clustersList.Output()
+	if err != nil {
+		return fmt.Errorf("failed to get clusters from kubeconfig: %v", err)
+	}
+
+	if !strings.Contains(string(output), clusterName) {
+		fmt.Printf("Cluster %s is already not present in kubeconfig, exiting...\n", clusterName)
+		return nil
+	}
+
+	var currentContextCmd *exec.Cmd
+	if isWindows {
+		currentContextCmd = exec.Command("powershell", "kubectl", "config", "current-context")
+	} else {
+		currentContextCmd = exec.Command("kubectl", "config", "current-context")
+	}
+	currentContextOutput, err := currentContextCmd.Output()
+	if err != nil {
+		fmt.Println("Error getting current context:", err)
+	} else {
+		currentContext := strings.TrimSpace(string(currentContextOutput))
+		if currentContext == clusterName {
+			fmt.Println("Current context is the same as the cluster being removed. Unsetting context.")
+			var cmd *exec.Cmd
+			if isWindows {
+				cmd = exec.Command("powershell", "kubectl", "config", "unset", "current-context")
+			} else {
+				cmd = exec.Command("kubectl", "config", "unset", "current-context")
+			}
+			if err := cmd.Run(); err != nil {
+				return fmt.Errorf("failed to unset current context %s: %v", clusterName, err)
+			}
+		}
+	}
+
+	var commands []*exec.Cmd
+
+	if isWindows {
+		commands = []*exec.Cmd{
+			exec.Command("powershell", "kubectl", "config", "delete-cluster", clusterName),
+			exec.Command("powershell", "kubectl", "config", "unset", fmt.Sprintf("users.%s", clusterName)),
+			exec.Command("powershell", "kubectl", "config", "unset", fmt.Sprintf("contexts.%s", clusterName)),
+		}
+	} else {
+		commands = []*exec.Cmd{
+			exec.Command("kubectl", "config", "delete-cluster", clusterName),
+			exec.Command("kubectl", "config", "unset", fmt.Sprintf("users.%s", clusterName)),
+			exec.Command("kubectl", "config", "unset", fmt.Sprintf("contexts.%s", clusterName)),
+		}
+	}
+
+	for _, cmd := range commands {
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("failed to execute command %v: %v", cmd.Args, err)
+		}
+	}
+
+	fmt.Printf("Successfully removed cluster %s from kubeconfig\n", clusterName)
+	return nil
+}
+
 // Generates config files give the path to file: string and the data: []byte
 func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bool, switchConfig bool, clusterName string) error {
 	if !suppressMessage {

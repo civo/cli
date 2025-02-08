@@ -764,13 +764,11 @@ You can create a cluster by running `civo kubernetes create` with a cluster name
 -e, --existing-firewall string     optional, ID of existing firewall to use
 -u, --firewall-rules string        optional, can be used if the --create-firewall flag is set, semicolon-separated list of ports to open (default "default")
 -h, --help                         help for create
--m, --merge                        merge the config with existing kubeconfig if it already exists.
 -t, --network string               the name of the network to use in the creation (default "default")
 -n, --nodes int                    the number of nodes to create (the master also acts as a node). (default 3)
 -r, --remove-applications string   optional, remove default application names shown by running  'civo kubernetes applications ls'
- --save                         save the config
+ --save                         save the config, merge into kubeconfig and switch automatically to the new cluster
 -s, --size string                  the size of nodes to create. (default "g4s.kube.medium")
- --switch                       switch context to newly-created cluster
 -v, --version string               the k3s version to use on the cluster. Defaults to the latest. Example - 'civo k3s create --version 1.21.2+k3s1' (default "latest")
 -w, --wait                         a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the cluster to be ACTIVE
 ```
@@ -878,10 +876,10 @@ The command uses the application name as displayed by running `civo kubernetes a
 
 #### Removing the cluster
 
-If you're completely finished with a cluster you can delete it with:
+If you're completely finished with a cluster you can delete it with `civo kubernetes remove`
 
-```sh
-civo kubernetes remove my-first-cluster
+```bash
+-r, --remove          optional, removes cluster contexts from kubeconfig if found
 ```
 
 ## Kubernetes Applications

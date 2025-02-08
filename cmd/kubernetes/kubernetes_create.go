@@ -17,7 +17,7 @@ import (
 
 var numTargetNodes int
 var rulesFirewall string
-var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes, createFirewall bool
+var waitKubernetes, saveConfigKubernetes, createFirewall bool
 var kubernetesVersion, targetNodesSize, clusterName, clusterType, applications, removeapplications, networkID, existingFirewall, cniPlugin string
 var kubernetesCluster *civogo.KubernetesCluster
 
@@ -77,22 +77,6 @@ var kubernetesCreateCmd = &cobra.Command{
 			}
 			utility.Error("You can't create a cluster with the specified size %s. Possible values: %s", targetNodesSize, k8sSize)
 			os.Exit(1)
-		}
-
-		if !waitKubernetes {
-			if saveConfigKubernetes || switchConfigKubernetes || mergeConfigKubernetes {
-				utility.Error("you can't use --save, --switch or --merge without --wait")
-				os.Exit(1)
-			}
-		} else {
-			if mergeConfigKubernetes && !saveConfigKubernetes {
-				utility.Error("you can't use --merge without --save")
-				os.Exit(1)
-			}
-			if switchConfigKubernetes && !saveConfigKubernetes {
-				utility.Error("you can't use --switch without --save")
-				os.Exit(1)
-			}
 		}
 
 		if len(args) > 0 {
@@ -191,69 +175,29 @@ var kubernetesCreateCmd = &cobra.Command{
 			configKubernetes.FirewallRule = ""
 		}
 
-		if !mergeConfigKubernetes && saveConfigKubernetes {
-			if utility.UserConfirmedOverwrite("kubernetes config", common.DefaultYes) {
-				kubernetesCluster, err = client.NewKubernetesClusters(configKubernetes)
-				if err != nil {
-					if err == civogo.QuotaLimitReachedError {
-						utility.Info("Please consider deleting dangling volumes, if any. To check if you have any dangling volumes, run `civo volume ls --dangling`")
-						os.Exit(1)
-					}
-					utility.Error("%s", err)
-					os.Exit(1)
-				}
-			} else {
-				fmt.Println("Operation aborted.")
+		kubernetesCluster, err = client.NewKubernetesClusters(configKubernetes)
+		if err != nil {
+			if err == civogo.QuotaLimitReachedError {
+				utility.Info("Please consider deleting dangling volumes, if any. To check if you have any dangling volumes, run `civo volume ls --dangling`")
 				os.Exit(1)
 			}
-		} else {
-			kubernetesCluster, err = client.NewKubernetesClusters(configKubernetes)
-			if err != nil {
-				if err == civogo.QuotaLimitReachedError {
-					utility.Info("Please consider deleting dangling volumes, if any. To check if you have any dangling volumes, run `civo volume ls --dangling`")
-					os.Exit(1)
-				}
-				utility.Error("%s", err)
-				os.Exit(1)
-			}
+			utility.Error("%s", err)
+			os.Exit(1)
 		}
 
 		var executionTime string
 
-		if waitKubernetes {
-			startTime := utility.StartTime()
-
-			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
-			s.Prefix = fmt.Sprintf("Creating a %s node k3s cluster of %s instances called %s... ", strconv.Itoa(kubernetesCluster.NumTargetNode), kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
-			s.Start()
-
-			for stillCreating {
-				kubernetesCheck, err := client.FindKubernetesCluster(kubernetesCluster.ID)
-				if err != nil {
-					utility.Error("Kubernetes %s", err)
-					os.Exit(1)
-				}
-				if kubernetesCheck.Ready {
-					stillCreating = false
-					s.Stop()
-				} else {
-					time.Sleep(2 * time.Second)
-				}
-			}
-
-			executionTime = utility.TrackTime(startTime)
-		}
-
-		if saveConfigKubernetes {
+		if !saveConfigKubernetes && waitKubernetes {
+			executionTime = wait(client)
+		} else if saveConfigKubernetes {
+			executionTime = wait(client)
 			kube, err := client.FindKubernetesCluster(kubernetesCluster.ID)
 			if err != nil {
 				utility.Error("Kubernetes %s", err)
 				os.Exit(1)
 			}
 
-			err = utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfigKubernetes, switchConfigKubernetes, kube.Name)
+			err = utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, true, true, kube.Name)
 			if err != nil {
 				utility.Error("Saving the cluster config failed with %s", err)
 				os.Exit(1)
@@ -302,4 +246,31 @@ func InstallApps(defaultApps []string, apps, removeApps string) []string {
 	}
 
 	return appsToInstall
+}
+
+func wait(client *civogo.Client) string {
+	startTime := utility.StartTime()
+
+	stillCreating := true
+	s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+	s.Writer = os.Stderr
+	s.Prefix = fmt.Sprintf("Creating a %s node k3s cluster of %s instances called %s... ", strconv.Itoa(kubernetesCluster.NumTargetNode), kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
+	s.Start()
+
+	for stillCreating {
+		kubernetesCheck, err := client.FindKubernetesCluster(kubernetesCluster.ID)
+		if err != nil {
+			utility.Error("Kubernetes %s", err)
+			os.Exit(1)
+		}
+		if kubernetesCheck.Ready {
+			stillCreating = false
+			s.Stop()
+		} else {
+			time.Sleep(2 * time.Second)
+		}
+	}
+
+	executionTime := utility.TrackTime(startTime)
+	return executionTime
 }
