@@ -71,6 +71,7 @@ func init() {
 	KubernetesCmd.AddCommand(kubernetesUpgradeCmd)
 	KubernetesCmd.AddCommand(kubernetesRemoveCmd)
 	KubernetesCmd.AddCommand(kubernetesRecycleCmd)
+	KubernetesCmd.AddCommand(kubernetesUpdateKubeconfigCmd)
 
 	home, err := os.UserHomeDir()
 	if err != nil {
