@@ -22,7 +22,7 @@ var dbCreateCmd = &cobra.Command{
 	Aliases: []string{"new", "add"},
 	Example: "civo db create <DATABASE-NAME> --size <SIZE> --software <SOFTWARE_NAME> --version <SOFTWARE_VERSION>",
 	Short:   "Create a new database",
-	Args:    cobra.MinimumNArgs(0), // Change from 1 to 0 to make the name argument optional
+	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -96,9 +96,11 @@ var dbCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		// Set default software to MySQL if not specified
+		if software == "" {
+			software = "mysql"
+		}
 		software = strings.ToLower(software)
-		softwareIsValid := false
-		softwareVersionIsValid := false
 
 		validSoftwares := map[string][]string{
 			"mysql":      {"mysql"},
@@ -111,17 +113,13 @@ var dbCreateCmd = &cobra.Command{
 		}
 
 		canonicalSoftwareName := ""
+		softwareIsValid := false
 		for swName, aliases := range validSoftwares {
 			for _, alias := range aliases {
 				if alias == software {
 					softwareIsValid = true
 					canonicalSoftwareName = apiSoftwareNames[swName]
-					for _, v := range dbVersions[canonicalSoftwareName] {
-						if v.SoftwareVersion == softwareVersion {
-							softwareVersionIsValid = true
-							break
-						}
-					}
+					break
 				}
 			}
 		}
@@ -131,28 +129,33 @@ var dbCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if !softwareVersionIsValid {
-			if softwareVersion == "" {
-				utility.Error("No version specified for %s. Please provide a version using --version flag. For example, civo database create db-psql --software psql --version 14", canonicalSoftwareName)
+		// If version is not specified, get the latest version
+		if softwareVersion == "" {
+			versions := dbVersions[canonicalSoftwareName]
+			if len(versions) > 0 {
+				// Assuming versions are sorted with latest first
+				softwareVersion = versions[0].SoftwareVersion
 			} else {
-				utility.Error("The provided software version is not valid. Please check the available versions by typing civo db engine")
-			}
-			os.Exit(1)
-		}
-
-		var dbName string
-		if len(args) > 0 {
-			if utility.ValidNameLength(args[0]) {
-				utility.Warning("the database name cannot be longer than 63 characters")
+				utility.Error("No versions available for %s", canonicalSoftwareName)
 				os.Exit(1)
 			}
-			dbName = args[0]
 		} else {
-			dbName = utility.RandomName()
+			// Verify the specified version is valid
+			versionValid := false
+			for _, v := range dbVersions[canonicalSoftwareName] {
+				if v.SoftwareVersion == softwareVersion {
+					versionValid = true
+					break
+				}
+			}
+			if !versionValid {
+				utility.Error("The provided software version is not valid. Please check the available versions for the specified software.")
+				os.Exit(1)
+			}
 		}
 
 		configDB := civogo.CreateDatabaseRequest{
-			Name:            dbName,
+			Name:            args[0],
 			Size:            size,
 			NetworkID:       network.ID,
 			Nodes:           nodes,
@@ -205,9 +208,9 @@ var dbCreateCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			if executionTime != "" {
-				fmt.Printf("Database %s (%s) has been created in %s\n", utility.Green(db.Name), db.ID, executionTime)
+				fmt.Printf("Database %s (%s) with ID %s using %s with version %s has been created in %s\n", utility.Green(db.Name), db.ID, db.Software, db.SoftwareVersion, executionTime)
 			} else {
-				fmt.Printf("Database (%s) with ID %s has been created\n", utility.Green(db.Name), db.ID)
+				fmt.Printf("Database (%s) with ID %s using %s with version %s has been created\n", utility.Green(db.Name), db.ID, db.Software, db.SoftwareVersion)
 			}
 		}
 	},

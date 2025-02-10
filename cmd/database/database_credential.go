@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/briandowns/spinner"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -41,40 +44,69 @@ var dbCredentialCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriter()
+		// Add check for database status
+		if db.Status == "Pending" {
+			fmt.Printf("The DB %s is currently being provisioned, please wait...\n", utility.Green(db.Name))
 
-		if !connectionString {
-			for _, userInfo := range db.DatabaseUserInfo {
+			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+			s.Writer = os.Stderr
+			s.Prefix = fmt.Sprintf("Waiting for database (%s)... ", db.Name)
+			s.Start()
 
-				ow.StartLine()
-				fmt.Println()
-				ow.AppendDataWithLabel("database_id", utility.TrimID(db.ID), "Database ID")
-				ow.AppendDataWithLabel("name", db.Name, "Name")
-				ow.AppendDataWithLabel("host", db.PublicIPv4, "Host")
-				ow.AppendDataWithLabel("port", fmt.Sprintf("%d", userInfo.Port), "Port")
-				ow.AppendDataWithLabel("username", userInfo.Username, "Username")
-				ow.AppendDataWithLabel("password", userInfo.Password, "Password")
-
-				if common.OutputFormat == "json" || common.OutputFormat == "custom" {
-					ow.AppendDataWithLabel("firewall_id", db.FirewallID, "Firewall ID")
-					ow.AppendDataWithLabel("network_id", db.NetworkID, "Network ID")
-					ow.AppendDataWithLabel("database_id", db.ID, "Database ID")
-
+			for db.Status == "Pending" {
+				db, err = client.FindDatabase(args[0])
+				if err != nil {
+					utility.Error("%s", err)
+					os.Exit(1)
 				}
+				time.Sleep(2 * time.Second)
 			}
-		} else {
+			s.Stop()
+		}
+
+		connStr := strings.ToLower(db.Software) + "://" + db.DatabaseUserInfo[0].Username + ":" + db.DatabaseUserInfo[0].Password + "@" + db.PublicIPv4 + ":" + fmt.Sprintf("%d", db.DatabaseUserInfo[0].Port)
+
+		if connectionString {
 			for _, user := range db.DatabaseUserInfo {
 				fmt.Printf("%s://%s:%s@%s:%d\n", strings.ToLower(db.Software), user.Username, user.Password, db.PublicIPv4, user.Port)
 			}
+			return
+		}
+		ow := utility.NewOutputWriter()
+		ow.StartLine()
+
+		ow.AppendDataWithLabel("id", utility.TrimID(db.ID), "ID")
+		ow.AppendDataWithLabel("name", db.Name, "Name")
+		ow.AppendDataWithLabel("host", db.PublicIPv4, "Host")
+		ow.AppendDataWithLabel("connection-string", connStr, "Connection String")
+
+		// Show credentials for each user
+		for i, userInfo := range db.DatabaseUserInfo {
+			if i == 0 {
+				// For the first user, show credentials directly
+				ow.AppendDataWithLabel("port", fmt.Sprintf("%d", userInfo.Port), "Port")
+				ow.AppendDataWithLabel("username", userInfo.Username, "Username")
+				ow.AppendDataWithLabel("password", userInfo.Password, "Password")
+			} else {
+				// For additional users, add a numbered suffix
+				ow.AppendDataWithLabel(fmt.Sprintf("port_%d", i+1), fmt.Sprintf("%d", userInfo.Port), fmt.Sprintf("Port %d", i+1))
+				ow.AppendDataWithLabel(fmt.Sprintf("username_%d", i+1), userInfo.Username, fmt.Sprintf("Username %d", i+1))
+				ow.AppendDataWithLabel(fmt.Sprintf("password_%d", i+1), userInfo.Password, fmt.Sprintf("Password %d", i+1))
+			}
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
+		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
+			ow.AppendDataWithLabel("firewall_id", db.FirewallID, "Firewall ID")
+			ow.AppendDataWithLabel("network_id", db.NetworkID, "Network ID")
+			ow.AppendDataWithLabel("database_id", db.ID, "Database ID")
+
+			if common.OutputFormat == "json" {
+				ow.WriteSingleObjectJSON(common.PrettySet)
+			} else {
+				ow.WriteCustomOutput(common.OutputFields)
+			}
+		} else {
+			ow.WriteKeyValues()
 		}
 	},
 }
