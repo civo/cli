@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
@@ -15,6 +16,8 @@ import (
 )
 
 var kuberneteList []utility.ObjecteList
+var deleteKubeconfigContext bool
+
 var kubernetesRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -84,6 +87,15 @@ var kubernetesRemoveCmd = &cobra.Command{
 		if utility.UserConfirmedDeletion(fmt.Sprintf("Kubernetes %s", pluralize.Pluralize(len(kuberneteList), "cluster")), common.DefaultYes, strings.Join(kubernetesNameList, ", ")) {
 
 			for _, v := range kuberneteList {
+				if deleteKubeconfigContext {
+					// Try to remove the kubeconfig context before deleting the cluster
+					cmd := exec.Command("kubectl", "config", "delete-context", strings.ToLower(v.Name))
+					if err := cmd.Run(); err != nil {
+						fmt.Printf("Note: Kubeconfig context for cluster %s was not found\n", utility.Green(v.Name))
+					} else {
+						fmt.Printf("Successfully removed kubeconfig context for cluster %s\n", utility.Green(v.Name))
+					}
+				}
 				_, err = client.DeleteKubernetesCluster(v.ID)
 				if err != nil {
 					utility.Error("error deleting the kubernetes cluster: %s", err)
