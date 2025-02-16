@@ -208,9 +208,9 @@ var dbCreateCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			if executionTime != "" {
-				fmt.Printf("Database %s (%s) with ID %s using %s with version %s has been created in %s\n", utility.Green(db.Name), db.ID, db.Software, db.SoftwareVersion, executionTime)
+				fmt.Printf("Database (%s) type %s version %s with ID %s and size %s has been created in %s\nTo get fetch the database credentials use the command:\n\ncivo database credentials %s\n", utility.Green(db.Name), strings.ToLower(db.Software), db.SoftwareVersion, db.ID, db.Size, executionTime, db.Name)
 			} else {
-				fmt.Printf("Database (%s) with ID %s using %s with version %s has been created\n", utility.Green(db.Name), db.ID, db.Software, db.SoftwareVersion)
+				fmt.Printf("Database (%s) type %s version %s with ID %s and size %s has been created\nTo get fetch the database credentials use the command:\n\ncivo database credentials %s\n", utility.Green(db.Name), strings.ToLower(db.Software), db.SoftwareVersion, db.ID, db.Size, db.Name)
 			}
 		}
 	},
