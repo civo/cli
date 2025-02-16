@@ -112,6 +112,8 @@ func init() {
 	kubernetesRecycleCmd.Flags().StringVarP(&kubernetesNode, "node", "n", "", "the node that needs to be recycled.")
 	kubernetesRecycleCmd.MarkFlagRequired("node")
 
+	kubernetesRemoveCmd.Flags().BoolVarP(&deleteKubeconfigContext, "delete-kubeconfig-context", "d", false, "delete the kubeconfig context for the cluster")
+
 	// Kubernetes Applications
 	KubernetesCmd.AddCommand(kubernetesApplicationsCmd)
 	kubernetesApplicationsCmd.AddCommand(kubernetesAppListCmd)
