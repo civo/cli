@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/pkg/browser"
@@ -54,6 +55,16 @@ var instanceVncCmd = &cobra.Command{
 		utility.Info("VNC has been successfully enabled for instance: %s", instance.Hostname)
 		utility.Info("VNC URL: %s", vnc.URI)
 		utility.Info("We're preparing the VNC Console Access. This may take a while...")
+
+		// exchange apikey with a valid JWT (accessing the VNC url is allowed only via JWTs)
+		exchangeTokenResp, err := client.ExchangeAuthToken(&civogo.ExchangeAuthTokenRequest{})
+		if err != nil {
+			utility.Error("Failed to exchange your apikey with a valid Civo JWT '%s': %s", instance.Hostname, err)
+			os.Exit(1)
+		}
+
+		// chain the bearer token to the URI to let it be opened via the default browser:
+		vnc.URI = fmt.Sprintf("%s&token=%s", vnc.URI, exchangeTokenResp.AccessToken)
 
 		err = waitEndpointReady(vnc.URI)
 		if err != nil {
