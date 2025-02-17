@@ -91,9 +91,9 @@ var kubernetesRemoveCmd = &cobra.Command{
 					// Try to remove the kubeconfig context before deleting the cluster
 					cmd := exec.Command("kubectl", "config", "delete-context", strings.ToLower(v.Name))
 					if err := cmd.Run(); err != nil {
-						fmt.Printf("Note: Kubeconfig context for cluster %s was not found\n", utility.Green(v.Name))
+						utility.Printf("Note: Kubeconfig context for cluster %s was not found\n", utility.Green(v.Name))
 					} else {
-						fmt.Printf("Successfully removed kubeconfig context for cluster %s\n", utility.Green(v.Name))
+						utility.Printf("Successfully removed kubeconfig context for cluster %s\n", utility.Green(v.Name))
 					}
 				}
 				_, err = client.DeleteKubernetesCluster(v.ID)
@@ -120,10 +120,10 @@ var kubernetesRemoveCmd = &cobra.Command{
 				}
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The Kubernetes %s (%s) has been deleted\n", pluralize.Pluralize(len(kuberneteList), "cluster"), utility.Green(strings.Join(kubernetesNameList, ", ")))
+				utility.Printf("The Kubernetes %s (%s) has been deleted\n", pluralize.Pluralize(len(kuberneteList), "cluster"), utility.Green(strings.Join(kubernetesNameList, ", ")))
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Println("Operation aborted.")
 		}
 	},
 }

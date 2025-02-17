@@ -2,7 +2,6 @@ package apikey
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"runtime"
 	"strings"
@@ -61,7 +60,7 @@ var apikeySaveCmd = &cobra.Command{
 
 		if len(args) == 0 && !loadAPIKeyFromEnv {
 			reader := bufio.NewReader(os.Stdin)
-			fmt.Printf("Enter a nice name for this account/API Key: ")
+			utility.Printf("Enter a nice name for this account/API Key: ")
 
 			name, err = reader.ReadString('\n')
 			if err != nil {
@@ -73,7 +72,7 @@ var apikeySaveCmd = &cobra.Command{
 			} else {
 				name = strings.TrimSuffix(name, "\n")
 			}
-			fmt.Printf("Enter the API key: ")
+			utility.Printf("Enter the API key: ")
 			apikeyBytes, err := term.ReadPassword(int(syscall.Stdin))
 			if err != nil {
 				utility.Error("Error reading api key %v", err)
@@ -140,7 +139,7 @@ var apikeySaveCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Saved the API Key %s\n", utility.Green(name))
+			utility.Printf("Saved the API Key %s\n", utility.Green(name))
 		}
 
 	},

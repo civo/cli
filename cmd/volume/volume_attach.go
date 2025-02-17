@@ -102,7 +102,7 @@ var volumeAttachCmd = &cobra.Command{
 
 		if attachAtBoot {
 			out := utility.Yellow(fmt.Sprintf("To use the volume %s you need reboot the instance %s once the volume is in attaching/detaching state", volume.Name, instance.Hostname))
-			fmt.Println(out)
+			utility.Println(out)
 		}
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"id": volume.ID, "name": volume.Name})
@@ -113,7 +113,7 @@ var volumeAttachCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The volume called %s with ID %s was attached to the instance %s\n", utility.Green(volume.Name), utility.Green(volume.ID), utility.Green(instance.Hostname))
+			utility.Printf("The volume called %s with ID %s was attached to the instance %s\n", utility.Green(volume.Name), utility.Green(volume.ID), utility.Green(instance.Hostname))
 		}
 	},
 }

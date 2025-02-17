@@ -1,7 +1,6 @@
 package teams
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -44,7 +43,7 @@ var teamsCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Created a team called %s with team ID %s\n", utility.Green(team.Name), utility.Green(team.ID))
+			utility.Printf("Created a team called %s with team ID %s\n", utility.Green(team.Name), utility.Green(team.ID))
 		}
 	},
 }

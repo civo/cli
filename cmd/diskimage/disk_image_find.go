@@ -1,11 +1,12 @@
 package diskimage
 
 import (
+	"os"
+
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var diskImageFindCmd = &cobra.Command{

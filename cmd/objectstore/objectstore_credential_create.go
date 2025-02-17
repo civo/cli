@@ -93,9 +93,9 @@ var objectStoreCredentialCreateCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			if waitOS {
-				fmt.Printf("Created Object Store Credential %s in %s in %s\n", utility.Green(objectStoreCred.Name), utility.Green(client.Region), executionTime)
+				utility.Printf("Created Object Store Credential %s in %s in %s\n", utility.Green(objectStoreCred.Name), utility.Green(client.Region), executionTime)
 			} else {
-				fmt.Printf("Creating Object Store Credential %s in %s\n", utility.Green(objectStoreCred.Name), utility.Green(client.Region))
+				utility.Printf("Creating Object Store Credential %s in %s\n", utility.Green(objectStoreCred.Name), utility.Green(client.Region))
 			}
 		}
 	},

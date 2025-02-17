@@ -1,7 +1,6 @@
 package kfcluster
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -101,7 +100,7 @@ var kfcCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("KfCluster (%s) with ID %s has been created\n", utility.Green(kfc.Name), kfc.ID)
+			utility.Printf("KfCluster (%s) with ID %s has been created\n", utility.Green(kfc.Name), kfc.ID)
 		}
 	},
 }

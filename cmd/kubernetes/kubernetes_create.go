@@ -209,7 +209,7 @@ var kubernetesCreateCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			} else {
-				fmt.Println("Operation aborted.")
+				utility.Println("Operation aborted.")
 				os.Exit(1)
 			}
 		} else {
@@ -276,9 +276,9 @@ var kubernetesCreateCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			if executionTime != "" {
-				fmt.Printf("The cluster %s (%s) has been created in %s\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID, executionTime)
+				utility.Printf("The cluster %s (%s) has been created in %s\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID, executionTime)
 			} else {
-				fmt.Printf("The cluster %s (%s) has been created\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID)
+				utility.Printf("The cluster %s (%s) has been created\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID)
 			}
 
 		}

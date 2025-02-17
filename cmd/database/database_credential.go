@@ -46,7 +46,7 @@ var dbCredentialCmd = &cobra.Command{
 
 		// Add check for database status
 		if db.Status == "Pending" {
-			fmt.Printf("The DB %s is currently being provisioned, please wait...\n", utility.Green(db.Name))
+			utility.Printf("The DB %s is currently being provisioned, please wait...\n", utility.Green(db.Name))
 
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
 			s.Writer = os.Stderr
@@ -68,7 +68,7 @@ var dbCredentialCmd = &cobra.Command{
 
 		if connectionString {
 			for _, user := range db.DatabaseUserInfo {
-				fmt.Printf("%s://%s:%s@%s:%d\n", strings.ToLower(db.Software), user.Username, user.Password, db.PublicIPv4, user.Port)
+				utility.Printf("%s://%s:%s@%s:%d\n", strings.ToLower(db.Software), user.Username, user.Password, db.PublicIPv4, user.Port)
 			}
 			return
 		}

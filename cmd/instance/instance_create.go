@@ -322,9 +322,9 @@ If you wish to use a custom format, the available fields are:
 
 		if common.OutputFormat == "human" {
 			if executionTime != "" {
-				fmt.Printf("The instance %s %s has been created in %s\n", utility.Green(instance.Hostname), publicIP, executionTime)
+				utility.Printf("The instance %s %s has been created in %s\n", utility.Green(instance.Hostname), publicIP, executionTime)
 			} else {
-				fmt.Printf("The instance %s has been created\n", utility.Green(instance.Hostname))
+				utility.Printf("The instance %s has been created\n", utility.Green(instance.Hostname))
 			}
 		} else {
 			ow := utility.NewOutputWriter()

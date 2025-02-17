@@ -1,7 +1,6 @@
 package volume
 
 import (
-	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -81,7 +80,7 @@ var volumeDetachCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The volume called %s with ID %s was detached\n", utility.Green(volume.Name), utility.Green(volume.ID))
+			utility.Printf("The volume called %s with ID %s was detached\n", utility.Green(volume.Name), utility.Green(volume.ID))
 		}
 	},
 }

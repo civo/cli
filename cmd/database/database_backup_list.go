@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -82,7 +81,7 @@ func postgresScheduledBackups(backups *civogo.PaginatedDatabaseBackup) {
 		ow.WriteCustomOutput(common.OutputFields)
 	default:
 		if printMsg {
-			fmt.Println("Scheduled backup")
+			utility.Println("Scheduled backup")
 		}
 		ow.WriteTable()
 	}
@@ -119,7 +118,7 @@ func postgresManualBackups(backups *civogo.PaginatedDatabaseBackup) {
 		ow.WriteCustomOutput(common.OutputFields)
 	default:
 		if printMsg {
-			fmt.Println("Manual backups")
+			utility.Println("Manual backups")
 		}
 		ow.WriteTable()
 	}
@@ -153,7 +152,7 @@ func mysqlBackups(backups *civogo.PaginatedDatabaseBackup) {
 		ow.WriteCustomOutput(common.OutputFields)
 	default:
 		if printMsg {
-			fmt.Println("Manual backups")
+			utility.Println("Manual backups")
 		}
 		ow.WriteTable()
 	}

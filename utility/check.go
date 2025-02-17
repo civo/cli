@@ -26,7 +26,7 @@ func CheckOS() string {
 	case "linux":
 		returnValue = "linux"
 	default:
-		fmt.Printf("%s.\n", os)
+		Printf("%s.\n", os)
 	}
 
 	return returnValue
