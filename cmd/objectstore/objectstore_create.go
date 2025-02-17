@@ -107,10 +107,13 @@ var objectStoreCreateCmd = &cobra.Command{
 		if waitOS {
 			startTime := utility.StartTime()
 			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
-			s.Prefix = fmt.Sprintf("Creating an Object Store with maxSize %d, called %s... ", store.MaxSize, store.Name)
-			s.Start()
+			var s *spinner.Spinner
+			if !common.Quiet {
+				s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+				s.Writer = os.Stderr
+				s.Prefix = fmt.Sprintf("Creating an Object Store with maxSize %d, called %s... ", store.MaxSize, store.Name)
+				s.Start()
+			}
 
 			for stillCreating {
 				storeCheck, err := client.FindObjectStore(store.ID)
@@ -120,7 +123,9 @@ var objectStoreCreateCmd = &cobra.Command{
 				}
 				if storeCheck.Status == "ready" {
 					stillCreating = false
-					s.Stop()
+					if !common.Quiet {
+						s.Stop()
+					}
 				} else {
 					time.Sleep(2 * time.Second)
 				}

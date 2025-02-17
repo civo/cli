@@ -290,10 +290,13 @@ If you wish to use a custom format, the available fields are:
 
 		if wait {
 			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
-			s.Prefix = fmt.Sprintf("Creating instance (%s)... ", resp.Hostname)
-			s.Start()
+			var s *spinner.Spinner
+			if !common.Quiet {
+				s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+				s.Writer = os.Stderr
+				s.Prefix = fmt.Sprintf("Creating instance (%s)... ", resp.Hostname)
+				s.Start()
+			}
 
 			for stillCreating {
 				instance, err = client.FindInstance(resp.ID)
@@ -303,7 +306,9 @@ If you wish to use a custom format, the available fields are:
 				}
 				if instance.Status == "ACTIVE" {
 					stillCreating = false
-					s.Stop()
+					if !common.Quiet {
+						s.Stop()
+					}
 				} else {
 					time.Sleep(2 * time.Second)
 				}

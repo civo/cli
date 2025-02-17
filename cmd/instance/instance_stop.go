@@ -49,10 +49,13 @@ If you wish to use a custom format, the available fields are:
 
 		if waitStop {
 			stillStopping := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
-			s.Prefix = "Stopping instance... "
-			s.Start()
+			var s *spinner.Spinner
+			if !common.Quiet {
+				s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+				s.Writer = os.Stderr
+				s.Prefix = "Stopping instance... "
+				s.Start()
+			}
 
 			for stillStopping {
 				instanceCheck, err := client.FindInstance(instance.ID)
@@ -62,7 +65,9 @@ If you wish to use a custom format, the available fields are:
 				}
 				if instanceCheck.Status == "SHUTOFF" {
 					stillStopping = false
-					s.Stop()
+					if !common.Quiet {
+						s.Stop()
+					}
 				} else {
 					time.Sleep(2 * time.Second)
 				}

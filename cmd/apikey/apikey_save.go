@@ -58,6 +58,11 @@ var apikeySaveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		if len(args) == 0 && common.Quiet {
+			utility.Info("You need to use the non-interactive way when in quiet mode")
+			os.Exit(1)
+		}
+
 		if len(args) == 0 && !loadAPIKeyFromEnv {
 			reader := bufio.NewReader(os.Stdin)
 			utility.Printf("Enter a nice name for this account/API Key: ")

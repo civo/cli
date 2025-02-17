@@ -50,7 +50,7 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, switchContext bo
 		return nil, writeErr
 	}
 
-	Printf("Merged with main kubernetes config: %s\n", Green(localKubeconfigPath))
+	fmt.Printf("Merged with main kubernetes config: %s\n", Green(localKubeconfigPath))
 
 	// Merge the two kubeconfigs and read the output into 'data'
 	osResult := CheckOS()
@@ -94,7 +94,7 @@ func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bo
 			if !switchConfig {
 				fmt.Printf("kubectl config use-context %s\n", strings.ToLower(clusterName))
 			}
-			Println("kubectl get node")
+			fmt.Println("kubectl get node")
 		} else {
 			if strings.Contains(path, ".kube") {
 				fmt.Print("kubectl get node\n")

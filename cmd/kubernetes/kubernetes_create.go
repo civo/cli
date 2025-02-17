@@ -230,10 +230,13 @@ var kubernetesCreateCmd = &cobra.Command{
 			startTime := utility.StartTime()
 
 			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
-			s.Prefix = fmt.Sprintf("Creating a %s node k3s cluster of %s instances called %s... ", strconv.Itoa(kubernetesCluster.NumTargetNode), kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
-			s.Start()
+			var s *spinner.Spinner
+			if !common.Quiet {
+				s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+				s.Writer = os.Stderr
+				s.Prefix = fmt.Sprintf("Creating a %s node k3s cluster of %s instances called %s... ", strconv.Itoa(kubernetesCluster.NumTargetNode), kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
+				s.Start()
+			}
 
 			for stillCreating {
 				kubernetesCheck, err := client.FindKubernetesCluster(kubernetesCluster.ID)
@@ -243,7 +246,9 @@ var kubernetesCreateCmd = &cobra.Command{
 				}
 				if kubernetesCheck.Ready {
 					stillCreating = false
-					s.Stop()
+					if !common.Quiet {
+						s.Stop()
+					}
 				} else {
 					time.Sleep(2 * time.Second)
 				}
