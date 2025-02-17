@@ -1,7 +1,6 @@
 package objectstore
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -57,19 +56,19 @@ var objectStoreCredentialExportCmd = &cobra.Command{
 		}
 
 		if format == "env" {
-			fmt.Printf("# Tip: You can redirect output with (>> ~/.zshrc) to add these to Zsh's startup automatically\n")
-			fmt.Printf("export AWS_ACCESS_KEY_ID=%s\n", credential.AccessKeyID)
-			fmt.Printf("export AWS_SECRET_ACCESS_KEY=%s\n", credential.SecretAccessKeyID)
-			fmt.Printf("export AWS_DEFAULT_REGION=%s\n", client.Region)
-			fmt.Printf("export AWS_HOST=https://objectstore.%s.civo.com\n", strings.ToLower(client.Region))
+			utility.Printf("# Tip: You can redirect output with (>> ~/.zshrc) to add these to Zsh's startup automatically\n")
+			utility.Printf("export AWS_ACCESS_KEY_ID=%s\n", credential.AccessKeyID)
+			utility.Printf("export AWS_SECRET_ACCESS_KEY=%s\n", credential.SecretAccessKeyID)
+			utility.Printf("export AWS_DEFAULT_REGION=%s\n", client.Region)
+			utility.Printf("export AWS_HOST=https://objectstore.%s.civo.com\n", strings.ToLower(client.Region))
 		} else if format == "s3cfg" {
-			fmt.Printf("# Tip: You can redirect output with (>> ~/.s3cfg) to automatically configure s3cmd\n")
-			fmt.Printf("[default]\n")
-			fmt.Printf("access_key = %s\n", credential.AccessKeyID)
-			fmt.Printf("secret_key = %s\n", credential.SecretAccessKeyID)
-			fmt.Printf("bucket_location = %s\n", client.Region)
-			fmt.Printf("host_base = objectstore.%s.civo.com\n", strings.ToLower(client.Region))
-			fmt.Printf("signature_v2 = True")
+			utility.Printf("# Tip: You can redirect output with (>> ~/.s3cfg) to automatically configure s3cmd\n")
+			utility.Printf("[default]\n")
+			utility.Printf("access_key = %s\n", credential.AccessKeyID)
+			utility.Printf("secret_key = %s\n", credential.SecretAccessKeyID)
+			utility.Printf("bucket_location = %s\n", client.Region)
+			utility.Printf("host_base = objectstore.%s.civo.com\n", strings.ToLower(client.Region))
+			utility.Printf("signature_v2 = True")
 		} else {
 			utility.Error("You must provide a valid format to export to. Supported formats are env and s3cfg. See --help for more information.")
 			os.Exit(1)

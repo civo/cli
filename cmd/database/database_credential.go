@@ -46,12 +46,15 @@ var dbCredentialCmd = &cobra.Command{
 
 		// Add check for database status
 		if db.Status == "Pending" {
-			fmt.Printf("The DB %s is currently being provisioned, please wait...\n", utility.Green(db.Name))
+			utility.Printf("The DB %s is currently being provisioned, please wait...\n", utility.Green(db.Name))
 
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
-			s.Prefix = fmt.Sprintf("Waiting for database (%s)... ", db.Name)
-			s.Start()
+			var s *spinner.Spinner
+			if !common.Quiet {
+				s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+				s.Writer = os.Stderr
+				s.Prefix = fmt.Sprintf("Waiting for database (%s)... ", db.Name)
+				s.Start()
+			}
 
 			for db.Status == "Pending" {
 				db, err = client.FindDatabase(args[0])
@@ -61,14 +64,16 @@ var dbCredentialCmd = &cobra.Command{
 				}
 				time.Sleep(2 * time.Second)
 			}
-			s.Stop()
+			if !common.Quiet {
+				s.Stop()
+			}
 		}
 
 		connStr := strings.ToLower(db.Software) + "://" + db.DatabaseUserInfo[0].Username + ":" + db.DatabaseUserInfo[0].Password + "@" + db.PublicIPv4 + ":" + fmt.Sprintf("%d", db.DatabaseUserInfo[0].Port)
 
 		if connectionString {
 			for _, user := range db.DatabaseUserInfo {
-				fmt.Printf("%s://%s:%s@%s:%d\n", strings.ToLower(db.Software), user.Username, user.Password, db.PublicIPv4, user.Port)
+				utility.Printf("%s://%s:%s@%s:%d\n", strings.ToLower(db.Software), user.Username, user.Password, db.PublicIPv4, user.Port)
 			}
 			return
 		}

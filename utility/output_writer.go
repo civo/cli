@@ -6,13 +6,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/civo/cli/common"
-	"github.com/civo/cli/config"
 	"os"
 	"regexp"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/civo/cli/common"
+	"github.com/civo/cli/config"
 
 	"github.com/olekukonko/tablewriter"
 )
@@ -75,9 +76,9 @@ func (ow *OutputWriter) ToJSON(v interface{}, pretty bool) {
 	switch pretty {
 	case true:
 		result, _ := prettyprint(value)
-		fmt.Println(string(result))
+		Println(string(result))
 	default:
-		fmt.Println(string(value))
+		Println(string(value))
 	}
 }
 
@@ -131,16 +132,16 @@ func (ow *OutputWriter) WriteSingleObjectJSON(pretty bool) {
 
 	jsonString, err := json.Marshal(data)
 	if err != nil {
-		fmt.Println(err)
+		Println(err)
 		os.Exit(-1)
 	}
 
 	switch pretty {
 	case true:
 		result, _ := prettyprint(jsonString)
-		fmt.Println(string(result))
+		Println(string(result))
 	default:
-		fmt.Println(string(jsonString))
+		Println(string(jsonString))
 	}
 
 }
@@ -162,16 +163,16 @@ func (ow *OutputWriter) WriteMultipleObjectsJSON(pretty bool) {
 
 	jsonString, err := json.Marshal(data)
 	if err != nil {
-		fmt.Println(err)
+		Println(err)
 		os.Exit(-1)
 	}
 
 	switch pretty {
 	case true:
 		result, _ := prettyprint(jsonString)
-		fmt.Println(string(result))
+		Println(string(result))
 	default:
-		fmt.Println(string(jsonString))
+		Println(string(jsonString))
 	}
 
 }
@@ -191,7 +192,7 @@ func (ow *OutputWriter) WriteKeyValues() {
 	for i := range ow.Keys {
 		value := ow.Values[0][i]
 		label := ow.Labels[i]
-		fmt.Printf("%"+strconv.Itoa(longestLabelLength)+"s : %s\n", label, value)
+		Printf("%"+strconv.Itoa(longestLabelLength)+"s : %s\n", label, value)
 	}
 }
 
@@ -263,19 +264,19 @@ func (ow *OutputWriter) WriteCustomOutput(fields string) {
 		}
 		output = strings.Replace(output, "\\t", "\t", -1)
 		output = strings.Replace(output, "\\n", "\n", -1)
-		fmt.Println(output)
+		Println(output)
 	}
 }
 
 // WriteSubheader writes a centred heading line in to output
 func (ow *OutputWriter) WriteSubheader(label string) {
 	count := (72 - len(label) + 2) / 2
-	fmt.Println(strings.Repeat("-", count) + " " + label + " " + strings.Repeat("-", count))
+	Println(strings.Repeat("-", count) + " " + label + " " + strings.Repeat("-", count))
 }
 
 // WriteHeader WriteSubheader writes a centred heading line in to output
 func (ow *OutputWriter) WriteHeader(label string) {
-	fmt.Printf("%s:\n", label)
+	Printf("%s:\n", label)
 }
 
 func prettyprint(b []byte) ([]byte, error) {

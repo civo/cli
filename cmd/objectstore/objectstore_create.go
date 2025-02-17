@@ -107,10 +107,13 @@ var objectStoreCreateCmd = &cobra.Command{
 		if waitOS {
 			startTime := utility.StartTime()
 			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
-			s.Prefix = fmt.Sprintf("Creating an Object Store with maxSize %d, called %s... ", store.MaxSize, store.Name)
-			s.Start()
+			var s *spinner.Spinner
+			if !common.Quiet {
+				s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+				s.Writer = os.Stderr
+				s.Prefix = fmt.Sprintf("Creating an Object Store with maxSize %d, called %s... ", store.MaxSize, store.Name)
+				s.Start()
+			}
 
 			for stillCreating {
 				storeCheck, err := client.FindObjectStore(store.ID)
@@ -120,7 +123,9 @@ var objectStoreCreateCmd = &cobra.Command{
 				}
 				if storeCheck.Status == "ready" {
 					stillCreating = false
-					s.Stop()
+					if !common.Quiet {
+						s.Stop()
+					}
 				} else {
 					time.Sleep(2 * time.Second)
 				}
@@ -144,12 +149,12 @@ var objectStoreCreateCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			if waitOS {
-				fmt.Printf("Created Object Store %s in %s in %s\n", utility.Green(objectStore.Name), utility.Green(client.Region), executionTime)
-				fmt.Printf("Created default admin credentials, access key is %s, this will be deleted if the Object Store is deleted. ", utility.Green(objectStore.OwnerInfo.AccessKeyID))
-				fmt.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(objectStore.OwnerInfo.AccessKeyID))
+				utility.Printf("Created Object Store %s in %s in %s\n", utility.Green(objectStore.Name), utility.Green(client.Region), executionTime)
+				utility.Printf("Created default admin credentials, access key is %s, this will be deleted if the Object Store is deleted. ", utility.Green(objectStore.OwnerInfo.AccessKeyID))
+				utility.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(objectStore.OwnerInfo.AccessKeyID))
 			} else {
-				fmt.Printf("Creating Object Store %s in %s\n", utility.Green(objectStore.Name), utility.Green(client.Region))
-				fmt.Printf("To check the status of the Object Store run: civo objectstore show %s\n", utility.Green(objectStore.Name))
+				utility.Printf("Creating Object Store %s in %s\n", utility.Green(objectStore.Name), utility.Green(client.Region))
+				utility.Printf("To check the status of the Object Store run: civo objectstore show %s\n", utility.Green(objectStore.Name))
 			}
 		}
 	},

@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 
@@ -27,7 +26,7 @@ If you wish to use a custom format, the available fields are:
 		utility.EnsureCurrentRegion()
 
 		if len(args) != 2 {
-			fmt.Printf("You must specify %s parameters (you gave %s), the ID/name and the firewall ID\n", utility.Red("2"), utility.Red(strconv.Itoa(len(args))))
+			utility.Printf("You must specify %s parameters (you gave %s), the ID/name and the firewall ID\n", utility.Red("2"), utility.Red(strconv.Itoa(len(args))))
 			os.Exit(1)
 		}
 
@@ -79,7 +78,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if common.OutputFormat == "human" {
-			fmt.Printf("Set the firewall for the instance %s (%s) to %s (%s)\n", utility.Green(instance.Hostname), instance.ID, utility.Green(firewall.Name), firewall.ID)
+			utility.Printf("Set the firewall for the instance %s (%s) to %s (%s)\n", utility.Green(instance.Hostname), instance.ID, utility.Green(firewall.Name), firewall.ID)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()

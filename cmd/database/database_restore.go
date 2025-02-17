@@ -1,8 +1,6 @@
 package database
 
 import (
-	"fmt"
-
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -67,10 +65,10 @@ var dbRestoreCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("Restoring database %s from from backup %s\n", utility.Green(db.Name), utility.Green(backup))
+				utility.Printf("Restoring database %s from from backup %s\n", utility.Green(db.Name), utility.Green(backup))
 			}
 		} else {
-			fmt.Println("Aborted")
+			utility.Println("Aborted")
 		}
 
 	},

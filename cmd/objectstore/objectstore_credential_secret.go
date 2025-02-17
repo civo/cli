@@ -1,7 +1,6 @@
 package objectstore
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -61,7 +60,7 @@ var objectStoreCredentialSecretCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Your secret key is: %s\n", utility.Green(credential.SecretAccessKeyID))
+			utility.Printf("Your secret key is: %s\n", utility.Green(credential.SecretAccessKeyID))
 		}
 	},
 }

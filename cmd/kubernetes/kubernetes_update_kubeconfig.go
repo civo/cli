@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -39,6 +38,6 @@ var kubernetesUpdateKubeconfigCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		fmt.Printf("Updated kubeconfig with cluster %s configuration\n", utility.Green(cluster.Name))
+		utility.Printf("Updated kubeconfig with cluster %s configuration\n", utility.Green(cluster.Name))
 	},
 }

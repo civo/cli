@@ -130,12 +130,12 @@ If you wish to use a custom format, the available fields are:
 			ow.WriteKeyValues()
 
 			if kubernetesCluster.UpgradeAvailableTo != "" {
-				fmt.Printf(utility.Red("\n* An upgrade to v%s is available. Learn more about how to upgrade: civo k3s upgrade --help"), kubernetesCluster.UpgradeAvailableTo)
-				fmt.Println()
+				utility.Printf(utility.Red("\n* An upgrade to v%s is available. Learn more about how to upgrade: civo k3s upgrade --help"), kubernetesCluster.UpgradeAvailableTo)
+				utility.Println()
 			}
 
 			if len(lbCluster) > 0 {
-				fmt.Println()
+				utility.Println()
 				ow.WriteHeader("Loadbalancers")
 				owLB := utility.NewOutputWriter()
 				for _, lb := range lbCluster {
@@ -152,7 +152,7 @@ If you wish to use a custom format, the available fields are:
 			}
 
 			if kubernetesCluster.Conditions != nil {
-				fmt.Println()
+				utility.Println()
 				ow.WriteHeader("Conditions")
 				owCond := utility.NewOutputWriter()
 				conditionFound := false
@@ -182,7 +182,7 @@ If you wish to use a custom format, the available fields are:
 			}
 
 			if len(kubernetesCluster.Instances) > 0 {
-				fmt.Println()
+				utility.Println()
 				for _, pool := range kubernetesCluster.Pools {
 					ow.WriteHeader(fmt.Sprintf("Pool (%s)", pool.ID[:6]))
 					owNode := utility.NewOutputWriter()
@@ -202,14 +202,14 @@ If you wish to use a custom format, the available fields are:
 						}
 					}
 					owNode.WriteTable()
-					fmt.Println()
+					utility.Println()
 					ow.WriteHeader("Labels")
-					fmt.Printf("kubernetes.civo.com/node-pool=%s\n", pool.ID)
-					fmt.Printf("kubernetes.civo.com/node-size=%s\n", pool.Size)
+					utility.Printf("kubernetes.civo.com/node-pool=%s\n", pool.ID)
+					utility.Printf("kubernetes.civo.com/node-size=%s\n", pool.Size)
 				}
 
 				if len(kubernetesCluster.InstalledApplications) > 0 {
-					fmt.Println()
+					utility.Println()
 					ow.WriteHeader("Applications")
 					owApp := utility.NewOutputWriter()
 
@@ -222,7 +222,7 @@ If you wish to use a custom format, the available fields are:
 						owApp.AppendData("Category", app.Category)
 					}
 					owApp.WriteTable()
-					fmt.Println()
+					utility.Println()
 				}
 			}
 		}

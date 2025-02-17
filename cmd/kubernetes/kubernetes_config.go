@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"fmt"
 	"os"
 	"runtime"
 
@@ -93,7 +92,7 @@ If you wish to use a custom format, the available fields are:
 						os.Exit(1)
 					}
 				} else {
-					fmt.Println("Operation aborted.")
+					utility.Println("Operation aborted.")
 					os.Exit(1)
 				}
 			} else {
@@ -116,7 +115,7 @@ If you wish to use a custom format, the available fields are:
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			if !saveConfig {
-				fmt.Println(kube.KubeConfig)
+				utility.Println(kube.KubeConfig)
 			}
 
 		}

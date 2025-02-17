@@ -1,7 +1,6 @@
 package teams
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -45,7 +44,7 @@ var teamsRenameCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The team with ID %s was renamed to %s\n", utility.Green(team.ID), utility.Green(team.Name))
+			utility.Printf("The team with ID %s was renamed to %s\n", utility.Green(team.ID), utility.Green(team.Name))
 		}
 	},
 }

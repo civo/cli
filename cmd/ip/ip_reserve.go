@@ -1,7 +1,6 @@
 package ip
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -52,9 +51,9 @@ civo ip reserve -n "server-1"`,
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			if name != "" {
-				fmt.Printf("Reserved IP called %s with ID %s\n", utility.Green(name), utility.Green(ip.ID))
+				utility.Printf("Reserved IP called %s with ID %s\n", utility.Green(name), utility.Green(ip.ID))
 			} else {
-				fmt.Printf("Reserved IP with ID %s\n", utility.Green(ip.ID))
+				utility.Printf("Reserved IP with ID %s\n", utility.Green(ip.ID))
 			}
 		}
 	},

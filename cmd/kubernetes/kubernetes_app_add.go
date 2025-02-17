@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -62,7 +61,7 @@ var kubernetesAppAddCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The application was installed in the Kubernetes cluster %s\n", utility.Green(kubeCluster.Name))
+			utility.Printf("The application was installed in the Kubernetes cluster %s\n", utility.Green(kubeCluster.Name))
 		}
 	},
 }

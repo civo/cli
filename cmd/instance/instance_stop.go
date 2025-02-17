@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"os"
 	"time"
 
@@ -50,10 +49,13 @@ If you wish to use a custom format, the available fields are:
 
 		if waitStop {
 			stillStopping := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
-			s.Prefix = "Stopping instance... "
-			s.Start()
+			var s *spinner.Spinner
+			if !common.Quiet {
+				s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+				s.Writer = os.Stderr
+				s.Prefix = "Stopping instance... "
+				s.Start()
+			}
 
 			for stillStopping {
 				instanceCheck, err := client.FindInstance(instance.ID)
@@ -63,7 +65,9 @@ If you wish to use a custom format, the available fields are:
 				}
 				if instanceCheck.Status == "SHUTOFF" {
 					stillStopping = false
-					s.Stop()
+					if !common.Quiet {
+						s.Stop()
+					}
 				} else {
 					time.Sleep(2 * time.Second)
 				}
@@ -71,7 +75,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if common.OutputFormat == "human" {
-			fmt.Printf("The instance %s (%s) is being stopped\n", utility.Green(instance.Hostname), instance.ID)
+			utility.Printf("The instance %s (%s) is being stopped\n", utility.Green(instance.Hostname), instance.ID)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()

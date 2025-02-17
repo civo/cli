@@ -1,7 +1,6 @@
 package objectstore
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -58,7 +57,7 @@ var objectStoreUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The Object Store with ID %s was updated to size: %d GB \n", utility.Green(objectStore.ID), bucketSize)
+			utility.Printf("The Object Store with ID %s was updated to size: %d GB \n", utility.Green(objectStore.ID), bucketSize)
 			os.Exit(0)
 		}
 	},

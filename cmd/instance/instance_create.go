@@ -290,10 +290,13 @@ If you wish to use a custom format, the available fields are:
 
 		if wait {
 			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
-			s.Prefix = fmt.Sprintf("Creating instance (%s)... ", resp.Hostname)
-			s.Start()
+			var s *spinner.Spinner
+			if !common.Quiet {
+				s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+				s.Writer = os.Stderr
+				s.Prefix = fmt.Sprintf("Creating instance (%s)... ", resp.Hostname)
+				s.Start()
+			}
 
 			for stillCreating {
 				instance, err = client.FindInstance(resp.ID)
@@ -303,7 +306,9 @@ If you wish to use a custom format, the available fields are:
 				}
 				if instance.Status == "ACTIVE" {
 					stillCreating = false
-					s.Stop()
+					if !common.Quiet {
+						s.Stop()
+					}
 				} else {
 					time.Sleep(2 * time.Second)
 				}
@@ -322,9 +327,9 @@ If you wish to use a custom format, the available fields are:
 
 		if common.OutputFormat == "human" {
 			if executionTime != "" {
-				fmt.Printf("The instance %s %s has been created in %s\n", utility.Green(instance.Hostname), publicIP, executionTime)
+				utility.Printf("The instance %s %s has been created in %s\n", utility.Green(instance.Hostname), publicIP, executionTime)
 			} else {
-				fmt.Printf("The instance %s has been created\n", utility.Green(instance.Hostname))
+				utility.Printf("The instance %s has been created\n", utility.Green(instance.Hostname))
 			}
 		} else {
 			ow := utility.NewOutputWriter()
