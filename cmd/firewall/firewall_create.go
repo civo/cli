@@ -13,6 +13,7 @@ import (
 
 var firewallnetwork string
 var createRules bool
+var noDefaultRules bool
 var defaultNetwork *civogo.Network
 
 var firewallCreateCmd = &cobra.Command{
@@ -21,6 +22,18 @@ var firewallCreateCmd = &cobra.Command{
 	Short:   "Create a new firewall",
 	Example: "civo firewall create NAME",
 	Args:    cobra.MinimumNArgs(1),
+	PreRun: func(cmd *cobra.Command, args []string) {
+		createRulesFlag := cmd.Flags().Lookup("create-rules")
+		noDefaultRulesFlag := cmd.Flags().Lookup("no-default-rules")
+
+		if createRulesFlag.Changed && noDefaultRulesFlag.Changed {
+			utility.Error("conflicting flags: --create-rules and --no-default-rules cannot be used together")
+			os.Exit(1)
+		}
+		if noDefaultRules {
+			createRules = false
+		}
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 

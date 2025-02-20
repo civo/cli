@@ -40,7 +40,8 @@ func init() {
 	FirewallCmd.AddCommand(firewallRemoveCmd)
 
 	firewallCreateCmd.Flags().StringVarP(&firewallnetwork, "network", "n", "default", "the network to create the firewall")
-	firewallCreateCmd.Flags().BoolVarP(&createRules, "create-rules", "r", true, "the create rules flag is used to create the default firewall rules, if is not defined will be set to true")
+	firewallCreateCmd.Flags().BoolVarP(&createRules, "create-rules", "r", true, "the create rules flag is used to create the default firewall rules, if is not defined will be set to true (deprecated)")
+	firewallCreateCmd.Flags().BoolVarP(&noDefaultRules, "no-default-rules", "", false, "the no-default-rules flag will ensure no default rules are created for the firewall, if not defined it will be set to false")
 
 	// Firewalls rule cmd
 	FirewallCmd.AddCommand(firewallRuleCmd)
@@ -57,4 +58,7 @@ func init() {
 	firewallRuleCreateCmd.Flags().StringVarP(&action, "action", "a", "allow", "the action of the rule can be allow or deny (default is allow)")
 	firewallRuleCreateCmd.Flags().StringVarP(&label, "label", "l", "", "a string that will be the displayed as the name/reference for this rule")
 	firewallRuleCreateCmd.MarkFlagRequired("startport")
+
+	// Mark the create-rules flag as deprecated
+	firewallCreateCmd.Flags().MarkDeprecated("create-rules", "it will be removed in future versions. Default firewall rules are created by default. Use --no-default-rules flag to create firewalls without them.\n")
 }
