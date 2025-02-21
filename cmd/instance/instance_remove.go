@@ -2,7 +2,6 @@ package instance
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"strings"
 
@@ -97,10 +96,10 @@ If you wish to use a custom format, the available fields are:
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(instanceList), "instance"), utility.Green(strings.Join(instanceNameList, ", ")))
+				utility.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(instanceList), "instance"), utility.Green(strings.Join(instanceNameList, ", ")))
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Println("Operation aborted.")
 		}
 	},
 }

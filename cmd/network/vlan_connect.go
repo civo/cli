@@ -1,7 +1,6 @@
 package network
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -74,7 +73,7 @@ var networkConnectCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Created a network called %s with ID %s\n", utility.Green(network.Label), utility.Green(network.ID))
+			utility.Printf("Created a network called %s with ID %s\n", utility.Green(network.Label), utility.Green(network.ID))
 		}
 	},
 }

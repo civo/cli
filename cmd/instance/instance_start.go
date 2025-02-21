@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -47,7 +46,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if common.OutputFormat == "human" {
-			fmt.Printf("The instance %s (%s) is being started\n", utility.Green(instance.Hostname), instance.ID)
+			utility.Printf("The instance %s (%s) is being started\n", utility.Green(instance.Hostname), instance.ID)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()

@@ -2,7 +2,6 @@ package ip
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -72,7 +71,7 @@ civo ip assign <ip id> --instance <instance ID>`,
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Assigned IP %s to instance %s\n", utility.Green(ip.Name), utility.Green(instance.Hostname))
+			utility.Printf("Assigned IP %s to instance %s\n", utility.Green(ip.Name), utility.Green(instance.Hostname))
 		}
 	},
 }
