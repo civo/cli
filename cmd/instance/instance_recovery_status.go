@@ -15,7 +15,17 @@ var instanceRecoveryStatusCmd = &cobra.Command{
 	Aliases: []string{"recovery"},
 	Example: "civo instance recovery-status INSTANCE_ID/HOSTNAME",
 	Short:   "Get the recovery status of an instance",
-	Args:    cobra.MinimumNArgs(1),
+	Long: `Show the current recovery mode status for a specified instance.
+If you wish to use a custom format, the available fields are:
+
+	* id
+	* hostname
+	* status
+
+Example:
+  * Check recovery status:
+    civo instance recovery-status my-instance`,
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 

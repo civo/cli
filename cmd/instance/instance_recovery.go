@@ -15,6 +15,14 @@ var instanceRecoveryCmd = &cobra.Command{
 	Example: "civo instance recovery enable/disable ID/HOSTNAME",
 	Args:    cobra.MinimumNArgs(2),
 	Short:   "Enable/disable recovery mode for an instance",
+	Long: `Enable or disable recovery mode for a specified instance.
+Recovery mode allows you to boot your instance into a recovery environment for troubleshooting.
+
+Example:
+  * Enable recovery mode:
+    civo instance recovery enable my-instance
+  * Disable recovery mode:
+    civo instance recovery disable my-instance`,
 	Aliases: []string{"rescue"},
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()

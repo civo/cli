@@ -666,6 +666,26 @@ Hello, world!
 
 Please note that resizing can take a few minutes.
 
+### Recovery Mode
+
+Recovery mode allows you to boot your instance into a recovery environment for troubleshooting.
+
+```sh
+# Enable recovery mode for an instance
+civo instance recovery enable INSTANCE_ID/HOSTNAME
+
+# Disable recovery mode for an instance
+civo instance recovery disable INSTANCE_ID/HOSTNAME
+
+# Check recovery mode status
+civo instance recovery-status INSTANCE_ID/HOSTNAME
+```
+
+The recovery-status command supports custom output formats with the following fields:
+* id - The instance ID
+* hostname - The instance hostname
+* status - Current recovery mode status
+
 ## Kubernetes clusters
 
 #### Introduction
