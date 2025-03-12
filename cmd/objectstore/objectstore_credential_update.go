@@ -17,7 +17,7 @@ var objectStoreCredentialUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"edit", "modify", "change", "update"},
 	Short:   "Update an Object Store Credential",
-	Example: "civo objectstore credential update CREDENTIAL_NAME --access-key=ACCESS_KEY --secret-access-key=SECRET_ACCESS_KEY",
+	Example: "civo objectstore credential update CREDENTIAL_NAME --access-key=ACCESS_KEY --secret-key=SECRET_ACCESS_KEY",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
