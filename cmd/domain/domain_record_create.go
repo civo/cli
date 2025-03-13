@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -83,7 +82,7 @@ var domainRecordCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Created %s record %s for %s with a TTL of %s seconds and with a priority of %s with ID %s", utility.Green(string(record.Type)), utility.Green(record.Name), utility.Green(domain.Name), utility.Green(strconv.Itoa(record.TTL)), utility.Green(strconv.Itoa(record.Priority)), utility.Green(record.ID))
+			utility.Printf("Created %s record %s for %s with a TTL of %s seconds and with a priority of %s with ID %s", utility.Green(string(record.Type)), utility.Green(record.Name), utility.Green(domain.Name), utility.Green(strconv.Itoa(record.TTL)), utility.Green(strconv.Itoa(record.Priority)), utility.Green(record.ID))
 		}
 	},
 }

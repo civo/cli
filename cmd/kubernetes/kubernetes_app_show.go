@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -51,7 +50,7 @@ var kubernetesAppShowCmd = &cobra.Command{
 				foundAPP = true
 				result := markdown.Render(app.PostInstall, 80, 0)
 				printPostInstall := color.S256()
-				fmt.Println()
+				utility.Println()
 				printPostInstall.Println(string(result))
 			}
 		}

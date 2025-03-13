@@ -35,7 +35,7 @@ var kubernetesNodePoolInstanceListCmd = &cobra.Command{
 		if nodePoolID == "" {
 
 			for _, pool := range cluster.Pools {
-				fmt.Println()
+				utility.Println()
 				ow.WriteHeader(fmt.Sprintf("Node Pool %s", pool.ID))
 				owPool := utility.NewOutputWriter()
 

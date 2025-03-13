@@ -2,7 +2,6 @@ package ip
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -63,10 +62,10 @@ Please make sure to delete your domains aren't pointed to it before deleting it.
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("IP called %s with ID %s was deleted\n", utility.Green(ip.Name), utility.Green(ip.ID))
+				utility.Printf("IP called %s with ID %s was deleted\n", utility.Green(ip.Name), utility.Green(ip.ID))
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Println("Operation aborted.")
 		}
 	},
 }

@@ -1,7 +1,6 @@
 package firewall
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -60,7 +59,7 @@ var firewallUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The firewall called %s with ID %s was renamed to %s\n", utility.Green(firewall.Name), utility.Green(firewall.ID), utility.Green(args[1]))
+			utility.Printf("The firewall called %s with ID %s was renamed to %s\n", utility.Green(firewall.Name), utility.Green(firewall.ID), utility.Green(args[1]))
 		}
 	},
 }

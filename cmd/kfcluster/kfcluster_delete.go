@@ -2,7 +2,6 @@ package kfcluster
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
@@ -96,10 +95,10 @@ var kfcDeleteCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(kfClusterList), "kfcluster"), utility.Green(strings.Join(kfcNameList, ", ")))
+				utility.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(kfClusterList), "kfcluster"), utility.Green(strings.Join(kfcNameList, ", ")))
 			}
 		} else {
-			fmt.Println("Operation aborted")
+			utility.Println("Operation aborted")
 		}
 	},
 }

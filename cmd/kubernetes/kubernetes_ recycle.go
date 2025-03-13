@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -55,7 +54,7 @@ var kubernetesRecycleCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The node (%s) was recycled\n", utility.Green(kubernetesNode))
+			utility.Printf("The node (%s) was recycled\n", utility.Green(kubernetesNode))
 		}
 	},
 }

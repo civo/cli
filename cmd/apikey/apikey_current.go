@@ -1,7 +1,6 @@
 package apikey
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/config"
@@ -24,7 +23,7 @@ var apikeyCurrentCmd = &cobra.Command{
 		if index != "" {
 			config.Current.Meta.CurrentAPIKey = index
 			config.SaveConfig()
-			fmt.Printf("Set the default API Key to be %s\n", utility.Green(index))
+			utility.Printf("Set the default API Key to be %s\n", utility.Green(index))
 		}
 
 	},

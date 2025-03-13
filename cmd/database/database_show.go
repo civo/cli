@@ -48,7 +48,7 @@ var dbShowCmd = &cobra.Command{
 		ow := utility.NewOutputWriter()
 
 		ow.StartLine()
-		fmt.Println()
+		utility.Println()
 		ow.AppendDataWithLabel("id", db.ID, "ID")
 		ow.AppendDataWithLabel("name", db.Name, "Name")
 		ow.AppendDataWithLabel("status", db.Status, "Status")
@@ -73,7 +73,7 @@ var dbShowCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteKeyValues()
-			fmt.Println("To get the credentials, run : civo db credential", db.Name)
+			utility.Println("To get the credentials, run : civo db credential", db.Name)
 		}
 	},
 }

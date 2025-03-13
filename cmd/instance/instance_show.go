@@ -122,20 +122,20 @@ If you wish to use a custom format, the available fields are:
 			ow.WriteKeyValues()
 
 			if len(instance.Notes) > 0 {
-				fmt.Println()
+				utility.Println()
 				ow.WriteSubheader("Notes")
-				fmt.Println(instance.Notes)
+				utility.Println(instance.Notes)
 			}
 
 			if len(instance.Script) > 0 {
-				fmt.Println()
+				utility.Println()
 				ow.WriteSubheader("Script")
 				sDec, err := b64.StdEncoding.DecodeString(instance.Script)
 				if err != nil {
 					utility.Error("%s", err)
 					os.Exit(1)
 				}
-				fmt.Println(string(sDec))
+				utility.Println(string(sDec))
 			}
 		}
 	},

@@ -58,7 +58,7 @@ var objectStoreShowCmd = &cobra.Command{
 		ow := utility.NewOutputWriter()
 
 		ow.StartLine()
-		fmt.Println()
+		utility.Println()
 		ow.AppendDataWithLabel("id", objectStore.ID, "ID")
 		ow.AppendDataWithLabel("name", objectStore.Name, "Name")
 		ow.AppendDataWithLabel("size", strconv.Itoa(objectStore.MaxSize), "Size")
@@ -75,7 +75,7 @@ var objectStoreShowCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			ow.WriteKeyValues()
-			fmt.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(creds.AccessKeyID))
+			utility.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(creds.AccessKeyID))
 		}
 	},
 }

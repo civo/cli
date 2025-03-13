@@ -1,7 +1,6 @@
 package volume
 
 import (
-	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -53,10 +52,13 @@ var volumeDetachCmd = &cobra.Command{
 		if waitVolumeDetach {
 
 			stillDetaching := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
-			s.Prefix = "Detaching the volume... "
-			s.Start()
+			var s *spinner.Spinner
+			if !common.Quiet {
+				s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+				s.Writer = os.Stderr
+				s.Prefix = "Detaching the volume... "
+				s.Start()
+			}
 
 			for stillDetaching {
 				volumeCheck, err := client.FindVolume(volume.ID)
@@ -66,7 +68,9 @@ var volumeDetachCmd = &cobra.Command{
 				}
 				if volumeCheck.Status == "available" {
 					stillDetaching = false
-					s.Stop()
+					if !common.Quiet {
+						s.Stop()
+					}
 				} else {
 					time.Sleep(2 * time.Second)
 				}
@@ -81,7 +85,7 @@ var volumeDetachCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The volume called %s with ID %s was detached\n", utility.Green(volume.Name), utility.Green(volume.ID))
+			utility.Printf("The volume called %s with ID %s was detached\n", utility.Green(volume.Name), utility.Green(volume.ID))
 		}
 	},
 }

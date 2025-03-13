@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -54,7 +53,7 @@ var kubernetesRenameCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The kubernetes cluster with ID %s was renamed to %s\n", utility.Green(kubernetesCluster.ID), utility.Green(kubernetesCluster.Name))
+			utility.Printf("The kubernetes cluster with ID %s was renamed to %s\n", utility.Green(kubernetesCluster.ID), utility.Green(kubernetesCluster.Name))
 		}
 	},
 }

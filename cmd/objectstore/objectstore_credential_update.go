@@ -1,7 +1,6 @@
 package objectstore
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -63,7 +62,7 @@ var objectStoreCredentialUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The Object Store Credential with ID %s is updated\n", utility.Green(cred.ID))
+			utility.Printf("The Object Store Credential with ID %s is updated\n", utility.Green(cred.ID))
 			os.Exit(0)
 		}
 	},
