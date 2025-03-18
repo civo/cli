@@ -61,5 +61,7 @@ func init() {
 	instanceCreateCmd.Flags().StringSliceVarP(&volumes, "volumes", "v", []string{}, "List of volumes to attach at boot")
 	instanceCreateCmd.Flags().StringVarP(&volumetype, "volume-type", "", "", "Specify the volume type for the instance")
 
+	instanceVncCmd.Flags().StringVarP(&duration, "duration", "d", "", "Duration for VNC access (e.g. 30m, 1h, 24h)")
+
 	instanceStopCmd.Flags().BoolVarP(&waitStop, "wait", "w", false, "wait until the instance's is stoped")
 }
