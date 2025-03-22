@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -52,9 +51,9 @@ var instancePublicIPCmd = &cobra.Command{
 		}
 
 		if args[0] == "disable" {
-			fmt.Printf("Instance %s has been updated to NOT have a Public IP\n", utility.Green(instance.Hostname))
+			utility.Printf("Instance %s has been updated to NOT have a Public IP\n", utility.Green(instance.Hostname))
 		} else {
-			fmt.Printf("Instance %s has been updated to have a Public IP. IP addressed will be assigned shortly.\n", utility.Green(instance.Hostname))
+			utility.Printf("Instance %s has been updated to have a Public IP. IP addressed will be assigned shortly.\n", utility.Green(instance.Hostname))
 		}
 	},
 }

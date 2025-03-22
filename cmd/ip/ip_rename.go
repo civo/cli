@@ -2,7 +2,6 @@ package ip
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -64,7 +63,7 @@ civo ip rename <ip id> server-2 `,
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Renamed IP to %s with ID %s\n", utility.Green(rename), utility.Green(ip.ID))
+			utility.Printf("Renamed IP to %s with ID %s\n", utility.Green(rename), utility.Green(ip.ID))
 		}
 	},
 }

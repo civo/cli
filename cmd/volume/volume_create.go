@@ -1,7 +1,6 @@
 package volume
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -86,7 +85,7 @@ var volumeCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Created a volume called %s with ID %s\n", utility.Green(volume.Name), utility.Green(volume.ID))
+			utility.Printf("Created a volume called %s with ID %s\n", utility.Green(volume.Name), utility.Green(volume.ID))
 		}
 	},
 }

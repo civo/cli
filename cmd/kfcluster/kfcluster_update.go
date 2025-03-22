@@ -1,7 +1,6 @@
 package kfcluster
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -54,7 +53,7 @@ var kfcUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The KfCluster %s was updated\n", utility.Green(findKfCluster.Name))
+			utility.Printf("The KfCluster %s was updated\n", utility.Green(findKfCluster.Name))
 			os.Exit(0)
 		}
 	},

@@ -1,7 +1,6 @@
 package apikey
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -41,13 +40,13 @@ var apikeyRemoveCmd = &cobra.Command{
 			config.SaveConfig()
 
 			if numKeys > len(config.Current.APIKeys) {
-				fmt.Printf("Removed the API Key %s\n", utility.Green(index))
+				utility.Printf("Removed the API Key %s\n", utility.Green(index))
 			} else {
 				utility.Error("The API Key %q couldn't be found", args[0])
 				os.Exit(1)
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Println("Operation aborted.")
 		}
 
 	},

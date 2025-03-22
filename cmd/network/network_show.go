@@ -1,7 +1,6 @@
 package network
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/config"
@@ -30,35 +29,35 @@ var networkShowCmd = &cobra.Command{
 		}
 
 		// Display Core Network Details
-		fmt.Println("Network Details:")
-		fmt.Printf("ID: %s\n", network.ID)
-		fmt.Printf("Name: %s\n", network.Name)
-		fmt.Printf("Default: %s\n", utility.BoolToYesNo(network.Default))
-		fmt.Printf("CIDR: %s\n", network.CIDR)
-		fmt.Printf("Status: %s\n", network.Status)
-		fmt.Printf("IPv4 Enabled: %s\n", utility.BoolToYesNo(network.IPv4Enabled))
-		fmt.Printf("IPv6 Enabled: %s\n", utility.BoolToYesNo(network.IPv6Enabled))
+		utility.Println("Network Details:")
+		utility.Printf("ID: %s\n", network.ID)
+		utility.Printf("Name: %s\n", network.Name)
+		utility.Printf("Default: %s\n", utility.BoolToYesNo(network.Default))
+		utility.Printf("CIDR: %s\n", network.CIDR)
+		utility.Printf("Status: %s\n", network.Status)
+		utility.Printf("IPv4 Enabled: %s\n", utility.BoolToYesNo(network.IPv4Enabled))
+		utility.Printf("IPv6 Enabled: %s\n", utility.BoolToYesNo(network.IPv6Enabled))
 
 		// Conditional VLAN Details
 		if network.VlanID != 0 {
-			fmt.Println("\nVLAN Details:")
-			fmt.Printf("VLAN ID: %d\n", network.VlanID)
-			fmt.Printf("Hardware Address: %s\n", network.PhysicalInterface)
-			fmt.Printf("Gateway IPv4: %s\n", network.GatewayIPv4)
-			fmt.Printf("Allocation Pool IPv4 Start: %s\n", network.AllocationPoolV4Start)
-			fmt.Printf("Allocation Pool IPv4 End: %s\n", network.AllocationPoolV4End)
+			utility.Println("\nVLAN Details:")
+			utility.Printf("VLAN ID: %d\n", network.VlanID)
+			utility.Printf("Hardware Address: %s\n", network.PhysicalInterface)
+			utility.Printf("Gateway IPv4: %s\n", network.GatewayIPv4)
+			utility.Printf("Allocation Pool IPv4 Start: %s\n", network.AllocationPoolV4Start)
+			utility.Printf("Allocation Pool IPv4 End: %s\n", network.AllocationPoolV4End)
 		} else {
-			fmt.Println("\nNo VLAN Configuration")
+			utility.Println("\nNo VLAN Configuration")
 		}
 
 		// Nameserver Details
 		if len(network.NameserversV4) > 0 || len(network.NameserversV6) > 0 {
-			fmt.Println("\nNameserver Details:")
+			utility.Println("\nNameserver Details:")
 			if len(network.NameserversV4) > 0 {
-				fmt.Printf("Nameservers IPv4: %s\n", utility.SliceToString(network.NameserversV4))
+				utility.Printf("Nameservers IPv4: %s\n", utility.SliceToString(network.NameserversV4))
 			}
 			if len(network.NameserversV6) > 0 {
-				fmt.Printf("Nameservers IPv6: %s\n", utility.SliceToString(network.NameserversV6))
+				utility.Printf("Nameservers IPv6: %s\n", utility.SliceToString(network.NameserversV6))
 			}
 		}
 	},

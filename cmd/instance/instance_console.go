@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -49,7 +48,7 @@ Example: civo instance console ID/NAME`,
 		}
 
 		if common.OutputFormat == "human" {
-			fmt.Printf("The instance %s (%s) has a console at %s\n", utility.Green(instance.Hostname), instance.ID,
+			utility.Printf("The instance %s (%s) has a console at %s\n", utility.Green(instance.Hostname), instance.ID,
 				utility.Green(url))
 		} else {
 			ow := utility.NewOutputWriter()
