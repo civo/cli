@@ -211,7 +211,7 @@ You can add the API Key to the CLI tool through the API Keys command.
 `civo apikey add apikey_name apikey` such as:
 
 ```sh
-$ civo apikey add Demo_Test_Key DAb75oyqVeaE7BI6Aa74FaRSP0E2tMZXkDWLC9wNQdcpGfH51r
+$ $ civo apikey save Demo_Test_Key DAb75oyqVeaE7BI6Aa74FaRSP0E2tMZXkDWLC9wNQdcpGfH51r
   Saved the API Key Demo_Test_Key as DAb75oyqVeaE7BI6Aa74FaRSP0E2tMZXkDWLC9wNQdcpGfH51r
 ```
 
