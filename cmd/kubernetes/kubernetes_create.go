@@ -3,7 +3,6 @@ package kubernetes
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
@@ -232,7 +231,7 @@ var kubernetesCreateCmd = &cobra.Command{
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
 			s.Writer = os.Stderr
-      s.Prefix = fmt.Sprintf("Creating a %d node %s cluster of %s instances called %s... ",kubernetesCluster.NumTargetNode, clusterType, kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
+			s.Prefix = fmt.Sprintf("Creating a %d node %s cluster of %s instances called %s... ", kubernetesCluster.NumTargetNode, clusterType, kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
 			s.Start()
 
 			for stillCreating {
