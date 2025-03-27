@@ -666,6 +666,28 @@ Hello, world!
 
 Please note that resizing can take a few minutes.
 
+
+### Recovery Mode
+
+Recovery mode allows you to boot your instance into a recovery environment for troubleshooting.
+
+```sh
+# Enable recovery mode for an instance
+civo instance recovery enable INSTANCE_ID/HOSTNAME
+
+# Disable recovery mode for an instance
+civo instance recovery disable INSTANCE_ID/HOSTNAME
+
+# Check recovery mode status
+civo instance recovery-status INSTANCE_ID/HOSTNAME
+```
+
+The recovery-status command supports custom output formats with the following fields:
+* id - The instance ID
+* hostname - The instance hostname
+* status - Current recovery mode status
+
+
 ### VNC Access
 
 The VNC command allows you to access your instance through a browser-based VNC console.
@@ -688,6 +710,8 @@ When executed, the command will:
 2. Generate a secure VNC URL
 3. Automatically open the console in your default browser
 4. Attempt to connect for up to 35 seconds before timing out
+
+
 ## Kubernetes clusters
 
 #### Introduction
