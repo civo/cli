@@ -666,6 +666,7 @@ Hello, world!
 
 Please note that resizing can take a few minutes.
 
+
 ### Recovery Mode
 
 Recovery mode allows you to boot your instance into a recovery environment for troubleshooting.
@@ -685,6 +686,31 @@ The recovery-status command supports custom output formats with the following fi
 * id - The instance ID
 * hostname - The instance hostname
 * status - Current recovery mode status
+
+
+### VNC Access
+
+The VNC command allows you to access your instance through a browser-based VNC console.
+
+```sh
+# Open VNC console (default duration)
+civo instance vnc INSTANCE_ID/HOSTNAME
+
+# Open VNC console with custom duration
+civo instance vnc INSTANCE_ID/HOSTNAME --duration 2h
+```
+
+The `--duration` flag accepts Go's duration format:
+* "30m" - 30 minutes
+* "1h" - 1 hour
+* "24h" - 24 hours
+
+When executed, the command will:
+1. Enable VNC access for the specified instance
+2. Generate a secure VNC URL
+3. Automatically open the console in your default browser
+4. Attempt to connect for up to 35 seconds before timing out
+
 
 ## Kubernetes clusters
 

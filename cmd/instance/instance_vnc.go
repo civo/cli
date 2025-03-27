@@ -13,15 +13,17 @@ import (
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
-
 // maxAttempts represents the max number of attempts (each one every 7s) to connect to the vnc URL
 const maxAttempts = 5
+var duration string
 
 var instanceVncCmd = &cobra.Command{
 	Use:     "vnc",
-	Example: "civo instance vnc INSTANCE-ID/NAME",
+	Example: "civo instance vnc INSTANCE-ID/NAME [--duration 2h]",
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Enable and access VNC on an instance",
+	Long: `Enable and access VNC on an instance with optional duration.
+Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -44,8 +46,13 @@ var instanceVncCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		// Enable VNC for the instance
-		vnc, err := client.GetInstanceVnc(instance.ID)
+		// Enable VNC for the instance with optional duration
+		var vnc civogo.InstanceVnc
+		if duration != "" {
+			vnc, err = client.GetInstanceVnc(instance.ID, duration)
+		} else {
+			vnc, err = client.GetInstanceVnc(instance.ID)
+		}
 		if err != nil {
 			utility.Error("Failed to enable VNC on instance '%s': %s", instance.Hostname, err)
 			os.Exit(1)
