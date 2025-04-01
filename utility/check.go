@@ -76,10 +76,10 @@ func GetK3sSize() ([]string, error) {
 // CheckAPPName is a function to check if the app name is valid
 func CheckAPPName(appName string) bool {
 	client, err := config.CivoAPIClient()
-	client.Region = "LON1"
 	if err != nil {
 		return false
 	}
+	client.Region = "nyc1"
 
 	allAPP, err := client.ListKubernetesMarketplaceApplications()
 	if err != nil {
@@ -98,10 +98,10 @@ func CheckAPPName(appName string) bool {
 // ListDefaultApps is a function to list the default apps in the marketplace
 func ListDefaultApps() ([]string, error) {
 	client, err := config.CivoAPIClient()
-	client.Region = "LON1"
 	if err != nil {
 		return nil, err
 	}
+	client.Region = "nyc1"
 
 	allApps, err := client.ListKubernetesMarketplaceApplications()
 	if err != nil {
