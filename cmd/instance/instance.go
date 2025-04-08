@@ -29,6 +29,7 @@ func init() {
 	InstanceCmd.AddCommand(instanceRemoveCmd)
 	InstanceCmd.AddCommand(instanceRebootCmd)
 	InstanceCmd.AddCommand(instanceSoftRebootCmd)
+	InstanceCmd.AddCommand(instanceSnapshotCreateCmd)
 	// InstanceCmd.AddCommand(instanceConsoleCmd)
 	InstanceCmd.AddCommand(instanceStopCmd)
 	InstanceCmd.AddCommand(instanceStartCmd)
@@ -45,6 +46,11 @@ func init() {
 	instanceUpdateCmd.Flags().StringVarP(&notes, "notes", "n", "", "notes stored against the instance")
 	instanceUpdateCmd.Flags().StringVarP(&reverseDNS, "reverse-dns", "r", "", "the reverse DNS entry for the instance")
 	instanceUpdateCmd.Flags().StringVarP(&hostname, "hostname", "s", "", "the instance's hostname")
+
+	instanceSnapshotCreateCmd.Flags().StringVarP(&instanceSnapshotName, "name", "n", "", "Name of the snapshot")
+	instanceSnapshotCreateCmd.Flags().StringVarP(&instanceSnapshotDescription, "description", "d", "", "Description of the snapshot")
+	instanceSnapshotCreateCmd.Flags().BoolVarP(&instanceSnapshotIncludeVolumes, "include-volumes", "v", true, "Include volumes in the snapshot")
+	instanceSnapshotCreateCmd.MarkFlagRequired("name")
 
 	instanceCreateCmd.Flags().BoolVarP(&wait, "wait", "w", false, "wait until the instance's is ready")
 	instanceCreateCmd.Flags().StringVarP(&hostnameCreate, "hostname", "s", "", "the instance's hostname")
