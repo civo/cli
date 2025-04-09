@@ -23,4 +23,19 @@ var DiskImageCmd = &cobra.Command{
 func init() {
 	DiskImageCmd.AddCommand(diskImageListCmd)
 	DiskImageCmd.AddCommand(diskImageFindCmd)
+	DiskImageCmd.AddCommand(diskImageCreateCmd)
+
+	diskImageCreateCmd.Flags().StringVarP(&createDiskImageName, "name", "n", "", "Name of the disk image")
+	diskImageCreateCmd.Flags().StringVarP(&createDiskImageDistribution, "distribution", "d", "", "Distribution name (e.g. ubuntu, centos)")
+	diskImageCreateCmd.Flags().StringVarP(&createDiskImageVersion, "version", "v", "", "Version of the distribution")
+	diskImageCreateCmd.Flags().StringVarP(&createDiskImagePath, "path", "p", "", "Path to disk image file (.raw/.qcow2)")
+	diskImageCreateCmd.Flags().StringVarP(&createOS, "os", "t", "linux", "Operating system type (linux/windows)")
+	diskImageCreateCmd.Flags().StringVarP(&createLogoPath, "logo_path", "l", "", "Path to SVG logo file")
+
+	diskImageCreateCmd.MarkFlagRequired("name")
+	diskImageCreateCmd.MarkFlagRequired("distribution")
+	diskImageCreateCmd.MarkFlagRequired("version")
+	diskImageCreateCmd.MarkFlagRequired("path")
+
+	diskImageListCmd.Flags().BoolVar(&showLocalImages, "local", false, "Include custom images in the list")
 }
