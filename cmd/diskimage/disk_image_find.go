@@ -1,17 +1,18 @@
 package diskimage
 
 import (
+	"os"
+
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var diskImageFindCmd = &cobra.Command{
-	Use:     "find",
-	Aliases: []string{"get", "search"},
-	Example: `civo diskimage find`,
+	Use:     "show",
+	Aliases: []string{"get", "search", "find"},
+	Example: `civo diskimage show`,
 	Short:   "Finds a disk image by either part of the ID or part of the name",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
