@@ -24,6 +24,7 @@ func init() {
 	DiskImageCmd.AddCommand(diskImageListCmd)
 	DiskImageCmd.AddCommand(diskImageFindCmd)
 	DiskImageCmd.AddCommand(diskImageCreateCmd)
+	DiskImageCmd.AddCommand(diskImageDeleteCmd)
 
 	diskImageCreateCmd.Flags().StringVarP(&createDiskImageName, "name", "n", "", "Name of the disk image")
 	diskImageCreateCmd.Flags().StringVarP(&createDiskImageDistribution, "distribution", "d", "", "Distribution name (e.g. ubuntu, centos)")

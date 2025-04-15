@@ -27,7 +27,7 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 - [Quota](#quota)
 - [Sizes](#sizes)
 - [SSH Keys](#ssh-keys)
-- [DiskImages](#disk-image)
+- [Disk Images](#disk-images)
 - [Volumes](#volumes)
 - [Teams](#teams)
 - [Permissions](#permissions)
@@ -1562,6 +1562,61 @@ $ civo objectstore credential delete cli-demo-fa5d-7de9b2
 Warning: Are you sure you want to delete the cli-demo-fa5d-7de9b2 Object Store Credential (y/N) ? y
 The Object Store Credential (cli-demo-fa5d-7de9b2) has been deleted
 ```
+
+## Disk Images
+
+Civo CLI provides comprehensive disk image management capabilities through the `diskimage` command. This feature allows you to list, create, show, and delete disk images in your Civo account.
+
+### List Disk Images
+```bash
+civo diskimage ls [--local]
+```
+Lists all available disk images. Use the `--local` flag to include custom images in the list.
+
+Available output fields:
+- id
+- name
+- version
+- state
+- distribution
+
+Example with custom format:
+```bash
+civo diskimage ls -o=custom -f=id,name
+```
+
+### Create Disk Image
+```bash
+civo diskimage create --name NAME --distribution DISTRO --version VERSION --path PATH [--os TYPE] [--logo_path LOGO]
+```
+
+Required flags:
+- `--name, -n`: Name of the disk image
+- `--distribution, -d`: Distribution name (e.g., ubuntu, centos)
+- `--version, -v`: Version of the distribution
+- `--path, -p`: Path to disk image file
+
+Optional flags:
+- `--os, -t`: Operating system type (linux/windows, defaults to linux)
+- `--logo_path, -l`: Path to SVG logo file
+
+Requirements:
+- Disk image must be in `.raw` or `.qcow2` format
+- Logo must be in SVG format
+
+### Show Disk Image Details
+```bash
+civo diskimage show ID/NAME
+```
+Finds and displays details of a disk image by its ID or name.
+
+### Delete Disk Image
+```bash
+civo diskimage delete ID/NAME
+```
+Deletes a disk image from your account.
+
+**Note:** All disk image operations respect the currently selected region.
 
 ## Quota
 
