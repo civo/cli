@@ -10,8 +10,8 @@ func TestWriteCustomOutput(t *testing.T) {
 	ow.WriteCustomOutput("B")
 }
 
-// TestExampleFWriteCustomOutput shows how to use the WriteCustomOutput function
-func TestExampleFWriteCustomOutput(t *testing.T) {
+// ExampleFWriteCustomOutput shows how to use the WriteCustomOutput function
+func ExampleFWriteCustomOutput() {
 	ow := NewOutputWriter()
 	// Write 3 lines and assert correct result
 	ow.StartLine()
