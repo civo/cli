@@ -107,8 +107,6 @@ var diskImageCreateCmd = &cobra.Command{
 			return fmt.Errorf("failed to create disk image: %s", err)
 		}
 
-		fmt.Println("DISK URL: ", resp.DiskImageURL)
-
 		// Upload disk image
 		err = uploadUsingPresigned(resp.DiskImageURL, createDiskImagePath)
 		if err != nil {
