@@ -3,6 +3,7 @@ package diskimage
 import (
 	"crypto/md5"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -11,11 +12,13 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
+	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 )
 
@@ -79,7 +82,7 @@ var diskImageCreateCmd = &cobra.Command{
 			if err != nil {
 				return fmt.Errorf("failed to read logo file: %s", err)
 			}
-			logoBase64 = string(logoBytes)
+			logoBase64 = base64.StdEncoding.EncodeToString(logoBytes)
 		}
 
 		// Create API request
@@ -103,6 +106,8 @@ var diskImageCreateCmd = &cobra.Command{
 		if err != nil {
 			return fmt.Errorf("failed to create disk image: %s", err)
 		}
+
+		fmt.Println("DISK URL: ", resp.DiskImageURL)
 
 		// Upload disk image
 		err = uploadUsingPresigned(resp.DiskImageURL, createDiskImagePath)
@@ -136,10 +141,39 @@ func uploadUsingPresigned(url string, filepath string) error {
 	}
 	defer file.Close()
 
-	req, err := http.NewRequest("PUT", url, file)
+	// Get file size for progress bar and content-length header
+	fileInfo, err := file.Stat()
 	if err != nil {
 		return err
 	}
+
+	// Create progress bar
+	bar := progressbar.NewOptions64(
+		fileInfo.Size(),
+		progressbar.OptionSetDescription("Uploading disk image..."),
+		progressbar.OptionShowBytes(true),
+		progressbar.OptionSetWidth(40),
+		progressbar.OptionThrottle(100*time.Millisecond),
+		progressbar.OptionShowCount(),
+		progressbar.OptionSetRenderBlankState(true),
+		progressbar.OptionOnCompletion(func() {
+			fmt.Fprint(os.Stderr, "\n")
+		}),
+		progressbar.OptionSpinnerType(14),
+		progressbar.OptionFullWidth(),
+	)
+
+	// Create a reader that updates the progress bar
+	reader := io.TeeReader(file, bar)
+
+	req, err := http.NewRequest("PUT", url, reader)
+	if err != nil {
+		return err
+	}
+
+	// Set required headers
+	req.ContentLength = fileInfo.Size()
+	req.Header.Set("Content-Length", fmt.Sprintf("%d", fileInfo.Size()))
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
