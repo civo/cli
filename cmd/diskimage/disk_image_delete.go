@@ -9,11 +9,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var diskImageFindCmd = &cobra.Command{
-	Use:     "show",
-	Aliases: []string{"get", "search", "find"},
-	Example: `civo diskimage show`,
-	Short:   "Finds a disk image by either part of the ID or part of the name",
+var diskImageDeleteCmd = &cobra.Command{
+	Use:     "delete",
+	Aliases: []string{"rm", "remove"},
+	Example: `civo diskimage delete ID/NAME`,
+	Short:   "Delete a disk image",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
@@ -28,11 +28,19 @@ var diskImageFindCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"id": diskImg.ID, "name": diskImg.Name, "version": diskImg.Version, "state": diskImg.State, "distribution": diskImg.Distribution})
+		err = client.DeleteDiskImage(diskImg.ID)
+		if err != nil {
+			utility.Error("Error deleting the disk image: %s", err)
+			os.Exit(1)
+		}
+
+		ow := utility.NewOutputWriter()
+		ow.AppendData("Disk image", diskImg.Name)
+		ow.AppendData("Result", "deleted")
 
 		switch common.OutputFormat {
 		case "json":
-			ow.WriteSingleObjectJSON(common.PrettySet)
+			ow.WriteMultipleObjectsJSON(common.PrettySet)
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
