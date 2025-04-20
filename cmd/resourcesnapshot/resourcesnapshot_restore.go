@@ -63,6 +63,9 @@ If you wish to use a custom format, the available fields are:
 				OverwriteExisting: overwriteExisting,
 			}
 			req.Instance = instanceReq
+		} else {
+			utility.Error("Unsupported snapshot type: %s. Currently only instance snapshots are supported", snapshot.ResourceType)
+			os.Exit(1)
 		}
 
 		// Restore from the snapshot
