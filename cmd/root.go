@@ -18,6 +18,7 @@ import (
 	"github.com/civo/cli/cmd/objectstore"
 	"github.com/civo/cli/cmd/permission"
 	"github.com/civo/cli/cmd/region"
+	"github.com/civo/cli/cmd/resourcesnapshot"
 	"github.com/civo/cli/cmd/size"
 	"github.com/civo/cli/cmd/sshkey"
 	"github.com/civo/cli/cmd/teams"
@@ -156,6 +157,7 @@ func init() {
 	rootCmd.AddCommand(objectstore.ObjectStoreCmd)
 	rootCmd.AddCommand(permission.PermissionsCmd)
 	rootCmd.AddCommand(region.RegionCmd)
+	rootCmd.AddCommand(resourcesnapshot.ResourceSnapshotCmd)
 	rootCmd.AddCommand(size.SizeCmd)
 	rootCmd.AddCommand(sshkey.SSHKeyCmd)
 	rootCmd.AddCommand(teams.TeamsCmd)
