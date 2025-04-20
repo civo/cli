@@ -32,6 +32,7 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 - [Teams](#teams)
 - [Permissions](#permissions)
 - [Region](#region)
+- [Resource Snapshots](#resource-snapshots)
 - [Enabling shell autocompletion](#enabling-shell-autocompletion)
 - [Contributing](#contributing)
 - [License](#license)
@@ -2185,6 +2186,35 @@ $ civo permissions ls
 ```
 
 ## Region
+
+## Resource Snapshots
+
+Resource snapshots allow you to manage snapshots of your resources. You can list, show details, update, delete, and restore snapshots using the following commands:
+
+```sh
+# List all resource snapshots
+civo resource-snapshot list
+
+# Show details of a specific snapshot
+civo resource-snapshot show SNAPSHOT_ID/NAME
+
+# Update a snapshot
+civo resource-snapshot update SNAPSHOT_ID/NAME
+
+# Delete a snapshot
+civo resource-snapshot delete SNAPSHOT_ID/NAME
+
+# Restore a snapshot
+civo resource-snapshot restore SNAPSHOT_ID/NAME
+```
+
+The available fields for custom output format when listing snapshots are:
+- id
+- name
+- description
+- resource_type
+- created_at
+
 
 As Civo grows, more regions for your instances will become available. You can run `civo region ls` to list the regions available. Block storage (Volumes) is region-specific, so if you configure an instance in one region, any volumes you wish to attach to that instance would have to be in the same region.
 
