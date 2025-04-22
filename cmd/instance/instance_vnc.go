@@ -57,14 +57,14 @@ Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 			vnc, err = client.GetInstanceVnc(instance.ID)
 		}
 		if err != nil {
-			utility.Error("Failed to enable the console access on instance '%s': %s", instance.Hostname, err)
+			utility.Error("Failed to enable console access on instance '%s': %s", instance.Hostname, err)
 			os.Exit(1)
 		}
 
 		// Display VNC details
 		utility.Info("Console access successfully enabled for instance: %s", instance.Hostname)
-		utility.Info("Console Access URL: %s", vnc.URI)
-		utility.Info("We're preparing the Console Access. This may take a while...")
+		utility.Info("Console access URL: %s", vnc.URI)
+		utility.Info("We're preparing console access. This may take a while...")
 
 		// exchange apikey with a valid JWT (accessing the VNC url is allowed only via JWTs)
 		exchangeTokenResp, err := client.ExchangeAuthToken(&civogo.ExchangeAuthTokenRequest{})
@@ -82,15 +82,15 @@ Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 			os.Exit(1)
 		}
 
-		utility.Info("Opening the Console in your default browser...")
+		utility.Info("Opening console in your default browser...")
 		time.Sleep(3 * time.Second)
 
 		// Open VNC in the browser
 		err = browser.OpenInBrowser(vnc.URI)
 		if err != nil {
-			utility.Error("Failed to open the Console Access URL in the browser: %s", err)
+			utility.Error("Failed to open console access URL in the browser: %s", err)
 		} else {
-			utility.Info("The Console Access Session is now active. You can access your instance's graphical interface.")
+			utility.Info("The console access session is now active. You can access your instance's graphical interface.")
 		}
 	},
 }
@@ -98,7 +98,7 @@ Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 // endpointReady checks if the given URL endpoint is ready by sending a GET request
 // and returning true if the HTTP status code is not 503 or 40x
 func endpointReady(url string) bool {
-	utility.Info("New attempt to reach the Console URI...")
+	utility.Info("New attempt to reach console URL...")
 	resp, err := http.Get(url)
 	if err != nil {
 		return false
@@ -118,7 +118,7 @@ func waitEndpointReady(url string) error {
 			return nil
 		}
 		if attempt == maxAttempts {
-			return fmt.Errorf("max num of attempts reached: Console endpoint not ready - please contact the support")
+			return fmt.Errorf("max num of attempts reached: console endpoint not ready - please contact Civo support")
 		}
 		time.Sleep(7 * time.Second) // Wait for 7 seconds before the next attempt
 	}
