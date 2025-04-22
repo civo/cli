@@ -78,17 +78,17 @@ Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 
 		err = waitEndpointReady(vnc.URI)
 		if err != nil {
-			utility.Error("Console URL is not reachable: %s", err)
+			utility.Error("The console URL is not reachable: %s", err)
 			os.Exit(1)
 		}
 
-		utility.Info("Opening console in your default browser...")
+		utility.Info("Opening the console in your default browser...")
 		time.Sleep(3 * time.Second)
 
 		// Open VNC in the browser
 		err = browser.OpenInBrowser(vnc.URI)
 		if err != nil {
-			utility.Error("Failed to open console access URL in the browser: %s", err)
+			utility.Error("Failed to open the console access URL in the browser: %s", err)
 		} else {
 			utility.Info("The console access session is now active. You can access your instance's graphical interface.")
 		}
@@ -98,7 +98,7 @@ Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 // endpointReady checks if the given URL endpoint is ready by sending a GET request
 // and returning true if the HTTP status code is not 503 or 40x
 func endpointReady(url string) bool {
-	utility.Info("New attempt to reach console URL...")
+	utility.Info("New attempt to reach the console URL...")
 	resp, err := http.Get(url)
 	if err != nil {
 		return false
