@@ -13,16 +13,19 @@ import (
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
+
 // maxAttempts represents the max number of attempts (each one every 7s) to connect to the vnc URL
 const maxAttempts = 5
+
 var duration string
 
 var instanceVncCmd = &cobra.Command{
-	Use:     "vnc",
+	Use:     "console",
+	Aliases: []string{"vnc", "access"},
 	Example: "civo instance vnc INSTANCE-ID/NAME [--duration 2h]",
 	Args:    cobra.MinimumNArgs(1),
-	Short:   "Enable and access VNC on an instance",
-	Long: `Enable and access VNC on an instance with optional duration.
+	Short:   "Enable and access the noVNC console on an instance",
+	Long: `Enable and access the console (through the VNC protocol via the default browser) on an instance with optional duration.
 Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -54,14 +57,14 @@ Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 			vnc, err = client.GetInstanceVnc(instance.ID)
 		}
 		if err != nil {
-			utility.Error("Failed to enable VNC on instance '%s': %s", instance.Hostname, err)
+			utility.Error("Failed to enable the console access on instance '%s': %s", instance.Hostname, err)
 			os.Exit(1)
 		}
 
 		// Display VNC details
-		utility.Info("VNC has been successfully enabled for instance: %s", instance.Hostname)
-		utility.Info("VNC URL: %s", vnc.URI)
-		utility.Info("We're preparing the VNC Console Access. This may take a while...")
+		utility.Info("Console access successfully enabled for instance: %s", instance.Hostname)
+		utility.Info("Console Access URL: %s", vnc.URI)
+		utility.Info("We're preparing the Console Access. This may take a while...")
 
 		// exchange apikey with a valid JWT (accessing the VNC url is allowed only via JWTs)
 		exchangeTokenResp, err := client.ExchangeAuthToken(&civogo.ExchangeAuthTokenRequest{})
@@ -75,19 +78,19 @@ Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 
 		err = waitEndpointReady(vnc.URI)
 		if err != nil {
-			utility.Error("VNC Console URL is not reachable: %s", err)
+			utility.Error("Console URL is not reachable: %s", err)
 			os.Exit(1)
 		}
 
-		utility.Info("Opening VNC in your default browser...")
+		utility.Info("Opening the Console in your default browser...")
 		time.Sleep(3 * time.Second)
 
 		// Open VNC in the browser
 		err = browser.OpenInBrowser(vnc.URI)
 		if err != nil {
-			utility.Error("Failed to open VNC URL in the browser: %s", err)
+			utility.Error("Failed to open the Console Access URL in the browser: %s", err)
 		} else {
-			utility.Info("VNC session is now active. You can access your instance's graphical interface.")
+			utility.Info("The Console Access Session is now active. You can access your instance's graphical interface.")
 		}
 	},
 }
@@ -95,7 +98,7 @@ Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 // endpointReady checks if the given URL endpoint is ready by sending a GET request
 // and returning true if the HTTP status code is not 503 or 40x
 func endpointReady(url string) bool {
-	utility.Info("New attempt to reach the VNC Console URI...")
+	utility.Info("New attempt to reach the Console URI...")
 	resp, err := http.Get(url)
 	if err != nil {
 		return false
@@ -115,7 +118,7 @@ func waitEndpointReady(url string) error {
 			return nil
 		}
 		if attempt == maxAttempts {
-			return fmt.Errorf("max num of attempts reached: VNC endpoint not ready - please contact the support")
+			return fmt.Errorf("max num of attempts reached: Console endpoint not ready - please contact the support")
 		}
 		time.Sleep(7 * time.Second) // Wait for 7 seconds before the next attempt
 	}
