@@ -105,7 +105,7 @@ func endpointReady(url string) bool {
 	}
 	defer resp.Body.Close()
 
-	return resp.StatusCode != http.StatusServiceUnavailable
+	return resp.StatusCode != http.StatusOK
 }
 
 // waitEndpointReady continuously checks the given URL endpoint every 5 seconds
