@@ -19,13 +19,13 @@ type DiskImage struct {
 	Distribution string
 }
 
-var showLocalImages bool
+var showCustomImages bool
 
 var diskImageListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
 	Example: `civo diskimage ls
-civo diskimage ls --local`,
+civo diskimage ls --custom`,
 	Short: "List diskimages",
 	Long: `List all available diskimages.
 If you wish to use a custom format, the available fields are:
@@ -36,9 +36,12 @@ If you wish to use a custom format, the available fields are:
 	* state
 	* distribution
 
-Example: civo diskimage ls -o=custom -f=id,name
+Examples:
+  # Show only ID & name, for all images
+  civo diskimage ls -o=custom -f=id,name
 
-Use --local flag to include custom images in the list`,
+  # Show only your custom images
+  civo diskimage ls --custom`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if common.RegionSet != "" {
@@ -51,7 +54,7 @@ Use --local flag to include custom images in the list`,
 
 		diskImageList := []DiskImage{}
 
-		diskImages, err := client.ListDiskImages(showLocalImages)
+		diskImages, err := client.ListDiskImages(showCustomImages)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)

@@ -1569,9 +1569,9 @@ Civo CLI provides comprehensive disk image management capabilities through the `
 
 ### List Disk Images
 ```bash
-civo diskimage ls [--local]
+civo diskimage ls [--custom]
 ```
-Lists all available disk images. Use the `--local` flag to include custom images in the list.
+Lists all available disk images. Use the `--custom` flag to show only your custom images in the list.
 
 Available output fields:
 - id
