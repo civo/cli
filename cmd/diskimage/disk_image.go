@@ -38,5 +38,5 @@ func init() {
 	diskImageCreateCmd.MarkFlagRequired("version")
 	diskImageCreateCmd.MarkFlagRequired("path")
 
-	diskImageListCmd.Flags().BoolVar(&showLocalImages, "local", false, "Include custom images in the list")
+	diskImageListCmd.Flags().BoolVar(&showCustomImages, "custom", false, "Show only your custom disk images")
 }
