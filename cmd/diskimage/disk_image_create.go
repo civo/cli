@@ -98,7 +98,7 @@ var diskImageCreateCmd = &cobra.Command{
 			OS:           createOS,
 			ImageSHA256:  sha256Sum,
 			ImageMD5:     md5Sum,
-			ImageSize:    size,
+			ImageSizeBytes:    size,
 			LogoBase64:   logoBase64,
 		}
 
