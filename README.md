@@ -348,6 +348,46 @@ $ civo size ls
 | g3.xsmall          | Extra Small                    | Instance   |   1 |    1024 |  25 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g3.small           | Small                          | Instance   |   1 |    2048 |  25 |
+
+#### Instance Snapshots
+
+Snapshots allow you to create point-in-time copies of your instances. You can use these snapshots to create new instances or restore an existing instance to a previous state.
+
+##### Creating a Snapshot
+
+To create a snapshot of an instance:
+
+```sh
+$ civo instance snapshot create INSTANCE_NAME [flags]
+
+Flags:
+  -n, --name string   The name of the snapshot (default: auto-generated)
+  -s, --safe         Shutdown the instance before taking the snapshot
+```
+
+##### Listing Snapshots
+
+To view all available snapshots:
+
+```sh
+$ civo instance snapshot list
+```
+
+##### Restoring from a Snapshot
+
+To restore an instance from a snapshot:
+
+```sh
+$ civo instance snapshot restore INSTANCE_NAME SNAPSHOT_NAME
+```
+
+##### Removing a Snapshot
+
+To delete a snapshot:
+
+```sh
+$ civo instance snapshot remove SNAPSHOT_NAME
+```
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g3.medium          | Medium                         | Instance   |   2 |    4096 |  50 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
