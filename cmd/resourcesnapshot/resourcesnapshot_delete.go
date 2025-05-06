@@ -28,11 +28,6 @@ var resourceSnapshotDeleteCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if len(args) == 0 {
-			utility.Error("No snapshot ID/NAME provided")
-			os.Exit(1)
-		}
-
 		// Get the snapshot first to verify it exists and to show the name in output
 		snapshot, err := client.GetResourceSnapshot(args[0])
 		if err != nil {
