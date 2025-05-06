@@ -8,9 +8,10 @@ jobs:
     steps:
 
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
-        go-version: 1.24
+        go-version: 1.24.x
+        cache-dependency-path: go.sum
       id: go
 
     - name: Check out code into the Go module directory
