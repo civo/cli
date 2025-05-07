@@ -29,7 +29,7 @@ type Metadata struct {
 	LatestReleaseCheck  time.Time `json:"latest_release_check"`
 	URL                 string    `json:"url"`
 	LastCmdExecuted     time.Time `json:"last_command_executed"`
-	DisableVersionCheck bool      `json:"disable_version_check"` // ✅ New flag to disable version check
+	DisableVersionCheck bool      `json:"disable_version_check"` 
 }
 
 // Current contains the parsed ~/.civo.json file
@@ -97,7 +97,7 @@ func loadConfig(filename string) {
 			saveUpdatedConfig(filename)
 		}
 
-		// ✅ Only check for updates if DisableVersionCheck is false
+		
 		if !Current.Meta.DisableVersionCheck && time.Since(Current.Meta.LatestReleaseCheck) > (24*time.Hour) {
 			Current.Meta.LatestReleaseCheck = time.Now()
 			saveUpdatedConfig(filename)
@@ -150,7 +150,7 @@ func checkConfigFile(filename string) error {
 		DefaultRegion:       "NYC1",
 		URL:                 "https://api.civo.com",
 		LastCmdExecuted:     time.Now(),
-		DisableVersionCheck: false, // ✅ Default is false
+		DisableVersionCheck: false,  
 	}
 
 	if Current.Meta.CurrentAPIKey != "" {
@@ -233,7 +233,7 @@ func CivoAPIClient() (*civogo.Client, error) {
 	}
 
 	var version string
-	if !Current.Meta.DisableVersionCheck { // ✅ Skip version check if disabled
+	if !Current.Meta.DisableVersionCheck { 
 		res, skip := common.VersionCheck(common.GithubClient())
 		if !skip {
 			version = *res.TagName
@@ -260,7 +260,7 @@ func initializeDefaultConfig(filename string) {
 			DefaultRegion:       "LON1",
 			URL:                 "https://api.civo.com",
 			LastCmdExecuted:     time.Now(),
-			DisableVersionCheck: false, // ✅ Default is false
+			DisableVersionCheck: false, // 
 		},
 		RegionToFeatures: make(map[string]civogo.Feature),
 	}
