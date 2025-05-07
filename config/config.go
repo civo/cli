@@ -260,7 +260,7 @@ func initializeDefaultConfig(filename string) {
 			DefaultRegion:       "LON1",
 			URL:                 "https://api.civo.com",
 			LastCmdExecuted:     time.Now(),
-			DisableVersionCheck: false, // 
+			DisableVersionCheck: false, 
 		},
 		RegionToFeatures: make(map[string]civogo.Feature),
 	}
