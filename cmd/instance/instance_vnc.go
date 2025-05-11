@@ -123,3 +123,7 @@ func waitEndpointReady(url string) error {
 		time.Sleep(7 * time.Second) // Wait for 7 seconds before the next attempt
 	}
 }
+func init() {
+	instanceVncCmd.AddCommand(statusCmd)
+	instanceVncCmd.AddCommand(stopCmd)
+}
