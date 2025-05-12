@@ -96,7 +96,7 @@ Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 }
 
 // endpointReady checks if the given URL endpoint is ready by sending a GET request
-// and returning true if the HTTP status code is not 503 or 40x
+// and returning true if the HTTP status code is 200 OK.
 func endpointReady(url string) bool {
 	utility.Info("New attempt to reach the console URL...")
 	resp, err := http.Get(url)
@@ -105,7 +105,7 @@ func endpointReady(url string) bool {
 	}
 	defer resp.Body.Close()
 
-	return resp.StatusCode != http.StatusServiceUnavailable
+	return resp.StatusCode == http.StatusOK
 }
 
 // waitEndpointReady continuously checks the given URL endpoint every 5 seconds

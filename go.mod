@@ -1,6 +1,4 @@
-go 1.23.0
-
-toolchain go1.23.7
+go 1.24.0
 
 module github.com/civo/cli
 
@@ -9,7 +7,7 @@ require (
 	github.com/adhocore/gronx v1.19.5
 	github.com/alejandrojnm/go-pluralize v0.1.0
 	github.com/briandowns/spinner v1.23.2
-	github.com/civo/civogo v0.3.100-0.20250429103028-33841d7778f2
+	github.com/civo/civogo v0.4.1
 	github.com/google/go-github/v57 v57.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.5.4
@@ -38,7 +36,7 @@ require (
 	github.com/fatih/color v1.9.0 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/gomarkdown/markdown v0.0.0-20191123064959-2c17d62f5098 // indirect
+	github.com/gomarkdown/markdown v0.0.0-20250311123330-531bef5e742b // indirect
 	github.com/google/go-github v17.0.0+incompatible // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.1.0 // indirect
@@ -62,7 +60,7 @@ require (
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/ulikunitz/xz v0.5.12 // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
-	golang.org/x/image v0.0.0-20191206065243-da761ea9ff43 // indirect
+	golang.org/x/image v0.18.0 // indirect
 	golang.org/x/mod v0.17.0 // indirect
 	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
