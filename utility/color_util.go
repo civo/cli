@@ -91,6 +91,8 @@ func ColorStatus(status string) string {
 		returnText = Magenta(status)
 	case status == "STOPPING":
 		returnText = Yellow(status)
+	case status == "MIGRATING":
+		returnText = Magenta(status)
 	default:
 		returnText = Red("Unknown")
 	}
