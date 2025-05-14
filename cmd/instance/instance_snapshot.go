@@ -215,6 +215,14 @@ var snapshotDeleteCmd = &cobra.Command{
 	},
 }
 
+// Added: Flag variables for snapshot restore
+var (
+	restoreDescription       string
+	restoreHostname          string
+	restorePrivateIPv4       string
+	restoreOverwriteExisting bool
+)
+
 var snapshotRestoreCmd = &cobra.Command{
 	Use:     "restore [INSTANCE_NAME/ID] [SNAPSHOT_NAME/ID]",
 	Short:   "Restore an instance from a snapshot",
@@ -229,13 +237,48 @@ var snapshotRestoreCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		err = client.RestoreInstanceSnapshot(args[0], args[1], &civogo.RestoreInstanceSnapshotParams{})
+		// Construct params from flags
+		params := civogo.RestoreInstanceSnapshotParams{
+			Description:       restoreDescription,
+			Hostname:          restoreHostname,
+			PrivateIPv4:       restorePrivateIPv4,
+			OverwriteExisting: restoreOverwriteExisting,
+		}
+
+		// Updated SDK call to RestoreInstanceSnapshot
+		instanceRestoreInfo, err := client.RestoreInstanceSnapshot(args[0], args[1], &params)
 		if err != nil {
 			utility.Error("Restoring snapshot failed with %s", err)
 			os.Exit(1)
 		}
 
-		fmt.Printf("The instance %s has been restored from snapshot %s", utility.Green(args[0]), utility.Green(args[1]))
+		ow := utility.NewOutputWriter()
+		ow.StartLine()
+		ow.AppendDataWithLabel("id", instanceRestoreInfo.ID, "ID")
+		ow.AppendDataWithLabel("name", instanceRestoreInfo.Name, "Name")
+		ow.AppendDataWithLabel("hostname", instanceRestoreInfo.Hostname, "Hostname")
+		ow.AppendDataWithLabel("description", instanceRestoreInfo.Description, "Description")
+		ow.AppendDataWithLabel("from_snapshot", instanceRestoreInfo.FromSnapshot, "From Snapshot")
+		ow.AppendDataWithLabel("private_ipv4", instanceRestoreInfo.PrivateIPv4, "Private IPv4")
+		ow.AppendDataWithLabel("overwrite_existing", fmt.Sprintf("%t", instanceRestoreInfo.OverwriteExisting), "Overwrite Existing")
+		ow.AppendDataWithLabel("state", instanceRestoreInfo.Status.State, "State")
+		ow.AppendDataWithLabel("created_at", instanceRestoreInfo.CreatedAt.Format("2006-01-02 15:04:05"), "Created At")
+		if instanceRestoreInfo.CompletedAt != nil {
+			ow.AppendDataWithLabel("completed_at", instanceRestoreInfo.CompletedAt.Format("2006-01-02 15:04:05"), "Completed At")
+		} else {
+			ow.AppendDataWithLabel("completed_at", "", "Completed At")
+		}
+
+		switch common.OutputFormat {
+		case "json":
+			ow.WriteSingleObjectJSON(common.PrettySet)
+		case "custom":
+			ow.WriteCustomOutput(common.OutputFields)
+		default:
+			// Print a success message before the key-value output for default format
+			fmt.Printf("The instance %s has been restored from snapshot %s. Details:\n", utility.Green(args[0]), utility.Green(args[1]))
+			ow.WriteKeyValues()
+		}
 	},
 }
 
@@ -246,6 +289,11 @@ func init() {
 
 	snapshotUpdateCmd.Flags().StringP("name", "n", "", "New name for the snapshot")
 	snapshotUpdateCmd.Flags().StringP("description", "d", "", "New description for the snapshot")
+
+	snapshotRestoreCmd.Flags().StringVarP(&restoreDescription, "description", "d", "", "New description for the restored instance")
+	snapshotRestoreCmd.Flags().StringVar(&restoreHostname, "hostname", "", "New hostname for the restored instance (optional)")
+	snapshotRestoreCmd.Flags().StringVar(&restorePrivateIPv4, "private-ipv4", "", "New private IPv4 address for the restored instance (optional)")
+	snapshotRestoreCmd.Flags().BoolVar(&restoreOverwriteExisting, "overwrite-existing", false, "Overwrite an existing instance if it shares the same IP or hostname (defaults to false)")
 
 	snapshotCmd.AddCommand(snapshotCreateCmd)
 	snapshotCmd.AddCommand(snapshotListCmd)
