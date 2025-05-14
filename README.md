@@ -362,15 +362,15 @@ $ civo instance snapshot create INSTANCE_NAME [flags]
 
 Flags:
   -n, --name string   The name of the snapshot (default: auto-generated)
-  -s, --safe         Shutdown the instance before taking the snapshot
+  -d, --description string   Description for the snapshot
 ```
 
 ##### Listing Snapshots
 
-To view all available snapshots:
+To view all available snapshots for a specific instance:
 
 ```sh
-$ civo instance snapshot list
+$ civo instance snapshot list INSTANCE_NAME/ID
 ```
 
 ##### Restoring from a Snapshot
@@ -378,7 +378,35 @@ $ civo instance snapshot list
 To restore an instance from a snapshot:
 
 ```sh
-$ civo instance snapshot restore INSTANCE_NAME SNAPSHOT_NAME
+$ civo instance snapshot restore INSTANCE_NAME/ID SNAPSHOT_NAME/ID [flags]
+
+Flags:
+  -d, --description string   New description for the restored instance
+      --hostname string      New hostname for the restored instance (optional)
+      --private-ipv4 string  New private IPv4 address for the restored instance (optional)
+      --overwrite-existing   Overwrite an existing instance if it shares the same IP or hostname (defaults to false)
+```
+
+Example:
+```sh
+$ civo instance snapshot restore my-instance-id snap-123 --hostname restored-instance-new-name --overwrite-existing
+```
+
+##### Updating a Snapshot
+
+To update the name or description of an instance snapshot:
+
+```sh
+$ civo instance snapshot update INSTANCE_NAME/ID SNAPSHOT_NAME/ID [flags]
+
+Flags:
+  -n, --name string         New name for the snapshot
+  -d, --description string  New description for the snapshot
+```
+
+Example:
+```sh
+$ civo instance snapshot update my-instance my-snapshot --name new-snapshot-name --description "Updated snapshot description"
 ```
 
 ##### Removing a Snapshot
@@ -386,8 +414,9 @@ $ civo instance snapshot restore INSTANCE_NAME SNAPSHOT_NAME
 To delete a snapshot:
 
 ```sh
-$ civo instance snapshot remove SNAPSHOT_NAME
+$ civo instance snapshot remove INSTANCE_NAME/ID SNAPSHOT_NAME/ID
 ```
+
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g3.medium          | Medium                         | Instance   |   2 |    4096 |  50 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
