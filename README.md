@@ -1376,11 +1376,18 @@ $ civo firewall create civocli_demo
 Created a firewall called civocli_demo with ID ab2a25d7-edd4-4ecd-95c4-58cb6bc402de
 ```
 
-You can also create a firewall without any default rules by using the flag `-r` or `--create-rules` set to `false`. In both cases, the usage is like:
+By default, this newly created firewall will come with the default rules applied.
+
+To create a firewall without any default rules, use the `--no-default-rules` flag:
+
+```bash
+civo firewall create new_firewall_name --no-default-rules
+```
+
+You can also use the `-r` or `--create-rules` flag set to `false` to create a firewall without default rules, but it is deprecated and will be removed in future versions. In both cases, the usage is like:
 
 ```bash
 civo firewall create new_firewall_name --create-rules=false
-
 ```
 
 You will then be able to **configure rules** that allow connections to and from your instance by adding a new rule using `civo firewall rule create firewall_id` with the required and your choice of optional parameters, listed here and used in an example below:
