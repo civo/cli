@@ -71,6 +71,7 @@ var snapshotListCmd = &cobra.Command{
 	Use:     "list [INSTANCE_NAME/ID]",
 	Short:   "List all snapshots of an instance",
 	Example: "civo instance snapshot list INSTANCE_NAME/ID",
+	Aliases: []string{"ls"},
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
