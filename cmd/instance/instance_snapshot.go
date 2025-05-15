@@ -303,7 +303,7 @@ func init() {
 	snapshotUpdateCmd.Flags().StringP("name", "n", "", "New name for the snapshot")
 	snapshotUpdateCmd.Flags().StringP("description", "d", "", "New description for the snapshot")
 
-	snapshotRestoreCmd.Flags().StringVarP(&restoreDescription, "description", "d", "", "New description for the restored instance")
+	snapshotRestoreCmd.Flags().StringVarP(&restoreDescription, "description", "d", "", "New description for the restore operation")
 	snapshotRestoreCmd.Flags().StringVar(&restoreHostname, "hostname", "", "New hostname for the restored instance (optional)")
 	snapshotRestoreCmd.Flags().StringVar(&restorePrivateIPv4, "private-ipv4", "", "New private IPv4 address for the restored instance (optional)")
 	snapshotRestoreCmd.Flags().BoolVar(&restoreOverwriteExisting, "overwrite-existing", false, "Overwrite the existing instance")
