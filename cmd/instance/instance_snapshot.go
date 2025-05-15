@@ -26,6 +26,9 @@ var snapshotCreateCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
@@ -73,6 +76,9 @@ var snapshotListCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
@@ -94,14 +100,8 @@ var snapshotListCmd = &cobra.Command{
 			ow.AppendDataWithLabel("created_at", snapshot.CreatedAt.Format("2006-01-02 15:04:05"), "Created At")
 		}
 
-		switch common.OutputFormat {
-		case "json":
-			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
-			ow.WriteCustomOutput(common.OutputFields)
-		default:
-			ow.WriteTable()
-		}
+		// Use FinishAndPrintOutput to handle empty results and different output formats
+		ow.FinishAndPrintOutput()
 	},
 }
 
@@ -114,6 +114,9 @@ var snapshotShowCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
@@ -153,6 +156,9 @@ var snapshotUpdateCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
@@ -200,6 +206,9 @@ var snapshotDeleteCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
@@ -232,6 +241,9 @@ var snapshotRestoreCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
+		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
