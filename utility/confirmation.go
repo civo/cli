@@ -3,6 +3,7 @@ package utility
 import (
 	"bufio"
 	"fmt"
+	"github.com/civo/cli/common"
 	"io"
 	"os"
 	"strings"
@@ -47,6 +48,14 @@ func AskForConfirm(message string) error {
 // a resource and then sends it through to AskForConfirm to
 // parses and verifies user input.
 func UserConfirmedDeletion(resourceType string, ignoringConfirmed bool, objectToDelete string) bool {
+	if common.Quiet {
+		if !ignoringConfirmed {
+			Warning("this is non-interactive mode. Please specify the -y flag in order to proceed")
+			return false
+		} else if ignoringConfirmed {
+			return true
+		}
+	}
 	if !ignoringConfirmed {
 		message := fmt.Sprintf("delete the %s %s", Green(objectToDelete), resourceType)
 		err := AskForConfirm(message)
@@ -62,6 +71,14 @@ func UserConfirmedDeletion(resourceType string, ignoringConfirmed bool, objectTo
 // a resource and then sends it through to AskForConfirm to
 // parses and verifies user input.
 func UserConfirmedUnassign(resourceType string, ignoringConfirmed bool, objectToDelete string) bool {
+	if common.Quiet {
+		if !ignoringConfirmed {
+			Warning("this is non-interactive mode. Please specify the -y flag in order to proceed")
+			return false
+		} else if ignoringConfirmed {
+			return true
+		}
+	}
 	if !ignoringConfirmed {
 		message := fmt.Sprintf("unassign %s %s from Civo resource", Green(objectToDelete), resourceType)
 		err := AskForConfirm(message)
@@ -77,6 +94,14 @@ func UserConfirmedUnassign(resourceType string, ignoringConfirmed bool, objectTo
 // a resource and then sends it through to AskForConfirm to
 // parses and verifies user input.
 func UserConfirmedRestore(resourceType string, ignoringConfirmed bool, objectToDelete string) bool {
+	if common.Quiet {
+		if !ignoringConfirmed {
+			Warning("this is non-interactive mode. Please specify the -y flag in order to proceed")
+			return false
+		} else if ignoringConfirmed {
+			return true
+		}
+	}
 	if !ignoringConfirmed {
 		message := fmt.Sprintf("restore db %s from %s backup", Green(resourceType), Green(objectToDelete))
 		err := AskForConfirm(message)
@@ -92,6 +117,14 @@ func UserConfirmedRestore(resourceType string, ignoringConfirmed bool, objectToD
 // and then sends it through to AskForConfirm to
 // parses and verifies user input.
 func UserConfirmedOverwrite(resourceType string, ignoringConfirmed bool) bool {
+	if common.Quiet {
+		if !ignoringConfirmed {
+			Warning("this is non-interactive mode. Please specify the -y flag in order to proceed")
+			return false
+		} else if ignoringConfirmed {
+			return true
+		}
+	}
 	if !ignoringConfirmed {
 		message := fmt.Sprintf("overwrite the %s", resourceType)
 		err := AskForConfirm(message)

@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -63,7 +62,7 @@ Example:
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Recovery Status for instance %s (%s):\n", utility.Green(instance.Hostname), instance.ID)
+			utility.Printf("Recovery Status for instance %s (%s):\n", utility.Green(instance.Hostname), instance.ID)
 			ow.WriteKeyValues()
 		}
 	},

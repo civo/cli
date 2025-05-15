@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -47,7 +46,7 @@ Example:
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
-		fmt.Println("Instance ID is: ", instance.ID)
+		utility.Println("Instance ID is: ", instance.ID)
 
 		if args[0] == "enable" {
 			_, err := client.EnableRecoveryMode(instance.ID)
@@ -64,9 +63,9 @@ Example:
 		}
 
 		if args[0] == "enable" {
-			fmt.Printf("Recovery mode has been enabled for instance %s\n", utility.Green(instance.Hostname))
+			utility.Printf("Recovery mode has been enabled for instance %s\n", utility.Green(instance.Hostname))
 		} else {
-			fmt.Printf("Recovery mode has been disabled for instance %s\n", utility.Green(instance.Hostname))
+			utility.Printf("Recovery mode has been disabled for instance %s\n", utility.Green(instance.Hostname))
 		}
 	},
 }

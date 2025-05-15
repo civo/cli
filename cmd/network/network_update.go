@@ -1,7 +1,6 @@
 package network
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -48,7 +47,7 @@ var networkUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Renamed the network called %s with ID %s to %s\n", utility.Green(oldNetwork.Label), utility.Green(network.ID), utility.Green(network.Label))
+			utility.Printf("Renamed the network called %s with ID %s to %s\n", utility.Green(oldNetwork.Label), utility.Green(network.ID), utility.Green(network.Label))
 		}
 	},
 }

@@ -2,7 +2,6 @@ package database
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
@@ -95,10 +94,10 @@ var dbDeleteCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(backupList), "database"), utility.Green(strings.Join(dbNameList, ", ")))
+				utility.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(backupList), "database"), utility.Green(strings.Join(dbNameList, ", ")))
 			}
 		} else {
-			fmt.Println("Operation aborted")
+			utility.Println("Operation aborted")
 		}
 	},
 }

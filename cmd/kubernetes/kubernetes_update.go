@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -66,7 +65,7 @@ var kubernetesUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The firewall for the Kubernetes cluster %s has been updated\n", utility.Green(kubernetesFindCluster.Name))
+			utility.Printf("The firewall for the Kubernetes cluster %s has been updated\n", utility.Green(kubernetesFindCluster.Name))
 		}
 	},
 }

@@ -50,7 +50,7 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, switchContext bo
 		return nil, writeErr
 	}
 
-	fmt.Printf("Merged with main kubernetes config: %s\n", Green(localKubeconfigPath))
+	Printf("Merged with main kubernetes config: %s\n", Green(localKubeconfigPath))
 
 	// Merge the two kubeconfigs and read the output into 'data'
 	osResult := CheckOS()
@@ -89,17 +89,17 @@ func mergeConfigs(localKubeconfigPath string, k3sconfig []byte, switchContext bo
 // Generates config files give the path to file: string and the data: []byte
 func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bool, switchConfig bool, clusterName string) error {
 	if !suppressMessage {
-		fmt.Print("\nAccess your cluster with:\n")
+		Printf("\nAccess your cluster with:\n")
 		if mergeConfigs {
 			if !switchConfig {
-				fmt.Printf("kubectl config use-context %s\n", strings.ToLower(clusterName))
+				Printf("kubectl config use-context %s\n", strings.ToLower(clusterName))
 			}
-			fmt.Println("kubectl get node")
+			Println("kubectl get node")
 		} else {
 			if strings.Contains(path, ".kube") {
-				fmt.Print("kubectl get node\n")
+				Printf("kubectl get node\n")
 			} else {
-				fmt.Printf("KUBECONFIG=%s kubectl get node\n", path)
+				Printf("KUBECONFIG=%s kubectl get node\n", path)
 			}
 		}
 	}
@@ -141,7 +141,7 @@ func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested s
 	for i, app := range appList {
 		if strings.Contains(app.Name, appName) {
 			if foundIndex != -1 {
-				fmt.Printf("unable to find %s because there were multiple matches", appName)
+				Printf("unable to find %s because there were multiple matches", appName)
 			}
 			foundIndex = i
 		}
@@ -183,7 +183,7 @@ func RequestedSplit(appList []civogo.KubernetesMarketplaceApplication, requested
 	for i := range allsplit {
 		checkApp, err := checkAppPlan(appList, allsplit[i])
 		if err != nil {
-			fmt.Print(err)
+			Error("%s", err)
 		}
 
 		allApp = append(allApp, checkApp)

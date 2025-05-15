@@ -2,7 +2,6 @@ package objectstore
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
@@ -96,10 +95,10 @@ var objectStoreDeleteCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(objectStoreList), "objectStore"), utility.Green(strings.Join(objectStoreNameList, ", ")))
+				utility.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(objectStoreList), "objectStore"), utility.Green(strings.Join(objectStoreNameList, ", ")))
 			}
 		} else {
-			fmt.Println("Operation aborted")
+			utility.Println("Operation aborted")
 		}
 	},
 }

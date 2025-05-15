@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -75,7 +74,7 @@ var dbBackupUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Database backup (%s) for database %s has been update\n", utility.Green(bk.Name), utility.Green(bk.DatabaseName))
+			utility.Printf("Database backup (%s) for database %s has been update\n", utility.Green(bk.Name), utility.Green(bk.DatabaseName))
 		}
 	},
 }

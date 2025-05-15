@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"fmt"
 	"runtime"
 
 	"github.com/civo/cli/common"
+	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
@@ -27,18 +27,18 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			switch {
 			case verbose:
-				fmt.Printf(logo)
-				fmt.Printf("Client version: v%s\n", common.VersionCli)
-				fmt.Printf("Go version (client): %s\n", runtime.Version())
-				fmt.Printf("Build date (client): %s\n", common.DateCli)
-				fmt.Printf("Git commit (client): %s\n", common.CommitCli)
-				fmt.Printf("OS/Arch (client): %s/%s\n", runtime.GOOS, runtime.GOARCH)
+				utility.Printf(logo)
+				utility.Printf("Client version: v%s\n", common.VersionCli)
+				utility.Printf("Go version (client): %s\n", runtime.Version())
+				utility.Printf("Build date (client): %s\n", common.DateCli)
+				utility.Printf("Git commit (client): %s\n", common.CommitCli)
+				utility.Printf("OS/Arch (client): %s/%s\n", runtime.GOOS, runtime.GOARCH)
 				common.CheckVersionUpdate()
 			case quiet:
-				fmt.Printf("v%s\n", common.VersionCli)
+				utility.Printf("v%s\n", common.VersionCli)
 			default:
 				common.CheckVersionUpdate()
-				fmt.Printf("Civo CLI v%s\n", common.VersionCli)
+				utility.Printf("Civo CLI v%s\n", common.VersionCli)
 			}
 		},
 	}

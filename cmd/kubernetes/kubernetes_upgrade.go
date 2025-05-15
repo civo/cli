@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -55,7 +54,7 @@ var kubernetesUpgradeCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The kubernetes cluster %s has started upgrading to %s\n", utility.Green(kubernetesCluster.Name), utility.Green(kubernetesNewVersion))
+			utility.Printf("The kubernetes cluster %s has started upgrading to %s\n", utility.Green(kubernetesCluster.Name), utility.Green(kubernetesNewVersion))
 		}
 	},
 }
