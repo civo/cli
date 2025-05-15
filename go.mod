@@ -7,7 +7,7 @@ require (
 	github.com/adhocore/gronx v1.19.5
 	github.com/alejandrojnm/go-pluralize v0.1.0
 	github.com/briandowns/spinner v1.23.2
-	github.com/civo/civogo v0.5.0
+	github.com/civo/civogo v0.5.1
 	github.com/google/go-github/v57 v57.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.5.4
@@ -76,3 +76,5 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.7.0 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
 )
+
+replace github.com/civo/civogo => /Users/uzair/Work/civogo
