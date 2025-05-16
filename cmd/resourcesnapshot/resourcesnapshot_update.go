@@ -16,7 +16,7 @@ var name, description string
 var resourceSnapshotUpdateCmd = &cobra.Command{
 	Use:     "update ID/NAME",
 	Args:    cobra.MinimumNArgs(1),
-	Aliases: []string{"modify", "change"},
+	Aliases: []string{"modify", "edit"},
 	Short:   "Update resource snapshot details",
 	Long: `Update the name or description of a resource snapshot by ID or name.
 If you wish to use a custom format, the available fields are:
@@ -24,6 +24,13 @@ If you wish to use a custom format, the available fields are:
 * id
 * name
 * description`,
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		// Check if at least one flag is provided
+		if name == "" && description == "" {
+			return fmt.Errorf("you must provide at least one of --name or --description")
+		}
+		return nil
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -33,12 +40,6 @@ If you wish to use a custom format, the available fields are:
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
-			os.Exit(1)
-		}
-
-		// Check if at least one flag is provided
-		if name == "" && description == "" {
-			utility.Error("You must provide at least one of --name or --description")
 			os.Exit(1)
 		}
 

@@ -14,7 +14,7 @@ import (
 var resourceSnapshotShowCmd = &cobra.Command{
 	Use:     "show ID/NAME",
 	Args:    cobra.MinimumNArgs(1),
-	Aliases: []string{"get", "inspect"},
+	Aliases: []string{"get", "describe"},
 	Short:   "Show details of a specific resource snapshot",
 	Long: `Show details of a specific resource snapshot by ID or name.
 If you wish to use a custom format, the available fields are:
