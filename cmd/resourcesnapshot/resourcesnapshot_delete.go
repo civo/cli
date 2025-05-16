@@ -42,7 +42,7 @@ var resourceSnapshotDeleteCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if common.OutputFormat == "human" {
+		if common.OutputFormat == common.OutputFormatHuman {
 			fmt.Printf("The resource snapshot %s (%s) has been deleted\n", utility.Green(snapshot.Name), snapshot.ID)
 		} else {
 			ow := utility.NewOutputWriter()
