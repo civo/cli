@@ -70,7 +70,7 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if common.OutputFormat == "human" {
+		if common.OutputFormat == common.OutputFormatHuman {
 			fmt.Printf("Moved the IP %s to the instance %s (%s)\n", utility.Green(args[1]), utility.Green(instance.Hostname), instance.ID)
 		} else {
 			ow := utility.NewOutputWriter()
