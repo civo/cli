@@ -320,7 +320,7 @@ If you wish to use a custom format, the available fields are:
 			}
 		}
 
-		if common.OutputFormat == "human" {
+		if common.OutputFormat == common.OutputFormatHuman {
 			if executionTime != "" {
 				fmt.Printf("The instance %s %s has been created in %s\n", utility.Green(instance.Hostname), publicIP, executionTime)
 			} else {

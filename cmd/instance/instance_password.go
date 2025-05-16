@@ -41,7 +41,7 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if common.OutputFormat == "human" {
+		if common.OutputFormat == common.OutputFormatHuman {
 			fmt.Printf("The instance %s (%s) has the password %s (and user %s)\n", utility.Green(instance.Hostname), instance.ID, utility.Green(instance.InitialPassword), utility.Green(instance.InitialUser))
 		} else {
 			ow := utility.NewOutputWriter()

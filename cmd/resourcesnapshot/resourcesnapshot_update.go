@@ -78,7 +78,7 @@ If you wish to use a custom format, the available fields are:
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			if common.OutputFormat == "human" {
+			if common.OutputFormat == common.OutputFormatHuman {
 				fmt.Printf("The resource snapshot %s (%s) has been updated\n", utility.Green(updatedSnapshot.Name), updatedSnapshot.ID)
 			}
 			ow.WriteKeyValues()
