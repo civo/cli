@@ -53,10 +53,12 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		switch common.OutputFormat {
-		case "json":
+		case common.OutputFormatJSON:
 			ow.WriteMultipleObjectsJSON(common.PrettySet)
-		case "custom":
+		case common.OutputFormatCustom:
 			ow.WriteCustomOutput(common.OutputFields)
+		case common.OutputFormatHuman:
+			ow.WriteTable()
 		default:
 			ow.WriteTable()
 		}
