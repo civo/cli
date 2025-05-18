@@ -61,7 +61,7 @@ require (
 	github.com/ulikunitz/xz v0.5.12 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
-	golang.org/x/image v0.0.0-20191206065243-da761ea9ff43 // indirect
+	golang.org/x/image v0.18.0 // indirect
 	golang.org/x/mod v0.24.0 // indirect
 	golang.org/x/net v0.40.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
