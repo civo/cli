@@ -77,10 +77,13 @@ If you wish to use a custom format, the available fields are:
 
 		ow := utility.NewOutputWriter()
 		ow.StartLine()
-		ow.AppendDataWithLabel("id", restoredSnapshot.ID, "ID")
-		ow.AppendDataWithLabel("name", restoredSnapshot.Name, "Name")
-		ow.AppendDataWithLabel("description", restoredSnapshot.Description, "Description")
 		ow.AppendDataWithLabel("resource_type", restoredSnapshot.ResourceType, "Resource Type")
+
+		if restoredSnapshot.ResourceType == "instance" && restoredSnapshot.Instance != nil {
+			ow.AppendDataWithLabel("id", restoredSnapshot.Instance.ID, "ID")
+			ow.AppendDataWithLabel("name", restoredSnapshot.Instance.Name, "Name")
+			ow.AppendDataWithLabel("description", restoredSnapshot.Instance.Description, "Description")
+		}
 
 		switch common.OutputFormat {
 		case "json":
@@ -89,10 +92,10 @@ If you wish to use a custom format, the available fields are:
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			if common.OutputFormat == common.OutputFormatHuman {
-				fmt.Printf("The resource %s has been restored from snapshot %s (%s)\n",
+				fmt.Printf("The resource of type %s has been restored from snapshot %s (%s).\n",
 					utility.Green(restoredSnapshot.ResourceType),
-					utility.Green(restoredSnapshot.Name),
-					restoredSnapshot.ID)
+					utility.Green(snapshot.Name),
+					snapshot.ID)
 			}
 			ow.WriteKeyValues()
 		}
