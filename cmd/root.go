@@ -11,7 +11,6 @@ import (
 	"github.com/civo/cli/cmd/firewall"
 	"github.com/civo/cli/cmd/instance"
 	"github.com/civo/cli/cmd/ip"
-	"github.com/civo/cli/cmd/kfcluster"
 	"github.com/civo/cli/cmd/kubernetes"
 	"github.com/civo/cli/cmd/loadbalancer"
 	"github.com/civo/cli/cmd/network"
@@ -150,7 +149,6 @@ func init() {
 	rootCmd.AddCommand(firewall.FirewallCmd)
 	rootCmd.AddCommand(instance.InstanceCmd)
 	rootCmd.AddCommand(ip.IPCmd)
-	rootCmd.AddCommand(kfcluster.KFClusterCmd)
 	rootCmd.AddCommand(kubernetes.KubernetesCmd)
 	rootCmd.AddCommand(loadbalancer.LoadBalancerCmd)
 	rootCmd.AddCommand(network.NetworkCmd)

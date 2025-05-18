@@ -349,6 +349,75 @@ $ civo size ls
 | g3.xsmall          | Extra Small                    | Instance   |   1 |    1024 |  25 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g3.small           | Small                          | Instance   |   1 |    2048 |  25 |
+
+#### Instance Snapshots
+
+Snapshots allow you to create point-in-time copies of your instances. You can use these snapshots to create new instances or restore an existing instance to a previous state.
+
+##### Creating a Snapshot
+
+To create a snapshot of an instance:
+
+```sh
+$ civo instance snapshot create INSTANCE_NAME [flags]
+
+Flags:
+  -n, --name string   The name of the snapshot (default: auto-generated)
+  -d, --description string   Description for the snapshot
+```
+
+##### Listing Snapshots
+
+To view all available snapshots for a specific instance:
+
+```sh
+$ civo instance snapshot list INSTANCE_NAME/ID
+```
+
+##### Restoring from a Snapshot
+
+To restore an instance from a snapshot:
+
+```sh
+$ civo instance snapshot restore INSTANCE_NAME/ID SNAPSHOT_NAME/ID [flags]
+
+Flags:
+  -d, --description string   New description for the restored instance
+      --hostname string      New hostname for the restored instance (optional)
+      --private-ipv4 string  New private IPv4 address for the restored instance (optional)
+      --overwrite-existing   Overwrite an existing instance if it shares the same IP or hostname (defaults to false)
+```
+
+Example:
+```sh
+$ civo instance snapshot restore my-instance-id snap-123 --hostname restored-instance-new-name --overwrite-existing
+```
+
+##### Updating a Snapshot
+
+To update the name or description of an instance snapshot:
+
+```sh
+$ civo instance snapshot update INSTANCE_NAME/ID SNAPSHOT_NAME/ID [flags]
+
+Flags:
+  -n, --name string         New name for the snapshot
+  -d, --description string  New description for the snapshot
+```
+
+Example:
+```sh
+$ civo instance snapshot update my-instance my-snapshot --name new-snapshot-name --description "Updated snapshot description"
+```
+
+##### Removing a Snapshot
+
+To delete a snapshot:
+
+```sh
+$ civo instance snapshot remove INSTANCE_NAME/ID SNAPSHOT_NAME/ID
+```
+
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g3.medium          | Medium                         | Instance   |   2 |    4096 |  50 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
@@ -1337,11 +1406,18 @@ $ civo firewall create civocli_demo
 Created a firewall called civocli_demo with ID ab2a25d7-edd4-4ecd-95c4-58cb6bc402de
 ```
 
-You can also create a firewall without any default rules by using the flag `-r` or `--create-rules` set to `false`. In both cases, the usage is like:
+By default, this newly created firewall will come with the default rules applied.
+
+To create a firewall without any default rules, use the `--no-default-rules` flag:
+
+```bash
+civo firewall create new_firewall_name --no-default-rules
+```
+
+You can also use the `-r` or `--create-rules` flag set to `false` to create a firewall without default rules, but it is deprecated and will be removed in future versions. In both cases, the usage is like:
 
 ```bash
 civo firewall create new_firewall_name --create-rules=false
-
 ```
 
 You will then be able to **configure rules** that allow connections to and from your instance by adding a new rule using `civo firewall rule create firewall_id` with the required and your choice of optional parameters, listed here and used in an example below:
