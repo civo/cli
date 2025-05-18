@@ -61,7 +61,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if common.OutputFormat == common.OutputFormatHuman {
-			fmt.Printf("The instance %s (%s) was updated\n", utility.Green(instance.Hostname), instance.ID)
+			fmt.Printf("The instance %s (%s) has been updated\n", utility.Green(instance.Hostname), instance.ID)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
