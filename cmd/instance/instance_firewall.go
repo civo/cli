@@ -78,8 +78,8 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if common.OutputFormat == "human" {
-			fmt.Printf("Set the firewall for the instance %s (%s) to %s (%s)\n", utility.Green(instance.Hostname), instance.ID, utility.Green(firewall.Name), firewall.ID)
+		if common.OutputFormat == common.OutputFormatHuman {
+			fmt.Printf("The instance %s (%s) has been assigned to firewall %s (%s)\n", utility.Green(instance.Hostname), instance.ID, utility.Green(firewall.Name), firewall.ID)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()

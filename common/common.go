@@ -27,6 +27,15 @@ var (
 	DateCli = "unknown"
 )
 
+const (
+	// OutputFormatHuman for human readable output
+	OutputFormatHuman = "human"
+	// OutputFormatJSON for JSON output
+	OutputFormatJSON = "json"
+	// OutputFormatCustom for custom output
+	OutputFormatCustom = "custom"
+)
+
 // GithubClient Create a Github client
 func GithubClient() *github.Client {
 	return github.NewClient(nil)
