@@ -197,6 +197,7 @@ The civo cli have multiple global options, that you can use, like this:
       --pretty          Print pretty the json output
       --region string   Choose the region to connect to, if you use this option it will use it over the default region
   -y, --yes             Automatic yes to prompts; assume "yes" as answer to all prompts and run non-interactive
+  -q, --quiet           Disables logging and run non-interactive, requires --yes flag wherever user prompts are required
 ```
 
 ## API Keys

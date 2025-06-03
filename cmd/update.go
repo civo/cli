@@ -49,7 +49,7 @@ var (
 
 			// no updates
 			if len(releases) == 0 {
-				fmt.Printf("%s\n", utility.Green("Your client is up to date"))
+				utility.Printf("%s\n", utility.Green("Your client is up to date"))
 				os.Exit(0)
 			}
 
@@ -73,7 +73,7 @@ var (
 						os.Exit(1)
 					}
 
-					fmt.Printf("Updated to %s\n", utility.Green(latest.Version))
+					utility.Printf("Updated to %s\n", utility.Green(latest.Version))
 
 				}
 			}

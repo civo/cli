@@ -1,9 +1,10 @@
 package utility
 
 import (
-	"github.com/google/uuid"
 	"math/rand"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 var adjectives = [...]string{

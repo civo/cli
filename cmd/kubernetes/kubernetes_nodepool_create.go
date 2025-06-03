@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -89,7 +88,7 @@ var kubernetesNodePoolCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The pool (%s) was added to the cluster (%s)\n", utility.Green(poolID), utility.Green(kubernetesFindCluster.Name))
+			utility.Printf("The pool (%s) was added to the cluster (%s)\n", utility.Green(poolID), utility.Green(kubernetesFindCluster.Name))
 		}
 	},
 }

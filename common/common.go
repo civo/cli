@@ -17,6 +17,8 @@ var (
 	RegionSet string
 	// DefaultYes : automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively
 	DefaultYes bool
+	// Quiet disables logging and run non-interactively; only throws errors and requires --yes flag wherever user prompts are required
+	Quiet bool
 	// PrettySet : Prints the json output in pretty format
 	PrettySet bool
 	// VersionCli is set from outside using ldflags

@@ -2,7 +2,6 @@ package ip
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -60,10 +59,10 @@ civo ip Unassign <ip id>`,
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("Unassigned IP %s from Civo resource\n", utility.Green(ip.Name))
+				utility.Printf("Unassigned IP %s from Civo resource\n", utility.Green(ip.Name))
 			}
 		} else {
-			fmt.Println("Aborted")
+			utility.Println("Aborted")
 		}
 
 	},

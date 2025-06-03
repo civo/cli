@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/adhocore/gronx"
@@ -106,7 +105,7 @@ var dbBackupCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Database backup (%s) for database %s has been created\n", utility.Green(name), utility.Green(bk.DatabaseName))
+			utility.Printf("Database backup (%s) for database %s has been created\n", utility.Green(name), utility.Green(bk.DatabaseName))
 		}
 	},
 }

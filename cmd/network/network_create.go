@@ -57,7 +57,7 @@ var networkCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Created a network called %s with ID %s\n", utility.Green(network.Label), utility.Green(network.ID))
+			utility.Printf("Created a network called %s with ID %s\n", utility.Green(network.Label), utility.Green(network.ID))
 		}
 
 		if createDefaultFirewall {
@@ -70,7 +70,7 @@ var networkCreateCmd = &cobra.Command{
 				utility.Error("%s", err)
 				os.Exit(1)
 			}
-			fmt.Printf("Created a default firewall %s\n", utility.Green(firewall.Name))
+			utility.Printf("Created a default firewall %s\n", utility.Green(firewall.Name))
 		}
 	},
 }

@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -55,7 +54,7 @@ var dbUpdateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The Database %s was updated\n", utility.Green(findDB.Name))
+			utility.Printf("The Database %s was updated\n", utility.Green(findDB.Name))
 			os.Exit(0)
 		}
 	},

@@ -2,7 +2,6 @@ package volume
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"strings"
 
@@ -98,10 +97,10 @@ var volumeRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) have been deleted\n", pluralize.Pluralize(len(volumesList), "volume"), utility.Green(strings.Join(volumeNameList, ", ")))
+				utility.Printf("The %s (%s) have been deleted\n", pluralize.Pluralize(len(volumesList), "volume"), utility.Green(strings.Join(volumeNameList, ", ")))
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Println("Operation aborted.")
 		}
 	},
 }

@@ -1,7 +1,6 @@
 package sshkey
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/common"
@@ -58,7 +57,7 @@ var sshKeyCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Created an SSH key called %s with ID %s\n", utility.Green(sshKey.Name), utility.Green(sshKey.ID))
+			utility.Printf("Created an SSH key called %s with ID %s\n", utility.Green(sshKey.Name), utility.Green(sshKey.ID))
 		}
 	},
 }

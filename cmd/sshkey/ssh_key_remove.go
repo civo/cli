@@ -83,10 +83,10 @@ var sshKeyRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The ssh %s (%s) has been deleted\n", pluralize.Pluralize(len(sshList), "key"), utility.Green(strings.Join(sshKeyNameList, ", ")))
+				utility.Printf("The ssh %s (%s) has been deleted\n", pluralize.Pluralize(len(sshList), "key"), utility.Green(strings.Join(sshKeyNameList, ", ")))
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Println("Operation aborted.")
 		}
 	},
 }

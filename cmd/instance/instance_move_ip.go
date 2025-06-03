@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 
@@ -28,7 +27,7 @@ If you wish to use a custom format, the available fields are:
 		utility.EnsureCurrentRegion()
 
 		if len(args) != 2 {
-			fmt.Printf("You must specify %s parameters (you gave %s), the ID/name and the public IP\n", utility.Red("2"), utility.Red(strconv.Itoa(len(args))))
+			utility.Printf("You must specify %s parameters (you gave %s), the ID/name and the public IP\n", utility.Red("2"), utility.Red(strconv.Itoa(len(args))))
 			os.Exit(1)
 		}
 
@@ -71,7 +70,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if common.OutputFormat == "human" {
-			fmt.Printf("Moved the IP %s to the instance %s (%s)\n", utility.Green(args[1]), utility.Green(instance.Hostname), instance.ID)
+			utility.Printf("Moved the IP %s to the instance %s (%s)\n", utility.Green(args[1]), utility.Green(instance.Hostname), instance.ID)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()

@@ -1,7 +1,6 @@
 package instance
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -52,7 +51,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if common.OutputFormat == "human" {
-			fmt.Printf("The instance %s (%s) has been tagged with '%s'\n", utility.Green(instance.Hostname), instance.ID, utility.Green(tags))
+			utility.Printf("The instance %s (%s) has been tagged with '%s'\n", utility.Green(instance.Hostname), instance.ID, utility.Green(tags))
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()

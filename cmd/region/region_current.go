@@ -1,7 +1,6 @@
 package region
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -32,7 +31,7 @@ var regionCurrentCmd = &cobra.Command{
 		}
 
 		if strings.ToLower(config.Current.Meta.DefaultRegion) == strings.ToLower(args[0]) {
-			fmt.Printf("You are already using that region: %s\n", utility.Red(args[0]))
+			utility.Printf("You are already using that region: %s\n", utility.Red(args[0]))
 			os.Exit(1)
 		}
 
@@ -46,7 +45,7 @@ var regionCurrentCmd = &cobra.Command{
 		}
 
 		if !validRegion {
-			fmt.Printf("The region you tried to set %s doesn't exist, please use 'civo region ls' to get the code of a valid region\n", utility.Red(args[0]))
+			utility.Printf("The region you tried to set %s doesn't exist, please use 'civo region ls' to get the code of a valid region\n", utility.Red(args[0]))
 			os.Exit(1)
 		}
 
@@ -58,7 +57,7 @@ var regionCurrentCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The default region was set to (%s) %s\n", regionName, utility.Green(args[0]))
+			utility.Printf("The default region was set to (%s) %s\n", regionName, utility.Green(args[0]))
 		}
 	},
 }

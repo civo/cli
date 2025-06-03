@@ -1,7 +1,6 @@
 package firewall
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/civo/civogo"
@@ -79,7 +78,7 @@ var firewallCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Created a firewall called %s with ID %s\n", utility.Green(firewall.Name), utility.Green(firewall.ID))
+			utility.Printf("Created a firewall called %s with ID %s\n", utility.Green(firewall.Name), utility.Green(firewall.ID))
 		}
 	},
 }

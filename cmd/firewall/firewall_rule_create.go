@@ -92,15 +92,15 @@ var firewallRuleCreateCmd = &cobra.Command{
 		default:
 			if rule.Label == "" {
 				if newRuleConfig.EndPort == newRuleConfig.StartPort {
-					fmt.Printf("Created a firewall rule to %s, %s access to port %s %s %s with ID %s\n", utility.Green(newRuleConfig.Action), utility.Green(newRuleConfig.Direction), utility.Green(newRuleConfig.StartPort), directionValue, utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+					utility.Printf("Created a firewall rule to %s, %s access to port %s %s %s with ID %s\n", utility.Green(newRuleConfig.Action), utility.Green(newRuleConfig.Direction), utility.Green(newRuleConfig.StartPort), directionValue, utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
 				} else {
-					fmt.Printf("Created a firewall rule to %s, %s access to ports %s-%s %s %s with ID %s\n", utility.Green(newRuleConfig.Action), utility.Green(newRuleConfig.Direction), utility.Green(newRuleConfig.StartPort), utility.Green(newRuleConfig.EndPort), directionValue, utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+					utility.Printf("Created a firewall rule to %s, %s access to ports %s-%s %s %s with ID %s\n", utility.Green(newRuleConfig.Action), utility.Green(newRuleConfig.Direction), utility.Green(newRuleConfig.StartPort), utility.Green(newRuleConfig.EndPort), directionValue, utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
 				}
 			} else {
 				if newRuleConfig.EndPort == newRuleConfig.StartPort {
-					fmt.Printf("Created a firewall rule called %s to %s, %s access to port %s %s %s with ID %s\n", utility.Green(rule.Label), utility.Green(newRuleConfig.Action), utility.Green(newRuleConfig.Direction), utility.Green(newRuleConfig.StartPort), directionValue, utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+					utility.Printf("Created a firewall rule called %s to %s, %s access to port %s %s %s with ID %s\n", utility.Green(rule.Label), utility.Green(newRuleConfig.Action), utility.Green(newRuleConfig.Direction), utility.Green(newRuleConfig.StartPort), directionValue, utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
 				} else {
-					fmt.Printf("Created a firewall rule called %s to %s, %s access to ports %s-%s %s %s with ID %s\n", utility.Green(rule.Label), utility.Green(newRuleConfig.Action), utility.Green(newRuleConfig.Direction), utility.Green(newRuleConfig.StartPort), utility.Green(newRuleConfig.EndPort), directionValue, utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
+					utility.Printf("Created a firewall rule called %s to %s, %s access to ports %s-%s %s %s with ID %s\n", utility.Green(rule.Label), utility.Green(newRuleConfig.Action), utility.Green(newRuleConfig.Direction), utility.Green(newRuleConfig.StartPort), utility.Green(newRuleConfig.EndPort), directionValue, utility.Green(strings.Join(newRuleConfig.Cidr, ", ")), rule.ID)
 				}
 			}
 		}

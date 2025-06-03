@@ -1,7 +1,6 @@
 package volume
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 
@@ -37,7 +36,7 @@ var volumeResizeCmd = &cobra.Command{
 		}
 
 		if newSizeGB < volume.SizeGigabytes {
-			fmt.Printf("Sorry, the volume size specified (%s) must be larger than the volume's current size (%s)\n", utility.Red(strconv.Itoa(newSizeGB)), utility.Green(strconv.Itoa(volume.SizeGigabytes)))
+			utility.Printf("Sorry, the volume size specified (%s) must be larger than the volume's current size (%s)\n", utility.Red(strconv.Itoa(newSizeGB)), utility.Green(strconv.Itoa(volume.SizeGigabytes)))
 			os.Exit(1)
 		}
 
@@ -55,7 +54,7 @@ var volumeResizeCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The volume called %s with ID %s was resized\n", utility.Green(volume.Name), utility.Green(volume.ID))
+			utility.Printf("The volume called %s with ID %s was resized\n", utility.Green(volume.Name), utility.Green(volume.ID))
 		}
 	},
 }

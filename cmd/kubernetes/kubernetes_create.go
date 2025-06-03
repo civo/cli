@@ -208,7 +208,7 @@ var kubernetesCreateCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			} else {
-				fmt.Println("Operation aborted.")
+				utility.Println("Operation aborted.")
 				os.Exit(1)
 			}
 		} else {
@@ -229,10 +229,13 @@ var kubernetesCreateCmd = &cobra.Command{
 			startTime := utility.StartTime()
 
 			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
-			s.Prefix = fmt.Sprintf("Creating a %d node %s cluster of %s instances called %s... ", kubernetesCluster.NumTargetNode, clusterType, kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
-			s.Start()
+			var s *spinner.Spinner
+			if !common.Quiet {
+				s = spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+				s.Writer = os.Stderr
+				s.Prefix = fmt.Sprintf("Creating a %d node %s cluster of %s instances called %s... ", kubernetesCluster.NumTargetNode, clusterType, kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
+				s.Start()
+			}
 
 			for stillCreating {
 				kubernetesCheck, err := client.FindKubernetesCluster(kubernetesCluster.ID)
@@ -242,7 +245,9 @@ var kubernetesCreateCmd = &cobra.Command{
 				}
 				if kubernetesCheck.Ready {
 					stillCreating = false
-					s.Stop()
+					if !common.Quiet {
+						s.Stop()
+					}
 				} else {
 					time.Sleep(2 * time.Second)
 				}
@@ -275,9 +280,9 @@ var kubernetesCreateCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			if executionTime != "" {
-				fmt.Printf("The cluster %s (%s) has been created in %s\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID, executionTime)
+				utility.Printf("The cluster %s (%s) has been created in %s\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID, executionTime)
 			} else {
-				fmt.Printf("The cluster %s (%s) has been created\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID)
+				utility.Printf("The cluster %s (%s) has been created\n", utility.Green(kubernetesCluster.Name), kubernetesCluster.ID)
 			}
 
 		}

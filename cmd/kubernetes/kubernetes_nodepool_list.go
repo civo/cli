@@ -36,20 +36,20 @@ var kubernetesNodePoolListCmd = &cobra.Command{
 
 		for _, pool := range cluster.RequiredPools {
 			ow = utility.NewOutputWriter()
-			fmt.Println()
+			utility.Println()
 			ow.WriteHeader(fmt.Sprintf("Node Pool %s", pool.ID))
 			ow.AppendDataWithLabel("ID", pool.ID, "Name")
 			ow.AppendDataWithLabel("Size", pool.Size, "Size")
 			ow.AppendDataWithLabel("Count", fmt.Sprintf("%d", pool.Count), "Count")
 			labels, err := json.Marshal(pool.Labels)
 			if err != nil {
-				fmt.Println("Error:", err)
+				utility.Println("Error:", err)
 				return
 			}
 			ow.AppendDataWithLabel("Labels", string(labels), "Labels")
 			taints, err := json.Marshal(pool.Taints)
 			if err != nil {
-				fmt.Println("Error:", err)
+				utility.Println("Error:", err)
 				return
 			}
 			ow.AppendDataWithLabel("Taints", string(taints), "Taints")
