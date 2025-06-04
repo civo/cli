@@ -42,6 +42,9 @@ func init() {
 	InstanceCmd.AddCommand(instanceRecoveryCmd)
 	InstanceCmd.AddCommand(instanceRecoveryStatusCmd)
 	InstanceCmd.AddCommand(snapshotCmd)
+	InstanceCmd.AddCommand(instanceAllowedIPsUpdateCmd)
+	InstanceCmd.AddCommand(instanceBandwidthUpdateCmd)
+
 
 	instanceUpdateCmd.Flags().StringVarP(&notes, "notes", "n", "", "notes stored against the instance")
 	instanceUpdateCmd.Flags().StringVarP(&reverseDNS, "reverse-dns", "r", "", "the reverse DNS entry for the instance")
@@ -63,8 +66,14 @@ func init() {
 	instanceCreateCmd.Flags().BoolVar(&skipShebangCheck, "skip-shebang-check", false, "skip the shebang line check when passing a user init script")
 	instanceCreateCmd.Flags().StringSliceVarP(&volumes, "volumes", "v", []string{}, "List of volumes to attach at boot")
 	instanceCreateCmd.Flags().StringVarP(&volumetype, "volume-type", "", "", "Specify the volume type for the instance")
+	instanceCreateCmd.Flags().StringArrayVar(&allowedIPs, "allowed-ips", []string{}, "A comma separated list of IP addresses that the instance is allowed to use")
+	instanceCreateCmd.Flags().IntVar(&networkBandwidthLimit, "network-bandwidth-limit", 0, "The network bandwidth limit for the instance in Mbps (0 for unlimited)")
 
 	instanceVncCmd.Flags().StringVarP(&duration, "duration", "d", "", "Duration for VNC access (e.g. 30m, 1h, 24h)")
 
 	instanceStopCmd.Flags().BoolVarP(&waitStop, "wait", "w", false, "wait until the instance's is stoped")
+
+	instanceAllowedIPsUpdateCmd.Flags().StringSliceVarP(&allowedIPsUpdate, "ips", "", []string{}, "Comma-separated list of IP addresses to allow (e.g., --ips 1.2.3.4,5.6.7.8). To clear all IPs, provide an empty string.")
+
+	instanceBandwidthUpdateCmd.Flags().IntVarP(&bandwidthLimitUpdate, "limit", "l", 0, "Network bandwidth limit in Mbps (e.g., 1000). Use 0 for unlimited")
 }
