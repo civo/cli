@@ -271,7 +271,7 @@ Options:
   -k, --sshkey string        the instance's ssh key you can use the Name or the ID
   -g, --tags string          the instance's tags
   -w, --wait                 wait until the instance's is ready
-  --allowed-ips <ip1,ip2,...> Specifies a comma-separated list of IP addresses that the instance is allowed to use (for IP/MAC spoofing protection).
+  --allowed-ips <ip1,ip2,...> Specifies a comma-separated list of IP addresses that the instance is allowed to use (for IP/MAC spoofing protection, the allowed_ips need to be within the network subnet that the instance is attached to).
   --network-bandwidth-limit <limit_mbps> Sets the network bandwidth limit for the instance in Mbps. Use 0 for unlimited.
 ```
 
@@ -301,7 +301,7 @@ Initial Password : demo-user
       Created At : Mon, 01 Jan 0001 00:00:00 UTC # Note: This is a placeholder date
       Private IP : 192.168.1.7
        Public IP : 74.220.21.246
-     Allowed IPs : 10.0.1.5, 10.0.1.6
+     Allowed IPs : 192.168.1.100, 192.168.1.101
 Network Bandwidth Limit : 100 Mbps
 
 ----------------------------- NOTES -----------------------------
@@ -344,7 +344,7 @@ If you wish to use a custom format, the available fields are:
 
 The output for `civo instance show` now includes:
 
-*   **Allowed IPs**: A comma-separated list of IPs the instance is allowed to use.
+*   **Allowed IPs**: A comma-separated list of IPs the instance is allowed to use, with traffic from the assigned private IP address being automatically allowed if it's not in this list.
 *   **Network Bandwidth Limit**: The configured network bandwidth limit (e.g., "500 Mbps" or "Unlimited").
 
 #### Disk images and instance sizes

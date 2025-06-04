@@ -73,7 +73,7 @@ func init() {
 
 	instanceStopCmd.Flags().BoolVarP(&waitStop, "wait", "w", false, "wait until the instance's is stoped")
 
-	instanceAllowedIPsUpdateCmd.Flags().StringSliceVarP(&allowedIPsUpdate, "ips", "", []string{}, "Comma-separated list of IP addresses to allow (e.g., --ips 1.2.3.4,5.6.7.8). To clear all IPs, provide an empty string or omit the flag if the API interprets an empty list as clearing.")
+	instanceAllowedIPsUpdateCmd.Flags().StringSliceVarP(&allowedIPsUpdate, "ips", "", []string{}, "Comma-separated list of IP addresses to allow (e.g., --ips 1.2.3.4,5.6.7.8). To clear all IPs, provide an empty string.")
 
 	instanceBandwidthUpdateCmd.Flags().IntVarP(&bandwidthLimitUpdate, "limit", "l", 0, "Network bandwidth limit in Mbps (e.g., 1000). Use 0 for unlimited")
 }
