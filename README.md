@@ -278,7 +278,7 @@ Options:
 Example usage:
 
 ```sh
-$ civo instance create --hostname=api-demo.test --size g3.small --diskimage=ubuntu-focal --initialuser=demo-user --allowed-ips 10.0.1.5,10.0.1.6 --network-bandwidth-limit 100
+$ civo instance create --hostname=api-demo.test --size g3.small --diskimage=ubuntu-focal --initialuser=demo-user --allowed-ips 192.168.1.100,192.168.1.101 --network-bandwidth-limit 100
   The instance api-demo.test has been created
 
 $ civo instance show api-demo.test
