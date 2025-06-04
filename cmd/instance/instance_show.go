@@ -43,7 +43,9 @@ If you wish to use a custom format, the available fields are:
 	* public_ip
 	* notes
 	* script
-	* reverse_dns`,
+	* reverse_dns
+	* allowed_ips
+	* network_bandwidth_limit`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -96,6 +98,20 @@ If you wish to use a custom format, the available fields are:
 			// Join the volume IDs into a single string with spaces separating them
 			ow.AppendDataWithLabel("attached_volumes", strings.Join(volumeIDs, ", "), "Attached Volume IDs")
 		}
+
+		// Add AllowedIPs
+		allowedIPsStr := "None"
+		if len(instance.AllowedIPs) > 0 {
+			allowedIPsStr = strings.Join(instance.AllowedIPs, ", ")
+		}
+		ow.AppendDataWithLabel("allowed_ips", allowedIPsStr, "Allowed IPs")
+
+		// Add NetworkBandwidthLimit
+		bandwidthLimitStr := "Unlimited"
+		if instance.NetworkBandwidthLimit > 0 {
+			bandwidthLimitStr = strconv.Itoa(instance.NetworkBandwidthLimit) + " Mbps"
+		}
+		ow.AppendDataWithLabel("network_bandwidth_limit", bandwidthLimitStr, "Network Bandwidth Limit")
 
 		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
 			ow.AppendDataWithLabel("public_ip", instance.PublicIP, "Public IP")
