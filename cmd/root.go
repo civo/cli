@@ -18,6 +18,7 @@ import (
 	"github.com/civo/cli/cmd/permission"
 	"github.com/civo/cli/cmd/region"
 	"github.com/civo/cli/cmd/size"
+	"github.com/civo/cli/cmd/snapshot"
 	"github.com/civo/cli/cmd/sshkey"
 	"github.com/civo/cli/cmd/teams"
 	"github.com/civo/cli/cmd/volume"
@@ -159,5 +160,5 @@ func init() {
 	rootCmd.AddCommand(teams.TeamsCmd)
 	rootCmd.AddCommand(volume.VolumeCmd)
 	rootCmd.AddCommand(volumetype.VolumeTypeCmd)
-
+	rootCmd.AddCommand(snapshot.SnapshotCmd)
 }
