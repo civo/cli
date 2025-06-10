@@ -21,7 +21,7 @@ var duration string
 
 var instanceConsoleCmd = &cobra.Command{
 	Use:     "console",
-	Aliases: []string{"connect"},
+	Aliases: []string{"vnc", "access", "connect"},
 	Example: "civo instance console INSTANCE-ID/NAME [--duration 2h]",
 	Args:    cobra.MinimumNArgs(1),
 	Short:   "Connect to the console of an instance",
