@@ -866,6 +866,18 @@ When executed, the command will:
 3. Automatically open the console in your default browser
 4. Attempt to connect for up to 35 seconds before timing out
 
+```sh
+# Check the status of a VNC session
+civo instance vnc-status INSTANCE_ID/HOSTNAME
+
+# Stop an active VNC session
+civo instance vnc-stop INSTANCE_ID/HOSTNAME
+```
+
+The `vnc-status` command will return the current state of the VNC session, including its URI and expiration time. If no session is active, it will notify you.
+
+The `vnc-stop` command will terminate any active VNC session for the instance. If no session is active, it will confirm that there was nothing to stop.
+
 
 ## Kubernetes clusters
 
@@ -1991,21 +2003,21 @@ $ civo sizes list --filter kubernetes
 | g4g.kube.xlarge    | Extra Large - Nvidia A100 80GB | Kubernetes |  96 | 1048576 | 100 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g4g.40.kube.small  | Small - Nvidia A100 40GB       | Kubernetes |   8 |   65536 | 200 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
 | g4g.40.kube.medium | Medium - Nvidia A100 40GB      | Kubernetes |  16 |  131072 | 400 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
 | g4g.40.kube.large  | Large - Nvidia A100 40GB       | Kubernetes |  32 |  262133 | 400 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
 | g4g.40.kube.xlarge | Extra Large - Nvidia A100 40GB | Kubernetes |  64 |  524288 | 400 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
-| an.g1.l40s.kube.x1 | Small - Nvidia L40S 40GB       | Kubernetes |  12 |  131072 | 200 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
-| an.g1.l40s.kube.x2 | Medium - Nvidia L40S 40GB      | Kubernetes |  24 |  262133 | 200 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
-| an.g1.l40s.kube.x4 | Large - Nvidia L40S 40GB       | Kubernetes |  48 |  524288 | 400 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
-| an.g1.l40s.kube.x8 | Extra Large - Nvidia L40S 40GB | Kubernetes |  96 | 1048576 | 400 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x1 | Small - Nvidia L40S 40GB       | Kubernetes |  12 |  131072 |  200 |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x2 | Medium - Nvidia L40S 40GB      | Kubernetes |  24 |  262133 |  200 |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x4 | Large - Nvidia L40S 40GB       | Kubernetes |  48 |  524288 |  400 |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x8 | Extra Large - Nvidia L40S 40GB | Kubernetes |  96 | 1048576 |  400 |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
 ```
 
 ## SSH Keys

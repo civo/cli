@@ -39,6 +39,8 @@ func init() {
 	InstanceCmd.AddCommand(instancePasswordCmd)
 	InstanceCmd.AddCommand(instanceTagCmd)
 	InstanceCmd.AddCommand(instanceVncCmd)
+	InstanceCmd.AddCommand(instanceVncStatusCmd)
+	InstanceCmd.AddCommand(instanceVncStopCmd)
 	InstanceCmd.AddCommand(instanceRecoveryCmd)
 	InstanceCmd.AddCommand(instanceRecoveryStatusCmd)
 	InstanceCmd.AddCommand(snapshotCmd)
