@@ -867,6 +867,7 @@ When executed, the command will:
 3. Automatically open the console in your default browser
 4. Attempt to connect for up to 35 seconds before timing out
 
+<<<<<<< HEAD
 ```sh
 # Check the status of a VNC/console session
 civo instance console status INSTANCE_ID/HOSTNAME
@@ -874,6 +875,8 @@ civo instance console status INSTANCE_ID/HOSTNAME
 # Stop an active VNC/console session
 civo instance console stop INSTANCE_ID/HOSTNAME
 ```
+=======
+>>>>>>> a68ac1d (reset readme)
 
 ## Kubernetes clusters
 
@@ -1980,6 +1983,8 @@ $ civo sizes list --filter kubernetes
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g4c.kube.large     | Large - CPU optimized          | Kubernetes |  32 |   65536 | 120 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
+| g4c.kube.xlarge    | Extra Large - CPU optimized    | Kubernetes |  64 |  131072 | 180 |
++--------------------+--------------------------------+------------+-----+---------+-----+
 | g4m.kube.small     | Small - RAM optimized          | Kubernetes |   2 |   16384 |  60 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g4m.kube.medium    | Medium - RAM optimized         | Kubernetes |   4 |   32768 |  80 |
@@ -2427,61 +2432,6 @@ To set the civo completion code for zsh to auto-load on start up yo can run this
 ```bash
 civo completion zsh > "${fpath[1]}/_civo"
 ```
-
-## Snapshots
-
-### Snapshot Schedules
-
-Snapshot schedules allow you to automatically create snapshots of your instances at specified intervals. You can manage snapshot schedules using the following commands:
-
-#### Creating a Snapshot Schedule
-
-```sh
-$ civo snapshot schedule create --name my-schedule --cron "0 0 * * *" --instance-id instance-123 --max-snapshots 5
-```
-
-Options:
-- `--name`: Name for the snapshot schedule (required)
-- `--description`: Description for the snapshot schedule
-- `--cron`: Cron expression for the schedule (e.g., '0 0 * * *' for daily at midnight) (required)
-- `--max-snapshots`: Maximum number of snapshots to retain
-- `--instance-id`: Instance IDs to snapshot (can be specified multiple times) (required)
-- `--include-volumes`: Include attached volumes in snapshots
-
-#### Listing Snapshot Schedules
-
-```sh
-$ civo snapshot schedule list
-```
-
-Displays all snapshot schedules with their status, instances, and last snapshot information.
-
-#### Showing Snapshot Schedule Details
-
-```sh
-$ civo snapshot schedule show my-schedule
-```
-
-Shows detailed information about a specific snapshot schedule, including instances and snapshot history.
-
-#### Updating a Snapshot Schedule
-
-```sh
-$ civo snapshot schedule update my-schedule --name new-name --description "New description" --pause
-```
-
-Options:
-- `--name`: New name for the snapshot schedule
-- `--description`: New description for the snapshot schedule
-- `--pause`: Pause the snapshot schedule
-
-#### Deleting a Snapshot Schedule
-
-```sh
-$ civo snapshot schedule delete my-schedule
-```
-
-Deletes a snapshot schedule by its ID or name.
 
 ## Contributing
 
