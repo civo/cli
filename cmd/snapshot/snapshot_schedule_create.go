@@ -12,7 +12,6 @@ import (
 )
 
 var scheduleDescription, scheduleCron string
-var retentionPeriod string
 var maxSnapshots int
 var instanceIDs []string
 var includeVolumes bool
@@ -20,8 +19,8 @@ var includeVolumes bool
 var snapshotScheduleCreateCmd = &cobra.Command{
 	Use:     "create",
 	Short:   "Create a new snapshot schedule",
-	Long:    "Create a new snapshot schedule with specified cron expression and retention policy",
-	Example: "civo snapshot schedule create --name my-schedule --cron '0 0 * * *' --instance-id instance-123 --retention-period 1w --max-snapshots 5",
+	Long:    "Create a new snapshot schedule with a specified cron expression and max number of snapshots to retain.",
+	Example: "civo snapshot schedule create --name my-schedule --cron '0 0 * * *' --instance-id instance-123 --max-snapshots 5",
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -39,7 +38,6 @@ var snapshotScheduleCreateCmd = &cobra.Command{
 			Description:    scheduleDescription,
 			CronExpression: scheduleCron,
 			Retention: civogo.SnapshotRetention{
-				Period:       retentionPeriod,
 				MaxSnapshots: maxSnapshots,
 			},
 			Instances: make([]civogo.CreateSnapshotInstance, 0),
@@ -78,7 +76,6 @@ func init() {
 	snapshotScheduleCreateCmd.Flags().StringVarP(&scheduleName, "name", "n", "", "Name for the snapshot schedule")
 	snapshotScheduleCreateCmd.Flags().StringVarP(&scheduleDescription, "description", "d", "", "Description for the snapshot schedule")
 	snapshotScheduleCreateCmd.Flags().StringVarP(&scheduleCron, "cron", "c", "", "Cron expression for the schedule (e.g., '0 0 * * *' for daily at midnight)")
-	snapshotScheduleCreateCmd.Flags().StringVarP(&retentionPeriod, "retention-period", "r", "", "Retention period for snapshots (e.g., '1w' for one week)")
 	snapshotScheduleCreateCmd.Flags().IntVarP(&maxSnapshots, "max-snapshots", "m", 0, "Maximum number of snapshots to retain")
 	snapshotScheduleCreateCmd.Flags().StringSliceVarP(&instanceIDs, "instance-id", "i", []string{}, "Instance IDs to snapshot (can be specified multiple times)")
 	snapshotScheduleCreateCmd.Flags().BoolVarP(&includeVolumes, "include-volumes", "v", false, "Include attached volumes in snapshots")

@@ -1980,8 +1980,6 @@ $ civo sizes list --filter kubernetes
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g4c.kube.large     | Large - CPU optimized          | Kubernetes |  32 |   65536 | 120 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
-| g4c.kube.xlarge    | Extra Large - CPU optimized    | Kubernetes |  64 |  131072 | 180 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
 | g4m.kube.small     | Small - RAM optimized          | Kubernetes |   2 |   16384 |  60 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g4m.kube.medium    | Medium - RAM optimized         | Kubernetes |   4 |   32768 |  80 |
@@ -2439,14 +2437,13 @@ Snapshot schedules allow you to automatically create snapshots of your instances
 #### Creating a Snapshot Schedule
 
 ```sh
-$ civo snapshot schedule create --name my-schedule --cron "0 0 * * *" --instance-id instance-123 --retention-period 1w --max-snapshots 5
+$ civo snapshot schedule create --name my-schedule --cron "0 0 * * *" --instance-id instance-123 --max-snapshots 5
 ```
 
 Options:
 - `--name`: Name for the snapshot schedule (required)
 - `--description`: Description for the snapshot schedule
 - `--cron`: Cron expression for the schedule (e.g., '0 0 * * *' for daily at midnight) (required)
-- `--retention-period`: Retention period for snapshots (e.g., '1w' for one week)
 - `--max-snapshots`: Maximum number of snapshots to retain
 - `--instance-id`: Instance IDs to snapshot (can be specified multiple times) (required)
 - `--include-volumes`: Include attached volumes in snapshots
@@ -2465,7 +2462,7 @@ Displays all snapshot schedules with their status, instances, and last snapshot 
 $ civo snapshot schedule show my-schedule
 ```
 
-Shows detailed information about a specific snapshot schedule, including instances, retention policy, and snapshot history.
+Shows detailed information about a specific snapshot schedule, including instances and snapshot history.
 
 #### Updating a Snapshot Schedule
 

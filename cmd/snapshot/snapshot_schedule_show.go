@@ -38,15 +38,14 @@ var snapshotScheduleShowCmd = &cobra.Command{
 		}
 
 		data := map[string]string{
-			"id":               schedule.ID,
-			"name":             schedule.Name,
-			"description":      schedule.Description,
-			"cron_expression":  schedule.CronExpression,
-			"status":           schedule.Status.State,
-			"paused":           strconv.FormatBool(schedule.Paused),
-			"retention_period": schedule.Retention.Period,
-			"max_snapshots":    strconv.Itoa(schedule.Retention.MaxSnapshots),
-			"created_at":       schedule.CreatedAt.Format(time.RFC822),
+			"id":              schedule.ID,
+			"name":            schedule.Name,
+			"description":     schedule.Description,
+			"cron_expression": schedule.CronExpression,
+			"status":          schedule.Status.State,
+			"paused":          strconv.FormatBool(schedule.Paused),
+			"max_snapshots":   strconv.Itoa(schedule.Retention.MaxSnapshots),
+			"created_at":      schedule.CreatedAt.Format(time.RFC822),
 		}
 
 		if schedule.Status.LastSnapshot.ID != "" {
@@ -70,7 +69,6 @@ var snapshotScheduleShowCmd = &cobra.Command{
 			ow.AppendDataWithLabel("Cron Expression", schedule.CronExpression, "Cron Expression")
 			ow.AppendDataWithLabel("Status", utility.Green(schedule.Status.State), "Status")
 			ow.AppendDataWithLabel("Paused", strconv.FormatBool(schedule.Paused), "Paused")
-			ow.AppendDataWithLabel("Retention Period", schedule.Retention.Period, "Retention Period")
 			ow.AppendDataWithLabel("Max Snapshots", strconv.Itoa(schedule.Retention.MaxSnapshots), "Max Snapshots")
 			ow.AppendDataWithLabel("Created At", schedule.CreatedAt.Format(time.RFC822), "Created At")
 
