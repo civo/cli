@@ -272,13 +272,14 @@ Options:
   -k, --sshkey string        the instance's ssh key you can use the Name or the ID
   -g, --tags string          the instance's tags
   -w, --wait                 wait until the instance's is ready
-
+  --allowed-ips <ip1,ip2,...> Specifies a comma-separated list of IP addresses that the instance is allowed to use (for IP/MAC spoofing protection, the allowed_ips need to be within the network subnet that the instance is attached to).
+  --network-bandwidth-limit <limit_mbps> Sets the network bandwidth limit for the instance in Mbps. Use 0 for unlimited.
 ```
 
 Example usage:
 
 ```sh
-$ civo instance create --hostname=api-demo.test --size g3.small  --diskimage=ubuntu-focal --initialuser=demo-user
+$ civo instance create --hostname=api-demo.test --size g3.small --diskimage=ubuntu-focal --initialuser=demo-user --allowed-ips 192.168.1.100,192.168.1.101 --network-bandwidth-limit 100
   The instance api-demo.test has been created
 
 $ civo instance show api-demo.test
@@ -291,22 +292,61 @@ $ civo instance show api-demo.test
         SSD disk : 25
           Region : LON1
       Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
-
-   ID : ubuntu-bionic
+   Disk image ID : ubuntu-focal # Corrected from 'ID : ubuntu-bionic'
      Snapshot ID :
     Initial User : demo-user
 Initial Password : demo-user
          SSH Key :
      Firewall ID : c9e14ae8-b8eb-4bae-a687-9da4637233da
             Tags :
-      Created At : Mon, 01 Jan 0001 00:00:00 UTC
+      Created At : Mon, 01 Jan 0001 00:00:00 UTC # Note: This is a placeholder date
       Private IP : 192.168.1.7
        Public IP : 74.220.21.246
+     Allowed IPs : 192.168.1.100, 192.168.1.101
+Network Bandwidth Limit : 100 Mbps
 
 ----------------------------- NOTES -----------------------------
 ```
 
 You will be able to see the instance's details by running `civo instance show api-demo.test` as above.
+
+#### Show Instance Details
+
+The `civo instance show` command displays detailed information about a specific instance.
+
+**Usage:**
+`civo instance show <INSTANCE_ID_OR_HOSTNAME>`
+
+If you wish to use a custom format, the available fields are:
+
+	* id
+	* hostname
+	* status
+	* size
+	* cpu_cores
+	* ram_mb
+	* disk_gb
+	* region
+	* network_id
+	* diskimage_id
+	* initial_user
+	* initial_password
+	* ssh_key
+	* firewall_id
+	* tags
+	* created_at
+	* private_ip
+	* public_ip
+	* notes
+	* script
+	* reverse_dns
+	* allowed_ips
+	* network_bandwidth_limit
+
+The output for `civo instance show` now includes:
+
+*   **Allowed IPs**: A comma-separated list of IPs the instance is allowed to use, with traffic from the assigned private IP address being automatically allowed if it's not in this list.
+*   **Network Bandwidth Limit**: The configured network bandwidth limit (e.g., "500 Mbps" or "Unlimited").
 
 #### Disk images and instance sizes
 
@@ -349,75 +389,6 @@ $ civo size ls
 | g3.xsmall          | Extra Small                    | Instance   |   1 |    1024 |  25 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g3.small           | Small                          | Instance   |   1 |    2048 |  25 |
-
-#### Instance Snapshots
-
-Snapshots allow you to create point-in-time copies of your instances. You can use these snapshots to create new instances or restore an existing instance to a previous state.
-
-##### Creating a Snapshot
-
-To create a snapshot of an instance:
-
-```sh
-$ civo instance snapshot create INSTANCE_NAME [flags]
-
-Flags:
-  -n, --name string   The name of the snapshot (default: auto-generated)
-  -d, --description string   Description for the snapshot
-```
-
-##### Listing Snapshots
-
-To view all available snapshots for a specific instance:
-
-```sh
-$ civo instance snapshot list INSTANCE_NAME/ID
-```
-
-##### Restoring from a Snapshot
-
-To restore an instance from a snapshot:
-
-```sh
-$ civo instance snapshot restore INSTANCE_NAME/ID SNAPSHOT_NAME/ID [flags]
-
-Flags:
-  -d, --description string   New description for the restored instance
-      --hostname string      New hostname for the restored instance (optional)
-      --private-ipv4 string  New private IPv4 address for the restored instance (optional)
-      --overwrite-existing   Overwrite an existing instance if it shares the same IP or hostname (defaults to false)
-```
-
-Example:
-```sh
-$ civo instance snapshot restore my-instance-id snap-123 --hostname restored-instance-new-name --overwrite-existing
-```
-
-##### Updating a Snapshot
-
-To update the name or description of an instance snapshot:
-
-```sh
-$ civo instance snapshot update INSTANCE_NAME/ID SNAPSHOT_NAME/ID [flags]
-
-Flags:
-  -n, --name string         New name for the snapshot
-  -d, --description string  New description for the snapshot
-```
-
-Example:
-```sh
-$ civo instance snapshot update my-instance my-snapshot --name new-snapshot-name --description "Updated snapshot description"
-```
-
-##### Removing a Snapshot
-
-To delete a snapshot:
-
-```sh
-$ civo instance snapshot remove INSTANCE_NAME/ID SNAPSHOT_NAME/ID
-```
-
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g3.medium          | Medium                         | Instance   |   2 |    4096 |  50 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
@@ -539,7 +510,74 @@ $ civo instance snapshot remove INSTANCE_NAME/ID SNAPSHOT_NAME/ID
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | an.g1.l40s.kube.x8 | Extra Large - Nvidia L40S 40GB | Kubernetes |  96 | 1048576 | 400 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
+```
 
+#### Instance Snapshots
+
+Snapshots allow you to create point-in-time copies of your instances. You can use these snapshots to create new instances or restore an existing instance to a previous state.
+
+##### Creating a Snapshot
+
+To create a snapshot of an instance:
+
+```sh
+$ civo instance snapshot create INSTANCE_NAME [flags]
+
+Flags:
+  -n, --name string   The name of the snapshot (default: auto-generated)
+  -d, --description string   Description for the snapshot
+```
+
+##### Listing Snapshots
+
+To view all available snapshots for a specific instance:
+
+```sh
+$ civo instance snapshot list INSTANCE_NAME/ID
+```
+
+##### Restoring from a Snapshot
+
+To restore an instance from a snapshot:
+
+```sh
+$ civo instance snapshot restore INSTANCE_NAME/ID SNAPSHOT_NAME/ID [flags]
+
+Flags:
+  -d, --description string   New description for the restored instance
+      --hostname string      New hostname for the restored instance (optional)
+      --private-ipv4 string  New private IPv4 address for the restored instance (optional)
+      --overwrite-existing   Overwrite an existing instance if it shares the same IP or hostname (defaults to false)
+```
+
+Example:
+```sh
+$ civo instance snapshot restore my-instance-id snap-123 --hostname restored-instance-new-name --overwrite-existing
+```
+
+##### Updating a Snapshot
+
+To update the name or description of an instance snapshot:
+
+```sh
+$ civo instance snapshot update INSTANCE_NAME/ID SNAPSHOT_NAME/ID [flags]
+
+Flags:
+  -n, --name string         New name for the snapshot
+  -d, --description string  New description for the snapshot
+```
+
+Example:
+```sh
+$ civo instance snapshot update my-instance my-snapshot --name new-snapshot-name --description "Updated snapshot description"
+```
+
+##### Removing a Snapshot
+
+To delete a snapshot:
+
+```sh
+$ civo instance snapshot remove INSTANCE_NAME/ID SNAPSHOT_NAME/ID
 ```
 
 #### Viewing the Default User Password For an Instance
@@ -563,7 +601,7 @@ BrbXNW2RUYLe
 If an instance has a public IP address configured, you can display it using `civo instance public-ip ID/hostname`:
 
 ```sh
-$ civo instance show api-demo.test -o custom -f public_ip
+$ civo instance public-ip api-demo.test -o custom -f public_ip # Corrected from 'show' to 'public-ip'
 74.220.21.246
 ```
 
@@ -588,6 +626,54 @@ You can take the firewall ID and use it to associate a firewall with an instance
 ```sh
 $ civo instance firewall api-demo.test f79db64d-41f0-4be0-ae80-ce4499164319
 Set the firewall for the instance api-demo.test (112f2407-fb89-443e-bd0e-5ddabc4682c6) to Kubernetes cluster: Demo (f79db64d-41f0-4be0-ae80-ce4499164319)
+```
+
+#### Update Allowed IPs for an Instance
+
+A new command to manage the allowed IP addresses for an instance (IP/MAC spoofing protection). This replaces the existing list of allowed IPs.
+
+**Usage:**
+`civo instance allowed-ips-update <INSTANCE_ID_OR_NAME> --ips <ip1,ip2,...>`
+
+**Arguments & Flags:**
+
+*   `<INSTANCE_ID_OR_NAME>` (Required): The ID or hostname of the instance.
+*   `--ips <ip1,ip2,...>`: A comma-separated list of IP addresses to set. To clear all allowed IPs, provide an empty string (e.g., `--ips ""`).
+
+**Example:**
+
+To set allowed IPs:
+```sh
+civo instance allowed-ips-update my-instance-01 --ips 192.168.0.10,192.168.0.11
+```
+
+To clear all allowed IPs:
+```sh
+civo instance allowed-ips-update my-instance-01 --ips ""
+```
+
+#### Update Network Bandwidth Limit for an Instance
+
+A new command to update the network bandwidth limit for an existing instance.
+
+**Usage:**
+`civo instance bandwidth-update <INSTANCE_ID_OR_NAME> --limit <BANDWIDTH_MBPS>`
+
+**Arguments & Flags:**
+
+*   `<INSTANCE_ID_OR_NAME>` (Required): The ID or hostname of the instance.
+*   `--limit <BANDWIDTH_MBPS>` (Required): The desired network bandwidth limit in Mbps. Use `0` for unlimited.
+
+**Example:**
+
+To set a 500 Mbps limit:
+```sh
+civo instance bandwidth-update my-instance-01 --limit 500
+```
+
+To set to unlimited (assuming 0 means unlimited by the API):
+```sh
+civo instance bandwidth-update my-instance-01 --limit 0
 ```
 
 #### Listing Instances

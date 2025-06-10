@@ -22,6 +22,8 @@ var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, networ
 var script string
 var skipShebangCheck bool
 var volumes []string
+var allowedIPs []string
+var networkBandwidthLimit int
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -143,6 +145,14 @@ If you wish to use a custom format, the available fields are:
 		// Set public ipv4 if provided
 		if publicip != "" {
 			config.PublicIPRequired = publicip
+		}
+
+		if len(allowedIPs) > 0 {
+			config.AllowedIPs = allowedIPs
+		}
+
+		if networkBandwidthLimit > 0 {
+			config.NetworkBandwidthLimit = networkBandwidthLimit
 		}
 
 		// Set reserved ip if provided
