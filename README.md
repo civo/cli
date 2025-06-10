@@ -844,16 +844,16 @@ The recovery-status command supports custom output formats with the following fi
 * status - Current recovery mode status
 
 
-### VNC Access
+### VNC/Console Access
 
-The VNC command allows you to access your instance through a browser-based VNC console.
+The console command allows you to access your instance through a browser-based VNC console.
 
 ```sh
 # Open VNC console (default duration)
-civo instance vnc INSTANCE_ID/HOSTNAME
+civo instance console INSTANCE_ID/HOSTNAME
 
 # Open VNC console with custom duration
-civo instance vnc INSTANCE_ID/HOSTNAME --duration 2h
+civo instance console INSTANCE_ID/HOSTNAME --duration 2h
 ```
 
 The `--duration` flag accepts Go's duration format:
@@ -868,17 +868,12 @@ When executed, the command will:
 4. Attempt to connect for up to 35 seconds before timing out
 
 ```sh
-# Check the status of a VNC session
-civo instance vnc-status INSTANCE_ID/HOSTNAME
+# Check the status of a VNC/console session
+civo instance console status INSTANCE_ID/HOSTNAME
 
-# Stop an active VNC session
-civo instance vnc-stop INSTANCE_ID/HOSTNAME
+# Stop an active VNC/console session
+civo instance console stop INSTANCE_ID/HOSTNAME
 ```
-
-The `vnc-status` command will return the current state of the VNC session, including its URI and expiration time. If no session is active, it will notify you.
-
-The `vnc-stop` command will terminate any active VNC session for the instance. If no session is active, it will confirm that there was nothing to stop.
-
 
 ## Kubernetes clusters
 
@@ -2448,15 +2443,3 @@ The code is available as open source under the terms of the [Apache License 2.0]
  <a href = "https://github.com/civo/cli/graphs/contributors">
    <img src = "https://contrib.rocks/image?repo=civo/cli"/>
  </a>
-
-# Get the status of the console for an instance
-civo instance console status INSTANCE_ID/HOSTNAME
-
-# Stop the console session for an instance
-civo instance console stop INSTANCE_ID/HOSTNAME
-
-# Open console (default duration)
-civo instance console INSTANCE_ID/HOSTNAME
-
-# Open console with custom duration
-civo instance console INSTANCE_ID/HOSTNAME --duration 2h
