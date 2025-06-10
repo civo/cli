@@ -101,7 +101,7 @@ If you wish to use a custom format, the available fields are:
 }
 
 func init() {
-	resourceSnapshotRestoreCmd.Flags().StringVarP(&restoreDescription, "description", "d", "", "Description for the restored resource")
+	resourceSnapshotRestoreCmd.Flags().StringVarP(&restoreDescription, "description", "d", "", "Description for the restore operation")
 	resourceSnapshotRestoreCmd.Flags().StringVarP(&restoreHostname, "hostname", "n", "", "Hostname for the restored instance (instance snapshots only)")
 	resourceSnapshotRestoreCmd.Flags().StringVar(&restorePrivateIPv4, "private-ip", "", "Private IP for the restored instance (instance snapshots only)")
 	resourceSnapshotRestoreCmd.Flags().BoolVar(&overwriteExisting, "overwrite", false, "Overwrite existing instance if it exists (instance snapshots only)")

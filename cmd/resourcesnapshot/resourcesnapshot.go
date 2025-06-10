@@ -9,7 +9,7 @@ var ResourceSnapshotCmd = &cobra.Command{
 	Use:     "resource-snapshot",
 	Aliases: []string{"resourcesnapshot", "resource-snapshots", "resourcesnapshots"},
 	Short:   "Manage resource snapshots",
-	Long:    `Create, list, update and delete resource snapshots`,
+	Long:    `List, update and delete resource snapshots`,
 }
 
 func init() {
