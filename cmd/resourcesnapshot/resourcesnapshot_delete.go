@@ -1,4 +1,4 @@
-package instance
+package resourcesnapshot
 
 import (
 	"fmt"
@@ -7,21 +7,15 @@ import (
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
 	"github.com/spf13/cobra"
 )
 
-var instanceStartCmd = &cobra.Command{
-	Use:     "start",
-	Example: "civo instance start ID/HOSTNAME",
+var resourceSnapshotDeleteCmd = &cobra.Command{
+	Use:     "delete ID/NAME",
 	Args:    cobra.MinimumNArgs(1),
-	Aliases: []string{"boot", "run"},
-	Short:   "Start an instance",
-	Long: `Power on the specified instance by part of the ID or name.
-If you wish to use a custom format, the available fields are:
-
-	* id
-	* hostname`,
+	Aliases: []string{"rm", "remove"},
+	Short:   "Delete a resource snapshot",
+	Long:    `Delete a resource snapshot by ID or name.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -34,25 +28,27 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		instance, err := client.FindInstance(args[0])
+		// Get the snapshot first to verify it exists and to show the name in output
+		snapshot, err := client.GetResourceSnapshot(args[0])
 		if err != nil {
-			utility.Error("Instance %s", err)
+			utility.Error("Error retrieving resource snapshot: %s", err)
 			os.Exit(1)
 		}
 
-		_, err = client.StartInstance(instance.ID)
+		// Delete the snapshot
+		_, err = client.DeleteResourceSnapshot(snapshot.ID)
 		if err != nil {
-			utility.Error("%s", err)
+			utility.Error("Error deleting resource snapshot: %s", err)
 			os.Exit(1)
 		}
 
 		if common.OutputFormat == common.OutputFormatHuman {
-			fmt.Printf("The instance %s (%s) is being started\n", utility.Green(instance.Hostname), instance.ID)
+			fmt.Printf("The resource snapshot %s (%s) has been deleted\n", utility.Green(snapshot.Name), snapshot.ID)
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()
-			ow.AppendDataWithLabel("id", instance.ID, "ID")
-			ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
+			ow.AppendDataWithLabel("id", snapshot.ID, "ID")
+			ow.AppendDataWithLabel("name", snapshot.Name, "Name")
 			if common.OutputFormat == "json" {
 				ow.WriteSingleObjectJSON(common.PrettySet)
 			} else {
