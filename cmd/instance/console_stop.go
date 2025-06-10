@@ -11,11 +11,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var instanceVncStopCmd = &cobra.Command{
-	Use:     "vnc-stop <INSTANCE_ID_OR_NAME>",
-	Aliases: []string{"vncstop"},
-	Short:   "Stop the VNC console session for an instance",
-	Example: "civo instance vnc-stop my-instance",
+var instanceConsoleStopCmd = &cobra.Command{
+	Use:     "stop",
+	Short:   "Stop the console session for an instance",
+	Example: "civo instance console stop my-instance",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -38,10 +37,10 @@ var instanceVncStopCmd = &cobra.Command{
 		resp, err := client.DeleteInstanceVncSession(instance.ID)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
-				utility.Info("There is no active VNC session for instance %s (%s) to stop.", instance.Hostname, instance.ID)
+				utility.Info("There is no active console session for instance %s (%s) to stop.", instance.Hostname, instance.ID)
 				os.Exit(0)
 			}
-			utility.Error("Stopping VNC session for instance %s: %s", instance.ID, err)
+			utility.Error("Stopping console session for instance %s: %s", instance.ID, err)
 			os.Exit(1)
 		}
 
@@ -53,14 +52,18 @@ var instanceVncStopCmd = &cobra.Command{
 
 		if common.OutputFormat == "human" {
 			if string(resp.Result) == "ok" {
-				fmt.Printf("VNC session for instance %s (%s) was stopped successfully.\n",
+				fmt.Printf("Console session for instance %s (%s) was stopped successfully.\n",
 					utility.Green(instance.Hostname), instance.ID)
 			} else {
-				fmt.Printf("Failed to stop VNC session for instance %s (%s). Result: %s\n",
+				fmt.Printf("Failed to stop console session for instance %s (%s). Result: %s\n",
 					utility.Red(instance.Hostname), instance.ID, string(resp.Result))
 			}
 		} else {
 			ow.WriteSingleObjectJSON(common.PrettySet)
 		}
 	},
+}
+
+func init() {
+	instanceConsoleCmd.AddCommand(instanceConsoleStopCmd)
 }

@@ -38,9 +38,7 @@ func init() {
 	InstanceCmd.AddCommand(instancePublicIPCmd)
 	InstanceCmd.AddCommand(instancePasswordCmd)
 	InstanceCmd.AddCommand(instanceTagCmd)
-	InstanceCmd.AddCommand(instanceVncCmd)
-	InstanceCmd.AddCommand(instanceVncStatusCmd)
-	InstanceCmd.AddCommand(instanceVncStopCmd)
+	InstanceCmd.AddCommand(instanceConsoleCmd)
 	InstanceCmd.AddCommand(instanceRecoveryCmd)
 	InstanceCmd.AddCommand(instanceRecoveryStatusCmd)
 	InstanceCmd.AddCommand(snapshotCmd)
@@ -71,9 +69,9 @@ func init() {
 	instanceCreateCmd.Flags().StringArrayVar(&allowedIPs, "allowed-ips", []string{}, "A comma separated list of IP addresses that the instance is allowed to use")
 	instanceCreateCmd.Flags().IntVar(&networkBandwidthLimit, "network-bandwidth-limit", 0, "The network bandwidth limit for the instance in Mbps (0 for unlimited)")
 
-	instanceVncCmd.Flags().StringVarP(&duration, "duration", "d", "", "Duration for VNC access (e.g. 30m, 1h, 24h)")
-
 	instanceStopCmd.Flags().BoolVarP(&waitStop, "wait", "w", false, "wait until the instance's is stoped")
+
+	instanceConsoleCmd.Flags().StringVarP(&duration, "duration", "", "", "The duration for the console session (e.g., '30m', '1h'). Default is provider-dependent.")
 
 	instanceAllowedIPsUpdateCmd.Flags().StringSliceVarP(&allowedIPsUpdate, "ips", "", []string{}, "Comma-separated list of IP addresses to allow (e.g., --ips 1.2.3.4,5.6.7.8). To clear all IPs, provide an empty string.")
 

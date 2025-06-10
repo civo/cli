@@ -10,11 +10,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var instanceVncStatusCmd = &cobra.Command{
-	Use:     "vnc-status <INSTANCE_ID_OR_NAME>",
-	Aliases: []string{"vncstatus"},
-	Short:   "Get the status of the VNC console for an instance",
-	Example: "civo instance vnc-status my-instance",
+var instanceConsoleStatusCmd = &cobra.Command{
+	Use:     "status",
+	Short:   "Get the status of the console for an instance",
+	Example: "civo instance console status my-instance",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -37,10 +36,10 @@ var instanceVncStatusCmd = &cobra.Command{
 		vnc, err := client.GetInstanceVncStatus(instance.ID)
 		if err != nil {
 			if strings.Contains(err.Error(), "404") {
-				utility.Info("The VNC session for instance %s (%s) does not exist or has expired.", instance.Hostname, instance.ID)
+				utility.Info("The console session for instance %s (%s) does not exist or has expired.", instance.Hostname, instance.ID)
 				os.Exit(0)
 			}
-			utility.Error("Getting VNC status for instance %s: %s", instance.ID, err)
+			utility.Error("Getting console status for instance %s: %s", instance.ID, err)
 			os.Exit(1)
 		}
 
@@ -58,4 +57,8 @@ var instanceVncStatusCmd = &cobra.Command{
 			ow.WriteKeyValues()
 		}
 	},
+}
+
+func init() {
+	instanceConsoleCmd.AddCommand(instanceConsoleStatusCmd)
 }

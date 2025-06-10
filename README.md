@@ -2418,3 +2418,15 @@ The code is available as open source under the terms of the [Apache License 2.0]
  <a href = "https://github.com/civo/cli/graphs/contributors">
    <img src = "https://contrib.rocks/image?repo=civo/cli"/>
  </a>
+
+# Get the status of the console for an instance
+civo instance console status INSTANCE_ID/HOSTNAME
+
+# Stop the console session for an instance
+civo instance console stop INSTANCE_ID/HOSTNAME
+
+# Open console (default duration)
+civo instance console INSTANCE_ID/HOSTNAME
+
+# Open console with custom duration
+civo instance console INSTANCE_ID/HOSTNAME --duration 2h
