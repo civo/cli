@@ -46,7 +46,7 @@ Duration follows Go's duration format (e.g. "30m", "1h", "24h")`,
 			os.Exit(1)
 		}
 
-		var vnc civogo.InstanceVnc
+		var vnc civogo.CreateInstanceVncResp
 		if duration != "" {
 			vnc, err = client.GetInstanceVnc(instance.ID, duration)
 		} else {
