@@ -867,7 +867,6 @@ When executed, the command will:
 3. Automatically open the console in your default browser
 4. Attempt to connect for up to 35 seconds before timing out
 
-<<<<<<< HEAD
 ```sh
 # Check the status of a VNC/console session
 civo instance console status INSTANCE_ID/HOSTNAME
@@ -875,8 +874,6 @@ civo instance console status INSTANCE_ID/HOSTNAME
 # Stop an active VNC/console session
 civo instance console stop INSTANCE_ID/HOSTNAME
 ```
-=======
->>>>>>> a68ac1d (reset readme)
 
 ## Kubernetes clusters
 
