@@ -1,7 +1,6 @@
 package snapshot
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -78,7 +77,7 @@ var snapshotScheduleListCmd = &cobra.Command{
 				}
 				ow.WriteTable()
 			} else {
-				fmt.Printf("No snapshot schedules found")
+				utility.Info("No snapshot schedules found in %s.", client.Region)
 			}
 		}
 	},
