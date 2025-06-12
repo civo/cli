@@ -51,6 +51,7 @@ var snapshotScheduleListCmd = &cobra.Command{
 					"name":            schedule.Name,
 					"cron_expression": schedule.CronExpression,
 					"status":          schedule.Status.State,
+					"paused":          strconv.FormatBool(schedule.Paused),
 					"instances":       instanceCount,
 					"last_snapshot":   lastSnapshot,
 					"created_at":      schedule.CreatedAt.Format(time.RFC822),
@@ -67,6 +68,7 @@ var snapshotScheduleListCmd = &cobra.Command{
 					ow.AppendDataWithLabel("name", utility.Green(schedule.Name), "Name")
 					ow.AppendDataWithLabel("cron_expression", schedule.CronExpression, "Cron Expression")
 					ow.AppendDataWithLabel("status", utility.Green(schedule.Status.State), "Status")
+					ow.AppendDataWithLabel("paused", strconv.FormatBool(schedule.Paused), "Paused")
 					ow.AppendDataWithLabel("instances", strconv.Itoa(len(schedule.Instances)), "Instances")
 					lastSnapshot := "N/A"
 					if schedule.Status.LastSnapshot.ID != "" {
