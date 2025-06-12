@@ -2191,7 +2191,7 @@ The available fields for custom output format when listing snapshots are:
 
 ### Snapshot Schedules
 
-Resource snapshots allow you to automate the creation and management of snapshots of your resources. 
+Snapshot schedules allow you to automate the creation and management of snapshots of your resources. 
 
 > [!IMPORTANT]  
 > Currently, Snapshot Schedules only work with Instance Snapshots. More resource types will be supported in the future.
