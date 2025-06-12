@@ -12,7 +12,7 @@ import (
 )
 
 var scheduleName string
-var pauseSchedule bool
+var schedulePaused string
 
 var snapshotScheduleUpdateCmd = &cobra.Command{
 	Use:     "update [ID/NAME]",
@@ -29,6 +29,19 @@ var snapshotScheduleUpdateCmd = &cobra.Command{
 		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
+			os.Exit(1)
+		}
+
+		var pauseSchedule *bool
+		switch schedulePaused {
+		case "true", "yes":
+			pauseSchedule = utility.Ptr(true)
+		case "false", "no":
+			pauseSchedule = utility.Ptr(false)
+		case "":
+			pauseSchedule = nil
+		default:
+			utility.Error("Invalid value for -paused, please use true/false values.")
 			os.Exit(1)
 		}
 
@@ -63,5 +76,5 @@ var snapshotScheduleUpdateCmd = &cobra.Command{
 func init() {
 	snapshotScheduleUpdateCmd.Flags().StringVarP(&scheduleName, "name", "n", "", "New name for the snapshot schedule")
 	snapshotScheduleUpdateCmd.Flags().StringVarP(&scheduleDescription, "description", "d", "", "New description for the snapshot schedule")
-	snapshotScheduleUpdateCmd.Flags().BoolVarP(&pauseSchedule, "pause", "p", false, "Pause the snapshot schedule")
+	snapshotScheduleUpdateCmd.Flags().StringVarP(&schedulePaused, "paused", "p", "", "Whether to pause the snapshot schedule (use 'true' and 'false')")
 }
