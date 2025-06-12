@@ -844,16 +844,16 @@ The recovery-status command supports custom output formats with the following fi
 * status - Current recovery mode status
 
 
-### VNC Access
+### VNC/Console Access
 
-The VNC command allows you to access your instance through a browser-based VNC console.
+The console command allows you to access your instance through a browser-based VNC console.
 
 ```sh
 # Open VNC console (default duration)
-civo instance vnc INSTANCE_ID/HOSTNAME
+civo instance console INSTANCE_ID/HOSTNAME
 
 # Open VNC console with custom duration
-civo instance vnc INSTANCE_ID/HOSTNAME --duration 2h
+civo instance console INSTANCE_ID/HOSTNAME --duration 2h
 ```
 
 The `--duration` flag accepts Go's duration format:
@@ -867,6 +867,13 @@ When executed, the command will:
 3. Automatically open the console in your default browser
 4. Attempt to connect for up to 35 seconds before timing out
 
+```sh
+# Check the status of a VNC/console session
+civo instance console status INSTANCE_ID/HOSTNAME
+
+# Stop an active VNC/console session
+civo instance console stop INSTANCE_ID/HOSTNAME
+```
 
 ## Kubernetes clusters
 
@@ -1992,21 +1999,21 @@ $ civo sizes list --filter kubernetes
 | g4g.kube.xlarge    | Extra Large - Nvidia A100 80GB | Kubernetes |  96 | 1048576 | 100 |
 +--------------------+--------------------------------+------------+-----+---------+-----+
 | g4g.40.kube.small  | Small - Nvidia A100 40GB       | Kubernetes |   8 |   65536 | 200 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
 | g4g.40.kube.medium | Medium - Nvidia A100 40GB      | Kubernetes |  16 |  131072 | 400 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
 | g4g.40.kube.large  | Large - Nvidia A100 40GB       | Kubernetes |  32 |  262133 | 400 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
 | g4g.40.kube.xlarge | Extra Large - Nvidia A100 40GB | Kubernetes |  64 |  524288 | 400 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
-| an.g1.l40s.kube.x1 | Small - Nvidia L40S 40GB       | Kubernetes |  12 |  131072 | 200 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
-| an.g1.l40s.kube.x2 | Medium - Nvidia L40S 40GB      | Kubernetes |  24 |  262133 | 200 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
-| an.g1.l40s.kube.x4 | Large - Nvidia L40S 40GB       | Kubernetes |  48 |  524288 | 400 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
-| an.g1.l40s.kube.x8 | Extra Large - Nvidia L40S 40GB | Kubernetes |  96 | 1048576 | 400 |
-+--------------------+--------------------------------+------------+-----+---------+-----+
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x1 | Small - Nvidia L40S 40GB       | Kubernetes |  12 |  131072 |  200 |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x2 | Medium - Nvidia L40S 40GB      | Kubernetes |  24 |  262133 |  200 |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x4 | Large - Nvidia L40S 40GB       | Kubernetes |  48 |  524288 |  400 |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
+| an.g1.l40s.kube.x8 | Extra Large - Nvidia L40S 40GB | Kubernetes |  96 | 1048576 |  400 |
++--------------------+--------------------------------+------------+-----------+---------+--------+------------+
 ```
 
 ## SSH Keys
