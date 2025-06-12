@@ -2440,6 +2440,6 @@ The code is available as open source under the terms of the [Apache License 2.0]
 
 ## Thanks to all the contributors ❤
 
- <a href = "https://github.com/civo/cli/graphs/contributors">
-   <img src = "https://contrib.rocks/image?repo=civo/cli"/>
- </a>
+<a href = "https://github.com/civo/cli/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=civo/cli"/>
+</a>
