@@ -76,5 +76,5 @@ var snapshotScheduleUpdateCmd = &cobra.Command{
 func init() {
 	snapshotScheduleUpdateCmd.Flags().StringVarP(&scheduleName, "name", "n", "", "New name for the snapshot schedule")
 	snapshotScheduleUpdateCmd.Flags().StringVarP(&scheduleDescription, "description", "d", "", "New description for the snapshot schedule")
-	snapshotScheduleUpdateCmd.Flags().StringVarP(&schedulePaused, "paused", "p", "", "Whether to pause the snapshot schedule (use 'true' and 'false')")
+	snapshotScheduleUpdateCmd.Flags().StringVarP(&schedulePaused, "paused", "p", "", "Whether to pause the snapshot schedule (use 'true' or 'false')")
 }

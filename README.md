@@ -29,10 +29,10 @@ Civo CLI is a tool to manage your [Civo.com](https://www.civo.com) account from 
 - [SSH Keys](#ssh-keys)
 - [Disk Images](#disk-images)
 - [Volumes](#volumes)
+- [Resource Snapshots](#resource-snapshots)
 - [Teams](#teams)
 - [Permissions](#permissions)
 - [Region](#region)
-- [Resource Snapshots](#resource-snapshots)
 - [Enabling shell autocompletion](#enabling-shell-autocompletion)
 - [Contributing](#contributing)
 - [License](#license)
@@ -2155,6 +2155,101 @@ The volume called CLI-demo-volume with ID 59076ec8-edba-4071-80d0-e9cfcce37b12 w
 
 If a Kubernetes volume is showing with a status of `dangling` it can be deleted to release the quota and prevent further billing by running `civo volume delete <VOLUME-NAME> --region <REGION-NAME>`.
 
+
+## Resource Snapshots
+
+Resource snapshots allow you to manage snapshots of your resources. 
+
+> [!IMPORTANT]  
+> Currently, Resource Snapshots will only display Instance Snapshots. More resource types will be supported in the future.
+
+You can list, show details, update, delete, and restore snapshots using the following commands:
+
+```sh
+# List all resource snapshots
+civo resource-snapshot list
+
+# Show details of a specific snapshot
+civo resource-snapshot show SNAPSHOT_ID/NAME
+
+# Update a snapshot
+civo resource-snapshot update SNAPSHOT_ID/NAME
+
+# Delete a snapshot
+civo resource-snapshot delete SNAPSHOT_ID/NAME
+
+# Restore a snapshot
+civo resource-snapshot restore SNAPSHOT_ID/NAME
+```
+
+The available fields for custom output format when listing snapshots are:
+- id
+- name
+- description
+- resource_type
+- created_at
+
+### Snapshot Schedules
+
+Resource snapshots allow you to automate the creation and management of snapshots of your resources. 
+
+> [!IMPORTANT]  
+> Currently, Snapshot Schedules only work with Instance Snapshots. More resource types will be supported in the future.
+
+#### Creating a Schedule
+
+To create a snapshot schedule:
+
+```sh
+$ civo snapshot schedule create --name SCHEDULE_NAME --cron CRON_EXPRESSION --instance-id="INSTANCE_ID1,INSTANCE_ID2,..." --max-snapshots MAX_SNAPSHOTS [flags]
+
+Flags:
+  -d, --description string    Description for the snapshot schedule
+  -v, --include-volumes       Include attached volumes in snapshots
+```
+
+##### Listing Schedules
+
+To view all available schedules: 
+
+```sh
+$ civo snapshot schedule list
+```
+
+##### Viewing Schedule Details
+
+To view the details of a specific schedule:
+
+```sh
+$ civo snapshot schedule show SCHEDULE_NAME/ID
+```
+
+##### Updating a Schedule
+
+To update the details of a snapshot schedule:
+
+```sh
+$ civo snapshot schedule update SCHEDULE_NAME/ID [flags]
+
+Flags:
+  -d, --description string   New description for the snapshot schedule
+  -n, --name string          New name for the snapshot schedule
+  -p, --paused string        Whether to pause the snapshot schedule (use 'true' or 'false')
+```
+
+Example:
+```sh
+$ civo snapshot schedule update my-snapshot --name new-schedule-name --description "Updated schedule description" --paused true
+```
+
+##### Removing a Schedule
+
+To delete a snapshot schedule:
+
+```sh
+$ civo snapshot schedule remove SCHEDULE_NAME/ID
+```
+
 ## Teams
 
 Teams are a grouping of users, each member of a team having one or more permissions, or roles. When a user logs in, they don't have to select which team to use - only which account they want to act within. The permissions available are the total set of permissions they have across the teams in that account, combined.
@@ -2279,35 +2374,6 @@ $ civo permissions ls
 ```
 
 ## Region
-
-## Resource Snapshots
-
-Resource snapshots allow you to manage snapshots of your resources. You can list, show details, update, delete, and restore snapshots using the following commands:
-
-```sh
-# List all resource snapshots
-civo resource-snapshot list
-
-# Show details of a specific snapshot
-civo resource-snapshot show SNAPSHOT_ID/NAME
-
-# Update a snapshot
-civo resource-snapshot update SNAPSHOT_ID/NAME
-
-# Delete a snapshot
-civo resource-snapshot delete SNAPSHOT_ID/NAME
-
-# Restore a snapshot
-civo resource-snapshot restore SNAPSHOT_ID/NAME
-```
-
-The available fields for custom output format when listing snapshots are:
-- id
-- name
-- description
-- resource_type
-- created_at
-
 
 As Civo grows, more regions for your instances will become available. You can run `civo region ls` to list the regions available. Block storage (Volumes) is region-specific, so if you configure an instance in one region, any volumes you wish to attach to that instance would have to be in the same region.
 
