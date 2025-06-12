@@ -1,6 +1,7 @@
 package snapshot
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -62,7 +63,7 @@ var snapshotScheduleShowCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			ow.StartLine()
+			ow := utility.NewOutputWriter()
 			ow.AppendDataWithLabel("ID", utility.Green(schedule.ID), "ID")
 			ow.AppendDataWithLabel("Name", utility.Green(schedule.Name), "Name")
 			ow.AppendDataWithLabel("Description", schedule.Description, "Description")
@@ -79,17 +80,20 @@ var snapshotScheduleShowCmd = &cobra.Command{
 			}
 
 			ow.AppendDataWithLabel("Instances", "", "Instances")
-			for _, instance := range schedule.Instances {
-				ow.AppendDataWithLabel("  ID", utility.Green(instance.ID), "  ID")
+			for i, instance := range schedule.Instances {
+				k := fmt.Sprintf("Instance %d ID", i+1)
+				ow.AppendDataWithLabel(k, utility.Green(instance.ID), k)
 				if instance.Size != "" {
-					ow.AppendDataWithLabel("  Size", instance.Size, "  Size")
+					k = fmt.Sprintf("Instance %d Size", i+1)
+					ow.AppendDataWithLabel(k, instance.Size, k)
 				}
 				if len(instance.IncludedVolumes) > 0 {
-					ow.AppendDataWithLabel("  Included Volumes", strings.Join(instance.IncludedVolumes, ", "), "  Included Volumes")
+					k = fmt.Sprintf("Instance %d Included Volumes", i+1)
+					ow.AppendDataWithLabel(k, strings.Join(instance.IncludedVolumes, ", "), k)
 				}
 			}
 
-			ow.WriteTable()
+			ow.WriteKeyValues()
 		}
 	},
 }
