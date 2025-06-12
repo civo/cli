@@ -60,7 +60,6 @@ github.com/gogo/protobuf v1.3.2 h1:Ov1cvc58UF3b5XjBnZv7+opcTcQFZebYjWzi34vdm4Q=
 github.com/gogo/protobuf v1.3.2/go.mod h1:P1XiOD3dCwIKUDQYPy72D8LYyHL2YPYrpS2s69NZV8Q=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/protobuf v1.3.1/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
-github.com/gomarkdown/markdown v0.0.0-20191123064959-2c17d62f5098 h1:Qxs3bNRWe8GTcKMxYOSXm0jx6j0de8XUtb/fsP3GZ0I=
 github.com/gomarkdown/markdown v0.0.0-20191123064959-2c17d62f5098/go.mod h1:aii0r/K0ZnHv7G0KF7xy1v0A7s2Ljrb5byB7MO5p6TU=
 github.com/gomarkdown/markdown v0.0.0-20240729212818-a2a9c4f76ef5 h1:8QWUW69MXlNdZXnDnD9vEQ1BL8/mm1FTiSesKKHYivk=
 github.com/gomarkdown/markdown v0.0.0-20240729212818-a2a9c4f76ef5/go.mod h1:JDGcbDT52eL4fju3sZ4TeHGsQwhG9nbDV21aMyhwPoA=
