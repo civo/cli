@@ -55,6 +55,16 @@ var snapshotScheduleShowCmd = &cobra.Command{
 			data["last_snapshot_state"] = schedule.Status.LastSnapshot.State
 		}
 
+		for i, instance := range schedule.Instances {
+			data[fmt.Sprintf("instance_%d_id", i+1)] = instance.ID
+			if instance.Size != "" {
+				data[fmt.Sprintf("instance_%d_size", i+1)] = instance.Size
+			}
+			if len(instance.IncludedVolumes) > 0 {
+				data[fmt.Sprintf("instance_%d_included_volumes", i+1)] = strings.Join(instance.IncludedVolumes, ", ")
+			}
+		}
+
 		ow := utility.NewOutputWriterWithMap(data)
 
 		switch common.OutputFormat {
