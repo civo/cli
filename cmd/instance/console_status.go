@@ -47,7 +47,6 @@ var instanceConsoleStatusCmd = &cobra.Command{
 		ow.StartLine()
 		ow.AppendDataWithLabel("instance_id", instance.ID, "Instance ID")
 		ow.AppendDataWithLabel("instance_hostname", instance.Hostname, "Instance Hostname")
-		ow.AppendDataWithLabel("status", vnc.Result, "Status")
 		ow.AppendDataWithLabel("uri", vnc.URI, "URI")
 		ow.AppendDataWithLabel("expiry", vnc.Expiration, "Expiry")
 
