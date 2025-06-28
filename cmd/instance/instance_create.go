@@ -18,9 +18,12 @@ import (
 )
 
 var wait bool
-var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, privateIPv4, firewall string
+var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, privateIPv4, reservedIPv4, firewall, volumetype string
 var script string
 var skipShebangCheck bool
+var volumes []string
+var allowedIPs []string
+var networkBandwidthLimit int
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -139,8 +142,29 @@ If you wish to use a custom format, the available fields are:
 			}
 		}
 
+		// Set public ipv4 if provided
 		if publicip != "" {
 			config.PublicIPRequired = publicip
+		}
+
+		if len(allowedIPs) > 0 {
+			config.AllowedIPs = allowedIPs
+		}
+
+		if networkBandwidthLimit > 0 {
+			config.NetworkBandwidthLimit = networkBandwidthLimit
+		}
+
+		// Set reserved ip if provided
+		if reservedIPv4 != "" {
+			config.ReservedIPv4 = reservedIPv4
+		}
+
+		if volumetype != "" {
+			if !validateAndSetVolumeType(client, volumetype, config) {
+				utility.Error("The provided volume type is not valid")
+				os.Exit(1)
+			}
 		}
 
 		// Set private_ipv4 if provided
@@ -252,6 +276,14 @@ If you wish to use a custom format, the available fields are:
 			config.Tags = strings.Split(tags, ",")
 		}
 
+		if len(volumes) > 0 {
+			for _, volume := range volumes {
+				config.AttachedVolumes = append(config.AttachedVolumes, civogo.AttachedVolume{
+					ID: volume,
+				})
+			}
+		}
+
 		var executionTime, publicIP string
 		startTime := utility.StartTime()
 
@@ -269,6 +301,7 @@ If you wish to use a custom format, the available fields are:
 		if wait {
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+			s.Writer = os.Stderr
 			s.Prefix = fmt.Sprintf("Creating instance (%s)... ", resp.Hostname)
 			s.Start()
 
@@ -297,7 +330,7 @@ If you wish to use a custom format, the available fields are:
 			}
 		}
 
-		if common.OutputFormat == "human" {
+		if common.OutputFormat == common.OutputFormatHuman {
 			if executionTime != "" {
 				fmt.Printf("The instance %s %s has been created in %s\n", utility.Green(instance.Hostname), publicIP, executionTime)
 			} else {
@@ -331,4 +364,24 @@ If you wish to use a custom format, the available fields are:
 			}
 		}
 	},
+}
+
+// Helper function to validate volume type and set it in config
+func validateAndSetVolumeType(client *civogo.Client, volumetype string, config *civogo.InstanceConfig) bool {
+	// Fetch volume types from Civo API
+	volumeTypes, err := client.ListVolumeTypes()
+	if err != nil {
+		utility.Error("Unable to list volume types %s", err)
+		os.Exit(1)
+	}
+
+	// Check if the provided volume type is valid
+	for _, v := range volumeTypes {
+		if v.Name == volumetype {
+			config.VolumeType = v.Name
+			return true // Volume type is valid
+		}
+	}
+
+	return false // Volume type is not valid
 }

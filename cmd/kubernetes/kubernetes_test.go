@@ -2,6 +2,7 @@ package kubernetes
 
 import (
 	"reflect"
+	"sort"
 	"testing"
 )
 
@@ -36,6 +37,8 @@ func TestInstallApplications(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := InstallApps(tt.args.defaultApps, tt.args.apps, tt.args.removeApps)
+			sort.Strings(tt.want)
+			sort.Strings(got)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("InstallApps() = %v, want %v", got, tt.want)
 			}

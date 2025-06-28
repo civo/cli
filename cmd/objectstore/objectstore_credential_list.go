@@ -3,6 +3,7 @@ package objectstore
 import (
 	"os"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -27,14 +28,25 @@ var objectStoreCredentialListCmd = &cobra.Command{
 			client.Region = common.RegionSet
 		}
 
-		creds, err := client.ListObjectStoreCredentials()
-		if err != nil {
-			utility.Error("%s", err)
-			os.Exit(1)
+		var creds []civogo.ObjectStoreCredential
+		page := 1
+		perPage := 100
+
+		for {
+			paginatedCreds, err := client.ListObjectStoreCredentials(page, perPage)
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+			creds = append(creds, paginatedCreds.Items...)
+			if page >= paginatedCreds.Pages {
+				break
+			}
+			page++
 		}
 
 		ow := utility.NewOutputWriter()
-		for _, credential := range creds.Items {
+		for _, credential := range creds {
 			ow.StartLine()
 			ow.AppendDataWithLabel("name", credential.Name, "Name")
 			ow.AppendDataWithLabel("access_key", credential.AccessKeyID, "Access Key")

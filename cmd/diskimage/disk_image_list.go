@@ -2,6 +2,7 @@ package diskimage
 
 import (
 	"os"
+	"sort"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -18,11 +19,14 @@ type DiskImage struct {
 	Distribution string
 }
 
+var showCustomImages bool
+
 var diskImageListCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list", "all"},
-	Example: `civo diskimage ls`,
-	Short:   "List diskimages",
+	Example: `civo diskimage ls
+civo diskimage ls --custom`,
+	Short: "List diskimages",
 	Long: `List all available diskimages.
 If you wish to use a custom format, the available fields are:
 
@@ -32,7 +36,12 @@ If you wish to use a custom format, the available fields are:
 	* state
 	* distribution
 
-Example: civo diskimage ls -o=custom -f=id,name`,
+Examples:
+  # Show only ID & name, for all images
+  civo diskimage ls -o=custom -f=id,name
+
+  # Show only your custom images
+  civo diskimage ls --custom`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
 		if common.RegionSet != "" {
@@ -45,7 +54,7 @@ Example: civo diskimage ls -o=custom -f=id,name`,
 
 		diskImageList := []DiskImage{}
 
-		diskImages, err := client.ListDiskImages()
+		diskImages, err := client.ListDiskImages(showCustomImages)
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
@@ -60,6 +69,11 @@ Example: civo diskimage ls -o=custom -f=id,name`,
 				Distribution: v.Distribution,
 			})
 		}
+
+		// Sort the diskImageList by Name
+		sort.Slice(diskImageList, func(i, j int) bool {
+			return diskImageList[i].Name < diskImageList[j].Name
+		})
 
 		ow := utility.NewOutputWriter()
 

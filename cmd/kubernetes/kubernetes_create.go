@@ -3,7 +3,6 @@ package kubernetes
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
@@ -77,6 +76,12 @@ var kubernetesCreateCmd = &cobra.Command{
 			}
 			utility.Error("You can't create a cluster with the specified size %s. Possible values: %s", targetNodesSize, k8sSize)
 			os.Exit(1)
+		}
+
+		if saveConfigKubernetes {
+			switchConfigKubernetes = true
+			mergeConfigKubernetes = true
+			waitKubernetes = true
 		}
 
 		if !waitKubernetes {
@@ -225,7 +230,8 @@ var kubernetesCreateCmd = &cobra.Command{
 
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Prefix = fmt.Sprintf("Creating a %s node k3s cluster of %s instances called %s... ", strconv.Itoa(kubernetesCluster.NumTargetNode), kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
+			s.Writer = os.Stderr
+			s.Prefix = fmt.Sprintf("Creating a %d node %s cluster of %s instances called %s... ", kubernetesCluster.NumTargetNode, clusterType, kubernetesCluster.TargetNodeSize, kubernetesCluster.Name)
 			s.Start()
 
 			for stillCreating {

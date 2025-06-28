@@ -3,7 +3,6 @@ package kubernetes
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -43,12 +42,12 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 		}
 
 		allApps := strings.Split(args[0], ",")
-		tmpFile, err := ioutil.TempFile(os.TempDir(), "kubeconfig-")
+		tmpFile, err := os.CreateTemp(os.TempDir(), "kubeconfig-")
 		if err != nil {
-			utility.Error("Cannot create temporary file", err)
+			utility.Error("Cannot create temporary file: %v", err)
 		}
 		if _, err = tmpFile.Write([]byte(kube.KubeConfig)); err != nil {
-			utility.Error("Failed to write to temporary file", err)
+			utility.Error("Failed to write to temporary file: %v", err)
 		}
 		defer os.Remove(tmpFile.Name())
 		for _, split := range allApps {

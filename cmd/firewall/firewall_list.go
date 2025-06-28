@@ -4,12 +4,10 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/spf13/cobra"
-
-	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
+	"github.com/spf13/cobra"
 )
 
 var firewallListCmd = &cobra.Command{
@@ -51,10 +49,10 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 		}
 
 		networkMap := make(map[string]string, 0)
-		var network civogo.Network
-		for _, network = range networks {
+		for _, network := range networks {
 			networkMap[network.ID] = network.Label
 		}
+
 		ow := utility.NewOutputWriter()
 		for _, firewall := range firewalls {
 
@@ -62,7 +60,7 @@ Example: civo firewall ls -o custom -f "ID: Name"`,
 
 			ow.AppendDataWithLabel("id", firewall.ID, "ID")
 			ow.AppendDataWithLabel("name", firewall.Name, "Name")
-			ow.AppendDataWithLabel("network", networkMap[network.ID], "Network")
+			ow.AppendDataWithLabel("network", networkMap[firewall.NetworkID], "Network")
 			ow.AppendDataWithLabel("rules_count", strconv.Itoa(firewall.RulesCount), "Total rules")
 			ow.AppendDataWithLabel("instances_count", strconv.Itoa(firewall.InstanceCount), "Total Instances")
 			ow.AppendDataWithLabel("clusters_count", strconv.Itoa(firewall.ClusterCount), "Total Clusters")

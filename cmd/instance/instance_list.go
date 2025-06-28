@@ -2,6 +2,7 @@ package instance
 
 import (
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -57,6 +58,11 @@ If you wish to use a custom format, the available fields are:
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
+
+		// Sort instances by hostname
+		sort.Slice(instances, func(i, j int) bool {
+			return instances[i].Hostname < instances[j].Hostname
+		})
 
 		ow := utility.NewOutputWriter()
 		for _, instance := range instances {

@@ -51,6 +51,11 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
+		if len(firewallRules) == 0 {
+			utility.Info("%s firewall has no rules, to create rules use command civo firewall rule create, for example:\ncivo firewall rule create test-issue -c '0.0.0.0/0' -s 443 -e 443 -l HTTPS", firewall.Name)
+			os.Exit(1)
+		}
+
 		ow := utility.NewOutputWriter()
 		for _, firewallRule := range firewallRules {
 			ow.StartLine()

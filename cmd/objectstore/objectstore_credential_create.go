@@ -58,6 +58,7 @@ var objectStoreCredentialCreateCmd = &cobra.Command{
 			startTime := utility.StartTime()
 			stillCreating := true
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+			s.Writer = os.Stderr
 			s.Prefix = fmt.Sprintf("Creating an Object Store Credential with maxSize %d, called %s... ", credential.MaxSizeGB, credential.Name)
 			s.Start()
 

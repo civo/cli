@@ -35,6 +35,7 @@ var kubernetesNodePoolListCmd = &cobra.Command{
 		ow := utility.NewOutputWriter()
 
 		for _, pool := range cluster.RequiredPools {
+			ow = utility.NewOutputWriter()
 			fmt.Println()
 			ow.WriteHeader(fmt.Sprintf("Node Pool %s", pool.ID))
 			ow.AppendDataWithLabel("ID", pool.ID, "Name")

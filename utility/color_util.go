@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/civo/cli/common"
 	"github.com/gookit/color"
 )
 
@@ -46,7 +45,6 @@ func Red(value string) string {
 
 // Error is the function to handler all error in the Cli
 func Error(msg string, args ...interface{}) {
-	common.IssueMessage()
 	fmt.Fprintf(os.Stderr, "%s: %s\n", color.Red.Sprintf("Error"), fmt.Sprintf(msg, args...))
 }
 
@@ -93,6 +91,8 @@ func ColorStatus(status string) string {
 		returnText = Magenta(status)
 	case status == "STOPPING":
 		returnText = Yellow(status)
+	case status == "MIGRATING":
+		returnText = Magenta(status)
 	default:
 		returnText = Red("Unknown")
 	}
