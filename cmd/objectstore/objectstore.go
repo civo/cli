@@ -2,6 +2,7 @@ package objectstore
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/spf13/cobra"
 )
@@ -35,6 +36,10 @@ var objectStoreCredentialCmd = &cobra.Command{
 	},
 }
 
+const (
+	minBucketSizeGB = 500
+)
+
 func init() {
 
 	ObjectStoreCmd.AddCommand(objectStoreListCmd)
@@ -45,7 +50,7 @@ func init() {
 	ObjectStoreCmd.AddCommand(objectStoreCredentialCmd)
 
 	//Flags for create cmd
-	objectStoreCreateCmd.Flags().Int64VarP(&bucketSize, "size", "s", 500, "Size of the Object store (Minimum size is 500GB)")
+	objectStoreCreateCmd.Flags().Int64VarP(&bucketSize, "size", "s", minBucketSizeGB, fmt.Sprintf("Size of the Object store (Allowed sizes: %dGB or 1000GB)", minBucketSizeGB))
 	objectStoreCreateCmd.Flags().StringVarP(&owner, "owner-name", "n", "", "Name of Owner of the Object store. You can reference name of any civo object store credential created before")
 	objectStoreCreateCmd.Flags().StringVarP(&owner, "owner-access-key", "a", "", "Access Key ID of Owner of the Object store. You can reference name of any civo object store credential created before")
 	objectStoreCreateCmd.Flags().BoolVarP(&waitOS, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the Object Store to be ready")
