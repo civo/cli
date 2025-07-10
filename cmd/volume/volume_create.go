@@ -11,8 +11,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var createSizeGB int
-var networkVolumeID string
+var (
+	createSizeGB    int
+	networkVolumeID string
+	volumeType      string
+)
 
 var volumeCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -66,6 +69,10 @@ var volumeCreateCmd = &cobra.Command{
 			}
 
 			volumeConfig.NetworkID = network.ID
+		}
+
+		if volumeType != "" {
+			volumeConfig.VolumeType = volumeType
 		}
 
 		volume, err := client.NewVolume(volumeConfig)
