@@ -1,11 +1,13 @@
 package database
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var dbVersionListCmd = &cobra.Command{
@@ -31,13 +33,18 @@ var dbVersionListCmd = &cobra.Command{
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
+		fmt.Println(dbVersions)
 
 		ow := utility.NewOutputWriter()
 
+		// Iterate through each database type and all its versions
 		for dbName, versionDetails := range dbVersions {
-			ow.StartLine()
-			ow.AppendDataWithLabel("name", dbName, "Name")
-			ow.AppendDataWithLabel("version", versionDetails[0].SoftwareVersion, "version")
+			for _, version := range versionDetails {
+				ow.StartLine()
+				ow.AppendDataWithLabel("name", dbName, "Name")
+				ow.AppendDataWithLabel("version", version.SoftwareVersion, "Version")
+				ow.AppendDataWithLabel("default", fmt.Sprintf("%t", version.Default), "Default")
+			}
 		}
 
 		switch common.OutputFormat {
