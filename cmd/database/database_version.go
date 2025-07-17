@@ -33,7 +33,6 @@ var dbVersionListCmd = &cobra.Command{
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
-		fmt.Println(dbVersions)
 
 		ow := utility.NewOutputWriter()
 
