@@ -103,6 +103,7 @@ func init() {
 	kubernetesCreateCmd.Flags().BoolVarP(&createFirewall, "create-firewall", "c", false, "optional, create a firewall for the cluster with all open ports")
 	kubernetesCreateCmd.Flags().StringVarP(&cniPlugin, "cni-plugin", "p", "flannel", "optional, possible options: flannel,cilium.")
 	kubernetesCreateCmd.Flags().StringVarP(&clusterType, "cluster-type", "", "k3s", "optional, possible options: k3s,talos.")
+	kubernetesCreateCmd.Flags().StringVar(&volumeType, "volume-type", "", "optional, volume-type name as returned by 'civo volumetypes ls'")
 
 	kubernetesRenameCmd.Flags().StringVarP(&kubernetesNewName, "name", "n", "", "the new name for the cluster.")
 
