@@ -17,7 +17,7 @@ import (
 var numTargetNodes int
 var rulesFirewall string
 var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes, createFirewall bool
-var kubernetesVersion, targetNodesSize, clusterName, clusterType, applications, removeapplications, networkID, existingFirewall, cniPlugin string
+var kubernetesVersion, targetNodesSize, clusterName, clusterType, applications, removeapplications, networkID, existingFirewall, cniPlugin, volumeType string
 var kubernetesCluster *civogo.KubernetesCluster
 
 var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
@@ -194,6 +194,10 @@ var kubernetesCreateCmd = &cobra.Command{
 
 			configKubernetes.InstanceFirewall = ef.ID
 			configKubernetes.FirewallRule = ""
+		}
+
+		if volumeType != "" {
+			configKubernetes.VolumeType = volumeType
 		}
 
 		if !mergeConfigKubernetes && saveConfigKubernetes {
