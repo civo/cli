@@ -40,3 +40,16 @@ func SliceToString(slice []string) string {
 
 	return result
 }
+
+// SplitCommaSeparatedValues splits a comma-separated string into a slice of strings.
+func SplitCommaSeparatedValues(s string) []string {
+	if s == "" {
+		return []string{}
+	}
+	// Trim spaces around each item and return the slice
+	parts := strings.Split(s, ",")
+	for i, part := range parts {
+		parts[i] = strings.TrimSpace(part)
+	}
+	return parts
+}
