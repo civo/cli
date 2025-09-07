@@ -93,6 +93,5 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
-
 	},
 }

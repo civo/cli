@@ -21,8 +21,8 @@ If you wish to use a custom format, the available fields are:
 Example: civo apikey ls -o custom -f "Name: Key"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		keys := make([]string, 0, len(config.Current.APIKeys))
-		for k := range config.Current.APIKeys {
-			keys = append(keys, k)
+		for _, k := range config.Current.APIKeys {
+			keys = append(keys, k.Name)
 		}
 		sort.Strings(keys)
 

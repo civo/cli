@@ -12,11 +12,20 @@ import (
 )
 
 // SkipAPIInitialization can be set to true to bypass API-related initialization
-var SkipAPIInitialization bool
+var (
+	SkipAPIInitialization bool
+	DefaultAPIURL         = "https://api.civo.com"
+)
+
+type APIKey struct {
+	Name   string `json:"name"`
+	Value  string `json:"value"`
+	APIURL string `json:"url"`
+}
 
 // Config describes the configuration for Civo's CLI
 type Config struct {
-	APIKeys          map[string]string         `json:"apikeys"`
+	APIKeys          []APIKey                  `json:"apikeys"`
 	Meta             Metadata                  `json:"meta"`
 	RegionToFeatures map[string]civogo.Feature `json:"region_to_features"`
 }
@@ -77,11 +86,11 @@ func loadConfig(filename string) {
 		initializeDefaultConfig(filename)
 	}
 	if Current.APIKeys == nil {
-		Current.APIKeys = map[string]string{}
+		Current.APIKeys = []APIKey{}
 	}
 
 	if token, found := os.LookupEnv("CIVO_TOKEN"); found && token != "" {
-		Current.APIKeys["tempKey"] = token
+		Current.APIKeys = append(Current.APIKeys, APIKey{Name: "tempKey", Value: "token", APIURL: DefaultAPIURL})
 		Current.Meta.CurrentAPIKey = "tempKey"
 	}
 
@@ -123,14 +132,14 @@ func saveUpdatedConfig(filename string) {
 	}
 
 	// Write the JSON data to the specified configuration file
-	err = os.WriteFile(filename, dataBytes, 0600)
+	err = os.WriteFile(filename, dataBytes, 0o600)
 	if err != nil {
 		fmt.Printf("Error writing configuration to file '%s': %s\n", filename, err)
 		os.Exit(1)
 	}
 
 	// Set file permissions to be read-write for the owner only
-	if err := os.Chmod(filename, 0600); err != nil {
+	if err := os.Chmod(filename, 0o600); err != nil {
 		fmt.Printf("Error setting file permissions for '%s': %s\n", filename, err)
 		os.Exit(1)
 	}
@@ -160,21 +169,20 @@ func SaveConfig() {
 		os.Exit(1)
 	}
 
-	err = os.WriteFile(filename, dataBytes, 0600)
+	err = os.WriteFile(filename, dataBytes, 0o600)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	if err := os.Chmod(filename, 0600); err != nil {
+	if err := os.Chmod(filename, 0o600); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
 }
 
 func checkConfigFile(filename string) error {
-	curr := Config{APIKeys: map[string]string{}}
+	curr := Config{APIKeys: []APIKey{}}
 	curr.Meta = Metadata{
 		Admin:           false,
 		DefaultRegion:   "NYC1",
@@ -202,7 +210,7 @@ func checkConfigFile(filename string) error {
 		if err != nil {
 			return err
 		}
-		err = os.WriteFile(filename, fileContend, 0600)
+		err = os.WriteFile(filename, fileContend, 0o600)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
@@ -211,7 +219,7 @@ func checkConfigFile(filename string) error {
 	} else {
 		size := file.Size()
 		if size == 0 {
-			err = os.WriteFile(filename, fileContend, 0600)
+			err = os.WriteFile(filename, fileContend, 0o600)
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
@@ -219,7 +227,7 @@ func checkConfigFile(filename string) error {
 		}
 	}
 
-	if err := os.Chmod(filename, 0600); err != nil {
+	if err := os.Chmod(filename, 0o600); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
@@ -252,7 +260,11 @@ func regionsToFeature() (map[string]civogo.Feature, error) {
 // DefaultAPIKey returns the current default API key
 func DefaultAPIKey() string {
 	if Current.Meta.CurrentAPIKey != "" {
-		return Current.APIKeys[Current.Meta.CurrentAPIKey]
+		for _, apiKey := range Current.APIKeys {
+			if apiKey.Name == Current.Meta.CurrentAPIKey {
+				return apiKey.Value
+			}
+		}
 	}
 	return ""
 }
@@ -290,7 +302,7 @@ func CivoAPIClient() (*civogo.Client, error) {
 func initializeDefaultConfig(filename string) {
 	// Set up a default configuration
 	Current = Config{
-		APIKeys: make(map[string]string), // Initialize an empty API keys map
+		APIKeys: []APIKey{}, // Initialize an empty API keys map
 		Meta: Metadata{
 			Admin:           false,
 			DefaultRegion:   "LON1", // Set a default region
@@ -308,14 +320,14 @@ func initializeDefaultConfig(filename string) {
 	}
 
 	// Write the default configuration to the file
-	err = os.WriteFile(filename, dataBytes, 0600)
+	err = os.WriteFile(filename, dataBytes, 0o600)
 	if err != nil {
 		fmt.Printf("Error saving default configuration to file '%s': %s\n", filename, err)
 		os.Exit(1)
 	}
 
 	// Set secure file permissions
-	if err := os.Chmod(filename, 0600); err != nil {
+	if err := os.Chmod(filename, 0o600); err != nil {
 		fmt.Printf("Error setting file permissions for '%s': %s\n", filename, err)
 		os.Exit(1)
 	}

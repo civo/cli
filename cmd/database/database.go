@@ -7,8 +7,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var firewallID, networkID, size, updatedName, software, softwareVersion string
-var nodes int
+var (
+	firewallID, networkID, size, updatedName, software, softwareVersion string
+	nodes                                                               int
+)
 
 // DBCmd is the root command for the db subcommand
 var DBCmd = &cobra.Command{

@@ -20,7 +20,7 @@ var apikeySaveCmdExample = `* Interactive way:
     civo apikey save
 
 * Non-interactive way:
-    civo apikey save NAME APIKEY
+    civo apikey save NAME APIKEY APIURL
 
 * Load from environment variables way:
     civo apikey save --load-from-env
@@ -43,8 +43,7 @@ var apikeySaveCmd = &cobra.Command{
 	Short:   "Save a new API key",
 	Example: apikeySaveCmdExample,
 	Run: func(cmd *cobra.Command, args []string) {
-
-		var name, apiKey string
+		var name, apiKey, apiURL string
 		var err error
 
 		// if arg is more than two, return an error
@@ -79,7 +78,22 @@ var apikeySaveCmd = &cobra.Command{
 				utility.Error("Error reading api key %v", err)
 				os.Exit(1)
 			}
+			fmt.Println()
 			apiKey = string(apikeyBytes)
+			fmt.Printf("Enter the API URL key: (default is %s): ", config.DefaultAPIURL)
+			apiURL, err = reader.ReadString('\n')
+			if err != nil {
+				utility.Error("Error reading name %v", err)
+				os.Exit(1)
+			}
+			if runtime.GOOS == "windows" {
+				apiURL = strings.TrimSuffix(apiURL, "\r\n")
+			} else {
+				apiURL = strings.TrimSuffix(apiURL, "\n")
+			}
+			if len(apiURL) == 0 {
+				apiURL = config.DefaultAPIURL
+			}
 		}
 
 		if len(args) == 2 && !loadAPIKeyFromEnv {
@@ -110,9 +124,9 @@ var apikeySaveCmd = &cobra.Command{
 			apiKey = apiKeyEnv
 		}
 
-		config.Current.APIKeys[name] = apiKey
+		config.Current.APIKeys = append(config.Current.APIKeys, config.APIKey{Name: name, Value: apiKey, APIURL: apiURL})
 		if config.Current.Meta.DefaultRegion == "" {
-			client, err := civogo.NewClientWithURL(apiKey, config.Current.Meta.URL, "")
+			client, err := civogo.NewClientWithURL(apiKey, apiURL, "")
 			if err != nil {
 				utility.Error("Unable to create a Civo API client, please report this at https://github.com/civo/cli")
 				os.Exit(1)
@@ -129,6 +143,7 @@ var apikeySaveCmd = &cobra.Command{
 
 		if len(config.Current.APIKeys) == 1 {
 			config.Current.Meta.CurrentAPIKey = name
+			config.Current.Meta.URL = apiURL
 			config.SaveConfig()
 		}
 
@@ -142,6 +157,5 @@ var apikeySaveCmd = &cobra.Command{
 		default:
 			fmt.Printf("Saved the API Key %s\n", utility.Green(name))
 		}
-
 	},
 }

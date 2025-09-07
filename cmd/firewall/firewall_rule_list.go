@@ -66,7 +66,7 @@ If you wish to use a custom format, the available fields are:
 
 			ow.AppendDataWithLabel("id", firewallRule.ID, "ID")
 			// TODO: Check if is necessary this in the table, because you need pass like arg the name or the id of the firewall
-			//ow.AppendDataWithLabel("Firewall", firewall.Name, "Firewall")
+			// ow.AppendDataWithLabel("Firewall", firewall.Name, "Firewall")
 			ow.AppendDataWithLabel("direction", firewallRule.Direction, "Direction")
 			ow.AppendDataWithLabel("protocol", firewallRule.Protocol, "Protocol")
 			ow.AppendDataWithLabel("start_port", firewallRule.StartPort, "Start Port")

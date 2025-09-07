@@ -3,14 +3,13 @@ package firewall
 import (
 	"fmt"
 	"net"
+	"os"
 	"strings"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
-	"os"
 
 	"github.com/spf13/cobra"
 )

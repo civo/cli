@@ -17,7 +17,6 @@ var teamsCreateCmd = &cobra.Command{
 	Short:   "Create a new team",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-
 		client, err := config.CivoAPIClient()
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)

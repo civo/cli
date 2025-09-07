@@ -21,12 +21,11 @@ var LoadBalancerCmd = &cobra.Command{
 }
 
 func init() {
-
 	LoadBalancerCmd.AddCommand(loadBalancerListCmd)
 	LoadBalancerCmd.AddCommand(loadBalancerShowCmd)
-	//loadBalancerCmd.AddCommand(loadBalancerRemoveCmd)
-	//loadBalancerCmd.AddCommand(loadBalancerCreateCmd)
-	//loadBalancerCmd.AddCommand(loadBalancerUpdateCmd)
+	// loadBalancerCmd.AddCommand(loadBalancerRemoveCmd)
+	// loadBalancerCmd.AddCommand(loadBalancerCreateCmd)
+	// loadBalancerCmd.AddCommand(loadBalancerUpdateCmd)
 
 	// Balancer create subcommand
 	// loadBalancerCreateCmd.Flags().StringVarP(&lbName, "name", "", "", "Name of the load balancer")

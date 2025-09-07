@@ -17,13 +17,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var wait bool
-var hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, privateIPv4, reservedIPv4, firewall, volumetype string
-var script string
-var skipShebangCheck bool
-var volumes []string
-var allowedIPs []string
-var networkBandwidthLimit int
+var (
+	wait                                                                                                                           bool
+	hostnameCreate, size, diskimage, publicip, initialuser, sshkey, tags, network, privateIPv4, reservedIPv4, firewall, volumetype string
+	script                                                                                                                         string
+	skipShebangCheck                                                                                                               bool
+	volumes                                                                                                                        []string
+	allowedIPs                                                                                                                     []string
+	networkBandwidthLimit                                                                                                          int
+)
 
 var instanceCreateCmd = &cobra.Command{
 	Use:     "create",
@@ -185,7 +187,7 @@ If you wish to use a custom format, the available fields are:
 			config.SSHKeyID = sshKey.ID
 		}
 
-		var net = &civogo.Network{}
+		net := &civogo.Network{}
 		if network != "" {
 			net, err = client.FindNetwork(network)
 			if err != nil {

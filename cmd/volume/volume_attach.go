@@ -14,8 +14,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var waitVolumeAttach bool
-var attachAtBoot bool
+var (
+	waitVolumeAttach bool
+	attachAtBoot     bool
+)
 
 var volumeAttachCmdExamples = []string{
 	"civo volume attach VOLUME_NAME INSTANCE_HOSTNAME",

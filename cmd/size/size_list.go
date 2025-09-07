@@ -57,7 +57,7 @@ Example: civo size ls -o custom -f "Code: name (type)"`,
 			case strings.ToLower(filterSize) == "database" || strings.ToLower(filterSize) == "db":
 				search = ".db."
 			case strings.ToLower(filterSize) == "kubernetes" || strings.ToLower(filterSize) == "k8s" || strings.ToLower(filterSize) == "k3s" || strings.ToLower(filterSize) == "kube":
-				search = ".kube."
+				search = ".kube"
 			case strings.ToLower(filterSize) == "instance" || strings.ToLower(filterSize) == "iaas" || strings.ToLower(filterSize) == "vm":
 				search = "iaas"
 			}
