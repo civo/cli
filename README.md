@@ -279,20 +279,20 @@ Options:
 Example usage:
 
 ```sh
-$ civo instance create --hostname=api-demo.test --size g3.small --diskimage=ubuntu-focal --initialuser=demo-user --allowed-ips 192.168.1.100,192.168.1.101 --network-bandwidth-limit 100
+$ civo instance create --hostname=api-demo.test --size g4s.small --diskimage=ubuntu-focal --initialuser=demo-user --allowed-ips 192.168.1.100,192.168.1.101 --network-bandwidth-limit 100
   The instance api-demo.test has been created
 
 $ civo instance show api-demo.test
               ID : 112f2407-fb89-443e-bd0e-5ddabc4682c6
         Hostname : api-demo.test
           Status : ACTIVE
-            Size : g3.small
+            Size : g4s.small
        Cpu Cores : 1
              Ram : 2048
         SSD disk : 25
           Region : LON1
       Network ID : 28244c7d-b1b9-48cf-9727-aebb3493aaac
-   Disk image ID : ubuntu-focal # Corrected from 'ID : ubuntu-bionic'
+   Disk image ID : ubuntu-focal
      Snapshot ID :
     Initial User : demo-user
 Initial Password : demo-user
