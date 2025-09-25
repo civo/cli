@@ -26,8 +26,10 @@ Notes:
 * When --overwrite is specified, --switch is not required. Your context will be updated automatically.
 `
 
-var saveConfig, switchConfig, overwriteConfig bool
-var localPathConfig, defaultKubeConfigPath string
+var (
+	saveConfig, switchConfig, overwriteConfig bool
+	localPathConfig, defaultKubeConfigPath    string
+)
 
 var kubernetesConfigCmd = &cobra.Command{
 	Use:     "config",
@@ -104,7 +106,6 @@ If you wish to use a custom format, the available fields are:
 					os.Exit(1)
 				}
 			}
-
 		}
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"kubeconfig": kube.KubeConfig})

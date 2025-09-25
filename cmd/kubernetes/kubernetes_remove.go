@@ -15,8 +15,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var kuberneteList []utility.ObjecteList
-var deleteKubeconfigContext bool
+var (
+	kuberneteList           []utility.ObjecteList
+	deleteKubeconfigContext bool
+)
 
 var kubernetesRemoveCmd = &cobra.Command{
 	Use:     "remove",

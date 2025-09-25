@@ -13,7 +13,7 @@ type InstallApplicationsArgs struct {
 }
 
 func TestInstallApplications(t *testing.T) {
-	var tests = []struct {
+	tests := []struct {
 		name string
 		args InstallApplicationsArgs
 		want []string

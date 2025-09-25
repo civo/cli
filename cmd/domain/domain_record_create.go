@@ -13,8 +13,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var recordName, recordType, recordValue string
-var recordTTL, recordPriority int
+var (
+	recordName, recordType, recordValue string
+	recordTTL, recordPriority           int
+)
 
 var domainRecordCreateCmd = &cobra.Command{
 	Use:     "create",

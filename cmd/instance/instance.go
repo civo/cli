@@ -45,7 +45,6 @@ func init() {
 	InstanceCmd.AddCommand(instanceAllowedIPsUpdateCmd)
 	InstanceCmd.AddCommand(instanceBandwidthUpdateCmd)
 
-
 	instanceUpdateCmd.Flags().StringVarP(&notes, "notes", "n", "", "notes stored against the instance")
 	instanceUpdateCmd.Flags().StringVarP(&reverseDNS, "reverse-dns", "r", "", "the reverse DNS entry for the instance")
 	instanceUpdateCmd.Flags().StringVarP(&hostname, "hostname", "s", "", "the instance's hostname")

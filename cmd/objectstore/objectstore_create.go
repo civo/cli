@@ -13,9 +13,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var bucketSize int64
-var owner string
-var waitOS bool
+var (
+	bucketSize int64
+	owner      string
+	waitOS     bool
+)
 
 var objectStoreCreateCmd = &cobra.Command{
 	Use:     "create",

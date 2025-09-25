@@ -11,10 +11,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var firewallnetwork string
-var createRules bool
-var noDefaultRules bool
-var defaultNetwork *civogo.Network
+var (
+	firewallnetwork string
+	createRules     bool
+	noDefaultRules  bool
+	defaultNetwork  *civogo.Network
+)
 
 var firewallCreateCmd = &cobra.Command{
 	Use:     "create",

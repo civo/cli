@@ -60,7 +60,6 @@ var kubernetesApplicationsCmd = &cobra.Command{
 }
 
 func init() {
-
 	KubernetesCmd.AddCommand(kubernetesListCmd)
 	KubernetesCmd.AddCommand(kubernetesSizeCmd)
 	KubernetesCmd.AddCommand(kubernetesListVersionCmd)
@@ -174,7 +173,6 @@ func getKubernetesList(value string) []string {
 	clusterList = append(clusterList, cluster.Name)
 
 	return clusterList
-
 }
 
 func getAllKubernetesList() []string {
@@ -196,5 +194,4 @@ func getAllKubernetesList() []string {
 	}
 
 	return clusterList
-
 }

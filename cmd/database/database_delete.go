@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 
 	pluralize "github.com/alejandrojnm/go-pluralize"
@@ -10,8 +11,6 @@ import (
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
-	"os"
 
 	"github.com/spf13/cobra"
 )

@@ -65,6 +65,5 @@ civo ip Unassign <ip id>`,
 		} else {
 			fmt.Println("Aborted")
 		}
-
 	},
 }

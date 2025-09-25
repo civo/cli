@@ -11,10 +11,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var scheduleDescription, scheduleCron string
-var maxSnapshots int
-var instanceIDs []string
-var includeVolumes bool
+var (
+	scheduleDescription, scheduleCron string
+	maxSnapshots                      int
+	instanceIDs                       []string
+	includeVolumes                    bool
+)
 
 var snapshotScheduleCreateCmd = &cobra.Command{
 	Use:     "create",

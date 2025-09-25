@@ -32,7 +32,7 @@ var sshKeyCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		//validate the ssh public key
+		// validate the ssh public key
 		if err := utility.ValidateSSHKey(data); err != nil {
 			utility.Error("Validating the SSH key failed with %s", err)
 			os.Exit(1)

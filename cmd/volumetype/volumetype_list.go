@@ -2,13 +2,14 @@ package volumetype
 
 import (
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
+
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
-	"os"
-	"strconv"
-	"strings"
 )
 
 var volumetypesListCmd = &cobra.Command{

@@ -65,13 +65,11 @@ func YellowConfirm(msg string, args ...interface{}) {
 
 // RedConfirm is the function to handler the new version of the Cli
 func RedConfirm(msg string, args ...interface{}) {
-
 	fmt.Fprintf(os.Stderr, "%s: %s", color.Red.Sprintf("IMPORTANT"), fmt.Sprintf(msg, args...))
 }
 
 // ColorStatus is to print the status of the Instance or k8s Cluster
 func ColorStatus(status string) string {
-
 	var returnText string
 
 	switch {

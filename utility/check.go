@@ -3,7 +3,6 @@ package utility
 import (
 	"fmt"
 	"math"
-
 	"os"
 	"runtime"
 	"strings"
@@ -74,14 +73,8 @@ func GetK3sSize() ([]string, error) {
 }
 
 // CheckAPPName is a function to check if the app name is valid
-func CheckAPPName(appName string) bool {
-	client, err := config.CivoAPIClient()
-	if err != nil {
-		return false
-	}
-	client.Region = "nyc1"
-
-	allAPP, err := client.ListKubernetesMarketplaceApplications()
+func CheckAppName(c *civogo.Client, appName string) bool {
+	allAPP, err := c.ListKubernetesMarketplaceApplications()
 	if err != nil {
 		return false
 	}
@@ -96,14 +89,8 @@ func CheckAPPName(appName string) bool {
 }
 
 // ListDefaultApps is a function to list the default apps in the marketplace
-func ListDefaultApps() ([]string, error) {
-	client, err := config.CivoAPIClient()
-	if err != nil {
-		return nil, err
-	}
-	client.Region = "nyc1"
-
-	allApps, err := client.ListKubernetesMarketplaceApplications()
+func ListDefaultApps(c *civogo.Client) ([]string, error) {
+	allApps, err := c.ListKubernetesMarketplaceApplications()
 	if err != nil {
 		return nil, err
 	}

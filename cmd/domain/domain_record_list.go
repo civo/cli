@@ -83,7 +83,6 @@ func getDomainList(value string) []string {
 	domainList = append(domainList, domain.Name)
 
 	return domainList
-
 }
 
 func getAllDomainList() []string {
@@ -105,5 +104,4 @@ func getAllDomainList() []string {
 	}
 
 	return domainList
-
 }

@@ -12,9 +12,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var targetNodesPoolSize, nodePoolName string
-var numTargetNodesPool int
-var publicIpNodePool bool
+var (
+	targetNodesPoolSize, nodePoolName string
+	numTargetNodesPool                int
+	publicIpNodePool                  bool
+)
 
 var kubernetesNodePoolCreateCmd = &cobra.Command{
 	Use:     "create",

@@ -1,14 +1,13 @@
 package kubernetes
 
 import (
+	"os"
+	"strconv"
 	"strings"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
-	"os"
-	"strconv"
 
 	"github.com/spf13/cobra"
 )

@@ -61,7 +61,6 @@ var kubernetesRecycleCmd = &cobra.Command{
 }
 
 func getKubernetesClusterName(value string) []string {
-
 	client, err := config.CivoAPIClient()
 	if err != nil {
 		utility.Error("Creating the connection to Civo's API failed with %s", err)
@@ -78,11 +77,9 @@ func getKubernetesClusterName(value string) []string {
 	k8sList = append(k8sList, k8s.Name)
 
 	return k8sList
-
 }
 
 func getAllKubernetesClusterName() []string {
-
 	client, err := config.CivoAPIClient()
 	if err != nil {
 		utility.Error("Creating the connection to Civo's API failed with %s", err)

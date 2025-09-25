@@ -14,11 +14,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var numTargetNodes int
-var rulesFirewall string
-var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes, createFirewall bool
-var kubernetesVersion, targetNodesSize, clusterName, clusterType, applications, removeapplications, networkID, existingFirewall, cniPlugin, volumeType string
-var kubernetesCluster *civogo.KubernetesCluster
+var (
+	numTargetNodes                                                                                                                                     int
+	rulesFirewall                                                                                                                                      string
+	waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKubernetes, createFirewall                                                bool
+	kubernetesVersion, targetNodesSize, clusterName, clusterType, applications, removeapplications, networkID, existingFirewall, cniPlugin, volumeType string
+	kubernetesCluster                                                                                                                                  *civogo.KubernetesCluster
+)
 
 var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
 
@@ -111,7 +113,7 @@ var kubernetesCreateCmd = &cobra.Command{
 			clusterName = utility.RandomName()
 		}
 
-		var network = &civogo.Network{}
+		network := &civogo.Network{}
 		if networkID == "default" {
 			network, err = client.GetDefaultNetwork()
 			if err != nil {
@@ -156,14 +158,14 @@ var kubernetesCreateCmd = &cobra.Command{
 			configKubernetes.KubernetesVersion = kubernetesVersion
 		}
 
-		defaultApplications, err := utility.ListDefaultApps()
+		defaultApplications, err := utility.ListDefaultApps(client)
 		if err != nil {
 			utility.Error("Error %s", err)
 			os.Exit(1)
 		}
 		apps := InstallApps(defaultApplications, applications, removeapplications)
 		for _, app := range apps {
-			if !utility.CheckAPPName(app) {
+			if !utility.CheckAppName(client, app) {
 				utility.Error("%q is not a valid application name", app)
 				os.Exit(1)
 			}

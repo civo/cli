@@ -34,7 +34,6 @@ var domainRecordCmd = &cobra.Command{
 }
 
 func init() {
-
 	DomainCmd.AddCommand(domainListCmd)
 	DomainCmd.AddCommand(domainCreateCmd)
 	DomainCmd.AddCommand(domainRemoveCmd)
@@ -54,5 +53,4 @@ func init() {
 	domainRecordCreateCmd.Flags().StringVarP(&recordValue, "value", "v", "", "the value of the record")
 	domainRecordCreateCmd.Flags().IntVarP(&recordTTL, "ttl", "t", 600, "The TTL of the record")
 	domainRecordCreateCmd.Flags().IntVarP(&recordPriority, "priority", "p", 0, "the priority of record only for SRV and MX record")
-
 }

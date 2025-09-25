@@ -1,14 +1,14 @@
 package domain
 
 import (
+	"os"
+	"strconv"
+	"time"
+
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
-	"os"
-	"strconv"
-	"time"
 
 	"github.com/spf13/cobra"
 )

@@ -15,17 +15,24 @@ var apikeyCurrentCmd = &cobra.Command{
 	Short:   "Set the current API key",
 	Args:    cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		index, err := apiKeyFind(args[0])
+		apiKeyName, err := apiKeyFind(args[0])
 		if err != nil {
 			utility.Error("Unable to find the API key %s", err.Error())
 			os.Exit(1)
 		}
 
-		if index != "" {
-			config.Current.Meta.CurrentAPIKey = index
+		if apiKeyName != "" {
+			var idx int
+			for index, apiKey := range config.Current.APIKeys {
+				if apiKeyName == apiKey.Name {
+					idx = index
+					break
+				}
+			}
+			config.Current.Meta.CurrentAPIKey = config.Current.APIKeys[idx].Name
+			config.Current.Meta.URL = config.Current.APIKeys[idx].APIURL
 			config.SaveConfig()
-			fmt.Printf("Set the default API Key to be %s\n", utility.Green(index))
+			fmt.Printf("Set the default API Key to be %s\n", utility.Green(apiKeyName))
 		}
-
 	},
 }

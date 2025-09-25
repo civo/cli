@@ -27,9 +27,9 @@ between them when required.`,
 
 func apiKeyFind(search string) (string, error) {
 	var result string
-	for key, value := range config.Current.APIKeys {
-		if key == search || value == search {
-			result = key
+	for _, apiKey := range config.Current.APIKeys {
+		if apiKey.Name == search {
+			result = apiKey.Name
 		}
 	}
 
@@ -41,7 +41,6 @@ func apiKeyFind(search string) (string, error) {
 }
 
 func init() {
-
 	config.SkipAPIInitialization = true
 
 	APIKeyCmd.AddCommand(apikeyListCmd)

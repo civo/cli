@@ -6,8 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var name, schedule, backupType string
-var scheduled bool
+var (
+	name, schedule, backupType string
+	scheduled                  bool
+)
 
 // dbBackupCmd is the root command for the db backup subcommand
 var dbBackupCmd = &cobra.Command{
