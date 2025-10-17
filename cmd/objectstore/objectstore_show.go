@@ -66,7 +66,8 @@ var objectStoreShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("region", client.Region, "Region")
 		ow.AppendDataWithLabel("accesskey", creds.AccessKeyID, "Access Key")
 		ow.AppendDataWithLabel("status", objectStore.Status, "Status")
-		ow.AppendDataWithLabel("stats", fmt.Sprintf("Objects: %d, Size: %d MB, Size Used: %d KB", stats.NumObjects, objectStore.MaxSize, stats.SizeKBUtilised), "Stats")
+		sizeUsedMB := float64(stats.SizeKBUtilised) / 1024.0
+		ow.AppendDataWithLabel("stats", fmt.Sprintf("Objects: %d, Size: %d MB, Size Used: %.2f MB", stats.NumObjects, objectStore.MaxSize, sizeUsedMB), "Stats")
 
 		switch common.OutputFormat {
 		case "json":
