@@ -37,6 +37,8 @@ var dbListCmd = &cobra.Command{
 		}
 
 		ow := utility.NewOutputWriter()
+
+		// Track if we've shown any deprecation warnings
 		for _, db := range databases.Items {
 			ports := []string{}
 			for _, user := range db.DatabaseUserInfo {
@@ -63,5 +65,10 @@ var dbListCmd = &cobra.Command{
 		}
 
 		ow.FinishAndPrintOutput()
+
+		// Show deprecation warnings after the output
+		if common.OutputFormat != "json" && common.OutputFormat != "custom" {
+			showDatabaseDeprecationWarnings(databases.Items...)
+		}
 	},
 }
