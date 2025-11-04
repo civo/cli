@@ -23,26 +23,34 @@ If you wish to use a custom format, the available fields are:
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		keys := make([]string, 0, len(config.Current.APIKeys))
-		for k := range config.Current.APIKeys {
-			keys = append(keys, k)
+		for _, apiKey := range config.Current.APIKeys {
+			keys = append(keys, apiKey.Name)
 		}
 		sort.Strings(keys)
 
 		ow := utility.NewOutputWriter()
-
 		for _, name := range keys {
-			apiKey := config.Current.APIKeys[name]
+			var idx int
+			for index, apiKey := range config.Current.APIKeys {
+				if name == apiKey.Name {
+					idx = index
+					break
+				}
+			}
+			apiKey := config.Current.APIKeys[idx]
 			if len(args) > 0 {
 				if strings.Contains(name, args[0]) {
 					ow.StartLine()
-					ow.AppendDataWithLabel("name", name, "Name")
-					ow.AppendDataWithLabel("key", apiKey, "Key")
+					ow.AppendDataWithLabel("name", apiKey.Name, "Name")
+					ow.AppendDataWithLabel("key", apiKey.Value, "Key")
+					ow.AppendDataWithLabel("url", apiKey.APIURL, "APIURL")
 				}
 			} else {
 				if config.Current.Meta.CurrentAPIKey == name {
 					ow.StartLine()
-					ow.AppendDataWithLabel("name", name, "Name")
-					ow.AppendDataWithLabel("key", apiKey, "Key")
+					ow.AppendDataWithLabel("name", apiKey.Name, "Name")
+					ow.AppendDataWithLabel("key", apiKey.Value, "Key")
+					ow.AppendDataWithLabel("url", apiKey.APIURL, "APIURL")
 				}
 			}
 		}

@@ -10,8 +10,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var firewallID, networkID, size, updatedName, software, softwareVersion string
-var nodes int
+var (
+	firewallID, networkID, size, updatedName, software, softwareVersion string
+	nodes                                                               int
+)
 
 // showDatabaseDeprecationWarning displays a warning message if the database version is deprecated
 func showDatabaseDeprecationWarnings(databases ...civogo.Database) {

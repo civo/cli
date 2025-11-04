@@ -11,8 +11,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var scheduleName string
-var schedulePaused string
+var (
+	scheduleName   string
+	schedulePaused string
+)
 
 var snapshotScheduleUpdateCmd = &cobra.Command{
 	Use:     "update [ID/NAME]",

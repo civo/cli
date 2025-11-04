@@ -1,10 +1,10 @@
 package domain
 
 import (
+	"os"
+
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
-	"os"
 
 	"github.com/spf13/cobra"
 )

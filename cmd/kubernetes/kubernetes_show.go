@@ -60,14 +60,14 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		//Get the firewall name by the id
+		// Get the firewall name by the id
 		firewall, err := client.FindFirewall(kubernetesCluster.FirewallID)
 		if err != nil {
 			utility.Error("Firewall %s", err)
 			os.Exit(1)
 		}
 
-		//Get the loadbalancer name by the id
+		// Get the loadbalancer name by the id
 		lbCluster := []civogo.LoadBalancer{}
 		loadbalancer, err := client.ListLoadBalancers()
 		if err != nil {
@@ -111,7 +111,7 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if common.OutputFormat == "json" || common.OutputFormat == "custom" {
-			//ow.AppendData("CloudConfig", template.CloudConfig)
+			// ow.AppendData("CloudConfig", template.CloudConfig)
 
 			if kubernetesCluster.UpgradeAvailableTo != "" {
 				ow.AppendDataWithLabel("KubernetesVersion", kubernetesCluster.KubernetesVersion, "Version")

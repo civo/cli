@@ -19,14 +19,14 @@ var apikeyRemoveCmd = &cobra.Command{
 	Args:    cobra.MinimumNArgs(1),
 	Example: "civo apikey remove NAME",
 	Run: func(cmd *cobra.Command, args []string) {
-		index, err := apiKeyFind(args[0])
+		apiKeyName, err := apiKeyFind(args[0])
 		if err != nil {
 			utility.Error("Unable to find the API key %s", err.Error())
 			os.Exit(1)
 		}
 
 		// Check if the requested API key is the current one
-		if index == config.Current.Meta.CurrentAPIKey {
+		if apiKeyName == config.Current.Meta.CurrentAPIKey {
 			if forceFlag {
 				utility.Warning("The API key %q is the current one. You are using the --force flag, so it will be deleted.", args[0])
 			} else {
@@ -37,11 +37,19 @@ var apikeyRemoveCmd = &cobra.Command{
 		// Confirm deletion of the API key
 		if forceFlag || utility.UserConfirmedDeletion("API key", common.DefaultYes, args[0]) {
 			numKeys := len(config.Current.APIKeys)
-			delete(config.Current.APIKeys, index)
+			var index int
+			for idx, apiKey := range config.Current.APIKeys {
+				if apiKey.Name == apiKeyName {
+					index = idx
+					break
+				}
+			}
+			// delete(config.Current.APIKeys, index)
+			config.Current.APIKeys = append(config.Current.APIKeys[:index], config.Current.APIKeys[index+1:]...)
 			config.SaveConfig()
 
 			if numKeys > len(config.Current.APIKeys) {
-				fmt.Printf("Removed the API Key %s\n", utility.Green(index))
+				fmt.Printf("Removed the API Key %s\n", utility.Green(apiKeyName))
 			} else {
 				utility.Error("The API Key %q couldn't be found", args[0])
 				os.Exit(1)
@@ -49,6 +57,5 @@ var apikeyRemoveCmd = &cobra.Command{
 		} else {
 			fmt.Println("Operation aborted.")
 		}
-
 	},
 }

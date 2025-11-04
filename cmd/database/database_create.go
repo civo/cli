@@ -14,8 +14,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rulesFirewall string
-var waitDatabase bool
+var (
+	rulesFirewall string
+	waitDatabase  bool
+)
 
 var dbCreateCmd = &cobra.Command{
 	Use:     "create",

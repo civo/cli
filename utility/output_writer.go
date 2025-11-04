@@ -6,13 +6,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/civo/cli/common"
-	"github.com/civo/cli/config"
 	"os"
 	"regexp"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/civo/cli/common"
+	"github.com/civo/cli/config"
 
 	"github.com/olekukonko/tablewriter"
 )
@@ -22,9 +23,11 @@ type byLen []string
 func (a byLen) Len() int {
 	return len(a)
 }
+
 func (a byLen) Less(i, j int) bool {
 	return len(a[i]) > len(a[j])
 }
+
 func (a byLen) Swap(i, j int) {
 	a[i], a[j] = a[j], a[i]
 }
@@ -142,7 +145,6 @@ func (ow *OutputWriter) WriteSingleObjectJSON(pretty bool) {
 	default:
 		fmt.Println(string(jsonString))
 	}
-
 }
 
 // WriteMultipleObjectsJSON writes the JSON for multiple objects to STDOUT
@@ -173,7 +175,6 @@ func (ow *OutputWriter) WriteMultipleObjectsJSON(pretty bool) {
 	default:
 		fmt.Println(string(jsonString))
 	}
-
 }
 
 // WriteKeyValues prints a single object stored in the OutputWriter
@@ -250,7 +251,7 @@ func (ow *OutputWriter) WriteCustomOutput(fields string) {
 	for i := range ow.Values {
 		output := fields
 		for key, name := range ow.Keys {
-			var re = regexp.MustCompile(name)
+			re := regexp.MustCompile(name)
 			if len(re.FindStringIndex(output)) > 0 {
 				output = replaceNth(output, name, fmt.Sprintf("$%v$", key), 1)
 			}

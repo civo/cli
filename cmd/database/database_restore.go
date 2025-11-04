@@ -2,13 +2,12 @@ package database
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
-
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -72,6 +71,5 @@ var dbRestoreCmd = &cobra.Command{
 		} else {
 			fmt.Println("Aborted")
 		}
-
 	},
 }

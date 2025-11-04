@@ -12,7 +12,6 @@ import (
 // ObtainKubeConfig is the function to get the kubeconfig from the cluster
 // and save to the file or merge with the existing one
 func ObtainKubeConfig(KubeconfigFilename string, civoConfig string, merge bool, switchContext bool, clusterName string) error {
-
 	kubeConfig := []byte(civoConfig)
 
 	if merge {
@@ -107,18 +106,18 @@ func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bo
 	// we check if the .kube dir is present
 	checkKubeDir()
 
-	var _, err = os.Stat(path)
+	_, err := os.Stat(path)
 
 	// create file if not exists
 	if os.IsNotExist(err) {
-		var file, err = os.Create(path)
+		file, err := os.Create(path)
 		if err != nil {
 			Error(err.Error())
 		}
 		defer file.Close()
 	}
 
-	writeErr := os.WriteFile(path, data, 0600)
+	writeErr := os.WriteFile(path, data, 0o600)
 	if writeErr != nil {
 		return writeErr
 	}
@@ -241,7 +240,6 @@ func switchKubernetesContext(context string) (bool, error) {
 }
 
 func checkKubeDir() {
-
 	home, err := os.UserHomeDir()
 	if err != nil {
 		Error("%s", err)
@@ -249,7 +247,7 @@ func checkKubeDir() {
 	}
 
 	if _, err := os.Stat(fmt.Sprintf("%s/.kube/", home)); os.IsNotExist(err) {
-		os.Mkdir(fmt.Sprintf("%s/.kube/", home), 0755)
+		os.Mkdir(fmt.Sprintf("%s/.kube/", home), 0o755)
 	}
 }
 
