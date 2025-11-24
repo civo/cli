@@ -111,7 +111,7 @@ func UserAccepts(in io.Reader) (bool, error) {
 		return false, err
 	}
 	answer = strings.TrimRight(answer, "\r\n")
-	strings.ToLower(answer)
+	answer = strings.ToLower(answer)
 	if answer != "y" && answer != "ye" && answer != "yes" {
 		return false, fmt.Errorf("invalid user input")
 	}
