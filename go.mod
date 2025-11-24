@@ -1,4 +1,4 @@
-go 1.24.0
+go 1.24.7
 
 module github.com/civo/cli
 
@@ -7,7 +7,7 @@ require (
 	github.com/adhocore/gronx v1.19.5
 	github.com/alejandrojnm/go-pluralize v0.1.0
 	github.com/briandowns/spinner v1.23.2
-	github.com/civo/civogo v0.6.4
+	github.com/civo/civogo v0.6.5
 	github.com/google/go-github/v57 v57.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.5.4
