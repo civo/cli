@@ -113,7 +113,7 @@ func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bo
 	if os.IsNotExist(err) {
 		var file, err = os.Create(path)
 		if err != nil {
-			Error(err.Error())
+			Error("%s", err.Error())
 		}
 		defer file.Close()
 	}

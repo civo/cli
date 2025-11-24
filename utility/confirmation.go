@@ -18,7 +18,7 @@ var retrieveUserInput = func(message string) (string, error) {
 // as to-be-read inputs can be injected conveniently.
 func readUserInput(in io.Reader, message string) (string, error) {
 	reader := bufio.NewReader(in)
-	YellowConfirm("Are you sure you want to " + message + " (y/N) ? ")
+	YellowConfirm("Are you sure you want to %s (y/N) ?", message)
 	answer, err := reader.ReadString('\n')
 	if err != nil {
 		return "", err

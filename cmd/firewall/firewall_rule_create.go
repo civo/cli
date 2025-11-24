@@ -43,7 +43,7 @@ var firewallRuleCreateCmd = &cobra.Command{
 
 		// Validate CIDR input
 		if err := validateCIDRs(cidr); err != nil {
-			utility.Error(err.Error())
+			utility.Error("%s", err.Error())
 			os.Exit(1)
 		}
 

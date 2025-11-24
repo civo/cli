@@ -80,7 +80,7 @@ var networkRemoveCmd = &cobra.Command{
 				if err != nil {
 					if errors.Is(err, civogo.DatabaseNetworkDeleteWithInstanceError) {
 						errMessage := fmt.Sprintf("sorry couldn't delete this network %s while it is in use\n", utility.Green(v.Name))
-						utility.Error(errMessage)
+						utility.Error("%s", errMessage)
 						os.Exit(1)
 					}
 					utility.Error("Error deleting the Network: %s", err)
