@@ -16,6 +16,7 @@ linters:
       exclude-functions:
         - (*net/http.Response.Body).Close
         - (net/http.ResponseWriter).Write
+        - (*github.com/spf13/cobra.Command).Help
 
     revive:
       rules:

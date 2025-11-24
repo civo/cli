@@ -298,7 +298,7 @@ var snapshotRestoreCmd = &cobra.Command{
 func init() {
 	snapshotCreateCmd.Flags().StringP("name", "n", "", "Name for the snapshot")
 	snapshotCreateCmd.Flags().StringP("description", "d", "", "Description for the snapshot")
-	snapshotCreateCmd.MarkFlagRequired("name")
+	_ = snapshotCreateCmd.MarkFlagRequired("name")
 
 	snapshotUpdateCmd.Flags().StringP("name", "n", "", "New name for the snapshot")
 	snapshotUpdateCmd.Flags().StringP("description", "d", "", "New description for the snapshot")

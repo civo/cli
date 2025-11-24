@@ -32,11 +32,10 @@ func init() {
 	diskImageCreateCmd.Flags().StringVarP(&createDiskImagePath, "path", "p", "", "Path to disk image file (.raw/.qcow2)")
 	diskImageCreateCmd.Flags().StringVarP(&createOS, "os", "t", "linux", "Operating system type (linux/windows)")
 	diskImageCreateCmd.Flags().StringVarP(&createLogoPath, "logo_path", "l", "", "Path to SVG logo file")
-
-	diskImageCreateCmd.MarkFlagRequired("name")
-	diskImageCreateCmd.MarkFlagRequired("distribution")
-	diskImageCreateCmd.MarkFlagRequired("version")
-	diskImageCreateCmd.MarkFlagRequired("path")
+	_ = diskImageCreateCmd.MarkFlagRequired("name")
+	_ = diskImageCreateCmd.MarkFlagRequired("distribution")
+	_ = diskImageCreateCmd.MarkFlagRequired("version")
+	_ = diskImageCreateCmd.MarkFlagRequired("path")
 
 	diskImageListCmd.Flags().BoolVar(&showCustomImages, "custom", false, "Show only your custom disk images")
 }
