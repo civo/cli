@@ -221,7 +221,7 @@ var snapshotDeleteCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		fmt.Println(fmt.Sprintf("The snapshot %s has been deleted", utility.Green(args[1])))
+		utility.Info("The snapshot %s has been deleted\n", utility.Green(args[1]))
 	},
 }
 
