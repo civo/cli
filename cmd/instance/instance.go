@@ -29,11 +29,9 @@ func init() {
 	InstanceCmd.AddCommand(instanceRemoveCmd)
 	InstanceCmd.AddCommand(instanceRebootCmd)
 	InstanceCmd.AddCommand(instanceSoftRebootCmd)
-	// InstanceCmd.AddCommand(instanceConsoleCmd)
 	InstanceCmd.AddCommand(instanceStopCmd)
 	InstanceCmd.AddCommand(instanceStartCmd)
 	InstanceCmd.AddCommand(instanceUpgradeCmd)
-	// InstanceCmd.AddCommand(instanceMoveIPCmd)
 	InstanceCmd.AddCommand(instanceSetFirewallCmd)
 	InstanceCmd.AddCommand(instancePublicIPCmd)
 	InstanceCmd.AddCommand(instancePasswordCmd)
@@ -44,7 +42,6 @@ func init() {
 	InstanceCmd.AddCommand(snapshotCmd)
 	InstanceCmd.AddCommand(instanceAllowedIPsUpdateCmd)
 	InstanceCmd.AddCommand(instanceBandwidthUpdateCmd)
-
 
 	instanceUpdateCmd.Flags().StringVarP(&notes, "notes", "n", "", "notes stored against the instance")
 	instanceUpdateCmd.Flags().StringVarP(&reverseDNS, "reverse-dns", "r", "", "the reverse DNS entry for the instance")

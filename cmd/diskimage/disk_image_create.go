@@ -92,14 +92,14 @@ var diskImageCreateCmd = &cobra.Command{
 		}
 
 		params := &civogo.CreateDiskImageParams{
-			Name:         createDiskImageName,
-			Distribution: createDiskImageDistribution,
-			Version:      createDiskImageVersion,
-			OS:           createOS,
-			ImageSHA256:  sha256Sum,
-			ImageMD5:     md5Sum,
-			ImageSizeBytes:    size,
-			LogoBase64:   logoBase64,
+			Name:           createDiskImageName,
+			Distribution:   createDiskImageDistribution,
+			Version:        createDiskImageVersion,
+			OS:             createOS,
+			ImageSHA256:    sha256Sum,
+			ImageMD5:       md5Sum,
+			ImageSizeBytes: size,
+			LogoBase64:     logoBase64,
 		}
 
 		resp, err := client.CreateDiskImage(params)

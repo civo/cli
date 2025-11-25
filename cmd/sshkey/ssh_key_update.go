@@ -2,12 +2,13 @@ package sshkey
 
 import (
 	"errors"
+	"os"
+
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var sshKeyUpdateCmd = &cobra.Command{

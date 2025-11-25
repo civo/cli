@@ -236,10 +236,10 @@ If you wish to use a custom format, the available fields are:
 
 			defer file.Close()
 
-			var buf []byte = make([]byte, 1)
+			buf := make([]byte, 1)
 
 			if !skipShebangCheck {
-				var shebangBuf []byte = make([]byte, 2)
+				shebangBuf := make([]byte, 2)
 
 				if _, err := file.Read(shebangBuf); err != nil {
 					utility.Error("read failed during shebang check on script '%s': %s", script, err)

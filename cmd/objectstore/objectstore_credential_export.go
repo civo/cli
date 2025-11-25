@@ -56,13 +56,14 @@ var objectStoreCredentialExportCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if format == "env" {
+		switch format {
+		case "env":
 			fmt.Printf("# Tip: You can redirect output with (>> ~/.zshrc) to add these to Zsh's startup automatically\n")
 			fmt.Printf("export AWS_ACCESS_KEY_ID=%s\n", credential.AccessKeyID)
 			fmt.Printf("export AWS_SECRET_ACCESS_KEY=%s\n", credential.SecretAccessKeyID)
 			fmt.Printf("export AWS_DEFAULT_REGION=%s\n", client.Region)
 			fmt.Printf("export AWS_HOST=https://objectstore.%s.civo.com\n", strings.ToLower(client.Region))
-		} else if format == "s3cfg" {
+		case "s3cfg":
 			fmt.Printf("# Tip: You can redirect output with (>> ~/.s3cfg) to automatically configure s3cmd\n")
 			fmt.Printf("[default]\n")
 			fmt.Printf("access_key = %s\n", credential.AccessKeyID)
@@ -70,7 +71,7 @@ var objectStoreCredentialExportCmd = &cobra.Command{
 			fmt.Printf("bucket_location = %s\n", client.Region)
 			fmt.Printf("host_base = objectstore.%s.civo.com\n", strings.ToLower(client.Region))
 			fmt.Printf("signature_v2 = True")
-		} else {
+		default:
 			utility.Error("You must provide a valid format to export to. Supported formats are env and s3cfg. See --help for more information.")
 			os.Exit(1)
 		}

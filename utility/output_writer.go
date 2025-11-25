@@ -6,13 +6,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/civo/cli/common"
-	"github.com/civo/cli/config"
 	"os"
 	"regexp"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/civo/cli/common"
+	"github.com/civo/cli/config"
 
 	"github.com/olekukonko/tablewriter"
 )
@@ -261,8 +262,8 @@ func (ow *OutputWriter) WriteCustomOutput(fields string) {
 				output = strings.Replace(output, fmt.Sprintf("$%v$", index), customMap[name][i], 1)
 			}
 		}
-		output = strings.Replace(output, "\\t", "\t", -1)
-		output = strings.Replace(output, "\\n", "\n", -1)
+		output = strings.ReplaceAll(output, "\\t", "\t")
+		output = strings.ReplaceAll(output, "\\n", "\n")
 		fmt.Println(output)
 	}
 }

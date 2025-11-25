@@ -45,11 +45,11 @@ Example: civo region ls -o custom -f "Code: Name (Region)"`,
 			ow.AppendDataWithLabel("country", region.CountryName, "Country")
 
 			if common.OutputFormat == "json" || common.OutputFormat == "custom" {
-				isCurrent := strings.ToLower(region.Code) == strings.ToLower(config.Current.Meta.DefaultRegion)
+				isCurrent := strings.EqualFold(region.Code, config.Current.Meta.DefaultRegion)
 				ow.AppendDataWithLabel("current", utility.BoolToYesNo(isCurrent), "Current")
 			} else {
 				defaultLabel := ""
-				if config.Current.Meta.DefaultRegion != "" && strings.ToLower(region.Code) == strings.ToLower(config.Current.Meta.DefaultRegion) {
+				if config.Current.Meta.DefaultRegion != "" && strings.EqualFold(region.Code, config.Current.Meta.DefaultRegion) {
 					defaultLabel = "<====="
 				}
 				ow.AppendDataWithLabel("current", defaultLabel, "Current")

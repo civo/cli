@@ -32,5 +32,5 @@ func init() {
 
 	ipCreateCmd.Flags().StringVarP(&name, "name", "n", "", "Name of the reserved IP")
 	ipAssignCmd.Flags().StringVarP(&instance, "instance", "i", "", "Name/ID of the instance to assign the IP to")
-	ipAssignCmd.MarkFlagRequired("instance")
+	_ = ipAssignCmd.MarkFlagRequired("instance")
 }

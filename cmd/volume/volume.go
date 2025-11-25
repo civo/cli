@@ -33,10 +33,10 @@ func init() {
 	volumeCreateCmd.Flags().IntVarP(&createSizeGB, "size-gb", "s", 0, "The new size in GB (required)")
 	volumeCreateCmd.Flags().StringVarP(&networkVolumeID, "network", "t", "default", "The network name/ID where the volume will be created")
 	volumeCreateCmd.Flags().StringVarP(&volumeType, "volume-type", "v", "", "The type of the volume that will be created (as provided by 'civo volumetypes ls')")
-	volumeCreateCmd.MarkFlagRequired("size-gb")
+	_ = volumeCreateCmd.MarkFlagRequired("size-gb")
 
 	volumeResizeCmd.Flags().IntVarP(&newSizeGB, "size-gb", "s", 0, "The new size in GB (required)")
-	volumeResizeCmd.MarkFlagRequired("size-gb")
+	_ = volumeResizeCmd.MarkFlagRequired("size-gb")
 
 	volumeAttachCmd.Flags().BoolVarP(&waitVolumeAttach, "wait", "w", false, "wait until the volume is attached")
 	volumeAttachCmd.Flags().BoolVarP(&attachAtBoot, "attach-at-boot", "a", false, "Attach the volume at boot to instance")
