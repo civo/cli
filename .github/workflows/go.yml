@@ -2,6 +2,8 @@ on:
   push:
     branches: [master]
   pull_request:
+name: Go CI
+
 jobs:
   test:
     name: Test
