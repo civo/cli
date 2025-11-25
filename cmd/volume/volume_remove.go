@@ -19,7 +19,7 @@ var volumeRemoveCmdExamples = []string{
 	"civo volume rm VOLUME_ID",
 }
 
-var volumesList []utility.ObjecteList
+var volumesList []utility.Resource
 var volumeRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -50,12 +50,12 @@ var volumeRemoveCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			volumesList = append(volumesList, utility.ObjecteList{ID: volume.ID, Name: volume.Name})
+			volumesList = append(volumesList, utility.Resource{ID: volume.ID, Name: volume.Name})
 		} else {
 			for _, v := range args {
 				volume, err := client.FindVolume(v)
 				if err == nil {
-					volumesList = append(volumesList, utility.ObjecteList{ID: volume.ID, Name: volume.Name})
+					volumesList = append(volumesList, utility.Resource{ID: volume.ID, Name: volume.Name})
 				}
 			}
 		}

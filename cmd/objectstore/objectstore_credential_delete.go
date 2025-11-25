@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var objectStoreCredsList []utility.ObjecteList
+var objectStoreCredsList []utility.Resource
 var objectStoreCredentialDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"rm", "remove", "destroy"},
@@ -47,12 +47,12 @@ var objectStoreCredentialDeleteCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			objectStoreCredsList = append(objectStoreCredsList, utility.ObjecteList{ID: credential.ID, Name: credential.Name})
+			objectStoreCredsList = append(objectStoreCredsList, utility.Resource{ID: credential.ID, Name: credential.Name})
 		} else {
 			for _, v := range args {
 				credential, err := client.FindObjectStoreCredential(v)
 				if err == nil {
-					objectStoreCredsList = append(objectStoreCredsList, utility.ObjecteList{ID: credential.ID, Name: credential.Name})
+					objectStoreCredsList = append(objectStoreCredsList, utility.Resource{ID: credential.ID, Name: credential.Name})
 				}
 			}
 		}

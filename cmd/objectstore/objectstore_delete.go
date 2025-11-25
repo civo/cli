@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var objectStoreList []utility.ObjecteList
+var objectStoreList []utility.Resource
 var objectStoreDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"rm", "remove", "destroy"},
@@ -48,12 +48,12 @@ var objectStoreDeleteCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			objectStoreList = append(objectStoreList, utility.ObjecteList{ID: objectStore.ID, Name: objectStore.Name})
+			objectStoreList = append(objectStoreList, utility.Resource{ID: objectStore.ID, Name: objectStore.Name})
 		} else {
 			for _, v := range args {
 				objectStore, err := client.FindObjectStore(v)
 				if err == nil {
-					objectStoreList = append(objectStoreList, utility.ObjecteList{ID: objectStore.ID, Name: objectStore.Name})
+					objectStoreList = append(objectStoreList, utility.Resource{ID: objectStore.ID, Name: objectStore.Name})
 				}
 			}
 		}

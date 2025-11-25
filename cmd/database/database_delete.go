@@ -47,12 +47,12 @@ var dbDeleteCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			backupList = append(backupList, utility.ObjecteList{ID: db.ID, Name: db.Name})
+			backupList = append(backupList, utility.Resource{ID: db.ID, Name: db.Name})
 		} else {
 			for _, v := range args {
 				db, err := client.FindDatabase(v)
 				if err == nil {
-					backupList = append(backupList, utility.ObjecteList{ID: db.ID, Name: db.Name})
+					backupList = append(backupList, utility.Resource{ID: db.ID, Name: db.Name})
 				}
 			}
 		}

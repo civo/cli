@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var firewallList []utility.ObjecteList
+var firewallList []utility.Resource
 var firewallRemoveCmd = &cobra.Command{
 	Use:     "remove [NAME]",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -47,12 +47,12 @@ var firewallRemoveCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			firewallList = append(firewallList, utility.ObjecteList{ID: firewall.ID, Name: firewall.Name})
+			firewallList = append(firewallList, utility.Resource{ID: firewall.ID, Name: firewall.Name})
 		} else {
 			for _, v := range args {
 				firewall, err := client.FindFirewall(v)
 				if err == nil {
-					firewallList = append(firewallList, utility.ObjecteList{ID: firewall.ID, Name: firewall.Name})
+					firewallList = append(firewallList, utility.Resource{ID: firewall.ID, Name: firewall.Name})
 				}
 			}
 		}

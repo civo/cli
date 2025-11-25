@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var backupList []utility.ObjecteList
+var backupList []utility.Resource
 var dbBackupDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"rm", "remove", "destroy"},
@@ -37,7 +37,7 @@ var dbBackupDeleteCmd = &cobra.Command{
 		}
 
 		if scheduled {
-			backupList = append(backupList, utility.ObjecteList{ID: "scheduled", Name: "scheduled backups"})
+			backupList = append(backupList, utility.Resource{ID: "scheduled", Name: "scheduled backups"})
 		} else {
 			if len(args) == 2 {
 				bk, err := client.FindDatabaseBackup(args[0], args[1])
@@ -51,7 +51,7 @@ var dbBackupDeleteCmd = &cobra.Command{
 						os.Exit(1)
 					}
 				}
-				backupList = append(backupList, utility.ObjecteList{ID: bk.ID, Name: bk.Name})
+				backupList = append(backupList, utility.Resource{ID: bk.ID, Name: bk.Name})
 			} else {
 				for idx, v := range args {
 					if idx == 0 {
@@ -59,7 +59,7 @@ var dbBackupDeleteCmd = &cobra.Command{
 					}
 					bk, err := client.FindDatabaseBackup(args[0], v)
 					if err == nil {
-						backupList = append(backupList, utility.ObjecteList{ID: bk.ID, Name: bk.Name})
+						backupList = append(backupList, utility.Resource{ID: bk.ID, Name: bk.Name})
 					}
 				}
 			}
