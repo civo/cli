@@ -2,10 +2,9 @@ on:
   push:
     branches: [master]
   pull_request:
-name: Go CI
-
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -42,6 +41,7 @@ jobs:
           fi
 
   lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -60,6 +60,7 @@ jobs:
           args: --timeout=5m
 
   security:
+    name: Security
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
