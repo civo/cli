@@ -1,29 +1,75 @@
-name: Go
-on: [push]
-jobs:
+on:
+  push:
+    branches: [master]
+  pull_request:
+name: Go CI
 
-  build:
-    name: Build
+jobs:
+  test:
+    name: Test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
 
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: 1.24.x
-        cache-dependency-path: go.sum
-      id: go
+      - name: Install Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ vars.GO_VERSION || '1.24.9' }}
+          cache: true
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v5
+      - name: Verify dependencies
+        run: |
+          go mod download
+          go mod verify
 
-    - name: Get dependencies
-      run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
+      - name: Check go.mod and go.sum are tidy
+        run: |
+          go mod tidy
+          git diff --exit-code go.mod go.sum
 
-    - name: Build
-      run: go build -v .
+      - name: Build
+        run: go build -v ./...
+
+      - name: Run tests
+        run: go test -v -race ./...
+
+      - name: Check formatting
+        run: |
+          if [ -n "$(gofmt -l .)" ]; then
+            echo "The following files are not formatted:"
+            gofmt -l .
+            exit 1
+          fi
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ vars.GO_VERSION || '1.24.9' }}
+          cache: true
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: latest
+          args: --timeout=5m
+
+  security:
+    name: Security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Run govulncheck
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-input: ${{ vars.GO_VERSION || '1.24.9' }}
+          go-package: ./...

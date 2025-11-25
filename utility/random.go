@@ -1,9 +1,9 @@
 package utility
 
 import (
-	"github.com/google/uuid"
 	"math/rand"
-	"time"
+
+	"github.com/google/uuid"
 )
 
 var adjectives = [...]string{
@@ -43,8 +43,6 @@ var nouns = [...]string{
 
 // RandomName generates a Heroku-style random name for instances/clusters/etc and appends a short UUID
 func RandomName() string {
-	rand.Seed(time.Now().UnixNano()) // Seed the random number generator
-
 	// Generate a random adjective and noun combination
 	name := adjectives[rand.Intn(len(adjectives))] + "-" + nouns[rand.Intn(len(nouns))]
 

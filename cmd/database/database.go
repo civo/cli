@@ -79,6 +79,6 @@ func init() {
 
 	dbRestoreCmd.Flags().StringVarP(&backup, "backup", "b", "", "the backup name which you can restore database")
 	dbRestoreCmd.Flags().StringVarP(&restoreName, "name", "n", "", "name of the restore")
-	dbRestoreCmd.MarkFlagRequired("backup")
-	dbRestoreCmd.MarkFlagRequired("name")
+	_ = dbRestoreCmd.MarkFlagRequired("backup")
+	_ = dbRestoreCmd.MarkFlagRequired("name")
 }

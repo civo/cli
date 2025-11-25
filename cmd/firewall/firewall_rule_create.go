@@ -43,7 +43,7 @@ var firewallRuleCreateCmd = &cobra.Command{
 
 		// Validate CIDR input
 		if err := validateCIDRs(cidr); err != nil {
-			utility.Error(err.Error())
+			utility.Error("%s", err.Error())
 			os.Exit(1)
 		}
 
@@ -59,13 +59,14 @@ var firewallRuleCreateCmd = &cobra.Command{
 
 		// Check the rule address, if the input is different
 		// from (ingress or egress) then we will generate an error
-		if direction == "ingress" {
+		switch direction {
+		case "ingress":
 			newRuleConfig.Direction = direction
 			directionValue = "from"
-		} else if direction == "egress" {
+		case "egress":
 			newRuleConfig.Direction = direction
 			directionValue = "to"
-		} else {
+		default:
 			utility.Error("'--direction' flag can't be empty")
 			os.Exit(1)
 		}
