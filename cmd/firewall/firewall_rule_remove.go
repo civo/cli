@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 
 	"os"
@@ -102,7 +102,11 @@ var firewallRuleRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The firewall %s (%s) has been deleted\n", pluralize.Pluralize(len(firewallRuleList), "rule"), strings.Join(firewallRuleNameList, ", "))
+				fmt.Printf("The firewall %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(firewallRuleList), "rule"),
+					strings.Join(firewallRuleNameList, ", "),
+					pluralize.Has(len(firewallRuleList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted.")

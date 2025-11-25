@@ -6,10 +6,10 @@ import (
 	"os"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
@@ -98,7 +98,11 @@ var domainRecordRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The domain %s (%s) has been deleted\n", pluralize.Pluralize(len(domainRecordList), "record"), strings.Join(domainRecordNameList, ", "))
+				fmt.Printf("The domain %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(domainRecordList), "record"),
+					strings.Join(domainRecordNameList, ", "),
+					pluralize.Has(len(domainRecordList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted.")

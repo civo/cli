@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 
 	"os"
@@ -86,7 +86,11 @@ var domainRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(domainList), "domain"), utility.Green(strings.Join(domainNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(domainList), "domain"),
+					utility.Green(strings.Join(domainNameList, ", ")),
+					pluralize.Has(len(domainList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted")

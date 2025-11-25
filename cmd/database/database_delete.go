@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 
 	"os"
@@ -95,7 +95,11 @@ var dbDeleteCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(backupList), "database"), utility.Green(strings.Join(dbNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(dbNameList), "database"),
+					utility.Green(strings.Join(dbNameList, ", ")),
+					pluralize.Has(len(dbNameList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted")

@@ -6,10 +6,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
@@ -98,7 +98,10 @@ var volumeRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) have been deleted\n", pluralize.Pluralize(len(volumesList), "volume"), utility.Green(strings.Join(volumeNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(volumesList), "volume"),
+					utility.Green(strings.Join(volumeNameList, ", ")),
+					pluralize.Has(len(volumeNameList)))
 			}
 		} else {
 			fmt.Println("Operation aborted.")

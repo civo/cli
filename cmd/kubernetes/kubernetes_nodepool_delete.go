@@ -5,10 +5,10 @@ import (
 	"os"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
@@ -100,7 +100,12 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted from the cluster (%s)\n", fmt.Sprintf("node %s", pluralize.Pluralize(len(kubernetesNodePoolList), "pool")), utility.Green(strings.Join(kubernetesPoolNameList, ", ")), utility.Green(kubernetesCluster.Name))
+				fmt.Printf("The node %s (%s) %s been deleted from the cluster (%s)\n",
+					pluralize.Pluralize(len(kubernetesNodePoolList), "pool"),
+					utility.Green(strings.Join(kubernetesPoolNameList, ", ")),
+					pluralize.Has(len(kubernetesNodePoolList)),
+					utility.Green(kubernetesCluster.Name),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted.")
