@@ -73,3 +73,25 @@ func TestPluralizeWithArgSingularPrural(t *testing.T) {
 		t.Errorf("Pluralize was incorrect, got: %s, want: %s.", test3, "candies")
 	}
 }
+
+func TestPluralizeHas(t *testing.T) {
+	slice1 := []string{}
+	slice2 := []string{"1"}
+	slice3 := []string{"1", "1", "1", "1", "1"}
+
+	test1 := Has(len(slice1))
+	test2 := Has(len(slice2))
+	test3 := Has(len(slice3))
+
+	if test1 != "have" {
+		t.Errorf("PluralizeHas was incorrect, got: %s, want: %s.", test1, "have")
+	}
+
+	if test2 != "has" {
+		t.Errorf("PluralizeHas was incorrect, got: %s, want: %s.", test2, "has")
+	}
+
+	if test3 != "have" {
+		t.Errorf("PluralizeHas was incorrect, got: %s, want: %s.", test3, "have")
+	}
+}
