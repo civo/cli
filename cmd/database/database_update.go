@@ -56,7 +56,7 @@ var dbUpdateCmd = &cobra.Command{
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			fmt.Printf("The Database %s was updated\n", utility.Green(findDB.Name))
-			os.Exit(0)
+			showDatabaseDeprecationWarnings(*findDB)
 		}
 	},
 }

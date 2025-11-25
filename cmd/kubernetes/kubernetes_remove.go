@@ -7,15 +7,15 @@ import (
 	"os/exec"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
-var kuberneteList []utility.ObjecteList
+var kubernetesList []utility.Resource
 var deleteKubeconfigContext bool
 
 var kubernetesRemoveCmd = &cobra.Command{
@@ -54,23 +54,23 @@ var kubernetesRemoveCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			kuberneteList = append(kuberneteList, utility.ObjecteList{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
+			kubernetesList = append(kubernetesList, utility.Resource{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
 		} else {
 			for _, v := range args {
 				kubernetesCluster, err := client.FindKubernetesCluster(v)
 				if err == nil {
-					kuberneteList = append(kuberneteList, utility.ObjecteList{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
+					kubernetesList = append(kubernetesList, utility.Resource{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
 				}
 			}
 		}
 
 		kubernetesNameList := []string{}
-		for _, v := range kuberneteList {
+		for _, v := range kubernetesList {
 			kubernetesNameList = append(kubernetesNameList, v.Name)
 		}
 
 		var volsNameList []string
-		for _, v := range kuberneteList {
+		for _, v := range kubernetesList {
 			vols, err := client.ListVolumesForCluster(v.ID)
 			if err != nil {
 				utility.Error("error getting the list of dangling volumes: %s", err)
@@ -84,9 +84,9 @@ var kubernetesRemoveCmd = &cobra.Command{
 			}
 		}
 
-		if utility.UserConfirmedDeletion(fmt.Sprintf("Kubernetes %s", pluralize.Pluralize(len(kuberneteList), "cluster")), common.DefaultYes, strings.Join(kubernetesNameList, ", ")) {
+		if utility.UserConfirmedDeletion(fmt.Sprintf("Kubernetes %s", pluralize.Pluralize(len(kubernetesList), "cluster")), common.DefaultYes, strings.Join(kubernetesNameList, ", ")) {
 
-			for _, v := range kuberneteList {
+			for _, v := range kubernetesList {
 				if deleteKubeconfigContext {
 					// Try to remove the kubeconfig context before deleting the cluster
 					cmd := exec.Command("kubectl", "config", "delete-context", strings.ToLower(v.Name))
@@ -105,7 +105,7 @@ var kubernetesRemoveCmd = &cobra.Command{
 
 			ow := utility.NewOutputWriter()
 
-			for _, v := range kuberneteList {
+			for _, v := range kubernetesList {
 				ow.StartLine()
 				ow.AppendDataWithLabel("id", v.ID, "ID")
 				ow.AppendDataWithLabel("name", v.Name, "Name")
@@ -113,14 +113,18 @@ var kubernetesRemoveCmd = &cobra.Command{
 
 			switch common.OutputFormat {
 			case "json":
-				if len(kuberneteList) == 1 {
+				if len(kubernetesList) == 1 {
 					ow.WriteSingleObjectJSON(common.PrettySet)
 				} else {
 					ow.WriteMultipleObjectsJSON(common.PrettySet)
 				}
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The Kubernetes %s (%s) has been deleted\n", pluralize.Pluralize(len(kuberneteList), "cluster"), utility.Green(strings.Join(kubernetesNameList, ", ")))
+				fmt.Printf("The Kubernetes %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(kubernetesList), "cluster"),
+					utility.Green(strings.Join(kubernetesNameList, ", ")),
+					pluralize.Has(len(kubernetesList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted.")

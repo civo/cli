@@ -113,7 +113,7 @@ func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bo
 	if os.IsNotExist(err) {
 		var file, err = os.Create(path)
 		if err != nil {
-			Error(err.Error())
+			Error("%s", err.Error())
 		}
 		defer file.Close()
 	}
@@ -241,7 +241,6 @@ func switchKubernetesContext(context string) (bool, error) {
 }
 
 func checkKubeDir() {
-
 	home, err := os.UserHomeDir()
 	if err != nil {
 		Error("%s", err)
@@ -249,7 +248,7 @@ func checkKubeDir() {
 	}
 
 	if _, err := os.Stat(fmt.Sprintf("%s/.kube/", home)); os.IsNotExist(err) {
-		os.Mkdir(fmt.Sprintf("%s/.kube/", home), 0755)
+		_ = os.Mkdir(fmt.Sprintf("%s/.kube/", home), 0755)
 	}
 }
 

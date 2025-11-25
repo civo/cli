@@ -6,17 +6,17 @@ import (
 	"os"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
 // InstanceList is a tmp list to hold all instance to delete
 
-var instanceList []utility.ObjecteList
+var instanceList []utility.Resource
 var instanceRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Example: "civo instance remove ID/HOSTNAME",
@@ -53,13 +53,13 @@ If you wish to use a custom format, the available fields are:
 				}
 			}
 
-			instanceList = append(instanceList, utility.ObjecteList{ID: instance.ID, Name: instance.Hostname})
+			instanceList = append(instanceList, utility.Resource{ID: instance.ID, Name: instance.Hostname})
 
 		} else {
 			for _, v := range args {
 				instance, err := client.FindInstance(v)
 				if err == nil {
-					instanceList = append(instanceList, utility.ObjecteList{ID: instance.ID, Name: instance.Hostname})
+					instanceList = append(instanceList, utility.Resource{ID: instance.ID, Name: instance.Hostname})
 				}
 			}
 		}
@@ -97,7 +97,11 @@ If you wish to use a custom format, the available fields are:
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(instanceList), "instance"), utility.Green(strings.Join(instanceNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(instanceList), "instance"),
+					utility.Green(strings.Join(instanceNameList, ", ")),
+					pluralize.Has(len(instanceList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted.")

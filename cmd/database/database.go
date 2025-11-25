@@ -3,12 +3,36 @@ package database
 
 import (
 	"errors"
+	"strings"
 
+	"github.com/civo/civogo"
+	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
 var firewallID, networkID, size, updatedName, software, softwareVersion string
 var nodes int
+
+// showDatabaseDeprecationWarning displays a warning message if the database version is deprecated
+func showDatabaseDeprecationWarnings(databases ...civogo.Database) {
+	// We want to show one warning per version at max.
+	pgWarning := false
+	mysqlWarning := false
+
+	for _, db := range databases {
+		software := strings.ToLower(db.Software)
+
+		if software == "mysql" && !mysqlWarning {
+			utility.Warning("MySQL databases are deprecated and will be removed in a future release. Please consider migrating to PostgreSQL.")
+			mysqlWarning = true
+		}
+
+		if software == "postgresql" && strings.HasPrefix(db.SoftwareVersion, "14") && !pgWarning {
+			utility.Warning("PostgreSQL 14 is deprecated and will be removed in a future release. Please consider upgrading to a newer version.")
+			pgWarning = true
+		}
+	}
+}
 
 // DBCmd is the root command for the db subcommand
 var DBCmd = &cobra.Command{
@@ -55,6 +79,6 @@ func init() {
 
 	dbRestoreCmd.Flags().StringVarP(&backup, "backup", "b", "", "the backup name which you can restore database")
 	dbRestoreCmd.Flags().StringVarP(&restoreName, "name", "n", "", "name of the restore")
-	dbRestoreCmd.MarkFlagRequired("backup")
-	dbRestoreCmd.MarkFlagRequired("name")
+	_ = dbRestoreCmd.MarkFlagRequired("backup")
+	_ = dbRestoreCmd.MarkFlagRequired("name")
 }

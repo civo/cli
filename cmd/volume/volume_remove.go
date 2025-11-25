@@ -6,10 +6,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
@@ -19,7 +19,7 @@ var volumeRemoveCmdExamples = []string{
 	"civo volume rm VOLUME_ID",
 }
 
-var volumesList []utility.ObjecteList
+var volumesList []utility.Resource
 var volumeRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -50,12 +50,12 @@ var volumeRemoveCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			volumesList = append(volumesList, utility.ObjecteList{ID: volume.ID, Name: volume.Name})
+			volumesList = append(volumesList, utility.Resource{ID: volume.ID, Name: volume.Name})
 		} else {
 			for _, v := range args {
 				volume, err := client.FindVolume(v)
 				if err == nil {
-					volumesList = append(volumesList, utility.ObjecteList{ID: volume.ID, Name: volume.Name})
+					volumesList = append(volumesList, utility.Resource{ID: volume.ID, Name: volume.Name})
 				}
 			}
 		}
@@ -98,7 +98,10 @@ var volumeRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) have been deleted\n", pluralize.Pluralize(len(volumesList), "volume"), utility.Green(strings.Join(volumeNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(volumesList), "volume"),
+					utility.Green(strings.Join(volumeNameList, ", ")),
+					pluralize.Has(len(volumeNameList)))
 			}
 		} else {
 			fmt.Println("Operation aborted.")

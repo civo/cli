@@ -6,15 +6,15 @@ import (
 	"os"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
-var teamList []utility.ObjecteList
+var teamList []utility.Resource
 var teamsDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"delete", "rm"},
@@ -39,12 +39,12 @@ var teamsDeleteCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			teamList = append(teamList, utility.ObjecteList{ID: team.ID, Name: team.Name})
+			teamList = append(teamList, utility.Resource{ID: team.ID, Name: team.Name})
 		} else {
 			for _, v := range args {
 				team, err := client.FindTeam(v)
 				if err == nil {
-					teamList = append(teamList, utility.ObjecteList{ID: team.ID, Name: team.Name})
+					teamList = append(teamList, utility.Resource{ID: team.ID, Name: team.Name})
 				}
 			}
 		}

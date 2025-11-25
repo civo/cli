@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 
 	"os"
@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var domainList []utility.ObjecteList
+var domainList []utility.Resource
 var domainRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -42,12 +42,12 @@ var domainRemoveCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			domainList = append(domainList, utility.ObjecteList{ID: domain.ID, Name: domain.Name})
+			domainList = append(domainList, utility.Resource{ID: domain.ID, Name: domain.Name})
 		} else {
 			for _, v := range args {
 				domain, err := client.FindDNSDomain(v)
 				if err == nil {
-					domainList = append(domainList, utility.ObjecteList{ID: domain.ID, Name: domain.Name})
+					domainList = append(domainList, utility.Resource{ID: domain.ID, Name: domain.Name})
 				}
 			}
 		}
@@ -86,7 +86,11 @@ var domainRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(domainList), "domain"), utility.Green(strings.Join(domainNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(domainList), "domain"),
+					utility.Green(strings.Join(domainNameList, ", ")),
+					pluralize.Has(len(domainList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted")

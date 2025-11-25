@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 
 	"os"
@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var objectStoreCredsList []utility.ObjecteList
+var objectStoreCredsList []utility.Resource
 var objectStoreCredentialDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"rm", "remove", "destroy"},
@@ -47,12 +47,12 @@ var objectStoreCredentialDeleteCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			objectStoreCredsList = append(objectStoreCredsList, utility.ObjecteList{ID: credential.ID, Name: credential.Name})
+			objectStoreCredsList = append(objectStoreCredsList, utility.Resource{ID: credential.ID, Name: credential.Name})
 		} else {
 			for _, v := range args {
 				credential, err := client.FindObjectStoreCredential(v)
 				if err == nil {
-					objectStoreCredsList = append(objectStoreCredsList, utility.ObjecteList{ID: credential.ID, Name: credential.Name})
+					objectStoreCredsList = append(objectStoreCredsList, utility.Resource{ID: credential.ID, Name: credential.Name})
 				}
 			}
 		}
@@ -95,7 +95,11 @@ var objectStoreCredentialDeleteCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(objectStoreCredsList), "objectStoreCredential"), utility.Green(strings.Join(objectStoreCredsNameList, ", ")))
+				fmt.Printf("The object store %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(objectStoreCredsList), "credential"),
+					utility.Green(strings.Join(objectStoreCredsNameList, ", ")),
+					pluralize.Has(len(objectStoreCredsList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted")

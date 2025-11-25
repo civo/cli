@@ -6,15 +6,15 @@ import (
 	"os"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
 
-var networkList []utility.ObjecteList
+var networkList []utility.Resource
 var networkRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -47,7 +47,7 @@ var networkRemoveCmd = &cobra.Command{
 				}
 			}
 
-			networkList = append(networkList, utility.ObjecteList{ID: network.ID, Name: network.Label})
+			networkList = append(networkList, utility.Resource{ID: network.ID, Name: network.Label})
 
 		} else {
 			for _, v := range args {
@@ -63,7 +63,7 @@ var networkRemoveCmd = &cobra.Command{
 					}
 				}
 				if err == nil {
-					networkList = append(networkList, utility.ObjecteList{ID: network.ID, Name: network.Label})
+					networkList = append(networkList, utility.Resource{ID: network.ID, Name: network.Label})
 				}
 			}
 		}
@@ -80,7 +80,7 @@ var networkRemoveCmd = &cobra.Command{
 				if err != nil {
 					if errors.Is(err, civogo.DatabaseNetworkDeleteWithInstanceError) {
 						errMessage := fmt.Sprintf("sorry couldn't delete this network %s while it is in use\n", utility.Green(v.Name))
-						utility.Error(errMessage)
+						utility.Error("%s", errMessage)
 						os.Exit(1)
 					}
 					utility.Error("Error deleting the Network: %s", err)
@@ -106,7 +106,11 @@ var networkRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(networkList), "network"), utility.Green(strings.Join(networkNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(networkList), "network"),
+					utility.Green(strings.Join(networkNameList, ", ")),
+					pluralize.Has(len(networkList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted.")

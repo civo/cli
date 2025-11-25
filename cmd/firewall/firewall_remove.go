@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strings"
 
-	pluralize "github.com/alejandrojnm/go-pluralize"
 	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
+	"github.com/civo/cli/pkg/pluralize"
 	"github.com/civo/cli/utility"
 
 	"os"
@@ -16,7 +16,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var firewallList []utility.ObjecteList
+var firewallList []utility.Resource
 var firewallRemoveCmd = &cobra.Command{
 	Use:     "remove [NAME]",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -47,12 +47,12 @@ var firewallRemoveCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			firewallList = append(firewallList, utility.ObjecteList{ID: firewall.ID, Name: firewall.Name})
+			firewallList = append(firewallList, utility.Resource{ID: firewall.ID, Name: firewall.Name})
 		} else {
 			for _, v := range args {
 				firewall, err := client.FindFirewall(v)
 				if err == nil {
-					firewallList = append(firewallList, utility.ObjecteList{ID: firewall.ID, Name: firewall.Name})
+					firewallList = append(firewallList, utility.Resource{ID: firewall.ID, Name: firewall.Name})
 				}
 			}
 		}
@@ -90,7 +90,11 @@ var firewallRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(firewallList), "firewall"), utility.Green(strings.Join(firewallNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(firewallList), "firewall"),
+					utility.Green(strings.Join(firewallNameList, ", ")),
+					pluralize.Has(len(firewallList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted.")

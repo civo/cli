@@ -45,10 +45,11 @@ var objectStoreCredentialSecretCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if credential.Status == "creating" || credential.Status == "" {
+		switch credential.Status {
+		case "creating", "":
 			utility.Error("The Object Store Credential is still being created. Please try again in a moment.")
 			os.Exit(1)
-		} else if credential.Status == "failed" {
+		case "failed":
 			utility.Error("The Object Store Credential failed to create. Please contact Civo support.")
 			os.Exit(1)
 		}

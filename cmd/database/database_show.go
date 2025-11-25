@@ -74,6 +74,8 @@ var dbShowCmd = &cobra.Command{
 		default:
 			ow.WriteKeyValues()
 			fmt.Println("To get the credentials, run : civo db credential", db.Name)
+			fmt.Println()
+			showDatabaseDeprecationWarnings(*db)
 		}
 	},
 }
