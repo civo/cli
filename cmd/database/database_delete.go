@@ -95,7 +95,11 @@ var dbDeleteCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(backupList), "database"), utility.Green(strings.Join(dbNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(dbNameList), "database"),
+					utility.Green(strings.Join(dbNameList, ", ")),
+					pluralize.Has(len(dbNameList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted")

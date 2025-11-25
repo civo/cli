@@ -106,7 +106,11 @@ var networkRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(networkList), "network"), utility.Green(strings.Join(networkNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(networkList), "network"),
+					utility.Green(strings.Join(networkNameList, ", ")),
+					pluralize.Has(len(networkList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted.")

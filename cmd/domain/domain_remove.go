@@ -86,7 +86,11 @@ var domainRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(domainList), "domain"), utility.Green(strings.Join(domainNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(domainList), "domain"),
+					utility.Green(strings.Join(domainNameList, ", ")),
+					pluralize.Has(len(domainList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted")

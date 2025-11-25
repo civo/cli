@@ -97,7 +97,11 @@ If you wish to use a custom format, the available fields are:
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(instanceList), "instance"), utility.Green(strings.Join(instanceNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(instanceList), "instance"),
+					utility.Green(strings.Join(instanceNameList, ", ")),
+					pluralize.Has(len(instanceList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted.")

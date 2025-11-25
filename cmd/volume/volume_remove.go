@@ -98,7 +98,10 @@ var volumeRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) %s been deleted\n", pluralize.Pluralize(len(volumesList), "volume"), utility.Green(strings.Join(volumeNameList, ", ")), pluralize.Has(len(volumeNameList)))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(volumesList), "volume"),
+					utility.Green(strings.Join(volumeNameList, ", ")),
+					pluralize.Has(len(volumeNameList)))
 			}
 		} else {
 			fmt.Println("Operation aborted.")

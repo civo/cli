@@ -95,7 +95,11 @@ var objectStoreCredentialDeleteCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(objectStoreCredsList), "objectStoreCredential"), utility.Green(strings.Join(objectStoreCredsNameList, ", ")))
+				fmt.Printf("The object store %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(objectStoreCredsList), "credential"),
+					utility.Green(strings.Join(objectStoreCredsNameList, ", ")),
+					pluralize.Has(len(objectStoreCredsList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted")

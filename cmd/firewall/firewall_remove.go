@@ -90,7 +90,11 @@ var firewallRemoveCmd = &cobra.Command{
 			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
-				fmt.Printf("The %s (%s) has been deleted\n", pluralize.Pluralize(len(firewallList), "firewall"), utility.Green(strings.Join(firewallNameList, ", ")))
+				fmt.Printf("The %s (%s) %s been deleted\n",
+					pluralize.Pluralize(len(firewallList), "firewall"),
+					utility.Green(strings.Join(firewallNameList, ", ")),
+					pluralize.Has(len(firewallList)),
+				)
 			}
 		} else {
 			fmt.Println("Operation aborted.")
