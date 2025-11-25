@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var kubernetesNodePoolList []utility.ObjecteList
+var kubernetesNodePoolList []utility.Resource
 var kubernetesNodePoolDeleteCmd = &cobra.Command{
 	Use:     "delete",
 	Aliases: []string{"delete", "rm"},
@@ -39,10 +39,10 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 		}
 
 		if len(args) == 1 {
-			kubernetesNodePoolList = append(kubernetesNodePoolList, utility.ObjecteList{ID: args[0], Name: args[1]})
+			kubernetesNodePoolList = append(kubernetesNodePoolList, utility.Resource{ID: args[0], Name: args[1]})
 		} else {
 			for _, v := range args[1:] {
-				kubernetesNodePoolList = append(kubernetesNodePoolList, utility.ObjecteList{ID: args[0], Name: v})
+				kubernetesNodePoolList = append(kubernetesNodePoolList, utility.Resource{ID: args[0], Name: v})
 			}
 		}
 

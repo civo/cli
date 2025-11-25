@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var kubernetesList []utility.ObjecteList
+var kubernetesList []utility.Resource
 var deleteKubeconfigContext bool
 
 var kubernetesRemoveCmd = &cobra.Command{
@@ -54,12 +54,12 @@ var kubernetesRemoveCmd = &cobra.Command{
 					os.Exit(1)
 				}
 			}
-			kubernetesList = append(kubernetesList, utility.ObjecteList{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
+			kubernetesList = append(kubernetesList, utility.Resource{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
 		} else {
 			for _, v := range args {
 				kubernetesCluster, err := client.FindKubernetesCluster(v)
 				if err == nil {
-					kubernetesList = append(kubernetesList, utility.ObjecteList{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
+					kubernetesList = append(kubernetesList, utility.Resource{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
 				}
 			}
 		}

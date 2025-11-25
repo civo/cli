@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var networkList []utility.ObjecteList
+var networkList []utility.Resource
 var networkRemoveCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"rm", "delete", "destroy"},
@@ -47,7 +47,7 @@ var networkRemoveCmd = &cobra.Command{
 				}
 			}
 
-			networkList = append(networkList, utility.ObjecteList{ID: network.ID, Name: network.Label})
+			networkList = append(networkList, utility.Resource{ID: network.ID, Name: network.Label})
 
 		} else {
 			for _, v := range args {
@@ -63,7 +63,7 @@ var networkRemoveCmd = &cobra.Command{
 					}
 				}
 				if err == nil {
-					networkList = append(networkList, utility.ObjecteList{ID: network.ID, Name: network.Label})
+					networkList = append(networkList, utility.Resource{ID: network.ID, Name: network.Label})
 				}
 			}
 		}
