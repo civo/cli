@@ -98,7 +98,11 @@ var dbCreateCmd = &cobra.Command{
 
 		// Set default software to MySQL if not specified
 		if software == "" {
-			software = "mysql"
+			software = "postgresql"
+		}
+
+		if software == "mysql" {
+			utility.Warning("The provided software will be deprecated soon. Please check the documentation https://www.civo.com/docs/database/mysql/dump-mysql.")
 		}
 		software = strings.ToLower(software)
 
@@ -125,7 +129,7 @@ var dbCreateCmd = &cobra.Command{
 		}
 
 		if !softwareIsValid {
-			utility.Error("The provided software name is not valid. valid options are mysql, psql or postgresql")
+			utility.Error("The provided software name is not valid. Valid options are mysql, psql or postgresql")
 			os.Exit(1)
 		}
 
