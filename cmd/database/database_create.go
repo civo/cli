@@ -96,23 +96,17 @@ var dbCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		// Set default software to MySQL if not specified
 		if software == "" {
 			software = "postgresql"
 		}
 
-		if software == "mysql" {
-			utility.Warning("The provided software will be deprecated soon. Please check the documentation https://www.civo.com/docs/database/mysql/dump-mysql.")
-		}
 		software = strings.ToLower(software)
 
 		validSoftwares := map[string][]string{
-			"mysql":      {"mysql"},
 			"postgresql": {"postgresql", "psql"},
 		}
 
 		apiSoftwareNames := map[string]string{
-			"mysql":      "MySQL",
 			"postgresql": "PostgreSQL",
 		}
 
@@ -129,7 +123,7 @@ var dbCreateCmd = &cobra.Command{
 		}
 
 		if !softwareIsValid {
-			utility.Error("The provided software name is not valid. Valid options are mysql, psql or postgresql")
+			utility.Error("The provided software name is not valid. Valid options are psql or postgresql")
 			os.Exit(1)
 		}
 
