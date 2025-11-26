@@ -19,26 +19,21 @@ Manual backups are initiated by a user on-demand. These are useful for creating 
 
 To manually create a backup, follow the steps outlined in the Usage section.
 
-* Support: PostgreSQL, MySQL
+* Support: PostgreSQL
 
 ### Restore Process
 
 The restore process allows you to recover your database from a previously created backup.
 
-* Support: PostgreSQL, MySQL
+* Support: PostgreSQL
 
 # CLI Operations
 
-## Create MySQL and PostgreSQL database
+## Create a PostgreSQL database
 
 ```bash
 ❯ civo database create postgres-demo --size g3.db.medium --software PostgreSQL --version 14
 Database (postgres-demo) with ID 65dd8173-f754-4c6c-b50a-7ddb6d5446c5 has been created
-```
-
-```bash
-❯ civo database create mysql-demo --size g3.db.medium --software MySQL --version 8.0
-Database (mysql-demo) with ID 0d328d59-98c3-4f68-8025-5b1633a1c287 has been created
 ```
 
 ```bash
@@ -48,8 +43,6 @@ Database (mysql-demo) with ID 0d328d59-98c3-4f68-8025-5b1633a1c287 has been crea
 +--------+---------------+--------------+-------+------------+------------------+--------------+------+--------+
 | 65dd81 | postgres-demo | g3.db.medium |     1 | PostgreSQL |               14 | 31.28.88.149 | 5432 | Ready  |
 +--------+---------------+--------------+-------+------------+------------------+--------------+------+--------+
-| 0d328d | mysql-demo    | g3.db.medium |     1 | MySQL      |              8.0 | 31.28.88.184 | 3306 | Ready  |
-+--------+---------------+--------------+-------+------------+------------------+--------------+------+--------+
 To get the credentials for a database, use `civo db credential <name/ID>`
 ```
 
@@ -57,10 +50,11 @@ To get the credentials for a database, use `civo db credential <name/ID>`
 
 ```bash
 ❯ civo database backups ls postgres-demo
-❯ civo database backups ls mysql-demo
 ```
 
 ## PostgreSQL
+
+> **Note:** PostgreSQL 14 is deprecated and will be removed in a future release. Please migrate to PostgreSQL 17. For migration guidance, see: https://www.civo.com/docs/database/postgresql/migrate-from-14-to-17
 
 ### Create Scheduled Backup
 
@@ -127,7 +121,7 @@ Warning: Are you sure you want to restore db postgres-demo from 20240131-095615F
 Restoring database postgres-demo from from backup 20240131-095615F
 ```
 
-## MySQL Backup
+## MySQL Backup (Deprecated)
 
 ### Create
 

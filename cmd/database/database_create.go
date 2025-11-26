@@ -96,19 +96,17 @@ var dbCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		// Set default software to MySQL if not specified
 		if software == "" {
-			software = "mysql"
+			software = "postgresql"
 		}
+
 		software = strings.ToLower(software)
 
 		validSoftwares := map[string][]string{
-			"mysql":      {"mysql"},
 			"postgresql": {"postgresql", "psql"},
 		}
 
 		apiSoftwareNames := map[string]string{
-			"mysql":      "MySQL",
 			"postgresql": "PostgreSQL",
 		}
 
@@ -125,7 +123,7 @@ var dbCreateCmd = &cobra.Command{
 		}
 
 		if !softwareIsValid {
-			utility.Error("The provided software name is not valid. valid options are mysql, psql or postgresql")
+			utility.Error("The provided software name is not valid. Valid options are psql or postgresql")
 			os.Exit(1)
 		}
 
