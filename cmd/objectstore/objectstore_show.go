@@ -66,7 +66,14 @@ var objectStoreShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("region", client.Region, "Region")
 		ow.AppendDataWithLabel("accesskey", creds.AccessKeyID, "Access Key")
 		ow.AppendDataWithLabel("status", objectStore.Status, "Status")
-		ow.AppendDataWithLabel("stats", fmt.Sprintf("Objects: %d, Size: %s MB, Size Used: %d", stats.NumObjects, strconv.Itoa(objectStore.MaxSize), stats.SizeKBUtilised), "Stats")
+		sizeUsedBytes := int64(stats.SizeKBUtilised) * 1024
+		humanSizeUsed := humanSize(sizeUsedBytes)
+
+		ow.AppendDataWithLabel(
+			"stats",
+			fmt.Sprintf("Size: %d GB, Used: %s, Objects: %d", objectStore.MaxSize, humanSizeUsed, stats.NumObjects),
+			"Stats",
+		)
 
 		switch common.OutputFormat {
 		case "json":
@@ -78,4 +85,31 @@ var objectStoreShowCmd = &cobra.Command{
 			fmt.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(creds.AccessKeyID))
 		}
 	},
+}
+
+func humanSize(bytes int64) string {
+	const (
+		_          = iota
+		KB float64 = 1 << (10 * iota)
+		MB
+		GB
+		TB
+		PB
+	)
+	value := float64(bytes)
+
+	switch {
+	case value >= PB:
+		return fmt.Sprintf("%.2f PB", value/PB)
+	case value >= TB:
+		return fmt.Sprintf("%.2f TB", value/TB)
+	case value >= GB:
+		return fmt.Sprintf("%.2f GB", value/GB)
+	case value >= MB:
+		return fmt.Sprintf("%.2f MB", value/MB)
+	case value >= KB:
+		return fmt.Sprintf("%.2f KB", value/KB)
+	default:
+		return fmt.Sprintf("%d B", bytes)
+	}
 }

@@ -20,7 +20,6 @@ Currently, all the components are integrated using [Cobra](https://github.com/sp
 * [Go-homedir](https://github.com/mitchellh/go-homedir) (to get the home of the system user)
 * [Tablewriter](https://github.com/olekukonko/tablewriter) (the utility to create and generate text based tables in the terminal)
 * [Go-update](https://github.com/tj/go-update) (it is to be able to auto-update the binary)
-* [Go-pluralize](https://github.com/alejandrojnm/go-pluralize) (to pluralize any string based on the number of elements of the slice passed to it)
 
 ## Release
 
