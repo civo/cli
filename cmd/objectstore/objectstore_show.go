@@ -71,7 +71,7 @@ var objectStoreShowCmd = &cobra.Command{
 
 		ow.AppendDataWithLabel(
 			"stats",
-			fmt.Sprintf("Objects: %d, Size: %d MB, Size Used: %s", stats.NumObjects, objectStore.MaxSize, humanSizeUsed),
+			fmt.Sprintf("Size: %d GB, Used: %s, Objects: %d", objectStore.MaxSize, humanSizeUsed, stats.NumObjects),
 			"Stats",
 		)
 
