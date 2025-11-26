@@ -28,7 +28,7 @@ func showDatabaseDeprecationWarnings(databases ...civogo.Database) {
 		}
 
 		if software == "postgresql" && strings.HasPrefix(db.SoftwareVersion, "14") && !pgWarning {
-			utility.Warning("PostgreSQL 14 is deprecated and will be removed in a future release. Please consider upgrading to a newer version.")
+			utility.Warning("PostgreSQL 14 is deprecated and will be removed in a future release. Please migrate to PostgreSQL 17. For migration guidance, see: https://www.civo.com/docs/database/postgresql/migrate-from-14-to-17")
 			pgWarning = true
 		}
 	}

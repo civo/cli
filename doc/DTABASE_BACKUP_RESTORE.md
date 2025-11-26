@@ -29,7 +29,7 @@ The restore process allows you to recover your database from a previously create
 
 # CLI Operations
 
-## Create and PostgreSQL database
+## Create a PostgreSQL database
 
 ```bash
 ❯ civo database create postgres-demo --size g3.db.medium --software PostgreSQL --version 14
@@ -53,6 +53,8 @@ To get the credentials for a database, use `civo db credential <name/ID>`
 ```
 
 ## PostgreSQL
+
+> **Note:** PostgreSQL 14 is deprecated and will be removed in a future release. Please migrate to PostgreSQL 17. For migration guidance, see: https://www.civo.com/docs/database/postgresql/migrate-from-14-to-17
 
 ### Create Scheduled Backup
 
