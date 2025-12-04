@@ -15,7 +15,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v6
         with:
-          go-version: ${{ vars.GO_VERSION || '1.24.9' }}
+          go-version: ${{ vars.GO_VERSION || '1.24.11' }}
           cache: true
 
       - name: Verify dependencies
@@ -52,7 +52,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v6
         with:
-          go-version: ${{ vars.GO_VERSION || '1.24.9' }}
+          go-version: ${{ vars.GO_VERSION || '1.24.11' }}
           cache: true
 
       - name: Run golangci-lint
@@ -71,5 +71,5 @@ jobs:
       - name: Run govulncheck
         uses: golang/govulncheck-action@v1
         with:
-          go-version-input: ${{ vars.GO_VERSION || '1.24.9' }}
+          go-version-input: ${{ vars.GO_VERSION || '1.24.11' }}
           go-package: ./...
