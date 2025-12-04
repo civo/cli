@@ -1,3 +1,4 @@
+version: 2
 project_name: civo
 builds:
   - env:
@@ -7,15 +8,17 @@ builds:
       - darwin
       - windows
     goarch:
-      - 386
-      - amd64
-      - arm
-      - arm64
+      - "386"
+      - "amd64"
+      - "arm"
+      - "arm64"
     ignore:
       - goos: darwin
-        goarch: 386
+        goarch: "386"
       - goos: windows
-        goarch: 386
+        goarch: "386"
+      - goos: windows
+        goarch: "arm"
     ldflags:
       - -s -w -X  github.com/civo/cli/common.VersionCli={{.Version}} -X  github.com/civo/cli/common.CommitCli={{.Commit}} -X  github.com/civo/cli/common.DateCli={{.Date}}
 checksum:
@@ -32,16 +35,23 @@ archives:
   - name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
     format_overrides:
       - goos: windows
-        format: zip
+        formats: [zip]
 brews:
   - name: civo
-    tap:
+    repository:
       owner: civo
       name: homebrew-tools
+      branch: "{{ .ProjectName }}-{{ .Version }}"
+      pull_request:
+        enabled: true
+        base:
+          owner: civo
+          name: homebrew-tools
+          branch: master
     commit_author:
       name: civobot
       email: hello@civo.com
-    folder: Formula
+    directory: Formula
     homepage: "https://github.com/civo/cli"
     description: "CLI for managing Civo resources."
 dockers:
@@ -54,15 +64,15 @@ dockers:
       - "civo/cli:{{ .Tag }}"
     dockerfile: docker/Dockerfile
 nfpms:
-  - file_name_template: '{{ .ProjectName }}_{{ .Arch }}'
-    homepage:  https://github.com/civo/cli
+  - file_name_template: "{{ .ProjectName }}_{{ .Arch }}"
+    homepage: https://github.com/civo/cli
     description: Our Command Line Interface (CLI) for interacting with your Civo resources
     maintainer: Alejandro J. Nuñez Madrazo <alejandro@civo.com>
     license: MIT
     vendor: Civo
     formats:
-    - deb
-    - rpm
+      - deb
+      - rpm
 # snapcrafts:
 #   - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
 #     summary: Tool to handler all Civo cloud resource
