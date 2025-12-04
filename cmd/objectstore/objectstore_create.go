@@ -13,16 +13,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var allowedBucketSizes = []int64{500, 1000}
+
 var bucketSize int64
 var owner string
 var waitOS bool
+var yesFlag bool
 
 var objectStoreCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
 	Example: "civo objectstore create OBJECTSTORE_NAME --size SIZE",
 	Short:   "Create a new Object Store",
-	Long:    "Bucket size should be in Gigabytes (GB) and must be a multiple of 500, starting from 500.\n",
+	Long:    "Bucket size should be in Gigabytes (GB) and must be either 500 or 1000.\n",
 	Args:    cobra.MinimumNArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -34,7 +37,6 @@ var objectStoreCreateCmd = &cobra.Command{
 				os.Exit(1)
 			}
 			objectStoreName = args[0]
-
 		} else {
 			objectStoreName = utility.RandomName()
 		}
@@ -60,17 +62,29 @@ var objectStoreCreateCmd = &cobra.Command{
 			client.Region = common.RegionSet
 		}
 
-		if bucketSize < 500 {
-			utility.Error("The minimum size to create an object store is 500 GB. Please provide a valid size.")
+		if bucketSize < minBucketSizeGB {
+			utility.Error("The minimum size to create an object store is %d GB. Please provide a valid size.", minBucketSizeGB)
 			os.Exit(1)
-		} else if bucketSize%500 != 0 {
-			utility.YellowConfirm("The size to create an object store must be a multiple of 500. Would you like to create an %s of %d GB instead? (y/n) ? ", utility.Green("object store"), bucketSize+(500-bucketSize%500))
-			_, err := utility.UserAccepts(os.Stdin)
-			if err != nil {
-				utility.Error("Unable to parse the input: %s", err)
+		}
+
+		if !isAllowedSize(bucketSize) {
+			newSize := adjustedBucketSize(bucketSize)
+			if !isAllowedSize(newSize) {
+				utility.Error("Only 500 GB and 1000 GB sizes are allowed for Object Store.")
 				os.Exit(1)
 			}
-			bucketSize = bucketSize + (500 - bucketSize%500)
+			if !yesFlag {
+				utility.YellowConfirm("Only 500 GB and 1000 GB sizes are allowed. Would you like to create an object store of %d GB instead? (y/n)", newSize)
+				accept, err := utility.UserAccepts(os.Stdin)
+				if err != nil {
+					utility.Error("Unable to parse the input: %s", err)
+					os.Exit(1)
+				}
+				if !accept {
+					os.Exit(1)
+				}
+			}
+			bucketSize = newSize
 		}
 
 		var credential *civogo.ObjectStoreCredential
@@ -135,7 +149,11 @@ var objectStoreCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"name": objectStore.Name, "id": objectStore.ID, "access_key": objectStore.OwnerInfo.AccessKeyID})
+		ow := utility.NewOutputWriterWithMap(map[string]string{
+			"name":       objectStore.Name,
+			"id":         objectStore.ID,
+			"access_key": objectStore.OwnerInfo.AccessKeyID,
+		})
 
 		switch common.OutputFormat {
 		case "json":
@@ -153,4 +171,20 @@ var objectStoreCreateCmd = &cobra.Command{
 			}
 		}
 	},
+}
+
+func adjustedBucketSize(size int64) int64 {
+	if size < minBucketSizeGB {
+		return minBucketSizeGB
+	}
+	return minBucketSizeGB * ((size + minBucketSizeGB - 1) / minBucketSizeGB)
+}
+
+func isAllowedSize(size int64) bool {
+	for _, allowed := range allowedBucketSizes {
+		if size == allowed {
+			return true
+		}
+	}
+	return false
 }
