@@ -9,6 +9,8 @@ release:
   prerelease: auto
   make_latest: false
   mode: replace
+changelog:
+  use: github-native
 builds:
   - env:
       - CGO_ENABLED=0
