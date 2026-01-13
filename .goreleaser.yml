@@ -9,8 +9,6 @@ release:
   prerelease: auto
   make_latest: false
   mode: replace
-changelog:
-  use: github-native
 builds:
   - env:
       - CGO_ENABLED=0
@@ -35,6 +33,7 @@ builds:
 checksum:
   name_template: "{{ .ProjectName }}-{{ .Version }}-checksums.sha256"
 changelog:
+  use: github-native
   sort: asc
   filters:
     exclude:
