@@ -24,6 +24,7 @@ import (
 	"github.com/civo/cli/cmd/teams"
 	"github.com/civo/cli/cmd/volume"
 	"github.com/civo/cli/cmd/volumetype"
+	"github.com/civo/cli/cmd/vpc"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -163,4 +164,5 @@ func init() {
 	rootCmd.AddCommand(volume.VolumeCmd)
 	rootCmd.AddCommand(volumetype.VolumeTypeCmd)
 	rootCmd.AddCommand(snapshot.SnapshotCmd)
+	rootCmd.AddCommand(vpc.VPCCmd)
 }
