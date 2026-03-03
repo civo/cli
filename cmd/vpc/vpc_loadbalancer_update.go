@@ -12,15 +12,15 @@ import (
 )
 
 var (
-	vpcLBUpdateName                    string
-	vpcLBUpdateAlgorithm               string
-	vpcLBUpdateExternalTrafficPolicy   string
-	vpcLBUpdateSessionAffinity         string
-	vpcLBUpdateSessionAffinityTimeout  int32
-	vpcLBUpdateEnableProxyProtocol     string
-	vpcLBUpdateFirewallID              string
-	vpcLBUpdateMaxConcurrentRequests   int
-	vpcLBUpdateBackends                []string
+	vpcLBUpdateName                   string
+	vpcLBUpdateAlgorithm              string
+	vpcLBUpdateExternalTrafficPolicy  string
+	vpcLBUpdateSessionAffinity        string
+	vpcLBUpdateSessionAffinityTimeout int32
+	vpcLBUpdateEnableProxyProtocol    string
+	vpcLBUpdateFirewallID             string
+	vpcLBUpdateMaxConcurrentRequests  int
+	vpcLBUpdateBackends               []string
 )
 
 var vpcLoadBalancerUpdateCmd = &cobra.Command{

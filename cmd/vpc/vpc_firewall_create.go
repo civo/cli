@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	vpcFwNetwork      string
+	vpcFwNetwork        string
 	vpcFwNoDefaultRules bool
 )
 
@@ -51,10 +51,7 @@ var vpcFirewallCreateCmd = &cobra.Command{
 			networkID = network.ID
 		}
 
-		createRules := true
-		if vpcFwNoDefaultRules {
-			createRules = false
-		}
+		createRules := !vpcFwNoDefaultRules
 
 		firewall, err := client.NewVPCFirewall(&civogo.FirewallConfig{
 			Name:        args[0],
