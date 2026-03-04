@@ -20,7 +20,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version: ${{ vars.GO_VERSION || '1.24.11' }}
+          go-version: ${{ vars.GO_VERSION || '1.24.13' }}
           cache: true
 
       - name: Run GoReleaser Check
