@@ -51,6 +51,12 @@ brews:
     repository:
       owner: civo
       name: homebrew-tools
+      pull_request:
+        enabled: true
+        base:
+          owner: civo
+          name: homebrew-tools
+          branch: master
     commit_author:
       name: civobot
       email: hello@civo.com
