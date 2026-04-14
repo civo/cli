@@ -79,7 +79,6 @@ func CheckAPPName(appName string) bool {
 	if err != nil {
 		return false
 	}
-	client.Region = "nyc1"
 
 	allAPP, err := client.ListKubernetesMarketplaceApplications()
 	if err != nil {
@@ -101,7 +100,6 @@ func ListDefaultApps() ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	client.Region = "nyc1"
 
 	allApps, err := client.ListKubernetesMarketplaceApplications()
 	if err != nil {
