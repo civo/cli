@@ -57,8 +57,6 @@ func init() {
 	firewallRuleCreateCmd.Flags().StringVarP(&direction, "direction", "d", "ingress", "the direction of the rule can be ingress or egress (default is ingress)")
 	firewallRuleCreateCmd.Flags().StringVarP(&action, "action", "a", "allow", "the action of the rule can be allow or deny (default is allow)")
 	firewallRuleCreateCmd.Flags().StringVarP(&label, "label", "l", "", "a string that will be the displayed as the name/reference for this rule")
-	_ = firewallRuleCreateCmd.MarkFlagRequired("startport")
-
 	// Mark the create-rules flag as deprecated
 	_ = firewallCreateCmd.Flags().MarkDeprecated("create-rules", "it will be removed in future versions. Default firewall rules are created by default. Use --no-default-rules flag to create firewalls without them.\n")
 }
