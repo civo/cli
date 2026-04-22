@@ -51,10 +51,23 @@ var instancePublicIPCmd = &cobra.Command{
 			utility.Error("%s", err)
 		}
 
-		if args[0] == "disable" {
-			fmt.Printf("Instance %s has been updated to NOT have a Public IP\n", utility.Green(instance.Hostname))
-		} else {
-			fmt.Printf("Instance %s has been updated to have a Public IP. IP addressed will be assigned shortly.\n", utility.Green(instance.Hostname))
+		ow := utility.NewOutputWriter()
+		ow.StartLine()
+		ow.AppendDataWithLabel("id", instance.ID, "ID")
+		ow.AppendDataWithLabel("hostname", instance.Hostname, "Hostname")
+		ow.AppendDataWithLabel("public_ip", args[0], "Public IP")
+
+		switch common.OutputFormat {
+		case "json":
+			ow.WriteSingleObjectJSON(common.PrettySet)
+		case "custom":
+			ow.WriteCustomOutput(common.OutputFields)
+		default:
+			if args[0] == "disable" {
+				fmt.Printf("Instance %s has been updated to NOT have a Public IP\n", utility.Green(instance.Hostname))
+			} else {
+				fmt.Printf("Instance %s has been updated to have a Public IP. IP addressed will be assigned shortly.\n", utility.Green(instance.Hostname))
+			}
 		}
 	},
 }
