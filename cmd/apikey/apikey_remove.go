@@ -41,7 +41,18 @@ var apikeyRemoveCmd = &cobra.Command{
 			config.SaveConfig()
 
 			if numKeys > len(config.Current.APIKeys) {
-				fmt.Printf("Removed the API Key %s\n", utility.Green(index))
+				ow := utility.NewOutputWriter()
+				ow.StartLine()
+				ow.AppendDataWithLabel("name", index, "Name")
+
+				switch common.OutputFormat {
+				case "json":
+					ow.WriteSingleObjectJSON(common.PrettySet)
+				case "custom":
+					ow.WriteCustomOutput(common.OutputFields)
+				default:
+					fmt.Printf("Removed the API Key %s\n", utility.Green(index))
+				}
 			} else {
 				utility.Error("The API Key %q couldn't be found", args[0])
 				os.Exit(1)

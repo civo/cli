@@ -63,7 +63,20 @@ var kubernetesNodePoolInstanceDeleteCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			fmt.Printf("Instance %s has been deleted from node pool %s in cluster %s\n", instanceID, nodePoolID, kubernetesFindCluster.Name)
+			ow := utility.NewOutputWriter()
+			ow.StartLine()
+			ow.AppendDataWithLabel("instance_id", instanceID, "Instance ID")
+			ow.AppendDataWithLabel("node_pool_id", nodePoolID, "Node Pool ID")
+			ow.AppendDataWithLabel("cluster_name", kubernetesFindCluster.Name, "Cluster Name")
+
+			switch common.OutputFormat {
+			case "json":
+				ow.WriteSingleObjectJSON(common.PrettySet)
+			case "custom":
+				ow.WriteCustomOutput(common.OutputFields)
+			default:
+				fmt.Printf("Instance %s has been deleted from node pool %s in cluster %s\n", instanceID, nodePoolID, kubernetesFindCluster.Name)
+			}
 		} else {
 			fmt.Println("Operation aborted.")
 		}

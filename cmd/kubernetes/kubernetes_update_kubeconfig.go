@@ -39,6 +39,18 @@ var kubernetesUpdateKubeconfigCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		fmt.Printf("Updated kubeconfig with cluster %s configuration\n", utility.Green(cluster.Name))
+		ow := utility.NewOutputWriter()
+		ow.StartLine()
+		ow.AppendDataWithLabel("id", cluster.ID, "ID")
+		ow.AppendDataWithLabel("name", cluster.Name, "Name")
+
+		switch common.OutputFormat {
+		case "json":
+			ow.WriteSingleObjectJSON(common.PrettySet)
+		case "custom":
+			ow.WriteCustomOutput(common.OutputFields)
+		default:
+			fmt.Printf("Updated kubeconfig with cluster %s configuration\n", utility.Green(cluster.Name))
+		}
 	},
 }

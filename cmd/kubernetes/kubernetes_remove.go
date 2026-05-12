@@ -118,6 +118,7 @@ var kubernetesRemoveCmd = &cobra.Command{
 				} else {
 					ow.WriteMultipleObjectsJSON(common.PrettySet)
 				}
+			case "custom":
 				ow.WriteCustomOutput(common.OutputFields)
 			default:
 				fmt.Printf("The Kubernetes %s (%s) %s been deleted\n",
