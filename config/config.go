@@ -269,20 +269,11 @@ func CivoAPIClient() (*civogo.Client, error) {
 		return nil, err
 	}
 
-	var version string
-	res, skip := common.VersionCheck(common.GithubClient())
-	if !skip {
-		version = *res.TagName
-	} else {
-		version = "0.0.0"
-	}
-
-	// Update the user agent to include the version of the CLI
-	cliComponent := &civogo.Component{
+	// Set the user agent to the running CLI version (injected at build time via ldflags)
+	cliClient.SetUserAgent(&civogo.Component{
 		Name:    "civo-cli",
-		Version: version,
-	}
-	cliClient.SetUserAgent(cliComponent)
+		Version: common.VersionCli,
+	})
 
 	return cliClient, nil
 }
