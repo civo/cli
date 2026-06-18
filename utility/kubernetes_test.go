@@ -15,12 +15,16 @@ func TestCheckAppPlanFindsAppByName(t *testing.T) {
 		{Name: "postgresql"},
 	}
 
-	result, err := checkAppPlan(appList, "mysql")
+	idx, result, err := checkAppPlan(appList, "mysql")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	if result != "mysql" {
 		t.Errorf("expected 'mysql', got '%s'", result)
+	}
+	// Index must point to the matched entry
+	if appList[idx].Name != "mysql" {
+		t.Errorf("expected appList[idx].Name = 'mysql', got '%s'", appList[idx].Name)
 	}
 }
 
@@ -35,7 +39,7 @@ func TestCheckAppPlanFindsAppWithValidPlan(t *testing.T) {
 		},
 	}
 
-	result, err := checkAppPlan(appList, "mysql:10GB")
+	_, result, err := checkAppPlan(appList, "mysql:10GB")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -55,7 +59,7 @@ func TestCheckAppPlanReturnsDefaultForInvalidPlan(t *testing.T) {
 		},
 	}
 
-	result, err := checkAppPlan(appList, "mysql:999GB")
+	_, result, err := checkAppPlan(appList, "mysql:999GB")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -75,7 +79,7 @@ func TestCheckAppPlanNoPlanSpecifiedWithPlansAvailable(t *testing.T) {
 		},
 	}
 
-	result, err := checkAppPlan(appList, "mysql")
+	_, result, err := checkAppPlan(appList, "mysql")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -91,7 +95,7 @@ func TestCheckAppPlanNoPlanSpecifiedNoPlansAvailable(t *testing.T) {
 		{Name: "traefik"},
 	}
 
-	result, err := checkAppPlan(appList, "traefik")
+	_, result, err := checkAppPlan(appList, "traefik")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -106,13 +110,17 @@ func TestCheckAppPlanPartialNameMatch(t *testing.T) {
 		{Name: "mysql"},
 	}
 
-	result, err := checkAppPlan(appList, "metrics")
+	idx, result, err := checkAppPlan(appList, "metrics")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	// No plans, returns requested string verbatim
+	// String returned is verbatim user input (no plans on this app)
 	if result != "metrics" {
 		t.Errorf("expected 'metrics', got '%s'", result)
+	}
+	// But the index points to the CANONICAL app — metrics-server
+	if appList[idx].Name != "metrics-server" {
+		t.Errorf("expected appList[idx].Name = 'metrics-server', got '%s'", appList[idx].Name)
 	}
 }
 

@@ -127,8 +127,11 @@ func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bo
 
 // checkAppPlan is the function to verify if the application to be installed in the cluster
 // has a plan or not, in case it has a plan but does not specify it,
-// we use the first one in the list
-func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested string) (string, error) {
+// we use the first one in the list.
+// It returns the index of the matched application in appList so that callers can
+// access the canonical application name (appList[idx].Name) without re-parsing
+// the resolved string.
+func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested string) (int, string, error) {
 	foundIndex := -1
 	parts := strings.SplitN(requested, ":", 2)
 	appName := parts[0]
@@ -164,10 +167,10 @@ func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested s
 		_, found := find(allPlan, planName)
 		if !found {
 			YellowConfirm("the plan you gave doesn't exist for %s; we've picked a default one for you\n", appName)
-			return fmt.Sprintf("%s:%s", appName, appList[foundIndex].Plans[0].Label), nil
+			return foundIndex, fmt.Sprintf("%s:%s", appName, appList[foundIndex].Plans[0].Label), nil
 		}
 
-		return requested, nil
+		return foundIndex, requested, nil
 	}
 
 	if planName != "" {
@@ -175,7 +178,7 @@ func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested s
 		os.Exit(1)
 	}
 
-	return requested, nil
+	return foundIndex, requested, nil
 }
 
 // RequestedSplit is a function to split all app requested to be installed
@@ -184,7 +187,7 @@ func RequestedSplit(appList []civogo.KubernetesMarketplaceApplication, requested
 	allApp := []string{}
 
 	for i := range allsplit {
-		checkApp, err := checkAppPlan(appList, allsplit[i])
+		idx, checkApp, err := checkAppPlan(appList, allsplit[i])
 		// NOTE: checkAppPlan either returns a nil error or calls os.Exit(1)
 		// internally — it never returns a non-nil error here. This branch
 		// is effectively dead code inherited from master.
@@ -192,10 +195,11 @@ func RequestedSplit(appList []civogo.KubernetesMarketplaceApplication, requested
 			fmt.Print(err)
 		}
 
-		// Check Talos compatibility after resolving canonical app name
-		resolvedName := strings.SplitN(checkApp, ":", 2)[0]
+		// Block metrics-server on Talos clusters using the canonical app name
+		// from appList[idx].Name — this correctly handles partial-name inputs
+		// (e.g. "metrics" resolves to appList[idx].Name == "metrics-server").
 		if strings.EqualFold(clusterType, "talos") &&
-			strings.EqualFold(resolvedName, "metrics-server") {
+			strings.EqualFold(appList[idx].Name, "metrics-server") {
 			Error(
 				"The metrics-server marketplace application is not " +
 					"currently supported on Talos clusters.",
