@@ -151,6 +151,9 @@ func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested s
 		os.Exit(1)
 	}
 
+	// NOTE: when no plan is specified, planName == "" which never matches
+	// any plan label, so checkAppPlan always falls back to the default plan.
+	// This is pre-existing behaviour inherited from master.
 	if len(appList[foundIndex].Plans) > 0 {
 		allPlan := []string{}
 
@@ -176,14 +179,28 @@ func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested s
 }
 
 // RequestedSplit is a function to split all app requested to be installed
-func RequestedSplit(appList []civogo.KubernetesMarketplaceApplication, requested string) string {
+func RequestedSplit(appList []civogo.KubernetesMarketplaceApplication, requested string, clusterType string) string {
 	allsplit := strings.Split(requested, ",")
 	allApp := []string{}
 
 	for i := range allsplit {
 		checkApp, err := checkAppPlan(appList, allsplit[i])
+		// NOTE: checkAppPlan either returns a nil error or calls os.Exit(1)
+		// internally — it never returns a non-nil error here. This branch
+		// is effectively dead code inherited from master.
 		if err != nil {
 			fmt.Print(err)
+		}
+
+		// Check Talos compatibility after resolving canonical app name
+		resolvedName := strings.SplitN(checkApp, ":", 2)[0]
+		if strings.EqualFold(clusterType, "talos") &&
+			strings.EqualFold(resolvedName, "metrics-server") {
+			Error(
+				"The metrics-server marketplace application is not " +
+					"currently supported on Talos clusters.",
+			)
+			os.Exit(1)
 		}
 
 		allApp = append(allApp, checkApp)

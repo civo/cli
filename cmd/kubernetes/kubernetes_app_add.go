@@ -43,7 +43,7 @@ var kubernetesAppAddCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		result := utility.RequestedSplit(appList, args[0])
+		result := utility.RequestedSplit(appList, args[0], kubernetesFindCluster.ClusterType)
 		configKubernetes := &civogo.KubernetesClusterConfig{
 			Applications: result,
 		}
