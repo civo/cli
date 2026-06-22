@@ -3,6 +3,9 @@ package kubernetes
 import (
 	"bytes"
 	"fmt"
+	"io"
+	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
 	"strings"
@@ -13,6 +16,8 @@ import (
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
 )
+
+const marketplaceBaseURL = "https://raw.githubusercontent.com/civo/kubernetes-marketplace/master"
 
 var kubernetesAppRemoveCmd = &cobra.Command{
 	Use:     "remove",
@@ -52,11 +57,19 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 		defer os.Remove(tmpFile.Name())
 		for _, split := range allApps {
 			appName := split
+
 			// TODO: Ideally this would come from the Civo API, but the Civo API doesn't currently return uninstall.sh
 			// https://www.civo.com/api/kubernetes#listing-applications
-			filepath := fmt.Sprintf("bash <(curl -s https://raw.githubusercontent.com/civo/kubernetes-marketplace/master/%s/uninstall.sh)", appName)
-			cmdConfig := exec.Command("/bin/bash", "-c", filepath)
+			raw, err := getMarketplaceAppUninstallScript(marketplaceBaseURL, appName)
+			if err != nil {
+				utility.Error("Failed to get uninstall script: %v", err)
+				os.Exit(1)
+			}
+
+			cmdConfig := exec.Command("/bin/bash", "-s")
 			var b bytes.Buffer
+
+			cmdConfig.Stdin = bytes.NewReader(raw)
 			cmdConfig.Stdout = &b
 			cmdConfig.Stderr = &b
 			cmdConfig.Env = os.Environ()
@@ -65,10 +78,8 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 			if err := cmdConfig.Run(); err != nil {
 				if exitError, ok := err.(*exec.ExitError); ok {
 					utility.Error("Failed to uninstall application %s (exited with code %d)\n", appName, exitError.ExitCode())
-					cmd := exec.Command("curl", "-s", fmt.Sprintf("https://raw.githubusercontent.com/civo/kubernetes-marketplace/master/%s/uninstall.sh", appName))
-					output, _ := cmd.CombinedOutput()
 					fmt.Println("--------------- Uninstall script ---------------")
-					fmt.Println(string(output))
+					fmt.Println(string(raw))
 					fmt.Println("--------------- Uninstall output ---------------")
 					if strings.Contains(b.String(), "command not found") {
 						fmt.Printf("Uninstall script for application %s not found \n", appName)
@@ -95,4 +106,17 @@ var kubernetesAppRemoveCmd = &cobra.Command{
 		}
 
 	},
+}
+
+func getMarketplaceAppUninstallScript(baseURL, appName string) ([]byte, error) {
+	scriptURL := fmt.Sprintf("%s/%s/uninstall.sh", baseURL, url.PathEscape(appName))
+	resp, err := http.Get(scriptURL)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch uninstall script for %s: %w", appName, err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("uninstall script for application %s not found (HTTP %d)", appName, resp.StatusCode)
+	}
+	return io.ReadAll(resp.Body)
 }
