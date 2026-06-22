@@ -128,7 +128,7 @@ func writeConfig(path string, data []byte, suppressMessage bool, mergeConfigs bo
 // checkAppPlan is the function to verify if the application to be installed in the cluster
 // has a plan or not, in case it has a plan but does not specify it,
 // we use the first one in the list
-func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested string) (string, error) {
+func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested string) (int, string, error) {
 	foundIndex := -1
 	parts := strings.SplitN(requested, ":", 2)
 	appName := parts[0]
@@ -161,10 +161,10 @@ func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested s
 		_, found := find(allPlan, planName)
 		if !found {
 			YellowConfirm("the plan you gave doesn't exist for %s; we've picked a default one for you\n", appName)
-			return fmt.Sprintf("%s:%s", appName, appList[foundIndex].Plans[0].Label), nil
+			return foundIndex, fmt.Sprintf("%s:%s", appName, appList[foundIndex].Plans[0].Label), nil
 		}
 
-		return requested, nil
+		return foundIndex, requested, nil
 	}
 
 	if planName != "" {
@@ -172,24 +172,52 @@ func checkAppPlan(appList []civogo.KubernetesMarketplaceApplication, requested s
 		os.Exit(1)
 	}
 
-	return requested, nil
+	return foundIndex, requested, nil
 }
 
 // RequestedSplit is a function to split all app requested to be installed
-func RequestedSplit(appList []civogo.KubernetesMarketplaceApplication, requested string) string {
+func RequestedSplit(appList []civogo.KubernetesMarketplaceApplication, requested, clusterType string) string {
 	allsplit := strings.Split(requested, ",")
 	allApp := []string{}
 
 	for i := range allsplit {
-		checkApp, err := checkAppPlan(appList, allsplit[i])
+		foundIdx, checkApp, err := checkAppPlan(appList, allsplit[i])
 		if err != nil {
 			fmt.Print(err)
+			continue
+		}
+
+		if !isAppCompatibleWithClusterType(appList[foundIdx].Name, clusterType) {
+			Error("%s cannot be installed via the marketplace on %s clusters", appList[foundIdx].Name, clusterType)
+			os.Exit(1)
 		}
 
 		allApp = append(allApp, checkApp)
 	}
 
 	return strings.Join(allApp, ",")
+}
+
+// unsupportedAppsByClusterType lists marketplace apps that cannot be
+// installed on a given cluster type.
+//
+// TODO: this table is hardcoded because civogo.KubernetesMarketplaceApplication
+// does not expose the app's supported cluster_type. The marketplace manifest
+// already declares it (e.g.
+// https://github.com/civo/kubernetes-marketplace/blob/master/metrics-server/manifest.yaml),
+// so once that field is surfaced through the API/civogo, this comparison should
+// be replaced by checking the application's own cluster_type and this table removed.
+var unsupportedAppsByClusterType = map[string][]string{
+	"talos": {"metrics-server"},
+}
+
+func isAppCompatibleWithClusterType(requestedApp, clusterType string) bool {
+	for _, app := range unsupportedAppsByClusterType[clusterType] {
+		if app == requestedApp {
+			return false
+		}
+	}
+	return true
 }
 
 // RemoveApplicationFromInstalledList is a function to split all currently installed apps and remove one being uninstalled
