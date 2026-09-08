@@ -79,6 +79,10 @@ func CheckAPPName(appName string) bool {
 	if err != nil {
 		return false
 	}
+	// The marketplace catalogue isn't region-scoped; sending the user's
+	// region can 404 with database_region_not_found for regions the
+	// marketplace backend doesn't know about.
+	client.Region = ""
 
 	allAPP, err := client.ListKubernetesMarketplaceApplications()
 	if err != nil {
@@ -100,6 +104,10 @@ func ListDefaultApps() ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
+	// The marketplace catalogue isn't region-scoped; sending the user's
+	// region can 404 with database_region_not_found for regions the
+	// marketplace backend doesn't know about.
+	client.Region = ""
 
 	allApps, err := client.ListKubernetesMarketplaceApplications()
 	if err != nil {
