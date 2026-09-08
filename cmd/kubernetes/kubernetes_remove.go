@@ -128,7 +128,7 @@ var kubernetesRemoveCmd = &cobra.Command{
 				)
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Error("Operation aborted.")
 		}
 	},
 }

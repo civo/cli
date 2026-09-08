@@ -17,6 +17,10 @@ var (
 	RegionSet string
 	// DefaultYes : automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively
 	DefaultYes bool
+	// Quiet suppresses interactive prompts, progress indicators, and non-error
+	// output. Interactive prompts fail instead of blocking when no confirmed
+	// default (--yes) is available. Set via the global --quiet/-q flag.
+	Quiet bool
 	// PrettySet : Prints the json output in pretty format
 	PrettySet bool
 	// VersionCli is set from outside using ldflags

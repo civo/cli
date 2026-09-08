@@ -58,7 +58,7 @@ var apikeyRemoveCmd = &cobra.Command{
 				os.Exit(1)
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Error("Operation aborted.")
 		}
 
 	},

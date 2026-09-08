@@ -85,7 +85,7 @@ var teamsDeleteCmd = &cobra.Command{
 				fmt.Printf("The team %s(%s) has been deleted\n", pluralize.Pluralize(len(teamList), ""), utility.Green(strings.Join(teamNameList, ", ")))
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Error("Operation aborted.")
 		}
 	},
 }

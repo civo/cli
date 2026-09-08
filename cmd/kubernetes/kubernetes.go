@@ -104,6 +104,7 @@ func init() {
 	kubernetesCreateCmd.Flags().StringVarP(&cniPlugin, "cni-plugin", "p", "flannel", "optional, possible options: flannel,cilium.")
 	kubernetesCreateCmd.Flags().StringVarP(&clusterType, "cluster-type", "", "k3s", "optional, possible options: k3s,talos.")
 	kubernetesCreateCmd.Flags().StringVar(&volumeType, "volume-type", "", "optional, volume-type name as returned by 'civo volumetypes ls'")
+	kubernetesCreateCmd.Flags().BoolVar(&logsCollectorEnabled, "logs-collector-enabled", true, "optional, disabling this will prevent you from seeing logs in the Civo platform dashboard, but it will save node resources. Disabled by default on small and xsmall standard nodes")
 
 	kubernetesRenameCmd.Flags().StringVarP(&kubernetesNewName, "name", "n", "", "the new name for the cluster.")
 

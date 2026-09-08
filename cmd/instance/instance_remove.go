@@ -104,7 +104,7 @@ If you wish to use a custom format, the available fields are:
 				)
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Error("Operation aborted.")
 		}
 	},
 }

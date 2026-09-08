@@ -104,7 +104,7 @@ var volumeRemoveCmd = &cobra.Command{
 					pluralize.Has(len(volumeNameList)))
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Error("Operation aborted.")
 		}
 	},
 }

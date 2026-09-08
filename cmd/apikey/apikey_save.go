@@ -60,6 +60,11 @@ var apikeySaveCmd = &cobra.Command{
 		}
 
 		if len(args) == 0 && !loadAPIKeyFromEnv {
+			if common.Quiet {
+				utility.Error("name and API key are required when --quiet is set (interactive prompts are disabled); run 'civo apikey save NAME APIKEY' or use --load-from-env")
+				os.Exit(1)
+			}
+
 			reader := bufio.NewReader(os.Stdin)
 			fmt.Printf("Enter a nice name for this account/API Key: ")
 
@@ -140,7 +145,9 @@ var apikeySaveCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Saved the API Key %s\n", utility.Green(name))
+			if !common.Quiet {
+				fmt.Printf("Saved the API Key %s\n", utility.Green(name))
+			}
 		}
 
 	},

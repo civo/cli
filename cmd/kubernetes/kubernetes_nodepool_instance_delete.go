@@ -78,7 +78,7 @@ var kubernetesNodePoolInstanceDeleteCmd = &cobra.Command{
 				fmt.Printf("Instance %s has been deleted from node pool %s in cluster %s\n", instanceID, nodePoolID, kubernetesFindCluster.Name)
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Error("Operation aborted.")
 		}
 	},
 }
