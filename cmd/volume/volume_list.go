@@ -102,18 +102,17 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 			ow.AppendDataWithLabel("id", volume.ID, "ID")
 			ow.AppendDataWithLabel("name", volume.Name, "Name")
 
-			var network civogo.Network
-
+			networkName := ""
 			if volume.NetworkID != "" {
-				for _, network = range networks {
+				networkName = volume.NetworkID
+				for _, network := range networks {
 					if network.ID == volume.NetworkID {
+						networkName = network.Label
 						break
 					}
 				}
-				ow.AppendDataWithLabel("network_id", network.Label, "Network")
-			} else {
-				ow.AppendDataWithLabel("network_id", "", "Network")
 			}
+			ow.AppendDataWithLabel("network_id", networkName, "Network")
 
 			var cluster *civogo.KubernetesCluster
 			if volume.ClusterID != "" {
@@ -133,27 +132,26 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 				ow.AppendDataWithLabel("cluster_id", "", "Cluster")
 			}
 
+			instanceName := ""
 			if volume.InstanceID != "" {
+				instanceName = volume.InstanceID
 				if cluster != nil {
 					for _, instance := range cluster.Instances {
 						if instance.ID == volume.InstanceID {
-							ow.AppendDataWithLabel("instance_id", instance.Hostname, "Instance")
+							instanceName = instance.Hostname
 							break
 						}
 					}
 				} else {
-					var instance civogo.Instance
-					for _, instance = range instances {
+					for _, instance := range instances {
 						if instance.ID == volume.InstanceID {
+							instanceName = instance.Hostname
 							break
 						}
 					}
-
-					ow.AppendDataWithLabel("instance_id", instance.Hostname, "Instance")
 				}
-			} else {
-				ow.AppendDataWithLabel("instance_id", "", "Instance")
 			}
+			ow.AppendDataWithLabel("instance_id", instanceName, "Instance")
 
 			ow.AppendDataWithLabel("size_gigabytes", fmt.Sprintf("%s GB", strconv.Itoa(volume.SizeGigabytes)), "Size")
 			ow.AppendDataWithLabel("mount_point", volume.MountPoint, "Mount Point")
