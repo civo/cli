@@ -29,6 +29,8 @@ If you wish to use a custom format, the available fields are:
 	* cluster_id
 	* instance_id
 	* size_gigabytes
+	* delivered_size_gigabytes (only when the API reports the delivered size)
+	* resize (only when the API reports the outcome of a resize)
 	* mount_point
 	* status
 
@@ -97,6 +99,10 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 			utility.Info("Volumes with status 'dangling' mean they are attached to a cluster that no longer exists. You can attach them to an instance, or delete them if they are no longer needed.")
 		}
 
+		// The two resize columns appear only when the API reports them for at least one volume, so
+		// the field order of custom output is unchanged against an API that does not.
+		showResize := reportsResize(volumes)
+
 		for _, volume := range volumes {
 			ow.StartLine()
 			ow.AppendDataWithLabel("id", volume.ID, "ID")
@@ -156,8 +162,10 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 			}
 
 			ow.AppendDataWithLabel("size_gigabytes", fmt.Sprintf("%s GB", strconv.Itoa(volume.SizeGigabytes)), "Size")
-			ow.AppendDataWithLabel("delivered_size_gigabytes", deliveredSizeLabel(volume), "Delivered")
-			ow.AppendDataWithLabel("resize", resizeLabel(volume), "Resize")
+			if showResize {
+				ow.AppendDataWithLabel("delivered_size_gigabytes", deliveredSizeLabel(volume), "Delivered")
+				ow.AppendDataWithLabel("resize", resizeLabel(volume), "Resize")
+			}
 			ow.AppendDataWithLabel("mount_point", volume.MountPoint, "Mount Point")
 			ow.AppendDataWithLabel("status", volume.Status, "Status")
 		}
