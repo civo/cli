@@ -26,8 +26,8 @@ type resizeWait struct {
 	before *civogo.Volume
 	// requested is the size asked for, in GB.
 	requested int
-	// grace bounds the wait for an API that does not report the delivered size, where the only
-	// possible evidence is the transitional status; timeout bounds the whole wait.
+	// grace bounds how long the wait looks for evidence that the request was picked up at all;
+	// timeout bounds the whole wait once it was.
 	grace, timeout, interval time.Duration
 	// maxFindFailures is how many consecutive find errors are tolerated before giving up.
 	maxFindFailures int
@@ -66,7 +66,9 @@ func (w resizeWait) resizeFromThisRequest(v *civogo.Volume) bool {
 }
 
 // deliveredNow reports whether the volume delivers the requested size, and did not already do so
-// before the request (a no-op would otherwise pass as evidence).
+// before the request. It confirms a resize that was seen to happen; it is not evidence on its own,
+// because the API serves the requested size as the delivered size when the platform has not
+// reported one (an operator that predates the field, or a request it has not looked at yet).
 func (w resizeWait) deliveredNow(v *civogo.Volume) bool {
 	if v.DeliveredSizeGigabytes <= 0 || v.DeliveredSizeGigabytes < w.requested {
 		return false
@@ -74,16 +76,10 @@ func (w resizeWait) deliveredNow(v *civogo.Volume) bool {
 	return w.before == nil || w.before.DeliveredSizeGigabytes < w.requested
 }
 
-// evidence reports whether the volume shows any sign that this request was picked up.
+// evidence reports whether the volume shows that this request was picked up: the transitional
+// status, or a resize outcome that belongs to this request.
 func (w resizeWait) evidence(v *civogo.Volume) bool {
-	return resizeInFlight(v) || w.resizeFromThisRequest(v) || w.deliveredNow(v)
-}
-
-// reportsDeliveredSize reports whether the API serves delivered_size_gb at all, judged on the
-// baseline read. An API that does gives a definite outcome for every resize; one that does not can
-// only show the transitional status, and may not even do that for a resize it has not started.
-func (w resizeWait) reportsDeliveredSize() bool {
-	return w.before != nil && w.before.DeliveredSizeGigabytes > 0
+	return resizeInFlight(v) || w.resizeFromThisRequest(v)
 }
 
 // run polls until the resize has an outcome. It returns an error only when the wait itself breaks
@@ -119,15 +115,17 @@ func (w resizeWait) run() (resizeResult, error) {
 				return resizeResult{volume: v, state: resizeDelivered}, nil
 			case w.resizeFromThisRequest(v):
 				return resizeResult{volume: v, state: resizeFailed, detail: resizeFailureDetail(v, w.requested)}, nil
-			case !w.reportsDeliveredSize():
+			case v.DeliveredSizeGigabytes <= 0:
 				// The transitional status came and went on an API that reports nothing else.
 				return resizeResult{volume: v, state: resizeUnconfirmed, detail: "the resize has settled, but this API does not report the delivered size"}, nil
 			}
 			// Delivered size still below the request and no outcome of this request yet: the
 			// platform is between steps. Keep polling.
 		}
-		if !seen && !w.reportsDeliveredSize() && elapsed >= w.grace {
-			return resizeResult{volume: v, state: resizeUnconfirmed, detail: fmt.Sprintf("the resize was not seen in progress within %s, and this API does not report the delivered size", w.grace)}, nil
+		if !seen && elapsed >= w.grace {
+			// Nothing has shown that the platform picked the request up. The delivered size cannot
+			// settle it either way (see deliveredNow), so the honest answer is that it is unknown.
+			return resizeResult{volume: v, state: resizeUnconfirmed, detail: fmt.Sprintf("the resize was not seen in progress within %s", w.grace)}, nil
 		}
 		if elapsed >= w.timeout {
 			return resizeResult{volume: v}, fmt.Errorf("timed out after %s waiting for the resize to settle (status %q)", w.timeout, v.Status)

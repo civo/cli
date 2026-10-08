@@ -100,13 +100,18 @@ func TestResizeWait(t *testing.T) {
 			wantState: resizeDelivered, quick: true,
 		},
 		{
-			name:      "slow pickup on an API that reports the delivered size keeps waiting past the grace window",
+			name:      "slow pickup with no evidence is reported as unconfirmed after the grace window",
 			before:    &civogo.Volume{Status: "available", SizeGigabytes: 20, DeliveredSizeGigabytes: 20},
 			requested: 60,
-			reads: append(repeat(&civogo.Volume{Status: "available", SizeGigabytes: 60, DeliveredSizeGigabytes: 20}, 60),
-				&civogo.Volume{Status: "resizing", SizeGigabytes: 60, DeliveredSizeGigabytes: 20, Resize: inProgress},
-				&civogo.Volume{Status: "available", SizeGigabytes: 60, DeliveredSizeGigabytes: 60, Resize: done}),
-			wantState: resizeDelivered,
+			reads:     []*civogo.Volume{{Status: "available", SizeGigabytes: 60, DeliveredSizeGigabytes: 20}},
+			wantState: resizeUnconfirmed, wantDetail: "the resize was not seen in progress within 1m0s",
+		},
+		{
+			name:      "the delivered size alone is not evidence: the API serves the request when the platform has not reported",
+			before:    &civogo.Volume{Status: "attached", SizeGigabytes: 20, DeliveredSizeGigabytes: 20},
+			requested: 60,
+			reads:     []*civogo.Volume{{Status: "attached", SizeGigabytes: 60, DeliveredSizeGigabytes: 60}},
+			wantState: resizeUnconfirmed, wantDetail: "the resize was not seen in progress within 1m0s",
 		},
 		{
 			name:      "delivered before the first poll",
@@ -149,7 +154,7 @@ func TestResizeWait(t *testing.T) {
 			before:    &civogo.Volume{Status: "available", SizeGigabytes: 5},
 			requested: 6,
 			reads:     []*civogo.Volume{{Status: "available", SizeGigabytes: 6}},
-			wantState: resizeUnconfirmed, wantDetail: "the resize was not seen in progress within 1m0s, and this API does not report the delivered size",
+			wantState: resizeUnconfirmed, wantDetail: "the resize was not seen in progress within 1m0s",
 		},
 		{
 			name:      "transient read errors are tolerated",
