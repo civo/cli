@@ -156,6 +156,8 @@ Example: civo volume ls -o custom -f "ID: Name (SizeGigabytes)`,
 			}
 
 			ow.AppendDataWithLabel("size_gigabytes", fmt.Sprintf("%s GB", strconv.Itoa(volume.SizeGigabytes)), "Size")
+			ow.AppendDataWithLabel("delivered_size_gigabytes", deliveredSizeLabel(volume), "Delivered")
+			ow.AppendDataWithLabel("resize", resizeLabel(volume), "Resize")
 			ow.AppendDataWithLabel("mount_point", volume.MountPoint, "Mount Point")
 			ow.AppendDataWithLabel("status", volume.Status, "Status")
 		}

@@ -37,6 +37,7 @@ func init() {
 
 	volumeResizeCmd.Flags().IntVarP(&newSizeGB, "size-gb", "s", 0, "The new size in GB (required)")
 	_ = volumeResizeCmd.MarkFlagRequired("size-gb")
+	volumeResizeCmd.Flags().BoolVarP(&waitVolumeResize, "wait", "w", false, "wait until the resize has settled and fail if the new size was not delivered")
 
 	volumeAttachCmd.Flags().BoolVarP(&waitVolumeAttach, "wait", "w", false, "wait until the volume is attached")
 	volumeAttachCmd.Flags().BoolVarP(&attachAtBoot, "attach-at-boot", "a", false, "Attach the volume at boot to instance")
