@@ -3,6 +3,7 @@ package common
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/google/go-github/v57/github"
 	"github.com/savioxavier/termlink"
@@ -45,15 +46,16 @@ func GithubClient() *github.Client {
 func CheckVersionUpdate() {
 	ghClient := GithubClient()
 	res, skip := VersionCheck(ghClient)
-	if skip {
+	if skip || res == nil || res.TagName == nil {
 		return
 	}
 
-	// Check if the version is different from the one in the binary
-	if res.TagName != nil && *res.TagName != fmt.Sprintf("v%s", VersionCli) {
-		if res.TagName != nil && *res.TagName != VersionCli {
-			fmt.Printf("A newer version (%s) is available, please upgrade with \"civo update\"\n", *res.TagName)
-		}
+	latest := *res.TagName
+	latestClean := strings.TrimPrefix(latest, "v")
+	currentClean := strings.TrimPrefix(VersionCli, "v")
+
+	if latestClean != currentClean {
+		fmt.Printf("A newer version (%s) is available, please upgrade with \"civo update\"\n", latest)
 	}
 }
 
