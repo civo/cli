@@ -208,14 +208,6 @@ func TestResizeWait(t *testing.T) {
 	}
 }
 
-func repeat(v *civogo.Volume, n int) []*civogo.Volume {
-	out := make([]*civogo.Volume, n)
-	for i := range out {
-		out[i] = v
-	}
-	return out
-}
-
 func TestResizeInFlight(t *testing.T) {
 	cases := []struct {
 		name string
