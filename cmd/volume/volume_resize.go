@@ -28,9 +28,10 @@ supports online expansion and the instance is running; otherwise the API refuses
 says what to do (detach the volume, start the instance, or move the volume to another volume type).
 
 The API accepts the request before the platform carries it out: without --wait the command returns
-as soon as the new size is admitted. With --wait it follows the resize to its outcome: it exits
-non-zero when the platform settles the resize without delivering the requested size, and reports
-the result as unconfirmed, without failing, when the API does not report the delivered size.`,
+as soon as the new size is admitted. With --wait it follows the resize to its outcome and exits
+non-zero when the platform settles the resize without delivering the requested size. Exit 0 covers
+two outcomes, reported in the "outcome" field: "delivered", and "unconfirmed" when no evidence of
+the resize arrived within the grace window or the API does not report the delivered size.`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -81,23 +82,30 @@ the result as unconfirmed, without failing, when the API does not report the del
 		s.Writer = os.Stderr
 		s.Prefix = fmt.Sprintf("Resizing volume %s to %d GB... ", volume.Name, newSizeGB)
 		s.Start()
-		outcome, err := resizeWait{
+		wait := resizeWait{
 			find:      func() (*civogo.Volume, error) { return client.GetVolume(volume.ID) },
 			before:    volume,
 			requested: newSizeGB,
 			grace:     time.Minute, timeout: 60 * time.Minute, interval: 2 * time.Second, maxFindFailures: 5,
 			sleep: time.Sleep, now: time.Now,
-		}.run()
+		}
+		outcome, err := wait.run()
 		s.Stop()
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
 		}
+		result["outcome"] = outcome.state
+		if outcome.detail != "" {
+			result["outcome_detail"] = outcome.detail
+		}
 		if v := outcome.volume; v != nil {
 			if v.DeliveredSizeGigabytes > 0 {
 				result["delivered_size_gb"] = strconv.Itoa(v.DeliveredSizeGigabytes)
 			}
-			if v.Resize != nil {
+			// Only an outcome of this request is reported; one left over from an earlier
+			// resize would be read as this one's.
+			if wait.resizeFromThisRequest(v) {
 				result["resize_state"] = v.Resize.State
 				if v.Resize.Reason != "" {
 					result["resize_reason"] = v.Resize.Reason

@@ -108,19 +108,23 @@ func (w resizeWait) run() (resizeResult, error) {
 			seen = true
 		}
 		if seen && !resizeInFlight(v) {
+			// This request's own outcome is judged first: the delivered size may be the API's
+			// fallback (the request echoed back), so it only decides when there is no outcome.
 			switch {
-			case w.deliveredNow(v):
-				return resizeResult{volume: v, state: resizeDelivered}, nil
 			case w.resizeFromThisRequest(v) && v.Resize.Succeeded():
 				return resizeResult{volume: v, state: resizeDelivered}, nil
 			case w.resizeFromThisRequest(v):
 				return resizeResult{volume: v, state: resizeFailed, detail: resizeFailureDetail(v, w.requested)}, nil
+			case w.deliveredNow(v):
+				return resizeResult{volume: v, state: resizeDelivered}, nil
 			case v.DeliveredSizeGigabytes <= 0:
 				// The transitional status came and went on an API that reports nothing else.
 				return resizeResult{volume: v, state: resizeUnconfirmed, detail: "the resize has settled, but this API does not report the delivered size"}, nil
+			default:
+				// The transitional status came and went, the delivered size is below the request
+				// and no outcome of this request was recorded: nothing more will arrive.
+				return resizeResult{volume: v, state: resizeUnconfirmed, detail: fmt.Sprintf("the resize has settled without an outcome; the volume reports %d GB of the %d GB requested", v.DeliveredSizeGigabytes, w.requested)}, nil
 			}
-			// Delivered size still below the request and no outcome of this request yet: the
-			// platform is between steps. Keep polling.
 		}
 		if !seen && elapsed >= w.grace {
 			// Nothing has shown that the platform picked the request up. The delivered size cannot

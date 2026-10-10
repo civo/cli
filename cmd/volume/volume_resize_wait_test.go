@@ -131,6 +131,25 @@ func TestResizeWait(t *testing.T) {
 			wantState: resizeDelivered, quick: true,
 		},
 		{
+			name:      "a failed outcome of this request wins over the fallback delivered size",
+			before:    &civogo.Volume{Status: "attached", SizeGigabytes: 20, DeliveredSizeGigabytes: 20},
+			requested: 60,
+			reads: []*civogo.Volume{
+				{Status: "attached", SizeGigabytes: 60, DeliveredSizeGigabytes: 60, Resize: cancelled},
+			},
+			wantState: resizeFailed, wantDetail: "the resize cancelled", quick: true,
+		},
+		{
+			name:      "resizing seen, then settled below the request with no outcome, is unconfirmed not a timeout",
+			before:    &civogo.Volume{Status: "attached", SizeGigabytes: 20, DeliveredSizeGigabytes: 20},
+			requested: 60,
+			reads: []*civogo.Volume{
+				{Status: "resizing", SizeGigabytes: 60, DeliveredSizeGigabytes: 20},
+				{Status: "attached", SizeGigabytes: 60, DeliveredSizeGigabytes: 20},
+			},
+			wantState: resizeUnconfirmed, wantDetail: "the resize has settled without an outcome; the volume reports 20 GB of the 60 GB requested", quick: true,
+		},
+		{
 			name:      "cancelled with no reason",
 			before:    &civogo.Volume{Status: "attached", SizeGigabytes: 6, DeliveredSizeGigabytes: 6},
 			requested: 10,
