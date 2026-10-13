@@ -326,3 +326,56 @@ func SizeType(size string) string {
 		return "Instance"
 	}
 }
+
+// IsStandardSmallOrXSmallKubeSize returns true when the given node size is a
+// "standard" tier (the "g4s" family) small or xsmall Kubernetes node, e.g.
+// "g4s.kube.small" or "g4s.kube.xsmall". This works dynamically off the size
+// name so it doesn't need updating if new standard node sizes are added -
+// only small/xsmall standard nodes qualify, matching the resource-saving
+// default requested for those specific sizes.
+func IsStandardSmallOrXSmallKubeSize(size string) bool {
+	if !strings.HasPrefix(size, "g4s.") {
+		return false
+	}
+
+	parts := strings.Split(size, ".")
+	if len(parts) == 0 {
+		return false
+	}
+
+	switch parts[len(parts)-1] {
+	case "small", "xsmall":
+		return true
+	default:
+		return false
+	}
+}
+
+// LogsCollectorDisabledMessage is shown to the user when the logs collector
+// is automatically disabled on a standard small/xsmall node, so they know why
+// and how to override it.
+const LogsCollectorDisabledMessage = "Logs collector not installed by default to save resource on small and xsmall standard nodes. If you wish to enable logs collector create the cluster with LogsCollectorEnable set to true"
+
+// ResolveLogsCollectorEnabled works out the value that should be sent to the
+// API for a cluster's LogsCollectorEnabled setting, and an informational
+// message to display to the user (empty if there's nothing to say).
+//
+//   - If the user explicitly passed --logs-collector-enabled, their choice is
+//     always respected, regardless of node size.
+//   - Otherwise, the logs collector is disabled by default on standard small
+//     and xsmall nodes to save node resources.
+//   - Otherwise, nil is returned so the API's own default applies (currently
+//     enabled).
+func ResolveLogsCollectorEnabled(size string, explicitlySet bool, value bool) (enabled *bool, message string) {
+	if explicitlySet {
+		v := value
+		return &v, ""
+	}
+
+	if IsStandardSmallOrXSmallKubeSize(size) {
+		v := false
+		return &v, LogsCollectorDisabledMessage
+	}
+
+	return nil, ""
+}

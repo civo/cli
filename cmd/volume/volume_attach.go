@@ -80,8 +80,7 @@ var volumeAttachCmd = &cobra.Command{
 		if waitVolumeAttach {
 
 			stillAttaching := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
+			s := utility.NewSpinner(spinner.CharSets[9], 100*time.Millisecond)
 			s.Prefix = "Attaching volume to the instance... "
 			s.Start()
 
@@ -113,7 +112,9 @@ var volumeAttachCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The volume called %s with ID %s was attached to the instance %s\n", utility.Green(volume.Name), utility.Green(volume.ID), utility.Green(instance.Hostname))
+			if !common.Quiet {
+				fmt.Printf("The volume called %s with ID %s was attached to the instance %s\n", utility.Green(volume.Name), utility.Green(volume.ID), utility.Green(instance.Hostname))
+			}
 		}
 	},
 }

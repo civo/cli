@@ -86,7 +86,7 @@ var sshKeyRemoveCmd = &cobra.Command{
 				fmt.Printf("The ssh %s (%s) has been deleted\n", pluralize.Pluralize(len(sshList), "key"), utility.Green(strings.Join(sshKeyNameList, ", ")))
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Error("Operation aborted.")
 		}
 	},
 }

@@ -300,8 +300,7 @@ If you wish to use a custom format, the available fields are:
 
 		if wait {
 			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
+			s := utility.NewSpinner(spinner.CharSets[9], 100*time.Millisecond)
 			s.Prefix = fmt.Sprintf("Creating instance (%s)... ", resp.Hostname)
 			s.Start()
 
@@ -331,10 +330,12 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if common.OutputFormat == common.OutputFormatHuman {
-			if executionTime != "" {
-				fmt.Printf("The instance %s %s has been created in %s\n", utility.Green(instance.Hostname), publicIP, executionTime)
-			} else {
-				fmt.Printf("The instance %s has been created\n", utility.Green(instance.Hostname))
+			if !common.Quiet {
+				if executionTime != "" {
+					fmt.Printf("The instance %s %s has been created in %s\n", utility.Green(instance.Hostname), publicIP, executionTime)
+				} else {
+					fmt.Printf("The instance %s has been created\n", utility.Green(instance.Hostname))
+				}
 			}
 		} else {
 			ow := utility.NewOutputWriter()

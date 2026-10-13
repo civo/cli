@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/civo/cli/common"
 	"github.com/gookit/color"
 )
 
@@ -44,28 +45,44 @@ func Red(value string) string {
 }
 
 // Error is the function to handler all error in the Cli
+// Errors are always shown, even in --quiet mode, so failures are never silently swallowed.
 func Error(msg string, args ...interface{}) {
 	fmt.Fprintf(os.Stderr, "%s: %s\n", color.Red.Sprintf("Error"), fmt.Sprintf(msg, args...))
 }
 
 // Info is the function to handler all info messages in the Cli
+// Suppressed in --quiet mode.
 func Info(msg string, args ...interface{}) {
+	if common.Quiet {
+		return
+	}
 	fmt.Fprintf(os.Stderr, "%s: %s\n", color.Blue.Sprintf("Info"), fmt.Sprintf(msg, args...))
 }
 
 // Warning is the function to handler all warnings in the Cli
+// Suppressed in --quiet mode.
 func Warning(msg string, args ...interface{}) {
+	if common.Quiet {
+		return
+	}
 	fmt.Fprintf(os.Stderr, "%s: %s\n", color.Yellow.Sprintf("Warning"), fmt.Sprintf(msg, args...))
 }
 
 // YellowConfirm is the function to handler all delete confirm
+// Suppressed in --quiet mode (confirmation prompts are skipped entirely when quiet; see AskForConfirm).
 func YellowConfirm(msg string, args ...interface{}) {
+	if common.Quiet {
+		return
+	}
 	fmt.Fprintf(os.Stderr, "%s: %s", color.Warn.Sprintf("Warning"), fmt.Sprintf(msg, args...))
 }
 
 // RedConfirm is the function to handler the new version of the Cli
+// Suppressed in --quiet mode.
 func RedConfirm(msg string, args ...interface{}) {
-
+	if common.Quiet {
+		return
+	}
 	fmt.Fprintf(os.Stderr, "%s: %s", color.Red.Sprintf("IMPORTANT"), fmt.Sprintf(msg, args...))
 }
 

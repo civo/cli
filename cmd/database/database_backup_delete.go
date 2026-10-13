@@ -113,7 +113,7 @@ var dbBackupDeleteCmd = &cobra.Command{
 					pluralize.Has(len(backupList)))
 			}
 		} else {
-			fmt.Println("Operation aborted")
+			utility.Error("Operation aborted.")
 		}
 	},
 }

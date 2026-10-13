@@ -176,8 +176,7 @@ var dbCreateCmd = &cobra.Command{
 			startTime := utility.StartTime()
 
 			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
+			s := utility.NewSpinner(spinner.CharSets[9], 100*time.Millisecond)
 			s.Prefix = fmt.Sprintf("Create a database called %s ", db.Name)
 			s.Start()
 
@@ -205,10 +204,12 @@ var dbCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			if executionTime != "" {
-				fmt.Printf("Database (%s) type %s version %s with ID %s and size %s has been created in %s\nTo get fetch the database credentials use the command:\n\ncivo database credentials %s\n", utility.Green(db.Name), strings.ToLower(db.Software), db.SoftwareVersion, db.ID, db.Size, executionTime, db.Name)
-			} else {
-				fmt.Printf("Database (%s) type %s version %s with ID %s and size %s has been created\nTo get fetch the database credentials use the command:\n\ncivo database credentials %s\n", utility.Green(db.Name), strings.ToLower(db.Software), db.SoftwareVersion, db.ID, db.Size, db.Name)
+			if !common.Quiet {
+				if executionTime != "" {
+					fmt.Printf("Database (%s) type %s version %s with ID %s and size %s has been created in %s\nTo get fetch the database credentials use the command:\n\ncivo database credentials %s\n", utility.Green(db.Name), strings.ToLower(db.Software), db.SoftwareVersion, db.ID, db.Size, executionTime, db.Name)
+				} else {
+					fmt.Printf("Database (%s) type %s version %s with ID %s and size %s has been created\nTo get fetch the database credentials use the command:\n\ncivo database credentials %s\n", utility.Green(db.Name), strings.ToLower(db.Software), db.SoftwareVersion, db.ID, db.Size, db.Name)
+				}
 			}
 		}
 	},
