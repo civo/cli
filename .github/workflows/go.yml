@@ -71,5 +71,8 @@ jobs:
       - name: Run govulncheck
         uses: golang/govulncheck-action@v1
         with:
-          go-version-input: ${{ vars.GO_VERSION || '1.26.3' }}
+          # govulncheck scans the standard library of the Go it runs on, and the action pins
+          # GOTOOLCHAIN=local, so the go.mod toolchain cannot lift it: ask for the 1.26 line and
+          # let check-latest pick the newest patch, independently of GO_VERSION.
+          go-version-input: '1.26'
           go-package: ./...
