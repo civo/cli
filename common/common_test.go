@@ -32,3 +32,19 @@ func TestVersionCheck(t *testing.T) {
 		}
 	})
 }
+
+func TestCheckVersionUpdate(t *testing.T) {
+	t.Run("nil release or tag safety", func(t *testing.T) {
+		oldCli := VersionCli
+		defer func() { VersionCli = oldCli }()
+
+		VersionCli = "1.0.0"
+
+		// Ensure calling with nil handling doesn't panic
+		res, skip := VersionCheck(github.NewClient(nil))
+		if skip && res == nil {
+			// Should return cleanly without panic
+			CheckVersionUpdate()
+		}
+	})
+}
