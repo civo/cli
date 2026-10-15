@@ -14,6 +14,7 @@ var objectStoreCredentialSecretCmd = &cobra.Command{
 	Use:     "secret",
 	Short:   "Access the secret key for the Object Store by providing your access key.",
 	Example: "civo objectstore credential secret --access-key ACCESS_KEY",
+	Args:    cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -27,12 +28,7 @@ var objectStoreCredentialSecretCmd = &cobra.Command{
 			client.Region = common.RegionSet
 		}
 
-		var key string
-		if accessKey != "" {
-			key = accessKey
-		} else if args[0] != "" {
-			key = args[0]
-		}
+		key := resolveAccessKey(accessKey, args)
 
 		if key == "" {
 			utility.Error("You must provide an access key. See --help for more information.")
@@ -65,4 +61,17 @@ var objectStoreCredentialSecretCmd = &cobra.Command{
 			fmt.Printf("Your secret key is: %s\n", utility.Green(credential.SecretAccessKeyID))
 		}
 	},
+}
+
+// resolveAccessKey returns the access key to use for the command: the
+// --access-key flag takes precedence, otherwise the first positional
+// argument is used, if any.
+func resolveAccessKey(accessKey string, args []string) string {
+	if accessKey != "" {
+		return accessKey
+	}
+	if len(args) > 0 {
+		return args[0]
+	}
+	return ""
 }
