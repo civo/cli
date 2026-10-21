@@ -1,6 +1,6 @@
 go 1.26.4
 
-toolchain go1.26.9
+toolchain go1.26.10
 
 module github.com/civo/cli
 
