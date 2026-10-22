@@ -17,6 +17,23 @@ const (
 	resizeUnconfirmed = "unconfirmed" // the API gave no evidence either way
 )
 
+// Timings of `civo volume resize --wait`.
+const (
+	// resizeWaitGrace bounds how long the wait looks for evidence that the platform picked the
+	// request up at all. It is about pickup, not about how long the resize takes: once evidence is
+	// seen the wait runs to resizeWaitTimeout. The platform normally reports the request within a
+	// few seconds of admission.
+	resizeWaitGrace = time.Minute
+	// resizeWaitTimeout is the default bound on the whole wait (--wait-timeout). The platform bounds
+	// each phase of a resize at 15 minutes and reports Timeout when one stalls, so a healthy or
+	// failed resize settles well before this; it is a backstop for a platform that reports nothing.
+	resizeWaitTimeout  = 60 * time.Minute
+	resizeWaitInterval = 2 * time.Second
+	// resizeWaitMaxFindFailures is how many consecutive read errors are tolerated before the wait
+	// gives up: a transient 5xx among the hundreds of polls of a long wait must not end it.
+	resizeWaitMaxFindFailures = 5
+)
+
 // resizeWait follows one resize request to its outcome by polling the volume.
 type resizeWait struct {
 	// find reads the volume afresh.
@@ -50,19 +67,29 @@ func resizeInFlight(v *civogo.Volume) bool {
 }
 
 // resizeFromThisRequest reports whether v.Resize describes the request being followed rather than an
-// earlier resize: it is in flight, or it did not exist before the request, or it changed since.
+// earlier resize: it did not exist before the request, or it changed since.
+//
+// The API admits a second resize of an attached volume while one is still in flight (a detached
+// volume is refused with volume_not_resizable until it settles). The platform then cancels the
+// outstanding grow and starts on the new size. So a record that is in flight is not ours when the
+// baseline already carried it unchanged, and a cancelled record that supersedes a baseline in
+// flight is the earlier request's end, not this one's outcome: this request's own record follows.
 func (w resizeWait) resizeFromThisRequest(v *civogo.Volume) bool {
 	r := v.Resize
 	if r == nil {
 		return false
 	}
-	if !r.Settled() {
-		return true
-	}
 	if w.before == nil || w.before.Resize == nil {
 		return true
 	}
-	return !r.UpdatedAt.Equal(w.before.Resize.UpdatedAt)
+	b := w.before.Resize
+	if r.UpdatedAt.Equal(b.UpdatedAt) && r.State == b.State {
+		return false
+	}
+	if r.State == civogo.VolumeResizeCancelled && !b.Settled() {
+		return false
+	}
+	return true
 }
 
 // deliveredNow reports whether the volume delivers the requested size, and did not already do so
@@ -77,9 +104,13 @@ func (w resizeWait) deliveredNow(v *civogo.Volume) bool {
 }
 
 // evidence reports whether the volume shows that this request was picked up: the transitional
-// status, or a resize outcome that belongs to this request.
+// status, unless the volume already had it before the request, or a resize record that belongs to
+// this request.
 func (w resizeWait) evidence(v *civogo.Volume) bool {
-	return resizeInFlight(v) || w.resizeFromThisRequest(v)
+	if v.Status == volumeStatusResizing && (w.before == nil || w.before.Status != volumeStatusResizing) {
+		return true
+	}
+	return w.resizeFromThisRequest(v)
 }
 
 // run polls until the resize has an outcome. It returns an error only when the wait itself breaks

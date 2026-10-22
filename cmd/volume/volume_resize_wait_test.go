@@ -53,6 +53,9 @@ func TestResizeWait(t *testing.T) {
 	done := &civogo.VolumeResize{State: civogo.VolumeResizeCompleted, Reason: "Completed", UpdatedAt: at(40)}
 	failed := &civogo.VolumeResize{State: civogo.VolumeResizeFailed, Reason: "InsufficientStorage", Message: "pool is full", UpdatedAt: at(17)}
 	cancelled := &civogo.VolumeResize{State: civogo.VolumeResizeCancelled, UpdatedAt: at(17)}
+	// A resize that was still running when the request was made, and its cancel by that request.
+	earlierInProgress := &civogo.VolumeResize{State: civogo.VolumeResizeInProgress, Reason: "Expanding", UpdatedAt: at(-30)}
+	earlierCancelled := &civogo.VolumeResize{State: civogo.VolumeResizeCancelled, Reason: "Cancelled", UpdatedAt: at(3)}
 
 	cases := []struct {
 		name       string
@@ -121,12 +124,21 @@ func TestResizeWait(t *testing.T) {
 			wantState: resizeDelivered, quick: true,
 		},
 		{
-			name:      "no-op request on a volume that already delivers the size is judged by the resize outcome, not the size",
-			before:    &civogo.Volume{Status: "attached", SizeGigabytes: 60, DeliveredSizeGigabytes: 60, Resize: oldDone},
-			requested: 60,
+			name:      "a resize already in flight before the request is not attributed to it",
+			before:    &civogo.Volume{Status: "resizing", SizeGigabytes: 60, DeliveredSizeGigabytes: 20, Resize: earlierInProgress},
+			requested: 100,
+			reads:     []*civogo.Volume{{Status: "resizing", SizeGigabytes: 100, DeliveredSizeGigabytes: 20, Resize: earlierInProgress}},
+			wantState: resizeUnconfirmed, wantDetail: "the resize was not seen in progress within 1m0s",
+		},
+		{
+			name:      "a resize in flight before the request is cancelled by it; the cancel is not this request's outcome",
+			before:    &civogo.Volume{Status: "resizing", SizeGigabytes: 60, DeliveredSizeGigabytes: 20, Resize: earlierInProgress},
+			requested: 100,
 			reads: []*civogo.Volume{
-				{Status: "attached", SizeGigabytes: 60, DeliveredSizeGigabytes: 60, Resize: oldDone},
-				{Status: "attached", SizeGigabytes: 60, DeliveredSizeGigabytes: 60, Resize: done},
+				{Status: "resizing", SizeGigabytes: 100, DeliveredSizeGigabytes: 20, Resize: earlierInProgress},
+				{Status: "attached", SizeGigabytes: 100, DeliveredSizeGigabytes: 20, Resize: earlierCancelled},
+				{Status: "resizing", SizeGigabytes: 100, DeliveredSizeGigabytes: 20, Resize: inProgress},
+				{Status: "attached", SizeGigabytes: 100, DeliveredSizeGigabytes: 100, Resize: &civogo.VolumeResize{State: civogo.VolumeResizeCompleted, Reason: "Completed", UpdatedAt: at(50)}},
 			},
 			wantState: resizeDelivered, quick: true,
 		},

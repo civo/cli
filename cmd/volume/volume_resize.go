@@ -12,10 +12,12 @@ import (
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
 	"github.com/spf13/cobra"
+	"golang.org/x/term"
 )
 
 var newSizeGB int
 var waitVolumeResize bool
+var waitVolumeResizeTimeout time.Duration
 
 var volumeResizeCmd = &cobra.Command{
 	Use:     "resize",
@@ -31,7 +33,10 @@ The API accepts the request before the platform carries it out: without --wait t
 as soon as the new size is admitted. With --wait it follows the resize to its outcome and exits
 non-zero when the platform settles the resize without delivering the requested size. Exit 0 covers
 two outcomes, reported in the "outcome" field: "delivered", and "unconfirmed" when no evidence of
-the resize arrived within the grace window or the API does not report the delivered size.`,
+the resize arrived within the one minute grace window or the API does not report the delivered
+size. The wait gives up after --wait-timeout (60m by default) with a non-zero exit. With -o json or
+-o custom the outcome, its detail and the resize state are written for every outcome, including a
+failed one.`,
 	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
@@ -51,7 +56,9 @@ the resize arrived within the grace window or the API does not report the delive
 			os.Exit(1)
 		}
 
-		if newSizeGB < volume.SizeGigabytes {
+		// The API admits an equal size and writes nothing, so the platform never starts a resize
+		// and --wait would sit through the grace window for nothing: refuse it up front.
+		if newSizeGB <= volume.SizeGigabytes {
 			fmt.Printf("Sorry, the volume size specified (%s) must be larger than the volume's current size (%s)\n", utility.Red(strconv.Itoa(newSizeGB)), utility.Green(strconv.Itoa(volume.SizeGigabytes)))
 			os.Exit(1)
 		}
@@ -78,19 +85,16 @@ the resize arrived within the grace window or the API does not report the delive
 			return
 		}
 
-		s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-		s.Writer = os.Stderr
-		s.Prefix = fmt.Sprintf("Resizing volume %s to %d GB... ", volume.Name, newSizeGB)
-		s.Start()
+		stopSpinner := startResizeSpinner(fmt.Sprintf("Resizing volume %s to %d GB... ", volume.Name, newSizeGB))
 		wait := resizeWait{
 			find:      func() (*civogo.Volume, error) { return client.GetVolume(volume.ID) },
 			before:    volume,
 			requested: newSizeGB,
-			grace:     time.Minute, timeout: 60 * time.Minute, interval: 2 * time.Second, maxFindFailures: 5,
+			grace:     resizeWaitGrace, timeout: waitVolumeResizeTimeout, interval: resizeWaitInterval, maxFindFailures: resizeWaitMaxFindFailures,
 			sleep: time.Sleep, now: time.Now,
 		}
 		outcome, err := wait.run()
-		s.Stop()
+		stopSpinner()
 		if err != nil {
 			utility.Error("%s", err)
 			os.Exit(1)
@@ -112,11 +116,8 @@ the resize arrived within the grace window or the API does not report the delive
 				}
 			}
 		}
-		if outcome.state == resizeFailed {
-			utility.Error("The volume %s was not resized to %d GB: %s", volume.Name, newSizeGB, outcome.detail)
-			os.Exit(1)
-		}
-
+		// Structured output is written for every outcome, a failed one included, so a script
+		// reads why before the non-zero exit.
 		ow := utility.NewOutputWriterWithMap(result)
 		switch common.OutputFormat {
 		case "json":
@@ -124,12 +125,31 @@ the resize arrived within the grace window or the API does not report the delive
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			if outcome.state == resizeUnconfirmed {
+			switch outcome.state {
+			case resizeFailed:
+				utility.Error("The volume %s was not resized to %d GB: %s", volume.Name, newSizeGB, outcome.detail)
+			case resizeUnconfirmed:
 				fmt.Printf("The resize of the volume called %s with ID %s to %s GB was accepted, but could not be confirmed: %s\n", utility.Green(volume.Name), utility.Green(volume.ID), utility.Green(strconv.Itoa(newSizeGB)), outcome.detail)
 				fmt.Println("Check `civo volume ls` to see whether the new size has been delivered")
-				return
+			default:
+				fmt.Printf("The volume called %s with ID %s was resized to %s GB\n", utility.Green(volume.Name), utility.Green(volume.ID), utility.Green(strconv.Itoa(newSizeGB)))
 			}
-			fmt.Printf("The volume called %s with ID %s was resized to %s GB\n", utility.Green(volume.Name), utility.Green(volume.ID), utility.Green(strconv.Itoa(newSizeGB)))
+		}
+		if outcome.state == resizeFailed {
+			os.Exit(1)
 		}
 	},
+}
+
+// startResizeSpinner shows a spinner on stderr while the wait runs, only when stderr is a terminal:
+// in a pipe or a CI log the carriage-return frames are noise. It returns the function that stops it.
+func startResizeSpinner(prefix string) func() {
+	if !term.IsTerminal(int(os.Stderr.Fd())) {
+		return func() {}
+	}
+	s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+	s.Writer = os.Stderr
+	s.Prefix = prefix
+	s.Start()
+	return s.Stop
 }
