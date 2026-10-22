@@ -121,6 +121,67 @@ Warning: Are you sure you want to restore db postgres-demo from 20240131-095615F
 Restoring database postgres-demo from from backup 20240131-095615F
 ```
 
+## Point-in-time restore
+
+Besides restoring a backup, a PostgreSQL database can be restored in place to any moment inside its restore window. The window starts at the oldest full backup kept for the database and ends now; `civo database show` prints its start as "Restore Window From". Data written after the chosen moment is lost, so the command asks for confirmation.
+
+```bash
+❯ civo database show postgres-demo
+...
+Storage             : 120 GB (40 GB plan + 80 GB add-on)
+Restore Window From : 2026-10-21T00:00:00Z
+
+❯ civo database restore postgres-demo --name restore-before-cleanup --target-time 2026-10-21T10:00:00Z
+Warning: Are you sure you want to restore db postgres-demo in place to its state at 2026-10-21T10:00:00Z (data written after that moment is lost) (y/N) ? y
+Restoring database postgres-demo to its state at 2026-10-21T10:00:00Z. Data written after that moment is lost.
+```
+
+The time is RFC 3339; an offset such as `2026-10-21T12:00:00+02:00` is accepted and converted to UTC.
+
+## Fork a database
+
+A fork is a new, independent database built from the backups of an existing one. By default it reflects the source at its latest backup; `--target-time` forks the source as it was at that moment, within the same restore window as above. Size, node count and network default to the source's.
+
+```bash
+❯ civo database fork postgres-demo --name postgres-demo-copy --wait
+Database postgres-demo-copy has been forked from postgres-demo (its latest backup) in 4m12s
+To get the credentials, run : civo db credential postgres-demo-copy
+
+❯ civo database fork postgres-demo --name postgres-demo-yesterday --target-time 2026-10-21T10:00:00Z --size g3.db.medium --nodes 3
+Database postgres-demo-yesterday is being forked from postgres-demo (its state at 2026-10-21T10:00:00Z)
+```
+
+## Backup destinations
+
+Scheduled backups go to the Civo Object Store of the database's region unless a destination is given. `--destination-region` sends them to the Civo Object Store of another region, and the `--s3-*` flags send them to any S3-compatible bucket. Both work on `backup create` and `backup update` for the scheduled backup; manual backups always stay in the database's region.
+
+```bash
+❯ civo database backup create postgres-demo --name offsite --schedule "0 3 * * *" --destination-region FRA1
+❯ civo database backup create postgres-demo --name external --schedule "0 3 * * *" \
+    --s3-endpoint https://s3.example.com --s3-bucket my-backups --s3-region eu-1 \
+    --s3-access-key KEY --s3-secret-key SECRET --s3-path-prefix postgres-demo/
+```
+
+## Storage, extensions and parameters
+
+The storage of every node can be grown beyond the plan (never shrunk; the extra GB are billed as an add-on), PostgreSQL extensions can be enabled, and server parameters can be set. All three go through `civo database update`.
+
+```bash
+❯ civo database extension list
++----------+---------------------------+----------+------------------+
+| Name     | Description               | Versions | Requires Restart |
++----------+---------------------------+----------+------------------+
+| pg_cron  | Job scheduler for Postgres| 1.6      | Yes              |
+| postgis  | Geospatial types          | 3.4      | No               |
++----------+---------------------------+----------+------------------+
+
+❯ civo database update postgres-demo --storage 120
+❯ civo database update postgres-demo --extensions pg_cron,postgis
+❯ civo database update postgres-demo --parameter max_connections=200 --parameter shared_buffers=1GB
+```
+
+`--extensions` and `--parameter` replace the current set; pass `--extensions ""` to disable every extension. Extensions that require a restart trigger a brief rolling restart.
+
 ## MySQL Backup (Deprecated)
 
 ### Create
