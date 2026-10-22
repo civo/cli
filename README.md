@@ -2154,6 +2154,8 @@ $ civo volume ls
 +--------------------------------------+------------------------------------------+---------+----------+----------+-------+-------------+-----------+
 ```
 
+When the API reports it, the list also shows a `Delivered` column (the size the volume currently provides, which lags `Size` while a resize is in progress and stays put when one fails) and a `Resize` column (the state of the most recent resize and, when it did not complete, the platform's reason).
+
 #### Deleting Volumes
 
 To free up quota and therefore the amount to be billed to your account, you can delete a volume through `civo volume delete volume_id`. This deletion is immediate:
