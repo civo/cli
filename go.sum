@@ -34,6 +34,8 @@ github.com/civo/civogo v0.7.6-0.20261022105332-6b8c2a36fd53 h1:6YOXRzsl0i7/ZaLnY
 github.com/civo/civogo v0.7.6-0.20261022105332-6b8c2a36fd53/go.mod h1:3fBAnxW7p2kXV2WtNx5Ykuq+H2EDAz4CcNbW2OiSDFk=
 github.com/civo/civogo v0.7.6-0.20261022111738-ed3aef104180 h1:U31Wb2hdxr8lo8ZJ7mQ42ZD1RU918LwqMF+DN0IE3pM=
 github.com/civo/civogo v0.7.6-0.20261022111738-ed3aef104180/go.mod h1:3fBAnxW7p2kXV2WtNx5Ykuq+H2EDAz4CcNbW2OiSDFk=
+github.com/civo/civogo v0.7.6-0.20261022123034-e84a07eea94f h1:xyk9YNTR3NWAPaiNq0d+9k32lf6SGFegR4u7mDxNddk=
+github.com/civo/civogo v0.7.6-0.20261022123034-e84a07eea94f/go.mod h1:3fBAnxW7p2kXV2WtNx5Ykuq+H2EDAz4CcNbW2OiSDFk=
 github.com/clipperhouse/uax29/v2 v2.7.0 h1:+gs4oBZ2gPfVrKPthwbMzWZDaAFPGYK72F0NJv2v7Vk=
 github.com/clipperhouse/uax29/v2 v2.7.0/go.mod h1:EFJ2TJMRUaplDxHKj1qAEhCtQPW2tJSwu5BF98AuoVM=
 github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod h1:oOW0eioCTA6cOiMLiUPZOpcVxMig6NIQQ7OS05n1F4g=
