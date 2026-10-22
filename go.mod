@@ -46,7 +46,7 @@ require (
 	github.com/hooklift/assert v0.1.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.17.11 // indirect
+	github.com/klauspost/compress v1.18.7 // indirect
 	github.com/klauspost/pgzip v1.2.6 // indirect
 	github.com/kyokomi/emoji/v2 v2.2.13 // indirect
 	github.com/lucasb-eyer/go-colorful v1.4.0 // indirect
