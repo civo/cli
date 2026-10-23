@@ -32,3 +32,30 @@ func TestVersionCheck(t *testing.T) {
 		}
 	})
 }
+
+func TestOutputFormatFlag(t *testing.T) {
+	var format string
+	flag := NewOutputFormatFlag(&format, OutputFormatHuman)
+	if format != OutputFormatHuman {
+		t.Errorf("expected default %q, got %q", OutputFormatHuman, format)
+	}
+
+	for _, value := range OutputFormats {
+		if err := flag.Set(value); err != nil {
+			t.Errorf("expected %q to be accepted, got %v", value, err)
+		}
+		if format != value {
+			t.Errorf("expected format to be %q, got %q", value, format)
+		}
+	}
+
+	// Matching is case-sensitive, so "JSON" is rejected rather than silently printing human output
+	for _, value := range []string{"", "lefafa", "JSON", "yaml", "table"} {
+		if err := flag.Set(value); err == nil {
+			t.Errorf("expected %q to be rejected", value)
+		}
+		if format != OutputFormatCustom {
+			t.Errorf("rejected value %q changed format to %q", value, format)
+		}
+	}
+}
