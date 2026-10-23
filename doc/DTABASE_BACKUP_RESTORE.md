@@ -184,18 +184,52 @@ The storage of every node can be grown beyond the plan (never shrunk; the extra 
 
 ## Engine upgrades
 
-Databases on the same network share an engine release, which decides the PostgreSQL versions available to them. It is never upgraded behind your back: `civo database show` reports the current `Engine` and, when there is one, the `Upgrade Available` release, and `civo database upgrade` moves to it when you choose. Every database on the network is upgraded together and restarts once.
+Databases on the same network share an engine release, which decides the PostgreSQL versions available to them. It is never upgraded behind your back: `civo database show` reports the current `Engine` and, when there is one, the `Upgrade Available` release, and `civo database upgrade` moves to it when you choose. Every database on the network is upgraded together and restarts during the upgrade, possibly more than once as the engine steps through releases.
 
 ```bash
 ❯ civo database upgrade postgres-demo --dry-run
 Upgrading postgres-demo would move the engine from 2.7.0 to 2.9.0 and restart: analytics, postgres-demo
 
 ❯ civo database upgrade postgres-demo
-Warning: Are you sure you want to upgrade the engine from 2.7.0 to 2.9.0 for analytics, postgres-demo (each restarts once) (y/N) ? y
-Upgrading the engine from 2.7.0 to 2.9.0 for analytics, postgres-demo. Each database restarts once; follow progress with civo db show.
+Warning: Are you sure you want to upgrade the engine from 2.7.0 to 2.9.0 for analytics, postgres-demo (each restarts during the upgrade) (y/N) ? y
+Upgrading the engine from 2.7.0 to 2.9.0 for analytics, postgres-demo. Each database restarts during the upgrade; follow progress with civo db show.
 ```
 
 `--version` picks a specific release instead of the newest. A version that needs a newer engine than the network runs (for example PostgreSQL 18 on 2.7.0) is refused by `civo database create` until the network is upgraded.
+
+## PostgreSQL major version upgrades
+
+`civo database upgrade --postgres-version <major>` upgrades one database in place to a newer PostgreSQL major, keeping its data, endpoint and credentials. `civo database show` lists the majors it can move to as `Major Upgrades Available`; a target the network's engine cannot run needs an engine upgrade first.
+
+Before anything changes the API runs pre-flight checks: the database is ready, no other operation is in flight, every enabled extension exists for the target, and the data volume has room. `--dry-run` only runs them:
+
+```bash
+❯ civo database upgrade postgres-demo --postgres-version 18 --dry-run
++----------------------+--------+--------+
+| Check                | Result | Detail |
++----------------------+--------+--------+
+| database_ready       | passed |        |
+| storage_headroom     | passed |        |
+| extensions_available | passed |        |
++----------------------+--------+--------+
+All checks passed: postgres-demo can be upgraded from PostgreSQL 17 to 18.
+```
+
+A failed check is printed the same way and nothing is upgraded. When every check passes the CLI explains what happens and asks for confirmation:
+
+```bash
+❯ civo database upgrade postgres-demo --postgres-version 18
+Upgrading from PostgreSQL 17 to 18:
+  - a backup named pre-upgrade-pg18 is taken first and kept
+  - the database stops for a few minutes while its data is upgraded
+  - replicas re-sync afterwards; until then there is no high availability or read-only endpoint
+  - point-in-time restore starts again from the first backup on PostgreSQL 18
+  - there is no downgrade; to go back, restore pre-upgrade-pg18 into a new database
+Warning: Are you sure you want to upgrade postgres-demo from PostgreSQL 17 to 18 (y/N) ? y
+Upgrading postgres-demo from PostgreSQL 17 to 18. A backup named pre-upgrade-pg18 is taken first; follow progress with civo db show postgres-demo.
+```
+
+`civo database show` reports the progress as `Version Upgrade`: `BackingUp`, `Upgrading`, `Finalizing`, then `Completed` or `Failed` with a message.
 
 ## MySQL Backup (Deprecated)
 
