@@ -201,17 +201,22 @@ Upgrading the engine from 2.7.0 to 2.9.0 for analytics, postgres-demo. Each data
 
 `civo database upgrade --postgres-version <major>` upgrades one database in place to a newer PostgreSQL major, keeping its data, endpoint and credentials. `civo database show` lists the majors it can move to as `Major Upgrades Available`; a target the network's engine cannot run needs an engine upgrade first.
 
-Before anything changes the API runs pre-flight checks: the database is ready, no other operation is in flight, every enabled extension exists for the target, and the data volume has room. `--dry-run` only runs them:
+Before anything changes the API runs pre-flight checks: the database is PostgreSQL, the target is a newer major, the database is not on the legacy PostgreSQL 14 platform, its engine can run the target, the region offers the target, the database is ready, no other upgrade is in flight, and every enabled extension exists for the target. `--dry-run` only runs them:
 
 ```bash
 ❯ civo database upgrade postgres-demo --postgres-version 18 --dry-run
-+----------------------+--------+--------+
-| Check                | Result | Detail |
-+----------------------+--------+--------+
-| database_ready       | passed |        |
-| storage_headroom     | passed |        |
-| extensions_available | passed |        |
-+----------------------+--------+--------+
++------------------------+--------+--------+
+| Check                  | Result | Detail |
++------------------------+--------+--------+
+| postgresql             | passed |        |
+| target_newer           | passed |        |
+| not_legacy             | passed |        |
+| engine_supports_target | passed |        |
+| target_offered         | passed |        |
+| database_ready         | passed |        |
+| no_operation_in_flight | passed |        |
+| extensions_available   | passed |        |
++------------------------+--------+--------+
 All checks passed: postgres-demo can be upgraded from PostgreSQL 17 to 18.
 ```
 

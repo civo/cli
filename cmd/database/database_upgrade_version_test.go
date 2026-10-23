@@ -10,11 +10,11 @@ import (
 func TestFailedVersionUpgradeChecks(t *testing.T) {
 	checks := []civogo.DatabaseVersionUpgradeCheck{
 		{Name: "database_ready", Passed: true},
-		{Name: "storage_headroom", Passed: false, Message: "grow the storage first"},
+		{Name: "engine_supports_target", Passed: false, Message: "upgrade the database engine first"},
 		{Name: "extensions_available", Passed: false},
 	}
 	got := failedVersionUpgradeChecks(checks)
-	if len(got) != 2 || got[0].Name != "storage_headroom" || got[1].Name != "extensions_available" {
+	if len(got) != 2 || got[0].Name != "engine_supports_target" || got[1].Name != "extensions_available" {
 		t.Errorf("unexpected failed checks %+v", got)
 	}
 	if got := failedVersionUpgradeChecks(nil); len(got) != 0 {
