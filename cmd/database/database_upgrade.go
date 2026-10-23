@@ -15,16 +15,23 @@ import (
 var upgradeTargetVersion string
 var upgradeDryRun bool
 var upgradePostgresVersion string
+var upgradeMinor bool
 
 var dbUpgradeCmd = &cobra.Command{
 	Use:   "upgrade",
-	Short: "Upgrade a database's engine release or its PostgreSQL major version",
-	Long: `Without --postgres-version, moves a PostgreSQL database to a newer engine
-release, which brings newer PostgreSQL versions and fixes. Databases on the same
-network share the engine, so they are upgraded together and each restarts while
-it moves.
+	Short: "Upgrade a database's engine release, PostgreSQL minor or PostgreSQL major version",
+	Long: `There are three kinds of upgrade, each run only when you ask for it.
 
-With --postgres-version, upgrades this one database in place to a newer
+Engine (no flag): moves a PostgreSQL database to a newer engine release, which
+brings newer PostgreSQL versions and fixes. Databases on the same network share
+the engine, so they are upgraded together and each restarts while it moves.
+
+Minor (--minor): moves this one database to the newest PostgreSQL minor of its
+major version, e.g. 17.9 to 17.10. The database restarts, replicas first and
+then a switchover; its data, endpoint and point-in-time restore are unaffected.
+There is no downgrade.
+
+Major (--postgres-version): upgrades this one database in place to a newer
 PostgreSQL major version, keeping its data, endpoint and credentials. A backup
 named pre-upgrade-pgN is taken first and kept, the database stops for a few
 minutes while its data is upgraded, its replicas re-sync afterwards, and
@@ -32,11 +39,13 @@ point-in-time restore starts again from the first backup on the new version.
 There is no downgrade.
 
 Nothing is upgraded until you run this command. "civo db show" reports the
-engine release, the engine upgrade available and the PostgreSQL majors the
-database can be upgraded to.`,
+engine release, the engine upgrade available, the PostgreSQL version, the newer
+minor available and the PostgreSQL majors the database can be upgraded to.`,
 	Example: `civo db upgrade <DATABASE-NAME/ID> --dry-run
 civo db upgrade <DATABASE-NAME/ID>
 civo db upgrade <DATABASE-NAME/ID> --version 2.9.0 --yes
+civo db upgrade <DATABASE-NAME/ID> --minor --dry-run
+civo db upgrade <DATABASE-NAME/ID> --minor
 civo db upgrade <DATABASE-NAME/ID> --postgres-version 18 --dry-run
 civo db upgrade <DATABASE-NAME/ID> --postgres-version 18`,
 	Args: cobra.ExactArgs(1),
@@ -55,6 +64,16 @@ civo db upgrade <DATABASE-NAME/ID> --postgres-version 18`,
 		if err != nil {
 			utility.Error("Database %s", err)
 			os.Exit(1)
+		}
+
+		if err := checkUpgradeFlags(upgradeTargetVersion, upgradePostgresVersion, upgradeMinor); err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
+		if upgradeMinor {
+			runMinorVersionUpgrade(client, db)
+			return
 		}
 
 		if upgradePostgresVersion != "" {

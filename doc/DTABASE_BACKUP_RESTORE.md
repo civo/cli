@@ -182,6 +182,18 @@ The storage of every node can be grown beyond the plan (never shrunk; the extra 
 
 `--extensions` and `--parameter` replace the current set; pass `--extensions ""` to disable every extension. Extensions that require a restart trigger a brief rolling restart.
 
+## Kinds of upgrade
+
+`civo database upgrade` runs three kinds of upgrade, each only when you ask for it:
+
+| Kind | Command | What changes | Scope |
+|------|---------|--------------|-------|
+| Engine | `civo database upgrade <db>` | the engine release, and with it the PostgreSQL images | every database on the network |
+| Minor | `civo database upgrade <db> --minor` | the PostgreSQL minor, e.g. 17.9 to 17.10 | this database |
+| Major | `civo database upgrade <db> --postgres-version 18` | the PostgreSQL major, e.g. 17 to 18 | this database |
+
+`civo database show` reports `Engine`, `Upgrade Available`, `PostgreSQL Version`, `Minor Upgrade Available` and `Major Upgrades Available`.
+
 ## Engine upgrades
 
 Databases on the same network share an engine release, which decides the PostgreSQL versions available to them. It is never upgraded behind your back: `civo database show` reports the current `Engine` and, when there is one, the `Upgrade Available` release, and `civo database upgrade` moves to it when you choose. Every database on the network is upgraded together and restarts during the upgrade, possibly more than once as the engine steps through releases.
@@ -196,6 +208,25 @@ Upgrading the engine from 2.7.0 to 2.9.0 for analytics, postgres-demo. Each data
 ```
 
 `--version` picks a specific release instead of the newest. A version that needs a newer engine than the network runs (for example PostgreSQL 18 on 2.7.0) is refused by `civo database create` until the network is upgraded.
+
+## PostgreSQL minor version upgrades
+
+New PostgreSQL minor releases carry bug and security fixes. `civo database show` reports the database's `PostgreSQL Version` and, when a newer minor of the same major is available, `Minor Upgrade Available`. `civo database upgrade --minor` moves the database to it. The database restarts, replicas first and then a switchover to an upgraded replica, so a database with replicas only sees a short interruption. Its data, endpoint and point-in-time restore are unaffected. There is no downgrade.
+
+```bash
+❯ civo database upgrade postgres-demo --minor --dry-run
+postgres-demo can be upgraded from PostgreSQL 17.9 to 17.10.
+
+❯ civo database upgrade postgres-demo --minor
+Upgrading from PostgreSQL 17.9 to 17.10:
+  - the database restarts: replicas first, then a switchover to an upgraded replica
+  - data, endpoint and point-in-time restore are unaffected
+  - there is no downgrade
+Warning: Are you sure you want to upgrade postgres-demo from PostgreSQL 17.9 to 17.10 (y/N) ? y
+Upgrading postgres-demo from PostgreSQL 17.9 to 17.10. The database restarts during the upgrade; follow progress with civo db show postgres-demo.
+```
+
+When the database already runs the newest minor, is not ready, or another upgrade is in progress, the command prints the reason and changes nothing. `--minor` cannot be combined with `--version` or `--postgres-version`.
 
 ## PostgreSQL major version upgrades
 

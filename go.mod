@@ -8,7 +8,7 @@ require (
 	github.com/MichaelMure/go-term-markdown v0.1.4
 	github.com/adhocore/gronx v1.19.5
 	github.com/briandowns/spinner v1.23.2
-	github.com/civo/civogo v0.7.6-0.20261023154522-241ace72bfdb
+	github.com/civo/civogo v0.7.6-0.20261023164653-a676ef0d07d4
 	github.com/google/go-github/v57 v57.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gookit/color v1.5.4

@@ -119,6 +119,12 @@ func appendDatabaseDetails(ow *utility.OutputWriter, db *civogo.Database) {
 	if db.UpgradeAvailableTo != "" {
 		ow.AppendDataWithLabel("upgrade_available_to", db.UpgradeAvailableTo, "Upgrade Available")
 	}
+	if db.PostgresVersion != "" {
+		ow.AppendDataWithLabel("postgres_version", db.PostgresVersion, "PostgreSQL Version")
+	}
+	if db.MinorUpgradeAvailableTo != "" {
+		ow.AppendDataWithLabel("minor_upgrade_available_to", db.MinorUpgradeAvailableTo, "Minor Upgrade Available")
+	}
 	if len(db.MajorUpgradesAvailable) > 0 {
 		ow.AppendDataWithLabel("major_upgrades_available", strings.Join(db.MajorUpgradesAvailable, ", "), "Major Upgrades Available")
 	}
