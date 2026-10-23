@@ -63,6 +63,7 @@ func init() {
 	DBCmd.AddCommand(dbVersionListCmd)
 	DBCmd.AddCommand(dbForkCmd)
 	DBCmd.AddCommand(dbExtensionCmd)
+	DBCmd.AddCommand(dbUpgradeCmd)
 
 	dbCredentialCmd.Flags().BoolVarP(&connectionString, "connection-string", "c", false, "show the connection string for the database")
 
@@ -99,4 +100,7 @@ func init() {
 	dbForkCmd.Flags().StringVarP(&extensions, "extensions", "", "", "comma separated list of PostgreSQL extensions to enable on the new database")
 	dbForkCmd.Flags().BoolVarP(&forkWait, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the new database to be Ready")
 	_ = dbForkCmd.MarkFlagRequired("name")
+
+	dbUpgradeCmd.Flags().StringVarP(&upgradeTargetVersion, "version", "v", "", "engine release to upgrade to (defaults to the newest available)")
+	dbUpgradeCmd.Flags().BoolVar(&upgradeDryRun, "dry-run", false, "only show which databases would be upgraded and restarted")
 }

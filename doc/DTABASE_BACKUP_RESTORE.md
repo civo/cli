@@ -182,6 +182,21 @@ The storage of every node can be grown beyond the plan (never shrunk; the extra 
 
 `--extensions` and `--parameter` replace the current set; pass `--extensions ""` to disable every extension. Extensions that require a restart trigger a brief rolling restart.
 
+## Engine upgrades
+
+Databases on the same network share an engine release, which decides the PostgreSQL versions available to them. It is never upgraded behind your back: `civo database show` reports the current `Engine` and, when there is one, the `Upgrade Available` release, and `civo database upgrade` moves to it when you choose. Every database on the network is upgraded together and restarts once.
+
+```bash
+❯ civo database upgrade postgres-demo --dry-run
+Upgrading postgres-demo would move the engine from 2.7.0 to 2.9.0 and restart: analytics, postgres-demo
+
+❯ civo database upgrade postgres-demo
+Warning: Are you sure you want to upgrade the engine from 2.7.0 to 2.9.0 for analytics, postgres-demo (each restarts once) (y/N) ? y
+Upgrading the engine from 2.7.0 to 2.9.0 for analytics, postgres-demo. Each database restarts once; follow progress with civo db show.
+```
+
+`--version` picks a specific release instead of the newest. A version that needs a newer engine than the network runs (for example PostgreSQL 18 on 2.7.0) is refused by `civo database create` until the network is upgraded.
+
 ## MySQL Backup (Deprecated)
 
 ### Create

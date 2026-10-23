@@ -90,7 +90,13 @@ var dbCreateCmd = &cobra.Command{
 			}
 		}
 
-		dbVersions, err := client.ListDBVersions()
+		// The versions a new database can use depend on its network: databases
+		// on a network share an engine release. Fall back to the region list
+		// where the scoped endpoint is not served.
+		dbVersions, err := client.ListDatabaseVersionsForNetwork(network.ID)
+		if err != nil || len(dbVersions) == 0 {
+			dbVersions, err = client.ListDBVersions()
+		}
 		if err != nil {
 			utility.Error("Failed to fetch database versions: %s", err)
 			os.Exit(1)
@@ -147,7 +153,7 @@ var dbCreateCmd = &cobra.Command{
 				}
 			}
 			if !versionValid {
-				utility.Error("The provided software version is not valid. Please check the available versions for the specified software.")
+				utility.Error("The provided software version is not available on this network. Check `civo db versions` for the region, and upgrade the databases on this network with `civo db upgrade` if it needs a newer engine.")
 				os.Exit(1)
 			}
 		}

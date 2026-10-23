@@ -113,4 +113,10 @@ func appendDatabaseDetails(ow *utility.OutputWriter, db *civogo.Database) {
 	if db.EarliestRestoreTime != nil || common.OutputFormat == "human" {
 		ow.AppendDataWithLabel("earliest_restore_time", formatRestoreWindow(db.EarliestRestoreTime), "Restore Window From")
 	}
+	if db.EngineVersion != "" {
+		ow.AppendDataWithLabel("engine_version", db.EngineVersion, "Engine")
+	}
+	if db.UpgradeAvailableTo != "" {
+		ow.AppendDataWithLabel("upgrade_available_to", db.UpgradeAvailableTo, "Upgrade Available")
+	}
 }
