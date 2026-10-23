@@ -30,8 +30,14 @@ var dbBackupUpdateCmd = &cobra.Command{
 			client.Region = common.RegionSet
 		}
 
-		if schedule == "" && name == "" {
-			utility.Error("Schedule, name  must be specified")
+		destination, err := backupDestinationFromFlags()
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
+		if schedule == "" && name == "" && destination == nil {
+			utility.Error("Schedule, name or a destination must be specified")
 			os.Exit(1)
 		}
 
@@ -52,7 +58,22 @@ var dbBackupUpdateCmd = &cobra.Command{
 			backupUpdateConfig.Name = name
 		}
 
-		bk, err := client.UpdateDatabaseBackup(db.ID, &backupUpdateConfig)
+		var bk *civogo.DatabaseBackup
+		if destination != nil {
+			// Destinations exist on the v3alpha1 API only. Only the flags that
+			// were given are sent: an explicit empty name or schedule would
+			// clear them on the server.
+			v3 := &civogo.UpdateDatabaseBackupV3alpha1Request{Region: client.Region, Destination: destination}
+			if name != "" {
+				v3.Name = &name
+			}
+			if schedule != "" {
+				v3.Schedule = &schedule
+			}
+			bk, err = client.UpdateDatabaseBackupV3alpha1(db.ID, v3)
+		} else {
+			bk, err = client.UpdateDatabaseBackup(db.ID, &backupUpdateConfig)
+		}
 		if err != nil {
 			utility.Error("Error creating database %s", err)
 			os.Exit(1)

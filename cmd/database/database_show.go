@@ -3,9 +3,11 @@ package database
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 
+	"github.com/civo/civogo"
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -66,6 +68,13 @@ var dbShowCmd = &cobra.Command{
 			ow.AppendDataWithLabel("network_id", db.NetworkID, "Network ID")
 		}
 
+		// The v3alpha1 API adds storage, the read-only endpoint, extensions,
+		// parameters and the restore window. Older regions may not serve it
+		// yet, so its absence only hides those rows.
+		if details, err := client.GetDatabaseV3alpha1(db.ID); err == nil {
+			appendDatabaseDetails(ow, details)
+		}
+
 		switch common.OutputFormat {
 		case "json":
 			ow.WriteMultipleObjectsJSON(common.PrettySet)
@@ -78,4 +87,36 @@ var dbShowCmd = &cobra.Command{
 			showDatabaseDeprecationWarnings(*db)
 		}
 	},
+}
+
+// appendDatabaseDetails adds the rows only the v3alpha1 API reports.
+func appendDatabaseDetails(ow *utility.OutputWriter, db *civogo.Database) {
+	if storage := formatDatabaseStorage(db.StorageGB, db.BaseStorageGB); storage != "" {
+		ow.AppendDataWithLabel("storage", storage, "Storage")
+	}
+	if db.ReadEndpoint != nil {
+		ow.AppendDataWithLabel("read_only_host", db.ReadEndpoint.Host, "Read-only Host")
+		ow.AppendDataWithLabel("read_only_port", strconv.Itoa(db.ReadEndpoint.Port), "Read-only Port")
+		if db.ReadEndpoint.DNSEntry != "" {
+			ow.AppendDataWithLabel("read_only_dns_entry", db.ReadEndpoint.DNSEntry, "Read-only DNS")
+		}
+	} else if db.Nodes < 3 && common.OutputFormat == "human" {
+		ow.AppendDataWithLabel("read_only_host", "scale to 3 nodes to get a read-only endpoint", "Read-only Host")
+	}
+	ow.AppendDataWithLabel("extensions", strings.Join(db.Extensions, ", "), "Extensions")
+	params := make([]string, 0, len(db.DatabaseParameters))
+	for k, v := range db.DatabaseParameters {
+		params = append(params, k+"="+v)
+	}
+	sort.Strings(params)
+	ow.AppendDataWithLabel("parameters", strings.Join(params, ", "), "Parameters")
+	if db.EarliestRestoreTime != nil || common.OutputFormat == "human" {
+		ow.AppendDataWithLabel("earliest_restore_time", formatRestoreWindow(db.EarliestRestoreTime), "Restore Window From")
+	}
+	if db.EngineVersion != "" {
+		ow.AppendDataWithLabel("engine_version", db.EngineVersion, "Engine")
+	}
+	if db.UpgradeAvailableTo != "" {
+		ow.AppendDataWithLabel("upgrade_available_to", db.UpgradeAvailableTo, "Upgrade Available")
+	}
 }
