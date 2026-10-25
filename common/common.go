@@ -3,6 +3,8 @@ package common
 import (
 	"context"
 	"fmt"
+	"slices"
+	"strings"
 
 	"github.com/google/go-github/v57/github"
 	"github.com/savioxavier/termlink"
@@ -35,6 +37,39 @@ const (
 	// OutputFormatCustom for custom output
 	OutputFormatCustom = "custom"
 )
+
+// OutputFormats lists the values accepted by the --output flag
+var OutputFormats = []string{OutputFormatJSON, OutputFormatHuman, OutputFormatCustom}
+
+// OutputFormatFlag is a flag value that only accepts one of OutputFormats,
+// so an unsupported format fails while the flags are parsed
+type OutputFormatFlag struct {
+	target *string
+}
+
+// NewOutputFormatFlag returns an OutputFormatFlag that stores the chosen format in target, starting at defaultFormat
+func NewOutputFormatFlag(target *string, defaultFormat string) *OutputFormatFlag {
+	*target = defaultFormat
+	return &OutputFormatFlag{target: target}
+}
+
+func (f *OutputFormatFlag) String() string {
+	return *f.target
+}
+
+// Set stores value if it is a supported output format
+func (f *OutputFormatFlag) Set(value string) error {
+	if !slices.Contains(OutputFormats, value) {
+		return fmt.Errorf("must be one of %s", strings.Join(OutputFormats, ", "))
+	}
+	*f.target = value
+	return nil
+}
+
+// Type is shown next to the flag name in the help output
+func (f *OutputFormatFlag) Type() string {
+	return "string"
+}
 
 // GithubClient Create a Github client
 func GithubClient() *github.Client {
