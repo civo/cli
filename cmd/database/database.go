@@ -97,7 +97,7 @@ func init() {
 	dbForkCmd.Flags().StringVarP(&forkNetworkID, "network", "", "", "network of the new database (defaults to the source's)")
 	dbForkCmd.Flags().StringVarP(&forkFirewallID, "firewall", "", "", "firewall of the new database")
 	dbForkCmd.Flags().IntVarP(&storageGB, "storage", "", 0, "storage of every node of the new database in GB")
-	dbForkCmd.Flags().StringVarP(&extensions, "extensions", "", "", "comma separated list of PostgreSQL extensions to enable on the new database")
+	dbForkCmd.Flags().StringVarP(&extensions, "extensions", "", "", "comma separated list of PostgreSQL extensions to enable on the new database, replacing the source's (defaults to the source's)")
 	dbForkCmd.Flags().BoolVarP(&forkWait, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the new database to be Ready")
 	_ = dbForkCmd.MarkFlagRequired("name")
 

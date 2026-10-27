@@ -140,7 +140,9 @@ The time is RFC 3339; an offset such as `2026-10-21T12:00:00+02:00` is accepted 
 
 ## Fork a database
 
-A fork is a new, independent database built from the backups of an existing one. By default it reflects the source at its latest backup; `--target-time` forks the source as it was at that moment, within the same restore window as above. Size, node count and network default to the source's.
+A fork is a new, independent database built from the backups of an existing one. By default it reflects the source at its latest backup; `--target-time` forks the source as it was at that moment, within the same restore window as above. Size, node count, network and extensions default to the source's.
+
+`--extensions` replaces the source's extensions with the listed ones. An empty `--extensions` still keeps the source's, so a fork cannot be created without them: to drop some, run `civo database update <NEW-NAME> --extensions ...` once the fork is ready (an empty value there disables them all).
 
 ```bash
 ❯ civo database fork postgres-demo --name postgres-demo-copy --wait
