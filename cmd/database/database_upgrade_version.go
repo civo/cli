@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -10,44 +11,76 @@ import (
 	"github.com/civo/cli/utility"
 )
 
+// errVersionUpgradeChecksFailed reports failed pre-flight checks, which are
+// already printed in full.
+var errVersionUpgradeChecksFailed = errors.New("pre-flight checks failed")
+
 // runMajorVersionUpgrade upgrades one PostgreSQL database in place to the
-// major given with --postgres-version. The pre-flight checks always run
-// first, so a failing check is shown in full before anything changes.
+// major given with --postgres-version and exits non-zero when it does not.
 func runMajorVersionUpgrade(client *civogo.Client, db *civogo.Database) {
-	target := strings.TrimSpace(upgradePostgresVersion)
-	plan, err := client.UpgradeDatabaseVersion(db.ID, &civogo.UpgradeDatabaseVersionRequest{TargetVersion: target, ValidateOnly: true})
+	err := majorVersionUpgrade(client, db, upgradePostgresVersion, upgradeDryRun, confirmMajorVersionUpgrade)
+	if err == nil {
+		return
+	}
+	if !errors.Is(err, errVersionUpgradeChecksFailed) {
+		utility.Error("%s", err)
+	}
+	os.Exit(1)
+}
+
+// majorVersionUpgrade runs the pre-flight checks first, so a failing check is
+// shown in full before anything changes. The real request is only sent when
+// every check passes, it is not a dry run and confirm agrees, and it asks for
+// the major the checks were run against.
+func majorVersionUpgrade(client *civogo.Client, db *civogo.Database, target string, dryRun bool,
+	confirm func(db *civogo.Database, plan *civogo.UpgradeDatabaseVersionResponse) bool) error {
+	plan, err := client.UpgradeDatabaseVersion(db.ID, &civogo.UpgradeDatabaseVersionRequest{TargetVersion: strings.TrimSpace(target), ValidateOnly: true})
 	if err != nil {
-		utility.Error("Failed to check the upgrade: %s", err)
-		os.Exit(1)
+		return fmt.Errorf("failed to check the upgrade: %w", err)
 	}
 
 	failed := failedVersionUpgradeChecks(plan.Checks)
-	if upgradeDryRun || len(failed) > 0 {
+	if dryRun || len(failed) > 0 {
 		writeVersionUpgradeChecks(plan.Checks)
 		if common.OutputFormat == "human" {
 			fmt.Println(versionUpgradeVerdict(db.Name, plan))
 		}
-		if len(failed) > 0 && !upgradeDryRun {
-			os.Exit(1)
+		if len(failed) > 0 {
+			return errVersionUpgradeChecksFailed
 		}
-		return
+		return nil
 	}
 
-	if !common.DefaultYes {
-		fmt.Println(majorVersionUpgradeWarning(plan.FromVersion, plan.ToVersion, preUpgradeBackupName(plan)))
-		msg := fmt.Sprintf("upgrade %s from PostgreSQL %s to %s", utility.Green(db.Name), utility.Green(plan.FromVersion), utility.Green(plan.ToVersion))
-		if err := utility.AskForConfirm(msg); err != nil {
-			fmt.Println("Aborted")
-			return
-		}
+	if !confirm(db, plan) {
+		fmt.Println("Aborted")
+		return nil
 	}
 
 	result, err := client.UpgradeDatabaseVersion(db.ID, &civogo.UpgradeDatabaseVersionRequest{TargetVersion: plan.ToVersion})
 	if err != nil {
-		utility.Error("Failed to upgrade the database: %s", err)
-		os.Exit(1)
+		return fmt.Errorf("failed to upgrade the database: %w", err)
 	}
+	writeVersionUpgrade(db, result)
+	return nil
+}
 
+// confirmMajorVersionUpgrade explains what the upgrade does and asks before
+// it starts, unless --yes was given. The explanation goes to stderr for
+// json and custom output so stdout stays machine-readable.
+func confirmMajorVersionUpgrade(db *civogo.Database, plan *civogo.UpgradeDatabaseVersionResponse) bool {
+	if common.DefaultYes {
+		return true
+	}
+	w := os.Stdout
+	if common.OutputFormat != "human" {
+		w = os.Stderr
+	}
+	fmt.Fprintln(w, majorVersionUpgradeWarning(plan.FromVersion, plan.ToVersion))
+	msg := fmt.Sprintf("upgrade %s from PostgreSQL %s to %s", utility.Green(db.Name), utility.Green(plan.FromVersion), utility.Green(plan.ToVersion))
+	return utility.AskForConfirm(msg) == nil
+}
+
+func writeVersionUpgrade(db *civogo.Database, result *civogo.UpgradeDatabaseVersionResponse) {
 	ow := utility.NewOutputWriterWithMap(map[string]string{
 		"id":           db.ID,
 		"name":         db.Name,
@@ -62,9 +95,24 @@ func runMajorVersionUpgrade(client *civogo.Client, db *civogo.Database) {
 	case "custom":
 		ow.WriteCustomOutput(common.OutputFields)
 	default:
-		fmt.Printf("Upgrading %s from PostgreSQL %s to %s. A backup named %s is taken first; follow progress with civo db show %s.\n",
-			utility.Green(db.Name), utility.Green(result.FromVersion), utility.Green(result.ToVersion), utility.Green(preUpgradeBackupName(result)), db.Name)
+		fmt.Println(versionUpgradeSummary(db.Name, result))
 	}
+}
+
+// versionUpgradeSummary is the human output once the upgrade was requested.
+// The backup name is the one the API reports: it can carry a suffix when an
+// earlier attempt kept its backup, so the CLI never guesses it.
+func versionUpgradeSummary(name string, r *civogo.UpgradeDatabaseVersionResponse) string {
+	if !r.Started {
+		return fmt.Sprintf("The upgrade of %s from PostgreSQL %s to %s did not start; check civo db show %s.",
+			utility.Green(name), utility.Green(r.FromVersion), utility.Green(r.ToVersion), name)
+	}
+	backup := "A backup is taken first"
+	if r.BackupName != "" {
+		backup = fmt.Sprintf("A backup named %s is taken first", utility.Green(r.BackupName))
+	}
+	return fmt.Sprintf("Upgrading %s from PostgreSQL %s to %s. %s; follow progress with civo db show %s.",
+		utility.Green(name), utility.Green(r.FromVersion), utility.Green(r.ToVersion), backup, name)
 }
 
 // writeVersionUpgradeChecks prints every pre-flight check.
@@ -116,25 +164,16 @@ func versionUpgradeVerdict(name string, plan *civogo.UpgradeDatabaseVersionRespo
 	}
 }
 
-// preUpgradeBackupName is the backup the upgrade takes first: the name the
-// API reports, or the name it uses when it reports none yet.
-func preUpgradeBackupName(r *civogo.UpgradeDatabaseVersionResponse) string {
-	if r.BackupName != "" {
-		return r.BackupName
-	}
-	return "pre-upgrade-pg" + r.ToVersion
-}
-
 // majorVersionUpgradeWarning spells out what the upgrade does before the
 // confirmation prompt.
-func majorVersionUpgradeWarning(from, to, backup string) string {
+func majorVersionUpgradeWarning(from, to string) string {
 	return strings.Join([]string{
 		fmt.Sprintf("Upgrading from PostgreSQL %s to %s:", from, to),
-		fmt.Sprintf("  - a backup named %s is taken first and kept", backup),
+		"  - a backup is taken first and kept; its name is shown once the upgrade starts",
 		"  - the database stops for a few minutes while its data is upgraded",
 		"  - replicas re-sync afterwards; until then there is no high availability or read-only endpoint",
 		fmt.Sprintf("  - point-in-time restore starts again from the first backup on PostgreSQL %s", to),
-		fmt.Sprintf("  - there is no downgrade; to go back, restore %s into a new database", backup),
+		"  - there is no downgrade; to go back, restore that backup into a new database",
 	}, "\n")
 }
 

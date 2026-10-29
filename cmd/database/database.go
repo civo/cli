@@ -102,6 +102,7 @@ func init() {
 	_ = dbForkCmd.MarkFlagRequired("name")
 
 	dbUpgradeCmd.Flags().StringVarP(&upgradeTargetVersion, "version", "v", "", "engine release to upgrade to (defaults to the one civo db show reports as Upgrade Available)")
-	dbUpgradeCmd.Flags().BoolVar(&upgradeDryRun, "dry-run", false, "only show what would be upgraded: the databases that restart, or the major upgrade's pre-flight checks")
+	dbUpgradeCmd.Flags().BoolVar(&upgradeDryRun, "dry-run", false, "only show what would be upgraded: the databases that restart, or the major upgrade's pre-flight checks (exits non-zero when a check fails)")
 	dbUpgradeCmd.Flags().StringVar(&upgradePostgresVersion, "postgres-version", "", "upgrade the database in place to this PostgreSQL major version, e.g. 18")
+	dbUpgradeCmd.MarkFlagsMutuallyExclusive("version", "postgres-version")
 }

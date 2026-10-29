@@ -26,9 +26,9 @@ it moves.
 
 With --postgres-version, upgrades this one database in place to a newer
 PostgreSQL major version, keeping its data, endpoint and credentials. A backup
-named pre-upgrade-pgN is taken first and kept, the database stops for a few
-minutes while its data is upgraded, its replicas re-sync afterwards, and
-point-in-time restore starts again from the first backup on the new version.
+is taken first and kept, the database stops for a few minutes while its data
+is upgraded, its replicas re-sync afterwards, and point-in-time restore starts
+again from the first backup on the new version.
 There is no downgrade.
 
 Nothing is upgraded until you run this command. "civo db show" reports the
@@ -58,10 +58,6 @@ civo db upgrade <DATABASE-NAME/ID> --postgres-version 18`,
 		}
 
 		if upgradePostgresVersion != "" {
-			if upgradeTargetVersion != "" {
-				utility.Error("--version picks an engine release and --postgres-version a PostgreSQL major; use one at a time")
-				os.Exit(1)
-			}
 			runMajorVersionUpgrade(client, db)
 			return
 		}

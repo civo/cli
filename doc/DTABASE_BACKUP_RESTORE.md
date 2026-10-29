@@ -203,7 +203,7 @@ Upgrading the engine from 2.7.0 to 2.9.0 for analytics, postgres-demo. Each data
 
 `civo database upgrade --postgres-version <major>` upgrades one database in place to a newer PostgreSQL major, keeping its data, endpoint and credentials. `civo database show` lists the majors it can move to as `Major Upgrades Available`; a target the network's engine cannot run needs an engine upgrade first.
 
-Before anything changes the API runs pre-flight checks: the database is PostgreSQL, the target is a newer major, the database is not on the legacy PostgreSQL 14 platform, its engine can run the target, the region offers the target, the database is ready, no other upgrade is in flight, and every enabled extension exists for the target. `--dry-run` only runs them:
+Before anything changes the API runs pre-flight checks: the database is PostgreSQL, the target is a newer major, the database is not on the legacy PostgreSQL 14 platform, its engine can run the target, the region offers the target, the database is ready, no other upgrade is in flight, and every enabled extension exists for the target. The CLI prints every check the API returns, so the list can grow. `--dry-run` only runs them, and exits non-zero when one fails, so it also works as a readiness check in scripts:
 
 ```bash
 ❯ civo database upgrade postgres-demo --postgres-version 18 --dry-run
@@ -227,14 +227,16 @@ A failed check is printed the same way and nothing is upgraded. When every check
 ```bash
 ❯ civo database upgrade postgres-demo --postgres-version 18
 Upgrading from PostgreSQL 17 to 18:
-  - a backup named pre-upgrade-pg18 is taken first and kept
+  - a backup is taken first and kept; its name is shown once the upgrade starts
   - the database stops for a few minutes while its data is upgraded
   - replicas re-sync afterwards; until then there is no high availability or read-only endpoint
   - point-in-time restore starts again from the first backup on PostgreSQL 18
-  - there is no downgrade; to go back, restore pre-upgrade-pg18 into a new database
+  - there is no downgrade; to go back, restore that backup into a new database
 Warning: Are you sure you want to upgrade postgres-demo from PostgreSQL 17 to 18 (y/N) ? y
 Upgrading postgres-demo from PostgreSQL 17 to 18. A backup named pre-upgrade-pg18 is taken first; follow progress with civo db show postgres-demo.
 ```
+
+The backup is normally named `pre-upgrade-pgN`; when an earlier attempt at the same major kept its backup, the new one gets a timestamp suffix.
 
 `civo database show` reports the progress as `Version Upgrade`: `BackingUp`, `Upgrading`, `Finalizing`, then `Completed` or `Failed` with a message.
 
