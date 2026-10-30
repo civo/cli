@@ -16,7 +16,9 @@ var dbBackupCreateCmd = &cobra.Command{
 	Use:     "create",
 	Aliases: []string{"new", "add"},
 	Example: `	Scheduled: civo database backup create <DATABASE-NAME/ID> --name <BACKUP-NAME> --schedule <SCHEDULE>
-	Manual:    civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --type manual`,
+	Manual:    civo database backup create <DATABASE-NAME/ID> --name <BACKUP_NAME> --type manual
+	Off-site:  civo database backup create <DATABASE-NAME/ID> --name <BACKUP-NAME> --schedule <SCHEDULE> --destination-region FRA1
+	External:  civo database backup create <DATABASE-NAME/ID> --name <BACKUP-NAME> --schedule <SCHEDULE> --s3-endpoint https://s3.example.com --s3-bucket my-bucket --s3-access-key KEY --s3-secret-key SECRET`,
 	Short: "Create a new database backup",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -75,7 +77,27 @@ var dbBackupCreateCmd = &cobra.Command{
 		}
 
 		backupCreateConfig.Region = client.Region
-		bk, err := client.CreateDatabaseBackup(db.ID, &backupCreateConfig)
+
+		destination, err := backupDestinationFromFlags()
+		if err != nil {
+			utility.Error("%s", err)
+			os.Exit(1)
+		}
+
+		var bk *civogo.DatabaseBackup
+		if destination != nil {
+			// Destinations exist on the v3alpha1 API only, and only the
+			// scheduled backup carries one: manual backups always land in the
+			// database's own Civo Object Store.
+			if backupType == "manual" {
+				utility.Error("A destination can only be set on scheduled backups")
+				os.Exit(1)
+			}
+			backupCreateConfig.Destination = destination
+			bk, err = client.CreateDatabaseBackupV3alpha1(db.ID, &backupCreateConfig)
+		} else {
+			bk, err = client.CreateDatabaseBackup(db.ID, &backupCreateConfig)
+		}
 		if err != nil {
 			utility.Error("Error creating database %s", err)
 			os.Exit(1)
