@@ -119,4 +119,10 @@ func appendDatabaseDetails(ow *utility.OutputWriter, db *civogo.Database) {
 	if db.UpgradeAvailableTo != "" {
 		ow.AppendDataWithLabel("upgrade_available_to", db.UpgradeAvailableTo, "Upgrade Available")
 	}
+	if len(db.MajorUpgradesAvailable) > 0 {
+		ow.AppendDataWithLabel("major_upgrades_available", strings.Join(db.MajorUpgradesAvailable, ", "), "Major Upgrades Available")
+	}
+	if v := formatVersionUpgrade(db.VersionUpgrade); v != "" {
+		ow.AppendDataWithLabel("version_upgrade", v, "Version Upgrade")
+	}
 }

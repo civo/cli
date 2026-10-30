@@ -97,10 +97,12 @@ func init() {
 	dbForkCmd.Flags().StringVarP(&forkNetworkID, "network", "", "", "network of the new database (defaults to the source's)")
 	dbForkCmd.Flags().StringVarP(&forkFirewallID, "firewall", "", "", "firewall of the new database")
 	dbForkCmd.Flags().IntVarP(&storageGB, "storage", "", 0, "storage of every node of the new database in GB")
-	dbForkCmd.Flags().StringVarP(&extensions, "extensions", "", "", "comma separated list of PostgreSQL extensions to enable on the new database")
+	dbForkCmd.Flags().StringVarP(&extensions, "extensions", "", "", "comma separated list of PostgreSQL extensions to enable on the new database, replacing the source's (defaults to the source's)")
 	dbForkCmd.Flags().BoolVarP(&forkWait, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the new database to be Ready")
 	_ = dbForkCmd.MarkFlagRequired("name")
 
-	dbUpgradeCmd.Flags().StringVarP(&upgradeTargetVersion, "version", "v", "", "engine release to upgrade to (defaults to the newest available)")
-	dbUpgradeCmd.Flags().BoolVar(&upgradeDryRun, "dry-run", false, "only show which databases would be upgraded and restarted")
+	dbUpgradeCmd.Flags().StringVarP(&upgradeTargetVersion, "version", "v", "", "engine release to upgrade to (defaults to the one civo db show reports as Upgrade Available)")
+	dbUpgradeCmd.Flags().BoolVar(&upgradeDryRun, "dry-run", false, "only show what would be upgraded: the databases that restart, or the major upgrade's pre-flight checks (exits non-zero when a check fails)")
+	dbUpgradeCmd.Flags().StringVar(&upgradePostgresVersion, "postgres-version", "", "upgrade the database in place to this PostgreSQL major version, e.g. 18")
+	dbUpgradeCmd.MarkFlagsMutuallyExclusive("version", "postgres-version")
 }

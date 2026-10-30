@@ -22,8 +22,11 @@ fork reflects the source at its latest backup; pass --target-time to fork the
 source as it was at that moment (point in time, no earlier than the restore
 window shown by "civo db show").
 
-The new database keeps the source's size, node count and network unless
-overridden with the matching flags.`,
+The new database keeps the source's size, node count, network and extensions
+unless overridden with the matching flags. --extensions replaces the source's
+extensions with the listed ones; an empty value still keeps the source's, so to
+fork without some of them, run "civo db update <NEW-NAME> --extensions ..."
+once the fork is ready (an empty value there disables them all).`,
 	Example: `civo db fork <SOURCE-NAME/ID> --name <NEW-NAME>
 civo db fork <SOURCE-NAME/ID> --name <NEW-NAME> --target-time 2026-10-21T10:00:00Z
 civo db fork <SOURCE-NAME/ID> --name <NEW-NAME> --size g3.db.medium --nodes 3`,
