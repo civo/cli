@@ -285,13 +285,17 @@ func RemoveNodePool(s []civogo.KubernetesClusterPoolConfig, id string, names []s
 	if len(s) == 0 {
 		return s, names
 	}
-	key := 0
+	key := -1
 	for k, v := range s {
-		if strings.Contains(v.ID, id) {
+		if strings.HasPrefix(v.ID, id) {
 			key = k
 			names = append(names, v.ID)
 			break
 		}
+	}
+
+	if key == -1 {
+		return s, names
 	}
 
 	s[len(s)-1], s[key] = s[key], s[len(s)-1]
