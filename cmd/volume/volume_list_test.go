@@ -14,6 +14,18 @@ import (
 )
 
 func TestVolumeListLookups(t *testing.T) {
+	// Save global state and restore on cleanup
+	savedConfig := config.Current
+	savedOutputFormat := common.OutputFormat
+	savedOutputFields := common.OutputFields
+	savedStdout := os.Stdout
+	t.Cleanup(func() {
+		config.Current = savedConfig
+		common.OutputFormat = savedOutputFormat
+		common.OutputFields = savedOutputFields
+		os.Stdout = savedStdout
+	})
+
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		switch r.URL.Path {
@@ -85,8 +97,10 @@ func TestVolumeListLookups(t *testing.T) {
 	config.Current.APIKeys = map[string]string{"test-key": "dummy-token"}
 	config.Current.Meta.DefaultRegion = "LON1"
 
-	oldStdout := os.Stdout
-	r, w, _ := os.Pipe()
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatalf("os.Pipe() failed: %v", err)
+	}
 	os.Stdout = w
 
 	common.OutputFormat = "custom"
@@ -95,7 +109,6 @@ func TestVolumeListLookups(t *testing.T) {
 	volumeListCmd.Run(volumeListCmd, []string{})
 
 	_ = w.Close()
-	os.Stdout = oldStdout
 
 	var buf bytes.Buffer
 	_, _ = io.Copy(&buf, r)
