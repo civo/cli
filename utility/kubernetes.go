@@ -282,9 +282,6 @@ func checkKubeDir() {
 
 // RemoveNodePool is a utility function to remove node pool from a kuberentes cluster
 func RemoveNodePool(s []civogo.KubernetesClusterPoolConfig, id string, names []string) ([]civogo.KubernetesClusterPoolConfig, []string) {
-	if len(s) == 0 {
-		return s, names
-	}
 	key := -1
 	for k, v := range s {
 		if strings.HasPrefix(v.ID, id) {
