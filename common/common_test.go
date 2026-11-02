@@ -50,11 +50,12 @@ func TestOutputFormatFlag(t *testing.T) {
 	}
 
 	// Matching is case-sensitive, so "JSON" is rejected rather than silently printing human output
+	before := format
 	for _, value := range []string{"", "lefafa", "JSON", "yaml", "table"} {
 		if err := flag.Set(value); err == nil {
 			t.Errorf("expected %q to be rejected", value)
 		}
-		if format != OutputFormatCustom {
+		if format != before {
 			t.Errorf("rejected value %q changed format to %q", value, format)
 		}
 	}
