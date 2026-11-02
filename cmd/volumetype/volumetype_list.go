@@ -18,12 +18,12 @@ var volumetypesListCmd = &cobra.Command{
 	Long:  `List the available volume types in Civo cloud`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		// Call ListVolumeTypes from SDK

@@ -22,12 +22,12 @@ civo ip rename "1234-68gyd-8knw9" new-keys`,
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		sshKey, err := client.FindSSHKey(args[0])

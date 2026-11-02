@@ -26,12 +26,12 @@ var snapshotCreateCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		name, _ := cmd.Flags().GetString("name")
@@ -77,12 +77,12 @@ var snapshotListCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		snapshots, err := client.ListInstanceSnapshots(args[0])
@@ -115,12 +115,12 @@ var snapshotShowCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		snapshot, err := client.GetInstanceSnapshot(args[0], args[1])
@@ -157,12 +157,12 @@ var snapshotUpdateCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		name, _ := cmd.Flags().GetString("name")
@@ -207,12 +207,12 @@ var snapshotDeleteCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		err = client.DeleteInstanceSnapshot(args[0], args[1])
@@ -242,12 +242,12 @@ var snapshotRestoreCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		// Construct params from flags
