@@ -69,8 +69,18 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 			}
 
 			kubernetesPoolNameList = nil
+			notFound := []string{}
 			for _, kubeList := range kubernetesNodePoolList {
+				before := len(kubernetesPoolNameList)
 				nodePool, kubernetesPoolNameList = utility.RemoveNodePool(nodePool, kubeList.Name, kubernetesPoolNameList)
+				if len(kubernetesPoolNameList) == before {
+					notFound = append(notFound, kubeList.Name)
+				}
+			}
+
+			if len(notFound) > 0 {
+				utility.Error("No node pool found matching %s in cluster %s", strings.Join(notFound, ", "), kubernetesFindCluster.Name)
+				os.Exit(1)
 			}
 
 			configKubernetes := &civogo.KubernetesClusterConfig{
@@ -85,14 +95,14 @@ var kubernetesNodePoolDeleteCmd = &cobra.Command{
 
 			ow := utility.NewOutputWriter()
 
-			for _, v := range kubernetesNodePoolList {
+			for _, v := range kubernetesPoolNameList {
 				ow.StartLine()
-				ow.AppendDataWithLabel("id", v.Name, "ID")
+				ow.AppendDataWithLabel("id", v, "ID")
 			}
 
 			switch common.OutputFormat {
 			case "json":
-				if len(kubernetesNodePoolList) == 1 {
+				if len(kubernetesPoolNameList) == 1 {
 					ow.WriteSingleObjectJSON(common.PrettySet)
 				} else {
 					ow.WriteMultipleObjectsJSON(common.PrettySet)
