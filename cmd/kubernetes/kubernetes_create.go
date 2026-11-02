@@ -40,10 +40,12 @@ Notes:
 `
 
 var kubernetesCreateCmd = &cobra.Command{
-	Use:     "create",
+	Use:     "create [CLUSTER_NAME]",
 	Aliases: []string{"new", "add"},
 	Example: kubernetesCreateCmdExample,
 	Short:   "Create a new Kubernetes cluster",
+	// The cluster name is optional (a random one is generated), but only one cluster is created per call
+	Args: cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 

@@ -15,8 +15,11 @@ var dbUpdateCmd = &cobra.Command{
 	Use:     "update",
 	Aliases: []string{"modify", "change"},
 	Short:   "Update a database",
-	Example: "civo db update DB_NAME --nodes 5 --name NEW_NAME",
-	Args:    cobra.MinimumNArgs(1),
+	Example: `civo db update DB_NAME --nodes 5 --name NEW_NAME
+civo db update DB_NAME --storage 120
+civo db update DB_NAME --extensions pg_cron,postgis
+civo db update DB_NAME --parameter max_connections=200 --parameter shared_buffers=1GB`,
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		utility.EnsureCurrentRegion()
 
@@ -36,15 +39,52 @@ var dbUpdateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		updatedDB, err := client.UpdateDatabase(findDB.ID, &civogo.UpdateDatabaseRequest{
-			Name:       updatedName,
-			Nodes:      &nodes,
-			FirewallID: firewallID,
-			Region:     client.Region,
-		})
-		if err != nil {
-			utility.Error("%s", err)
-			os.Exit(1)
+		updatedDB := findDB
+		if cmd.Flags().Changed("name") || cmd.Flags().Changed("nodes") || cmd.Flags().Changed("firewall") {
+			updatedDB, err = client.UpdateDatabase(findDB.ID, &civogo.UpdateDatabaseRequest{
+				Name:       updatedName,
+				Nodes:      &nodes,
+				FirewallID: firewallID,
+				Region:     client.Region,
+			})
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+		}
+
+		// Storage, extensions and parameters live on the v3alpha1 API and go
+		// out in one request, so a failure cannot leave them half applied.
+		v3 := &civogo.UpdateDatabaseV3alpha1Request{Region: client.Region}
+		v3Changed := false
+		if storageGB > 0 {
+			gb := storageGB
+			v3.StorageGB = &gb
+			v3Changed = true
+		}
+		if cmd.Flags().Changed("extensions") {
+			update := true
+			v3.Extensions = parseExtensions(extensions)
+			v3.UpdateExtensions = &update
+			v3Changed = true
+		}
+		if cmd.Flags().Changed("parameter") {
+			params, err := parseDatabaseParameters(parameters)
+			if err != nil {
+				utility.Error("%s", err)
+				os.Exit(1)
+			}
+			update := true
+			v3.DatabaseParameters = params
+			v3.UpdateDatabaseParameters = &update
+			v3Changed = true
+		}
+		if v3Changed {
+			updatedDB, err = client.UpdateDatabaseV3alpha1(findDB.ID, v3)
+			if err != nil {
+				utility.Error("Failed to update the database: %s", err)
+				os.Exit(1)
+			}
 		}
 
 		ow := utility.NewOutputWriterWithMap(map[string]string{"id": updatedDB.ID, "name": updatedDB.Name})
