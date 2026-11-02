@@ -66,7 +66,7 @@ Please make sure to delete your domains aren't pointed to it before deleting it.
 				fmt.Printf("IP called %s with ID %s was deleted\n", utility.Green(ip.Name), utility.Green(ip.ID))
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Error("Operation aborted.")
 		}
 	},
 }

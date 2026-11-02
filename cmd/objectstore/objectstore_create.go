@@ -64,13 +64,22 @@ var objectStoreCreateCmd = &cobra.Command{
 			utility.Error("The minimum size to create an object store is 500 GB. Please provide a valid size.")
 			os.Exit(1)
 		} else if bucketSize%500 != 0 {
-			utility.YellowConfirm("The size to create an object store must be a multiple of 500. Would you like to create an %s of %d GB instead? (y/n) ? ", utility.Green("object store"), bucketSize+(500-bucketSize%500))
-			_, err := utility.UserAccepts(os.Stdin)
-			if err != nil {
-				utility.Error("Unable to parse the input: %s", err)
-				os.Exit(1)
+			roundedSize := bucketSize + (500 - bucketSize%500)
+			if common.Quiet {
+				if !common.DefaultYes {
+					utility.Error("The size to create an object store must be a multiple of 500 GB; re-run with --size %d, or combine --quiet with --yes to round up automatically", roundedSize)
+					os.Exit(1)
+				}
+				bucketSize = roundedSize
+			} else {
+				utility.YellowConfirm("The size to create an object store must be a multiple of 500. Would you like to create an %s of %d GB instead? (y/n) ? ", utility.Green("object store"), roundedSize)
+				_, err := utility.UserAccepts(os.Stdin)
+				if err != nil {
+					utility.Error("Unable to parse the input: %s", err)
+					os.Exit(1)
+				}
+				bucketSize = roundedSize
 			}
-			bucketSize = bucketSize + (500 - bucketSize%500)
 		}
 
 		var credential *civogo.ObjectStoreCredential
@@ -107,8 +116,7 @@ var objectStoreCreateCmd = &cobra.Command{
 		if waitOS {
 			startTime := utility.StartTime()
 			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
+			s := utility.NewSpinner(spinner.CharSets[9], 100*time.Millisecond)
 			s.Prefix = fmt.Sprintf("Creating an Object Store with maxSize %d, called %s... ", store.MaxSize, store.Name)
 			s.Start()
 
@@ -143,13 +151,15 @@ var objectStoreCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			if waitOS {
-				fmt.Printf("Created Object Store %s in %s in %s\n", utility.Green(objectStore.Name), utility.Green(client.Region), executionTime)
-				fmt.Printf("Created default admin credentials, access key is %s, this will be deleted if the Object Store is deleted. ", utility.Green(objectStore.OwnerInfo.AccessKeyID))
-				fmt.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(objectStore.OwnerInfo.AccessKeyID))
-			} else {
-				fmt.Printf("Creating Object Store %s in %s\n", utility.Green(objectStore.Name), utility.Green(client.Region))
-				fmt.Printf("To check the status of the Object Store run: civo objectstore show %s\n", utility.Green(objectStore.Name))
+			if !common.Quiet {
+				if waitOS {
+					fmt.Printf("Created Object Store %s in %s in %s\n", utility.Green(objectStore.Name), utility.Green(client.Region), executionTime)
+					fmt.Printf("Created default admin credentials, access key is %s, this will be deleted if the Object Store is deleted. ", utility.Green(objectStore.OwnerInfo.AccessKeyID))
+					fmt.Printf("To access the secret key run: civo objectstore credential secret --access-key=%s\n", utility.Green(objectStore.OwnerInfo.AccessKeyID))
+				} else {
+					fmt.Printf("Creating Object Store %s in %s\n", utility.Green(objectStore.Name), utility.Green(client.Region))
+					fmt.Printf("To check the status of the Object Store run: civo objectstore show %s\n", utility.Green(objectStore.Name))
+				}
 			}
 		}
 	},

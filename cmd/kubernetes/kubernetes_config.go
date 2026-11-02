@@ -93,7 +93,7 @@ If you wish to use a custom format, the available fields are:
 						os.Exit(1)
 					}
 				} else {
-					fmt.Println("Operation aborted.")
+					utility.Error("Operation aborted.")
 					os.Exit(1)
 				}
 			} else {

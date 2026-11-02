@@ -6,6 +6,8 @@ import (
 	"io"
 	"os"
 	"strings"
+
+	"github.com/civo/cli/common"
 )
 
 // retrieveUserInput is a function that can retrieve user input in form of string. By default,
@@ -30,7 +32,17 @@ func readUserInput(in io.Reader, message string) (string, error) {
 }
 
 // AskForConfirm parses and verifies user input for confirmation.
+//
+// In --quiet mode, this never blocks waiting for interactive input: since
+// quiet mode has no confirmed default to fall back on here (callers only
+// reach this function when they haven't already been told "yes" via
+// --yes/ignoringConfirmed), it fails immediately instead. To proceed
+// non-interactively, combine --quiet with --yes at the call site.
 func AskForConfirm(message string) error {
+	if common.Quiet {
+		return fmt.Errorf("confirmation required to %s, but --quiet was set without --yes; re-run with --yes to confirm automatically, or without --quiet to be prompted", message)
+	}
+
 	answer, err := retrieveUserInput(message)
 	if err != nil {
 		Error("Unable to parse users input: %s", err)

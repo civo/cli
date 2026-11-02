@@ -53,8 +53,7 @@ var volumeDetachCmd = &cobra.Command{
 		if waitVolumeDetach {
 
 			stillDetaching := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
+			s := utility.NewSpinner(spinner.CharSets[9], 100*time.Millisecond)
 			s.Prefix = "Detaching the volume... "
 			s.Start()
 
@@ -81,7 +80,9 @@ var volumeDetachCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("The volume called %s with ID %s was detached\n", utility.Green(volume.Name), utility.Green(volume.ID))
+			if !common.Quiet {
+				fmt.Printf("The volume called %s with ID %s was detached\n", utility.Green(volume.Name), utility.Green(volume.ID))
+			}
 		}
 	},
 }

@@ -62,7 +62,7 @@ var vpcIPRemoveCmd = &cobra.Command{
 				fmt.Printf("VPC IP called %s with ID %s was deleted\n", utility.Green(ip.Name), utility.Green(ip.ID))
 			}
 		} else {
-			fmt.Println("Operation aborted.")
+			utility.Error("Operation aborted.")
 		}
 	},
 }

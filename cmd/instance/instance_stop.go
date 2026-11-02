@@ -50,8 +50,7 @@ If you wish to use a custom format, the available fields are:
 
 		if waitStop {
 			stillStopping := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
+			s := utility.NewSpinner(spinner.CharSets[9], 100*time.Millisecond)
 			s.Prefix = "Stopping instance... "
 			s.Start()
 
@@ -71,7 +70,9 @@ If you wish to use a custom format, the available fields are:
 		}
 
 		if common.OutputFormat == common.OutputFormatHuman {
-			fmt.Printf("The instance %s (%s) is being stopped\n", utility.Green(instance.Hostname), instance.ID)
+			if !common.Quiet {
+				fmt.Printf("The instance %s (%s) is being stopped\n", utility.Green(instance.Hostname), instance.ID)
+			}
 		} else {
 			ow := utility.NewOutputWriter()
 			ow.StartLine()

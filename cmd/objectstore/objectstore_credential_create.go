@@ -57,8 +57,7 @@ var objectStoreCredentialCreateCmd = &cobra.Command{
 		if waitOS {
 			startTime := utility.StartTime()
 			stillCreating := true
-			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-			s.Writer = os.Stderr
+			s := utility.NewSpinner(spinner.CharSets[9], 100*time.Millisecond)
 			s.Prefix = fmt.Sprintf("Creating an Object Store Credential with maxSize %d, called %s... ", credential.MaxSizeGB, credential.Name)
 			s.Start()
 
@@ -92,10 +91,12 @@ var objectStoreCredentialCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			if waitOS {
-				fmt.Printf("Created Object Store Credential %s in %s in %s\n", utility.Green(objectStoreCred.Name), utility.Green(client.Region), executionTime)
-			} else {
-				fmt.Printf("Creating Object Store Credential %s in %s\n", utility.Green(objectStoreCred.Name), utility.Green(client.Region))
+			if !common.Quiet {
+				if waitOS {
+					fmt.Printf("Created Object Store Credential %s in %s in %s\n", utility.Green(objectStoreCred.Name), utility.Green(client.Region), executionTime)
+				} else {
+					fmt.Printf("Creating Object Store Credential %s in %s\n", utility.Green(objectStoreCred.Name), utility.Green(client.Region))
+				}
 			}
 		}
 	},
