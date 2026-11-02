@@ -121,6 +121,125 @@ Warning: Are you sure you want to restore db postgres-demo from 20240131-095615F
 Restoring database postgres-demo from from backup 20240131-095615F
 ```
 
+## Point-in-time restore
+
+Besides restoring a backup, a PostgreSQL database can be restored in place to any moment inside its restore window. The window starts at the oldest full backup kept for the database and ends now; `civo database show` prints its start as "Restore Window From". Data written after the chosen moment is lost, so the command asks for confirmation.
+
+```bash
+❯ civo database show postgres-demo
+...
+Storage             : 120 GB (40 GB plan + 80 GB add-on)
+Restore Window From : 2026-10-21T00:00:00Z
+
+❯ civo database restore postgres-demo --name restore-before-cleanup --target-time 2026-10-21T10:00:00Z
+Warning: Are you sure you want to restore db postgres-demo in place to its state at 2026-10-21T10:00:00Z (data written after that moment is lost) (y/N) ? y
+Restoring database postgres-demo to its state at 2026-10-21T10:00:00Z. Data written after that moment is lost.
+```
+
+The time is RFC 3339; an offset such as `2026-10-21T12:00:00+02:00` is accepted and converted to UTC.
+
+## Fork a database
+
+A fork is a new, independent database built from the backups of an existing one. By default it reflects the source at its latest backup; `--target-time` forks the source as it was at that moment, within the same restore window as above. Size, node count, network and extensions default to the source's.
+
+`--extensions` replaces the source's extensions with the listed ones. An empty `--extensions` still keeps the source's, so a fork cannot be created without them: to drop some, run `civo database update <NEW-NAME> --extensions ...` once the fork is ready (an empty value there disables them all).
+
+```bash
+❯ civo database fork postgres-demo --name postgres-demo-copy --wait
+Database postgres-demo-copy has been forked from postgres-demo (its latest backup) in 4m12s
+To get the credentials, run : civo db credential postgres-demo-copy
+
+❯ civo database fork postgres-demo --name postgres-demo-yesterday --target-time 2026-10-21T10:00:00Z --size g3.db.medium --nodes 3
+Database postgres-demo-yesterday is being forked from postgres-demo (its state at 2026-10-21T10:00:00Z)
+```
+
+## Backup destinations
+
+Scheduled backups go to the Civo Object Store of the database's region unless a destination is given. `--destination-region` sends them to the Civo Object Store of another region, and the `--s3-*` flags send them to any S3-compatible bucket. Both work on `backup create` and `backup update` for the scheduled backup; manual backups always stay in the database's region.
+
+```bash
+❯ civo database backup create postgres-demo --name offsite --schedule "0 3 * * *" --destination-region FRA1
+❯ civo database backup create postgres-demo --name external --schedule "0 3 * * *" \
+    --s3-endpoint https://s3.example.com --s3-bucket my-backups --s3-region eu-1 \
+    --s3-access-key KEY --s3-secret-key SECRET --s3-path-prefix postgres-demo/
+```
+
+## Storage, extensions and parameters
+
+The storage of every node can be grown beyond the plan (never shrunk; the extra GB are billed as an add-on), PostgreSQL extensions can be enabled, and server parameters can be set. All three go through `civo database update`.
+
+```bash
+❯ civo database extension list
++----------+---------------------------+----------+------------------+
+| Name     | Description               | Versions | Requires Restart |
++----------+---------------------------+----------+------------------+
+| pg_cron  | Job scheduler for Postgres| 1.6      | Yes              |
+| postgis  | Geospatial types          | 3.4      | No               |
++----------+---------------------------+----------+------------------+
+
+❯ civo database update postgres-demo --storage 120
+❯ civo database update postgres-demo --extensions pg_cron,postgis
+❯ civo database update postgres-demo --parameter max_connections=200 --parameter shared_buffers=1GB
+```
+
+`--extensions` and `--parameter` replace the current set; pass `--extensions ""` to disable every extension. Extensions that require a restart trigger a brief rolling restart.
+
+## Engine upgrades
+
+Databases on the same network share an engine release, which decides the PostgreSQL versions available to them. It is never upgraded behind your back: `civo database show` reports the current `Engine` and, when there is one, the `Upgrade Available` release, and `civo database upgrade` moves to it when you choose. Every database on the network is upgraded together and restarts during the upgrade, possibly more than once as the engine steps through releases.
+
+```bash
+❯ civo database upgrade postgres-demo --dry-run
+Upgrading postgres-demo would move the engine from 2.7.0 to 2.9.0 and restart: analytics, postgres-demo
+
+❯ civo database upgrade postgres-demo
+Warning: Are you sure you want to upgrade the engine from 2.7.0 to 2.9.0 for analytics, postgres-demo (each restarts during the upgrade) (y/N) ? y
+Upgrading the engine from 2.7.0 to 2.9.0 for analytics, postgres-demo. Each database restarts during the upgrade; follow progress with civo db show.
+```
+
+`--version` picks a specific release instead of the newest. A version that needs a newer engine than the network runs (for example PostgreSQL 18 on 2.7.0) is refused by `civo database create` until the network is upgraded.
+
+## PostgreSQL major version upgrades
+
+`civo database upgrade --postgres-version <major>` upgrades one database in place to a newer PostgreSQL major, keeping its data, endpoint and credentials. `civo database show` lists the majors it can move to as `Major Upgrades Available`; a target the network's engine cannot run needs an engine upgrade first.
+
+Before anything changes the API runs pre-flight checks: the database is PostgreSQL, the target is a newer major, the database is not on the legacy PostgreSQL 14 platform, its engine can run the target, the region offers the target, the database is ready, no other upgrade is in flight, and every enabled extension exists for the target. The CLI prints every check the API returns, so the list can grow. `--dry-run` only runs them, and exits non-zero when one fails, so it also works as a readiness check in scripts:
+
+```bash
+❯ civo database upgrade postgres-demo --postgres-version 18 --dry-run
++------------------------+--------+--------+
+| Check                  | Result | Detail |
++------------------------+--------+--------+
+| postgresql             | passed |        |
+| target_newer           | passed |        |
+| not_legacy             | passed |        |
+| engine_supports_target | passed |        |
+| target_offered         | passed |        |
+| database_ready         | passed |        |
+| no_operation_in_flight | passed |        |
+| extensions_available   | passed |        |
++------------------------+--------+--------+
+All checks passed: postgres-demo can be upgraded from PostgreSQL 17 to 18.
+```
+
+A failed check is printed the same way and nothing is upgraded. When every check passes the CLI explains what happens and asks for confirmation:
+
+```bash
+❯ civo database upgrade postgres-demo --postgres-version 18
+Upgrading from PostgreSQL 17 to 18:
+  - a backup is taken first and kept; its name is shown once the upgrade starts
+  - the database stops for a few minutes while its data is upgraded
+  - replicas re-sync afterwards; until then there is no high availability or read-only endpoint
+  - point-in-time restore starts again from the first backup on PostgreSQL 18
+  - there is no downgrade; to go back, restore that backup into a new database
+Warning: Are you sure you want to upgrade postgres-demo from PostgreSQL 17 to 18 (y/N) ? y
+Upgrading postgres-demo from PostgreSQL 17 to 18. A backup named pre-upgrade-pg18 is taken first; follow progress with civo db show postgres-demo.
+```
+
+The backup is normally named `pre-upgrade-pgN`; when an earlier attempt at the same major kept its backup, the new one gets a timestamp suffix.
+
+`civo database show` reports the progress as `Version Upgrade`: `BackingUp`, `Upgrading`, `Finalizing`, then `Completed` or `Failed` with a message.
+
 ## MySQL Backup (Deprecated)
 
 ### Create
