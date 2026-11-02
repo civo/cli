@@ -61,6 +61,9 @@ func init() {
 	DBCmd.AddCommand(dbBackupCmd)
 	DBCmd.AddCommand(dbRestoreCmd)
 	DBCmd.AddCommand(dbVersionListCmd)
+	DBCmd.AddCommand(dbForkCmd)
+	DBCmd.AddCommand(dbExtensionCmd)
+	DBCmd.AddCommand(dbUpgradeCmd)
 
 	dbCredentialCmd.Flags().BoolVarP(&connectionString, "connection-string", "c", false, "show the connection string for the database")
 
@@ -76,9 +79,30 @@ func init() {
 	dbUpdateCmd.Flags().IntVarP(&nodes, "nodes", "", 0, "the number of nodes for the database")
 	dbUpdateCmd.Flags().StringVarP(&firewallID, "firewall", "", "", "the firewall to use for the database")
 	dbUpdateCmd.Flags().StringVarP(&updatedName, "name", "n", "", "the new name for the database")
+	dbUpdateCmd.Flags().IntVarP(&storageGB, "storage", "", 0, "grow the storage of every node to this many GB (storage can only be increased; GB beyond the plan are billed as an add-on)")
+	dbUpdateCmd.Flags().StringVarP(&extensions, "extensions", "", "", "comma separated list of PostgreSQL extensions to enable, replacing the current set (an empty value disables them all); see civo db extension list")
+	dbUpdateCmd.Flags().StringArrayVarP(&parameters, "parameter", "p", nil, "database parameter as key=value, repeatable; replaces the current custom parameters")
 
 	dbRestoreCmd.Flags().StringVarP(&backup, "backup", "b", "", "the backup name which you can restore database")
 	dbRestoreCmd.Flags().StringVarP(&restoreName, "name", "n", "", "name of the restore")
-	_ = dbRestoreCmd.MarkFlagRequired("backup")
+	dbRestoreCmd.Flags().StringVarP(&targetTime, "target-time", "t", "", "restore to this point in time instead of a backup, as RFC 3339 (e.g. 2026-10-21T10:00:00Z); must not be earlier than the restore window shown by civo db show")
+	dbRestoreCmd.MarkFlagsMutuallyExclusive("backup", "target-time")
+	dbRestoreCmd.MarkFlagsOneRequired("backup", "target-time")
 	_ = dbRestoreCmd.MarkFlagRequired("name")
+
+	dbForkCmd.Flags().StringVarP(&forkName, "name", "n", "", "name of the new database")
+	dbForkCmd.Flags().StringVarP(&targetTime, "target-time", "t", "", "fork the source as it was at this point in time, as RFC 3339 (e.g. 2026-10-21T10:00:00Z)")
+	dbForkCmd.Flags().StringVarP(&forkSize, "size", "s", "", "size of the new database (defaults to the source's)")
+	dbForkCmd.Flags().IntVarP(&forkNodes, "nodes", "", 0, "number of nodes of the new database (defaults to the source's)")
+	dbForkCmd.Flags().StringVarP(&forkNetworkID, "network", "", "", "network of the new database (defaults to the source's)")
+	dbForkCmd.Flags().StringVarP(&forkFirewallID, "firewall", "", "", "firewall of the new database")
+	dbForkCmd.Flags().IntVarP(&storageGB, "storage", "", 0, "storage of every node of the new database in GB")
+	dbForkCmd.Flags().StringVarP(&extensions, "extensions", "", "", "comma separated list of PostgreSQL extensions to enable on the new database, replacing the source's (defaults to the source's)")
+	dbForkCmd.Flags().BoolVarP(&forkWait, "wait", "w", false, "a simple flag (e.g. --wait) that will cause the CLI to spin and wait for the new database to be Ready")
+	_ = dbForkCmd.MarkFlagRequired("name")
+
+	dbUpgradeCmd.Flags().StringVarP(&upgradeTargetVersion, "version", "v", "", "engine release to upgrade to (defaults to the one civo db show reports as Upgrade Available)")
+	dbUpgradeCmd.Flags().BoolVar(&upgradeDryRun, "dry-run", false, "only show what would be upgraded: the databases that restart, or the major upgrade's pre-flight checks (exits non-zero when a check fails)")
+	dbUpgradeCmd.Flags().StringVar(&upgradePostgresVersion, "postgres-version", "", "upgrade the database in place to this PostgreSQL major version, e.g. 18")
+	dbUpgradeCmd.MarkFlagsMutuallyExclusive("version", "postgres-version")
 }
