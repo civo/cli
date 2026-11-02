@@ -3,6 +3,7 @@ package domain
 import (
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/civo/cli/config"
 	"github.com/civo/cli/utility"
@@ -56,7 +57,7 @@ If you wish to use a custom format, the available fields are:
 			ow.AppendDataWithLabel("id", record.ID, "ID")
 			ow.AppendDataWithLabel("name", record.Name, "Name")
 			ow.AppendDataWithLabel("value", record.Value, "Value")
-			ow.AppendDataWithLabel("type", string(record.Type), "Type")
+			ow.AppendDataWithLabel("type", strings.ToUpper(string(record.Type)), "Type")
 			ow.AppendDataWithLabel("ttl", strconv.Itoa(record.TTL), "TTL")
 			ow.AppendDataWithLabel("priority", strconv.Itoa(record.Priority), "Priority")
 

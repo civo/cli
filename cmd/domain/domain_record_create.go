@@ -75,7 +75,7 @@ var domainRecordCreateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		ow := utility.NewOutputWriterWithMap(map[string]string{"id": domain.ID, "name": domain.Name})
+		ow := dnsRecordOutputWriter(record)
 
 		switch common.OutputFormat {
 		case "json":
@@ -83,7 +83,7 @@ var domainRecordCreateCmd = &cobra.Command{
 		case "custom":
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
-			fmt.Printf("Created %s record %s for %s with a TTL of %s seconds and with a priority of %s with ID %s", utility.Green(string(record.Type)), utility.Green(record.Name), utility.Green(domain.Name), utility.Green(strconv.Itoa(record.TTL)), utility.Green(strconv.Itoa(record.Priority)), utility.Green(record.ID))
+			fmt.Printf("Created %s record %s for %s with a TTL of %s seconds and with a priority of %s with ID %s\n", utility.Green(strings.ToUpper(string(record.Type))), utility.Green(record.Name), utility.Green(domain.Name), utility.Green(strconv.Itoa(record.TTL)), utility.Green(strconv.Itoa(record.Priority)), utility.Green(record.ID))
 		}
 	},
 }
