@@ -33,12 +33,12 @@ If you wish to use a custom format, the available fields are:
 Example: civo size ls -o custom -f "Code: name (type)"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			return
+		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		filter := []civogo.InstanceSize{}

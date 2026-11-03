@@ -36,12 +36,12 @@ civo vpc loadbalancer create my-lb --network my-network --backend "10.0.0.1:80:8
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		network, err := client.FindVPCNetwork(vpcLBNetwork)

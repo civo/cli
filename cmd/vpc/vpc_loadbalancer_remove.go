@@ -25,12 +25,12 @@ var vpcLoadBalancerRemoveCmd = &cobra.Command{
 		utility.EnsureCurrentRegion()
 
 		client, err := config.CivoAPIClient()
-		if common.RegionSet != "" {
-			client.Region = common.RegionSet
-		}
 		if err != nil {
 			utility.Error("Creating the connection to Civo's API failed with %s", err)
 			os.Exit(1)
+		}
+		if common.RegionSet != "" {
+			client.Region = common.RegionSet
 		}
 
 		if len(args) == 1 {
