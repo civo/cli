@@ -140,6 +140,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&config.Filename, "config", "", "", "config file (default is $HOME/.civo.json)")
 	rootCmd.PersistentFlags().StringVarP(&common.OutputFields, "fields", "f", "", "output fields for custom format output (use -h to determine fields)")
 	rootCmd.PersistentFlags().VarP(common.NewOutputFormatFlag(&common.OutputFormat, common.OutputFormatHuman), "output", "o", "output format ("+strings.Join(common.OutputFormats, "/")+")")
+	_ = rootCmd.RegisterFlagCompletionFunc("output", cobra.FixedCompletions(common.OutputFormats, cobra.ShellCompDirectiveNoFileComp))
 	rootCmd.PersistentFlags().BoolVarP(&common.DefaultYes, "yes", "y", false, "Automatic yes to prompts; assume \"yes\" as answer to all prompts and run non-interactively")
 	rootCmd.PersistentFlags().StringVarP(&common.RegionSet, "region", "", "", "Choose the region to connect to, if you use this option it will use it over the default region")
 	rootCmd.PersistentFlags().BoolVarP(&common.PrettySet, "pretty", "", false, "Print pretty the json output")
