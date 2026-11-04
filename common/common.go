@@ -77,18 +77,16 @@ func (f *OutputFormatFlag) Type() string {
 }
 
 // IsVersionCheckDisabled reports whether checking for CLI updates is disabled.
-// It returns true if VersionCheckOptOut is true or if either CIVO_NO_VERSION_CHECK
-// or CIVO_DISABLE_VERSION_CHECK environment variable is set to a truthy value ("1", "true", "yes", "on").
+// It returns true if VersionCheckOptOut is true or if the CIVO_NO_VERSION_CHECK
+// environment variable is set to a truthy value ("1", "true", "yes", "on").
 func IsVersionCheckDisabled() bool {
 	if VersionCheckOptOut {
 		return true
 	}
-	for _, env := range []string{"CIVO_NO_VERSION_CHECK", "CIVO_DISABLE_VERSION_CHECK"} {
-		if val, ok := os.LookupEnv(env); ok {
-			val = strings.TrimSpace(strings.ToLower(val))
-			if val != "" && val != "0" && val != "false" {
-				return true
-			}
+	if val, ok := os.LookupEnv("CIVO_NO_VERSION_CHECK"); ok {
+		switch strings.TrimSpace(strings.ToLower(val)) {
+		case "1", "true", "yes", "on":
+			return true
 		}
 	}
 	return false
@@ -125,7 +123,8 @@ func checkVersionUpdateWithClient(ghClient *github.Client, stderr io.Writer) {
 		currentV = "v" + currentV
 	}
 
-	// Do not notify for development builds or invalid semver
+	// Do not notify for development builds or invalid semver.
+	// "0.0.0" is the default VersionCli for local/dev builds.
 	if !semver.IsValid(latestV) || !semver.IsValid(currentV) || currentV == "v0.0.0" {
 		return
 	}

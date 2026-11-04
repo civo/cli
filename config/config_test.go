@@ -9,6 +9,11 @@ import (
 )
 
 func TestLoadConfig_VersionCheckOptOut(t *testing.T) {
+	origConfig := Current
+	t.Cleanup(func() {
+		Current = origConfig
+	})
+
 	tempDir := t.TempDir()
 
 	tests := []struct {
@@ -22,24 +27,14 @@ func TestLoadConfig_VersionCheckOptOut(t *testing.T) {
 			wantOptOut: false,
 		},
 		{
-			name:       "disable_version_check at root sets opt-out true",
-			jsonConfig: `{"disable_version_check":true}`,
-			wantOptOut: true,
-		},
-		{
-			name:       "version_check false at root sets opt-out true",
-			jsonConfig: `{"version_check":false}`,
-			wantOptOut: true,
-		},
-		{
 			name:       "disable_version_check in meta sets opt-out true",
 			jsonConfig: `{"meta":{"disable_version_check":true}}`,
 			wantOptOut: true,
 		},
 		{
-			name:       "version_check false in meta sets opt-out true",
-			jsonConfig: `{"meta":{"version_check":false}}`,
-			wantOptOut: true,
+			name:       "disable_version_check false in meta keeps opt-out false",
+			jsonConfig: `{"meta":{"disable_version_check":false}}`,
+			wantOptOut: false,
 		},
 	}
 

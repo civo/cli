@@ -45,18 +45,19 @@ func TestVersionCheck(t *testing.T) {
 	})
 
 	t.Run("opt-out via CIVO_NO_VERSION_CHECK", func(t *testing.T) {
-		t.Setenv("CIVO_NO_VERSION_CHECK", "1")
-		release, skip := VersionCheck(nil)
-		if !skip || release != nil {
-			t.Errorf("expected skip=true and release=nil when CIVO_NO_VERSION_CHECK is set")
+		for _, val := range []string{"1", "true", "yes", "on", " TRUE "} {
+			t.Setenv("CIVO_NO_VERSION_CHECK", val)
+			release, skip := VersionCheck(nil)
+			if !skip || release != nil {
+				t.Errorf("expected skip=true and release=nil when CIVO_NO_VERSION_CHECK=%q", val)
+			}
 		}
-	})
 
-	t.Run("opt-out via CIVO_DISABLE_VERSION_CHECK", func(t *testing.T) {
-		t.Setenv("CIVO_DISABLE_VERSION_CHECK", "true")
-		release, skip := VersionCheck(nil)
-		if !skip || release != nil {
-			t.Errorf("expected skip=true and release=nil when CIVO_DISABLE_VERSION_CHECK is set")
+		for _, val := range []string{"0", "false", "no", "off", ""} {
+			t.Setenv("CIVO_NO_VERSION_CHECK", val)
+			if IsVersionCheckDisabled() {
+				t.Errorf("expected IsVersionCheckDisabled()=false when CIVO_NO_VERSION_CHECK=%q", val)
+			}
 		}
 	})
 
@@ -141,7 +142,7 @@ func TestCheckVersionUpdate(t *testing.T) {
 			requestMade := false
 			server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 				requestMade = true
-				rw.Write([]byte(fmt.Sprintf(`{"tag_name": %q}`, tt.latestTag)))
+				fmt.Fprintf(rw, `{"tag_name": %q}`, tt.latestTag)
 			}))
 			defer server.Close()
 
