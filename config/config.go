@@ -23,12 +23,13 @@ type Config struct {
 
 // Metadata describes the metadata for Civo's CLI
 type Metadata struct {
-	Admin              bool      `json:"admin"`
-	CurrentAPIKey      string    `json:"current_apikey"`
-	DefaultRegion      string    `json:"default_region"`
-	LatestReleaseCheck time.Time `json:"latest_release_check"`
-	URL                string    `json:"url"`
-	LastCmdExecuted    time.Time `json:"last_command_executed"`
+	Admin               bool      `json:"admin"`
+	CurrentAPIKey       string    `json:"current_apikey"`
+	DefaultRegion       string    `json:"default_region"`
+	LatestReleaseCheck  time.Time `json:"latest_release_check"`
+	DisableVersionCheck bool      `json:"disable_version_check,omitempty"`
+	URL                 string    `json:"url"`
+	LastCmdExecuted     time.Time `json:"last_command_executed"`
 }
 
 // Current contains the parsed ~/.civo.json file
@@ -85,6 +86,10 @@ func loadConfig(filename string) {
 		Current.Meta.CurrentAPIKey = "tempKey"
 	}
 
+	if Current.Meta.DisableVersionCheck {
+		common.VersionCheckOptOut = true
+	}
+
 	// Skip API initialization if the flag is set
 	if !SkipAPIInitialization {
 		if Current.Meta.CurrentAPIKey != "" && Current.RegionToFeatures == nil {
@@ -97,7 +102,7 @@ func loadConfig(filename string) {
 			saveUpdatedConfig(filename)
 		}
 
-		if time.Since(Current.Meta.LatestReleaseCheck) > (24 * time.Hour) {
+		if !common.IsVersionCheckDisabled() && time.Since(Current.Meta.LatestReleaseCheck) > (24*time.Hour) {
 			Current.Meta.LatestReleaseCheck = time.Now()
 
 			if Current.Meta.CurrentAPIKey != "" {

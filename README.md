@@ -136,6 +136,23 @@ and so on. The main components of Civo CLI are outlined in the following section
 
 Every user receives a reminder to update the CLI once in 24 hours as well as notified to update the CLI version in case of any error. Run `civo update` to update the CLI to the latest version.
 
+### Disabling Version Checks
+
+You can opt out of automatic version checks in one of two ways:
+
+- **Environment Variable**: Set `CIVO_NO_VERSION_CHECK` to `1` (or `true`, `yes`, `on`):
+  ```sh
+  export CIVO_NO_VERSION_CHECK=1
+  ```
+- **Configuration File**: Add `disable_version_check: true` under `meta` in `~/.civo.json`:
+  ```json
+  {
+    "meta": {
+      "disable_version_check": true
+    }
+  }
+  ```
+
 ## Docker Usage
 
 Civo's CLI utility can also run within a Docker container, if you prefer to keep your base OS clean.

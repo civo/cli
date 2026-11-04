@@ -20,6 +20,7 @@ require (
 	github.com/spf13/cobra v1.9.1
 	github.com/tj/go-update v2.2.4+incompatible
 	golang.org/x/crypto v0.58.0
+	golang.org/x/mod v0.41.0
 	golang.org/x/term v0.47.0
 )
 
