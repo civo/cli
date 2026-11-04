@@ -974,7 +974,7 @@ $ civo kubernetes size
 
 #### Create a cluster
 
-You can create a cluster by running `civo kubernetes create` with a cluster name parameter, as well as any options you provide:
+You can create a cluster by running `civo kubernetes create` with an optional cluster name (a random one is picked if you leave it out), as well as any options you provide:
 
 ```bash
 -a, --applications string          optional, use names shown by running 'civo kubernetes applications ls'
