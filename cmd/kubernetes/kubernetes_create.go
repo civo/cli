@@ -20,7 +20,7 @@ var waitKubernetes, saveConfigKubernetes, mergeConfigKubernetes, switchConfigKub
 var kubernetesVersion, targetNodesSize, clusterName, clusterType, applications, removeapplications, networkID, existingFirewall, cniPlugin, volumeType string
 var kubernetesCluster *civogo.KubernetesCluster
 
-var kubernetesCreateCmdExample = `civo kubernetes create CLUSTER_NAME [flags]
+var kubernetesCreateCmdExample = `civo kubernetes create [CLUSTER_NAME] [flags]
 
 Notes:
 * The '--create-firewall' will open the ports 80,443 and 6443 in the firewall if '--firewall-rules' is not used.
