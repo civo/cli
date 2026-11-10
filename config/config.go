@@ -261,7 +261,7 @@ func DefaultAPIKey() string {
 func CivoAPIClient() (*civogo.Client, error) {
 	apiKey := DefaultAPIKey()
 	if apiKey == "" {
-		fmt.Printf("Error: Creating the connection to Civo's API failed because no API key is supplied. This is required to authenticate requests. Please go to https://dashboard.civo.com/security to obtain your API key, then save it using the command 'civo apikey save YOUR_API_KEY'.\n")
+		fmt.Printf("Error: Creating the connection to Civo's API failed because no API key is supplied. This is required to authenticate requests. Please go to https://dashboard.civo.com/security to obtain your API key, then save it by running 'civo apikey save', which will prompt for a name and the key without echoing it to your terminal or shell history.\n")
 		return nil, fmt.Errorf("no API Key supplied, this is required")
 	}
 	cliClient, err := civogo.NewClientWithURL(apiKey, Current.Meta.URL, Current.Meta.DefaultRegion)
