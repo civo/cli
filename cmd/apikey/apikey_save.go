@@ -54,8 +54,8 @@ var apikeySaveCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if len(args) > 0 && len(args) < 2 {
-			utility.Info("There are too few arguments for this command")
+		if len(args) == 1 {
+			utility.Info("There are too few arguments for this command. Run 'civo apikey save' with no arguments to be prompted for a name and API key, or pass both as 'civo apikey save NAME APIKEY'")
 			os.Exit(1)
 		}
 
