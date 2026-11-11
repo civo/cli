@@ -71,6 +71,7 @@ func loadConfig(filename string) {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
+	defer configFile.Close()
 
 	jsonParser := json.NewDecoder(configFile)
 	err = jsonParser.Decode(&Current)
@@ -102,7 +103,7 @@ func loadConfig(filename string) {
 			saveUpdatedConfig(filename)
 		}
 
-		if !common.IsVersionCheckDisabled() && time.Since(Current.Meta.LatestReleaseCheck) > (24*time.Hour) {
+		if time.Since(Current.Meta.LatestReleaseCheck) > (24*time.Hour) {
 			Current.Meta.LatestReleaseCheck = time.Now()
 
 			if Current.Meta.CurrentAPIKey != "" {
