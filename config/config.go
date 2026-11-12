@@ -103,7 +103,7 @@ func loadConfig(filename string) {
 			saveUpdatedConfig(filename)
 		}
 
-		if time.Since(Current.Meta.LatestReleaseCheck) > (24*time.Hour) {
+		if time.Since(Current.Meta.LatestReleaseCheck) > (24 * time.Hour) {
 			Current.Meta.LatestReleaseCheck = time.Now()
 
 			if Current.Meta.CurrentAPIKey != "" {
