@@ -23,12 +23,13 @@ type Config struct {
 
 // Metadata describes the metadata for Civo's CLI
 type Metadata struct {
-	Admin              bool      `json:"admin"`
-	CurrentAPIKey      string    `json:"current_apikey"`
-	DefaultRegion      string    `json:"default_region"`
-	LatestReleaseCheck time.Time `json:"latest_release_check"`
-	URL                string    `json:"url"`
-	LastCmdExecuted    time.Time `json:"last_command_executed"`
+	Admin               bool      `json:"admin"`
+	CurrentAPIKey       string    `json:"current_apikey"`
+	DefaultRegion       string    `json:"default_region"`
+	LatestReleaseCheck  time.Time `json:"latest_release_check"`
+	DisableVersionCheck bool      `json:"disable_version_check,omitempty"`
+	URL                 string    `json:"url"`
+	LastCmdExecuted     time.Time `json:"last_command_executed"`
 }
 
 // Current contains the parsed ~/.civo.json file
@@ -70,6 +71,7 @@ func loadConfig(filename string) {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
+	defer configFile.Close()
 
 	jsonParser := json.NewDecoder(configFile)
 	err = jsonParser.Decode(&Current)
@@ -83,6 +85,10 @@ func loadConfig(filename string) {
 	if token, found := os.LookupEnv("CIVO_TOKEN"); found && token != "" {
 		Current.APIKeys["tempKey"] = token
 		Current.Meta.CurrentAPIKey = "tempKey"
+	}
+
+	if Current.Meta.DisableVersionCheck {
+		common.VersionCheckOptOut = true
 	}
 
 	// Skip API initialization if the flag is set
