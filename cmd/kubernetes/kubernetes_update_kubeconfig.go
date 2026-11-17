@@ -33,7 +33,14 @@ var kubernetesUpdateKubeconfigCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		err = utility.ObtainKubeConfig(localPathConfig, cluster.KubeConfig, true, true, cluster.Name)
+		defaultKube, homeErr := utility.DefaultKubeConfigPath()
+		if homeErr != nil {
+			utility.Error("%s", homeErr)
+			os.Exit(1)
+		}
+		kubeconfigWritePath := utility.ResolveKubeConfigWritePath(localPathConfig, os.Getenv("KUBECONFIG"), defaultKube)
+
+		err = utility.ObtainKubeConfig(kubeconfigWritePath, cluster.KubeConfig, true, true, cluster.Name)
 		if err != nil {
 			utility.Error("Updating kubeconfig failed with %s", err)
 			os.Exit(1)

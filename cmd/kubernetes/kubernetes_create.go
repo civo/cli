@@ -264,7 +264,14 @@ var kubernetesCreateCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			err = utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, mergeConfigKubernetes, switchConfigKubernetes, kube.Name)
+			defaultKube, homeErr := utility.DefaultKubeConfigPath()
+			if homeErr != nil {
+				utility.Error("%s", homeErr)
+				os.Exit(1)
+			}
+			kubeconfigWritePath := utility.ResolveKubeConfigWritePath(localPathConfig, os.Getenv("KUBECONFIG"), defaultKube)
+
+			err = utility.ObtainKubeConfig(kubeconfigWritePath, kube.KubeConfig, mergeConfigKubernetes, switchConfigKubernetes, kube.Name)
 			if err != nil {
 				utility.Error("Saving the cluster config failed with %s", err)
 				os.Exit(1)

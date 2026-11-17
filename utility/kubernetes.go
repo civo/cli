@@ -4,10 +4,45 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/civo/civogo"
 )
+
+// DefaultKubeConfigPath returns ~/.kube/config for the current user.
+func DefaultKubeConfigPath() (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(home, ".kube", "config"), nil
+}
+
+// ResolveKubeConfigWritePath picks a single file path to write or merge into.
+// kubectl's KUBECONFIG may list several files (colon-separated on Unix,
+// semicolon-separated on Windows); writes go to the first entry. An explicit
+// path from --local-path / -p wins. Falls back to defaultPath (usually
+// ~/.kube/config).
+func ResolveKubeConfigWritePath(explicit, kubeconfigEnv, defaultPath string) string {
+	if explicit != "" {
+		parts := filepath.SplitList(explicit)
+		for _, p := range parts {
+			if p != "" {
+				return p
+			}
+		}
+	}
+	if kubeconfigEnv != "" {
+		parts := filepath.SplitList(kubeconfigEnv)
+		for _, p := range parts {
+			if p != "" {
+				return p
+			}
+		}
+	}
+	return defaultPath
+}
 
 // ObtainKubeConfig is the function to get the kubeconfig from the cluster
 // and save to the file or merge with the existing one

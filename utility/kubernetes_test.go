@@ -1,11 +1,41 @@
 package utility
 
 import (
+	"path/filepath"
 	"slices"
 	"testing"
 
 	"github.com/civo/civogo"
 )
+
+func TestResolveKubeConfigWritePath(t *testing.T) {
+	sep := string(filepath.ListSeparator)
+	defaultPath := filepath.Join("home", ".kube", "config")
+	first := filepath.Join("home", ".kube", "config")
+	second := filepath.Join("home", ".kube", "other")
+
+	tests := []struct {
+		name     string
+		explicit string
+		env      string
+		want     string
+	}{
+		{name: "default when empty", explicit: "", env: "", want: defaultPath},
+		{name: "explicit wins", explicit: filepath.Join("tmp", "k"), env: first + sep + second, want: filepath.Join("tmp", "k")},
+		{name: "first of multipath env", env: first + sep + second, want: first},
+		{name: "explicit multipath uses first", explicit: first + sep + second, want: first},
+		{name: "skips empty env segments", env: sep + first, want: first},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := ResolveKubeConfigWritePath(tt.explicit, tt.env, defaultPath)
+			if got != tt.want {
+				t.Fatalf("ResolveKubeConfigWritePath(%q, %q, %q) = %q, want %q", tt.explicit, tt.env, defaultPath, got, tt.want)
+			}
+		})
+	}
+}
 
 func TestRemoveApplicationFromInstalledListSimpleName(t *testing.T) {
 	current := []civogo.KubernetesInstalledApplication{

@@ -2,7 +2,6 @@ package kubernetes
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/civo/cli/config"
@@ -73,18 +72,12 @@ func init() {
 	KubernetesCmd.AddCommand(kubernetesRecycleCmd)
 	KubernetesCmd.AddCommand(kubernetesUpdateKubeconfigCmd)
 
-	home, err := os.UserHomeDir()
-	if err != nil {
-		utility.Error("%s", err)
-		os.Exit(1)
-	}
-
 	kubernetesConfigCmd.Flags().BoolVarP(&saveConfig, "save", "s", false, "save the config")
 	kubernetesConfigCmd.Flags().BoolVarP(&switchConfig, "switch", "i", false, "switch context to newly-created cluster")
 	_ = kubernetesConfigCmd.Flags().MarkDeprecated("switch", "this flag is deprecated, KUBECONFIG is automatically switched to the newly created cluster config if the --save flag is set")
 	_ = kubernetesConfigCmd.Flags().MarkHidden("switch")
 	kubernetesConfigCmd.Flags().BoolVarP(&overwriteConfig, "overwrite", "w", false, "overwrite the kubeconfig file")
-	kubernetesConfigCmd.Flags().StringVarP(&localPathConfig, "local-path", "p", fmt.Sprintf("%s/.kube/config", home), "local path to save the kubeconfig file")
+	kubernetesConfigCmd.Flags().StringVarP(&localPathConfig, "local-path", "p", "", "local path to save the kubeconfig file (defaults to the first path in $KUBECONFIG, or ~/.kube/config). Do not use --config; that flag selects the Civo CLI config file")
 
 	kubernetesCreateCmd.Flags().StringVarP(&targetNodesSize, "size", "s", "g4s.kube.medium", "the size of nodes to create. You can list available kubernetes sizes by `civo size list -s kubernetes`")
 	kubernetesCreateCmd.Flags().StringVarP(&networkID, "network", "t", "default", "the name of the network to use in the creation")
