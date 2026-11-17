@@ -3,7 +3,6 @@ package kubernetes
 import (
 	"fmt"
 	"os"
-	"runtime"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -13,6 +12,9 @@ import (
 
 var kubernetesConfigCmdExample = `* To merge and save:
     civo kubernetes config CLUSTER_NAME --save
+
+* To merge and save into a specific kubeconfig file:
+    civo kubernetes config CLUSTER_NAME --save --local-path ~/.kube/config
 
 * To merge and save, and switch to the new context:
 	civo kubernetes config CLUSTER_NAME --save --switch
@@ -24,10 +26,12 @@ Notes:
 * By default, when --save is specified, we will merge your kubeconfig (unless --overwrite is specified).
 * To auto-switch to new kubeconfig, --switch is required. Without it, your active context will remain unchanged.
 * When --overwrite is specified, --switch is not required. Your context will be updated automatically.
+* If $KUBECONFIG lists multiple files, --save writes to the first path (kubectl convention). Use --local-path / -p to pick a file.
+* Do not pass --config for the kubeconfig path; --config selects the Civo CLI config (~/.civo.json).
 `
 
 var saveConfig, switchConfig, overwriteConfig bool
-var localPathConfig, defaultKubeConfigPath string
+var localPathConfig string
 
 var kubernetesConfigCmd = &cobra.Command{
 	Use:     "config",
@@ -66,28 +70,21 @@ If you wish to use a custom format, the available fields are:
 			os.Exit(1)
 		}
 
-		if runtime.GOOS == "windows" {
-			defaultKubeConfigPath = os.Getenv("USERPROFILE") + "\\.kube\\config"
-		} else {
-			defaultKubeConfigPath = os.Getenv("HOME") + "/.kube/config"
-		}
-
-		if localPathConfig == "" { // Check if -p or --local-path argument was not provided
-			if os.Getenv("KUBECONFIG") != "" {
-				localPathConfig = os.Getenv("KUBECONFIG")
-			} else {
-				localPathConfig = defaultKubeConfigPath
-			}
-		}
-
 		if saveConfig {
+			defaultKubeConfigPath, pathErr := utility.DefaultKubeConfigPath()
+			if pathErr != nil {
+				utility.Error("%s", pathErr)
+				os.Exit(1)
+			}
+			kubeconfigWritePath := utility.ResolveKubeConfigWritePath(localPathConfig, os.Getenv("KUBECONFIG"), defaultKubeConfigPath)
+
 			if overwriteConfig {
 				// overwrite and save
-				if localPathConfig == os.Getenv("KUBECONFIG") {
-					utility.Warning("Your $KUBECONFIG is set to %s, you are about to overwrite that config with your current kubeconfig.", localPathConfig)
+				if localPathConfig == "" && os.Getenv("KUBECONFIG") != "" {
+					utility.Warning("Your $KUBECONFIG is set to %s; overwriting the first path (%s).", os.Getenv("KUBECONFIG"), kubeconfigWritePath)
 				}
 				if utility.UserConfirmedOverwrite("kubernetes config", common.DefaultYes) {
-					err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, false, switchConfig, kube.Name)
+					err := utility.ObtainKubeConfig(kubeconfigWritePath, kube.KubeConfig, false, switchConfig, kube.Name)
 					if err != nil {
 						utility.Error("Saving the cluster config failed with %s", err)
 						os.Exit(1)
@@ -98,7 +95,7 @@ If you wish to use a custom format, the available fields are:
 				}
 			} else {
 				// merge and save
-				err := utility.ObtainKubeConfig(localPathConfig, kube.KubeConfig, true, switchConfig, kube.Name)
+				err := utility.ObtainKubeConfig(kubeconfigWritePath, kube.KubeConfig, true, switchConfig, kube.Name)
 				if err != nil {
 					utility.Error("Saving the cluster config failed with %s", err)
 					os.Exit(1)
