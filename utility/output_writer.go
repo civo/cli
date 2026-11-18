@@ -233,11 +233,44 @@ func replaceNth(s, old, new string, n int) string {
 	return s
 }
 
+// InvalidCustomOutputFields reports fields that cannot be used with custom
+// output. An empty fields string is always valid. Documented -f values are
+// bare keys (id,name), labels (ID), or templates that embed either
+// ("ID: Name"), so we only reject values that contain none of the supplied
+// names — matching how WriteCustomOutput substitutes by substring.
+func InvalidCustomOutputFields(fields string, names []string) []string {
+	fields = strings.TrimSpace(fields)
+	if fields == "" {
+		return nil
+	}
+
+	for _, n := range names {
+		if n != "" && strings.Contains(fields, n) {
+			return nil
+		}
+	}
+	return []string{fields}
+}
+
 // WriteCustomOutput prints one or multiple objects using custom formatting
 func (ow *OutputWriter) WriteCustomOutput(fields string) {
 	ow.finishExistingLine()
 	defaultKeys := make([]string, len(ow.Keys))
 	copy(defaultKeys, ow.Keys)
+
+	names := make([]string, 0, len(ow.Keys)+len(ow.Labels))
+	names = append(names, ow.Keys...)
+	names = append(names, ow.Labels...)
+
+	if missing := InvalidCustomOutputFields(fields, names); len(missing) > 0 {
+		available := strings.Join(defaultKeys, ", ")
+		if available == "" {
+			available = "(none)"
+		}
+		Error("unsupported --fields value %q; available fields: %s", strings.Join(missing, ", "), available)
+		os.Exit(1)
+	}
+
 	sort.Sort(byLen(ow.Keys))
 
 	// Transcribe Data
