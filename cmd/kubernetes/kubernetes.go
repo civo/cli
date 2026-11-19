@@ -113,7 +113,13 @@ func init() {
 	kubernetesRecycleCmd.Flags().StringVarP(&kubernetesNode, "node", "n", "", "the node that needs to be recycled.")
 	_ = kubernetesRecycleCmd.MarkFlagRequired("node")
 
-	kubernetesRemoveCmd.Flags().BoolVarP(&deleteKubeconfigContext, "delete-kubeconfig-context", "d", false, "delete the kubeconfig context for the cluster")
+	// Dependent-resource cleanup on delete (#406): firewalls and kubeconfig
+	// context are removed by default; volumes are kept unless --delete-volumes.
+	kubernetesRemoveCmd.Flags().BoolVar(&deleteVolumes, "delete-volumes", false, "also delete volumes that belonged to the cluster")
+	kubernetesRemoveCmd.Flags().BoolVar(&keepFirewalls, "keep-firewalls", false, "do not delete the firewall associated with the cluster")
+	kubernetesRemoveCmd.Flags().BoolVar(&keepKubeconfig, "keep-kubeconfig", false, "do not remove the kubeconfig context for the cluster")
+	kubernetesRemoveCmd.Flags().BoolVarP(&deleteKubeconfigContext, "delete-kubeconfig-context", "d", false, "delete the kubeconfig context for the cluster (default behaviour; prefer omitting --keep-kubeconfig)")
+	_ = kubernetesRemoveCmd.Flags().MarkDeprecated("delete-kubeconfig-context", "kubeconfig context is removed by default; use --keep-kubeconfig to retain it")
 
 	// Kubernetes Applications
 	KubernetesCmd.AddCommand(kubernetesApplicationsCmd)

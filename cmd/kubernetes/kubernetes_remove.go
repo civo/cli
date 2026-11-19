@@ -15,8 +15,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var kubernetesList []utility.Resource
-var deleteKubeconfigContext bool
+var (
+	deleteVolumes           bool
+	keepFirewalls           bool
+	keepKubeconfig          bool
+	deleteKubeconfigContext bool // deprecated; kubeconfig context is removed by default
+)
 
 var kubernetesRemoveCmd = &cobra.Command{
 	Use:     "remove",
@@ -42,6 +46,7 @@ var kubernetesRemoveCmd = &cobra.Command{
 			client.Region = common.RegionSet
 		}
 
+		targets := make([]clusterRemovalTarget, 0, len(args))
 		if len(args) == 1 {
 			kubernetesCluster, err := client.FindKubernetesCluster(args[0])
 			if err != nil {
@@ -53,82 +58,169 @@ var kubernetesRemoveCmd = &cobra.Command{
 					utility.Error("sorry we found more than one Kubernetes cluster with that name in your account")
 					os.Exit(1)
 				}
+				utility.Error("%s", err)
+				os.Exit(1)
 			}
-			kubernetesList = append(kubernetesList, utility.Resource{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
+			targets = append(targets, buildRemovalTarget(client, kubernetesCluster))
 		} else {
 			for _, v := range args {
 				kubernetesCluster, err := client.FindKubernetesCluster(v)
-				if err == nil {
-					kubernetesList = append(kubernetesList, utility.Resource{ID: kubernetesCluster.ID, Name: kubernetesCluster.Name})
+				if err != nil {
+					utility.Warning("skipping %q: %s", v, err)
+					continue
 				}
+				targets = append(targets, buildRemovalTarget(client, kubernetesCluster))
 			}
 		}
 
-		kubernetesNameList := []string{}
-		for _, v := range kubernetesList {
-			kubernetesNameList = append(kubernetesNameList, v.Name)
+		if len(targets) == 0 {
+			utility.Error("no matching Kubernetes clusters found")
+			os.Exit(1)
 		}
 
-		var volsNameList []string
-		for _, v := range kubernetesList {
-			vols, err := client.ListVolumesForCluster(v.ID)
+		kubernetesNameList := make([]string, 0, len(targets))
+		var keptVolumes []pendingVolume
+		for _, t := range targets {
+			kubernetesNameList = append(kubernetesNameList, t.Name)
+			if t.VolumesError != "" {
+				utility.Warning("could not list volumes for cluster %s before delete: %s. Attached volumes may be left behind with no leftover report", t.Name, t.VolumesError)
+			}
+			if !deleteVolumes && len(t.Volumes) > 0 {
+				keptVolumes = append(keptVolumes, t.Volumes...)
+			}
+		}
+
+		if len(keptVolumes) > 0 {
+			utility.YellowConfirm("There are volume(s) attached to this cluster. They will be left behind unless you pass --delete-volumes:\n%s\n", utility.Green(strings.Join(volumeNames(keptVolumes), "\n")))
+		}
+
+		if !utility.UserConfirmedDeletion(fmt.Sprintf("Kubernetes %s", pluralize.Pluralize(len(targets), "cluster")), common.DefaultYes, strings.Join(kubernetesNameList, ", ")) {
+			fmt.Println("Operation aborted.")
+			return
+		}
+
+		removeKubeconfig := shouldRemoveKubeconfigContext(keepKubeconfig)
+		if deleteKubeconfigContext && keepKubeconfig {
+			removeKubeconfig = false
+		} else if deleteKubeconfigContext {
+			removeKubeconfig = true
+		}
+
+		for _, t := range targets {
+			_, err = client.DeleteKubernetesCluster(t.ID)
 			if err != nil {
-				utility.Error("error getting the list of dangling volumes: %s", err)
+				utility.Error("error deleting the kubernetes cluster: %s", err)
 				os.Exit(1)
 			}
-			for _, v := range vols {
-				volsNameList = append(volsNameList, v.Name)
+
+			// Only strip the local context after the API accepted the delete, so a
+			// failed delete leaves kubectl access intact.
+			if removeKubeconfig {
+				removeClusterKubeconfigContext(t.Name)
 			}
-			if vols != nil {
-				utility.YellowConfirm("There are volume(s) attached to this cluster. Consider deleting or detaching these before deleting the cluster:\n%s\n", utility.Green(strings.Join(volsNameList, "\n")))
+
+			if deleteVolumes {
+				var failed []pendingVolume
+				for _, vol := range t.Volumes {
+					if err := deleteClusterVolume(client, vol); err != nil {
+						utility.Warning("could not delete volume %s (%s): %s", vol.Name, vol.ID, err)
+						failed = append(failed, vol)
+						continue
+					}
+					fmt.Printf("Deleted volume %s (%s)\n", utility.Green(vol.Name), vol.ID)
+				}
+				if len(failed) > 0 {
+					fmt.Fprint(os.Stderr, leftBehindVolumesInfo(t.Name, failed))
+				}
+			} else if len(t.Volumes) > 0 {
+				fmt.Fprint(os.Stderr, leftBehindVolumesInfo(t.Name, t.Volumes))
+			}
+
+			if shouldDeleteFirewall(keepFirewalls) && t.FirewallID != "" {
+				if !t.FirewallExclusive {
+					utility.Info("keeping firewall %s for cluster %s because it is shared with other resources; pass nothing extra, or delete it later with 'civo firewall remove %s'", t.FirewallID, t.Name, t.FirewallID)
+				} else if _, err := client.DeleteFirewall(t.FirewallID); err != nil {
+					// Cluster delete is async; the firewall may still be in use briefly.
+					utility.Warning("could not delete firewall %s for cluster %s: %s. Delete it manually with 'civo firewall remove %s' once the cluster is gone, or pass --keep-firewalls to skip this step", t.FirewallID, t.Name, err, t.FirewallID)
+				} else {
+					fmt.Printf("Deleted firewall %s\n", utility.Green(t.FirewallID))
+				}
 			}
 		}
 
-		if utility.UserConfirmedDeletion(fmt.Sprintf("Kubernetes %s", pluralize.Pluralize(len(kubernetesList), "cluster")), common.DefaultYes, strings.Join(kubernetesNameList, ", ")) {
+		ow := utility.NewOutputWriter()
 
-			for _, v := range kubernetesList {
-				if deleteKubeconfigContext {
-					// Try to remove the kubeconfig context before deleting the cluster
-					cmd := exec.Command("kubectl", "config", "delete-context", strings.ToLower(v.Name))
-					if err := cmd.Run(); err != nil {
-						fmt.Printf("Note: Kubeconfig context for cluster %s was not found\n", utility.Green(v.Name))
-					} else {
-						fmt.Printf("Successfully removed kubeconfig context for cluster %s\n", utility.Green(v.Name))
-					}
-				}
-				_, err = client.DeleteKubernetesCluster(v.ID)
-				if err != nil {
-					utility.Error("error deleting the kubernetes cluster: %s", err)
-					os.Exit(1)
-				}
+		for _, t := range targets {
+			ow.StartLine()
+			ow.AppendDataWithLabel("id", t.ID, "ID")
+			ow.AppendDataWithLabel("name", t.Name, "Name")
+		}
+
+		switch common.OutputFormat {
+		case "json":
+			if len(targets) == 1 {
+				ow.WriteSingleObjectJSON(common.PrettySet)
+			} else {
+				ow.WriteMultipleObjectsJSON(common.PrettySet)
 			}
-
-			ow := utility.NewOutputWriter()
-
-			for _, v := range kubernetesList {
-				ow.StartLine()
-				ow.AppendDataWithLabel("id", v.ID, "ID")
-				ow.AppendDataWithLabel("name", v.Name, "Name")
-			}
-
-			switch common.OutputFormat {
-			case "json":
-				if len(kubernetesList) == 1 {
-					ow.WriteSingleObjectJSON(common.PrettySet)
-				} else {
-					ow.WriteMultipleObjectsJSON(common.PrettySet)
-				}
-			case "custom":
-				ow.WriteCustomOutput(common.OutputFields)
-			default:
-				fmt.Printf("The Kubernetes %s (%s) %s been deleted\n",
-					pluralize.Pluralize(len(kubernetesList), "cluster"),
-					utility.Green(strings.Join(kubernetesNameList, ", ")),
-					pluralize.Has(len(kubernetesList)),
-				)
-			}
-		} else {
-			fmt.Println("Operation aborted.")
+		case "custom":
+			ow.WriteCustomOutput(common.OutputFields)
+		default:
+			fmt.Printf("The Kubernetes %s (%s) %s been deleted\n",
+				pluralize.Pluralize(len(targets), "cluster"),
+				utility.Green(strings.Join(kubernetesNameList, ", ")),
+				pluralize.Has(len(targets)),
+			)
 		}
 	},
+}
+
+func buildRemovalTarget(client *civogo.Client, cluster *civogo.KubernetesCluster) clusterRemovalTarget {
+	target := clusterRemovalTarget{
+		ID:         cluster.ID,
+		Name:       cluster.Name,
+		FirewallID: cluster.FirewallID,
+	}
+
+	if cluster.FirewallID != "" {
+		fw, err := client.FindFirewall(cluster.FirewallID)
+		if err != nil {
+			utility.Warning("could not inspect firewall %s for cluster %s: %s; it will not be auto-deleted", cluster.FirewallID, cluster.Name, err)
+		} else {
+			target.FirewallExclusive = firewallSafeToDelete(fw.ClusterCount, fw.InstanceCount, fw.LoadBalancerCount)
+		}
+	}
+
+	vols, err := client.ListVolumesForCluster(cluster.ID)
+	if err != nil {
+		target.VolumesError = err.Error()
+		return target
+	}
+	for _, v := range vols {
+		target.Volumes = append(target.Volumes, pendingVolume{ID: v.ID, Name: v.Name})
+	}
+	return target
+}
+
+func removeClusterKubeconfigContext(clusterName string) {
+	context := strings.ToLower(clusterName)
+	var cmd *exec.Cmd
+	if utility.CheckOS() == "windows" {
+		cmd = exec.Command("powershell", "kubectl", "config", "delete-context", context)
+	} else {
+		cmd = exec.Command("kubectl", "config", "delete-context", context)
+	}
+	if err := cmd.Run(); err != nil {
+		utility.Info("Kubeconfig context for cluster %s was not found (nothing to remove)", clusterName)
+		return
+	}
+	fmt.Printf("Removed kubeconfig context for cluster %s\n", utility.Green(clusterName))
+}
+
+func deleteClusterVolume(client *civogo.Client, vol pendingVolume) error {
+	// Best-effort detach first so a still-attached volume can be removed without
+	// waiting for the async cluster delete to finish.
+	_, _ = client.DetachVolume(vol.ID)
+	_, err := client.DeleteVolume(vol.ID)
+	return err
 }
